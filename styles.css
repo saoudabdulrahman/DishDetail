@@ -49,6 +49,7 @@ header {
 	padding: 1.5rem 1.5rem 0 1.5rem;
 	gap: 1rem;
 	position: relative;
+	flex-wrap: wrap;
 }
 
 header::after {
@@ -77,6 +78,15 @@ header::after {
 	display: flex;
 	gap: 0.5rem;
 	align-items: center;
+}
+
+#hamburger-btn {
+	display: none;
+	background: none;
+	border: none;
+	font-size: 1.5rem;
+	cursor: pointer;
+	padding: 0.25rem;
 }
 
 .header-actions a {
@@ -122,6 +132,9 @@ header::after {
 
 main {
 	padding: 1.5rem 1rem;
+	padding-top: 4.5rem;
+	max-width: 1200px;
+	margin: 0 auto;
 }
 
 .review-header {
@@ -130,7 +143,7 @@ main {
 }
 
 .review-container {
-	padding: 0 5rem;
+	padding: 0;
 	display: grid;
 	grid-template-columns: repeat(auto-fill, 20rem);
 	gap: 1rem;
@@ -143,6 +156,31 @@ main {
 	border: solid;
 	border-radius: 1rem;
 	cursor: pointer;
+	transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.review-item:hover {
+	transform: translateY(-4px);
+	box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+
+.review-item-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 0.25rem;
+}
+
+.stars {
+	color: oklch(0.7 0.15 85);
+	font-size: 1.1rem;
+	letter-spacing: 1px;
+}
+
+.review-meta {
+	font-size: 0.85rem;
+	color: oklch(0.5 0 0);
+	margin-bottom: 0.5rem;
 }
 
 input,
@@ -154,8 +192,43 @@ select {
 
 footer {
 	background-color: var(--bg-dark);
-	padding: 0.5rem;
+	padding: 1.5rem 1rem;
 	text-align: center;
+}
+
+.footer-links {
+	display: flex;
+	justify-content: center;
+	gap: 1.5rem;
+	margin-bottom: 0.75rem;
+}
+
+.footer-links a {
+	text-decoration: none;
+	color: inherit;
+	font-size: 0.9rem;
+}
+
+.footer-links a:hover {
+	text-decoration: underline;
+}
+
+.footer-social {
+	display: flex;
+	justify-content: center;
+	gap: 1rem;
+	margin-bottom: 0.75rem;
+}
+
+.footer-social a {
+	text-decoration: none;
+	color: inherit;
+	font-weight: bold;
+	font-size: 0.9rem;
+}
+
+.footer-social a:hover {
+	text-decoration: underline;
 }
 
 #contact-btn {
@@ -165,4 +238,43 @@ footer {
 	border: solid;
 	border-radius: 0.5rem;
 	cursor: pointer;
+}
+
+/* --- Responsive (mobile) --- */
+@media (max-width: 768px) {
+	#hamburger-btn {
+		display: block;
+	}
+
+	.header-actions {
+		display: none;
+		width: 100%;
+		flex-direction: column;
+		align-items: stretch;
+		gap: 0.5rem;
+		padding-bottom: 1rem;
+	}
+
+	.header-actions.open {
+		display: flex;
+	}
+
+	.header-actions a,
+	.header-actions button {
+		text-align: center;
+		margin-right: 0;
+	}
+
+	.search-container {
+		order: 3;
+		width: 100%;
+	}
+
+	#search-box {
+		flex: 1;
+	}
+
+	.review-container {
+		grid-template-columns: 1fr;
+	}
 }

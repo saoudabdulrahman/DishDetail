@@ -25,22 +25,32 @@
 					id="search-box"
 					type="text"
 					placeholder="Search for restaurants..."
+					aria-label="Search for restaurants"
 				/>
 				<button id="search-btn">Search</button>
 			</div>
-			<div class="header-actions">
+			<button id="hamburger-btn" aria-label="Toggle navigation menu">
+				&#9776;
+			</button>
+			<nav class="header-actions">
 				<a href="establishments.html">Establishments</a>
 				<a href="reviews.html">Reviews</a>
 				<button id="login-btn">Log In</button>
 				<button id="signup-btn">Sign Up</button>
-			</div>
+			</nav>
 		</header>
 
 		<main>
 			<h2 class="review-header">Latest Reviews</h2>
 			<section class="review-container">
 				<article class="review-item">
-					<h3>Restaurant 1</h3>
+					<div class="review-item-header">
+						<h3>Restaurant 1</h3>
+						<span class="stars" data-rating="4">★★★★☆</span>
+					</div>
+					<p class="review-meta">
+						Reviewed by <strong>Alice M.</strong> · Jan 15, 2026
+					</p>
 					<p>
 						Lorem ipsum dolor sit amet consectetur adipiscing elit. Consectetur
 						adipiscing elit quisque faucibus ex sapien vitae. Ex sapien vitae
@@ -50,7 +60,13 @@
 				</article>
 
 				<article class="review-item">
-					<h3>Restaurant 2</h3>
+					<div class="review-item-header">
+						<h3>Restaurant 2</h3>
+						<span class="stars" data-rating="3">★★★☆☆</span>
+					</div>
+					<p class="review-meta">
+						Reviewed by <strong>Brian T.</strong> · Jan 20, 2026
+					</p>
 					<p>
 						Lorem ipsum dolor sit amet consectetur adipiscing elit. Sit amet
 						consectetur adipiscing elit quisque faucibus ex. Adipiscing elit
@@ -59,7 +75,13 @@
 				</article>
 
 				<article class="review-item">
-					<h3>Restaurant 3</h3>
+					<div class="review-item-header">
+						<h3>Restaurant 3</h3>
+						<span class="stars" data-rating="5">★★★★★</span>
+					</div>
+					<p class="review-meta">
+						Reviewed by <strong>Carla S.</strong> · Jan 22, 2026
+					</p>
 					<p>
 						Lorem ipsum dolor sit amet consectetur adipiscing elit. Elit quisque
 						faucibus ex sapien vitae pellentesque sem. Sem placerat in id cursus
@@ -71,7 +93,13 @@
 				</article>
 
 				<article class="review-item">
-					<h3>Restaurant 4</h3>
+					<div class="review-item-header">
+						<h3>Restaurant 4</h3>
+						<span class="stars" data-rating="4">★★★★☆</span>
+					</div>
+					<p class="review-meta">
+						Reviewed by <strong>David R.</strong> · Jan 25, 2026
+					</p>
 					<p>
 						Lorem ipsum dolor sit amet consectetur adipiscing elit. Amet
 						consectetur adipiscing elit quisque faucibus ex sapien. Quisque
@@ -81,7 +109,13 @@
 				</article>
 
 				<article class="review-item">
-					<h3>Restaurant 5</h3>
+					<div class="review-item-header">
+						<h3>Restaurant 5</h3>
+						<span class="stars" data-rating="2">★★☆☆☆</span>
+					</div>
+					<p class="review-meta">
+						Reviewed by <strong>Elena V.</strong> · Jan 28, 2026
+					</p>
 					<p>
 						Lorem ipsum dolor sit amet consectetur adipiscing elit. Faucibus ex
 						sapien vitae pellentesque sem placerat in. Cursus mi pretium tellus
@@ -95,7 +129,13 @@
 				</article>
 
 				<article class="review-item">
-					<h3>Restaurant 6</h3>
+					<div class="review-item-header">
+						<h3>Restaurant 6</h3>
+						<span class="stars" data-rating="3">★★★☆☆</span>
+					</div>
+					<p class="review-meta">
+						Reviewed by <strong>Frank L.</strong> · Feb 1, 2026
+					</p>
 					<p>
 						Lorem ipsum dolor sit amet consectetur adipiscing elit. Adipiscing
 						elit quisque faucibus ex sapien vitae pellentesque. Vitae
@@ -106,7 +146,13 @@
 				</article>
 
 				<article class="review-item">
-					<h3>Restaurant 7</h3>
+					<div class="review-item-header">
+						<h3>Restaurant 7</h3>
+						<span class="stars" data-rating="5">★★★★★</span>
+					</div>
+					<p class="review-meta">
+						Reviewed by <strong>Grace K.</strong> · Feb 3, 2026
+					</p>
 					<p>
 						Lorem ipsum dolor sit amet consectetur adipiscing elit. Dolor sit
 						amet consectetur adipiscing elit quisque faucibus.
@@ -114,7 +160,13 @@
 				</article>
 
 				<article class="review-item">
-					<h3>Restaurant 8</h3>
+					<div class="review-item-header">
+						<h3>Restaurant 8</h3>
+						<span class="stars" data-rating="4">★★★★☆</span>
+					</div>
+					<p class="review-meta">
+						Reviewed by <strong>Henry W.</strong> · Feb 5, 2026
+					</p>
 					<p>
 						Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque
 						faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi
@@ -127,7 +179,13 @@
 				</article>
 
 				<article class="review-item">
-					<h3>Restaurant 9</h3>
+					<div class="review-item-header">
+						<h3>Restaurant 9</h3>
+						<span class="stars" data-rating="3">★★★☆☆</span>
+					</div>
+					<p class="review-meta">
+						Reviewed by <strong>Irene P.</strong> · Feb 6, 2026
+					</p>
 					<p>
 						Lorem ipsum dolor sit amet consectetur adipiscing elit. Sit amet
 						consectetur adipiscing elit quisque faucibus ex. Adipiscing elit
@@ -136,7 +194,13 @@
 				</article>
 
 				<article class="review-item">
-					<h3>Restaurant 10</h3>
+					<div class="review-item-header">
+						<h3>Restaurant 10</h3>
+						<span class="stars" data-rating="4">★★★★☆</span>
+					</div>
+					<p class="review-meta">
+						Reviewed by <strong>Jack C.</strong> · Feb 7, 2026
+					</p>
 					<p>
 						Lorem ipsum dolor sit amet consectetur adipiscing elit. Elit quisque
 						faucibus ex sapien vitae pellentesque sem. Sem placerat in id cursus
@@ -150,6 +214,16 @@
 		</main>
 
 		<footer>
+			<div class="footer-links">
+				<a href="#">About</a>
+				<a href="#">Privacy Policy</a>
+				<a href="#">Terms of Service</a>
+			</div>
+			<div class="footer-social">
+				<a href="#" aria-label="Facebook">FB</a>
+				<a href="#" aria-label="Twitter">TW</a>
+				<a href="#" aria-label="Instagram">IG</a>
+			</div>
 			<p>&copy; 2026 Dish Detail. All rights reserved.</p>
 			<button id="contact-btn">Contact Us</button>
 		</footer>
