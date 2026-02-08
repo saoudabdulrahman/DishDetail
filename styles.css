@@ -1,7 +1,168 @@
+:root {
+	--bg-dark: oklch(0.9 0.01 80);
+	--bg: oklch(0.95 0.01 80);
+	--bg-light: oklch(0.98 0.01 80);
+
+	--primary: oklch(0.9 0.15 110);
+	--secondary: oklch(0.9 0.05 290);
+}
+
+* {
+	box-sizing: border-box;
+	margin: 0;
+}
+
 body {
-  font-family: "Inter", sans-serif;
+	font-family: 'Google Sans', sans-serif;
+	line-height: 1.5;
+	background-color: var(--bg-light);
+}
+
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	overflow-wrap: break-word;
+}
+
+p {
+	text-wrap: pretty;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	text-wrap: balance;
 }
 
 header {
-  font-family: 'Libre Baskerville', sans-serif;
+	background-color: var(--primary);
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 1.5rem 1.5rem 0 1.5rem;
+	gap: 1rem;
+	position: relative;
+}
+
+header::after {
+	content: '';
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	height: 3rem;
+	background: linear-gradient(to bottom, var(--primary), var(--bg-light));
+	translate: 0 100%;
+	pointer-events: none;
+}
+
+.logo {
+	font-family: 'Libre Baskerville', sans-serif;
+}
+
+.logo a {
+	text-decoration: none;
+	color: inherit;
+	cursor: pointer;
+}
+
+.header-actions {
+	display: flex;
+	gap: 0.5rem;
+	align-items: center;
+}
+
+.header-actions a {
+	margin-right: 0.5rem;
+	text-decoration: none;
+	color: inherit;
+	cursor: pointer;
+}
+
+.header-actions button {
+	padding: 0.25rem 0.5rem;
+	border: solid;
+	border-radius: 0.5rem;
+	cursor: pointer;
+}
+
+.search-container {
+	display: flex;
+}
+
+#search-box {
+	padding: 0.25rem;
+	border: solid;
+	border-right: none;
+	border-radius: 0.5rem 0 0 0.5rem;
+}
+
+#search-btn {
+	background-color: var(--bg-dark);
+	padding: 0.25rem 0.5rem;
+	border: solid;
+	border-radius: 0 0.5rem 0.5rem 0;
+	cursor: pointer;
+}
+
+#signup-btn {
+	background-color: var(--bg-dark);
+}
+
+#login-btn {
+	background-color: var(--bg-dark);
+}
+
+main {
+	padding: 1.5rem 1rem;
+}
+
+.review-header {
+	margin: 1rem 0;
+	text-align: center;
+}
+
+.review-container {
+	padding: 0 5rem;
+	display: grid;
+	grid-template-columns: repeat(auto-fill, 20rem);
+	gap: 1rem;
+	justify-content: center;
+}
+
+.review-item {
+	background-color: var(--bg);
+	padding: 1rem;
+	border: solid;
+	border-radius: 1rem;
+	cursor: pointer;
+}
+
+input,
+button,
+textarea,
+select {
+	font: inherit;
+}
+
+footer {
+	background-color: var(--bg-dark);
+	padding: 0.5rem;
+	text-align: center;
+}
+
+#contact-btn {
+	background-color: var(--bg-dark);
+	padding: 0.25rem;
+	margin: 0.5rem 0;
+	border: solid;
+	border-radius: 0.5rem;
+	cursor: pointer;
 }
