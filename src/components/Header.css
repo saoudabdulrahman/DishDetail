@@ -1,0 +1,131 @@
+header {
+	background-color: var(--bg-dark);
+	border-bottom: 1px solid var(--primary);
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 1.5rem;
+	gap: 1rem;
+	position: relative;
+	flex-wrap: wrap;
+}
+
+.logo {
+	font-family: 'Libre Baskerville', sans-serif;
+}
+
+.logo a {
+	text-decoration: none;
+	color: light-dark(var(--text), var(--primary));
+	cursor: pointer;
+}
+
+.headerActions {
+	display: flex;
+	gap: 0.5rem;
+	align-items: center;
+}
+
+#hamburgerButton {
+	display: none;
+	background: none;
+	border: none;
+	font-size: 1.5rem;
+	cursor: pointer;
+	padding: 0.25rem;
+}
+
+.headerActions a {
+	margin-right: 0.5rem;
+	text-decoration: none;
+	color: var(--text);
+	cursor: pointer;
+	font-weight: 500;
+	transition: color 0.2s ease;
+}
+
+.headerActions a:hover {
+	color: var(--primary);
+}
+
+.headerActions button {
+	background-color: var(--primary);
+	color: var(--text-on-primary);
+	padding: 0.4rem 1rem;
+	border: none;
+	border-radius: 0.5rem;
+	cursor: pointer;
+	box-shadow: var(--shadow-s);
+	transition:
+		transform 0.2s ease,
+		box-shadow 0.2s ease,
+		filter 0.2s ease;
+}
+
+.headerActions button:hover {
+	transform: translateY(-1px);
+	filter: brightness(1.1);
+	box-shadow: var(--shadow-l);
+}
+
+.searchContainer {
+	display: flex;
+}
+
+#searchInput {
+	padding: 0.25rem 0.75rem;
+	border: none;
+	border-right: none;
+	border-radius: 0.5rem 0 0 0.5rem;
+	box-shadow: var(--shadow-s);
+}
+
+#searchButton {
+	background-color: var(--primary);
+	color: var(--text-on-primary);
+	padding: 0.25rem 0.75rem;
+	border: none;
+	border-radius: 0 0.5rem 0.5rem 0;
+	cursor: pointer;
+	box-shadow: var(--shadow-s);
+	transition: filter 0.2s ease;
+}
+
+#searchButton:hover {
+	filter: brightness(1.1);
+}
+
+/* --- Responsive (mobile) --- */
+@media (max-width: 768px) {
+	#hamburgerButton {
+		display: block;
+	}
+
+	.headerActions {
+		display: none;
+		width: 100%;
+		flex-direction: column;
+		align-items: stretch;
+		gap: 0.5rem;
+		padding-bottom: 1rem;
+	}
+
+	.headerActions.open {
+		display: flex;
+	}
+
+	.headerActions a,
+	.headerActions button {
+		text-align: center;
+		margin-right: 0;
+	}
+
+	.searchContainer {
+		order: 3;
+		width: 100%;
+	}
+
+	#searchInput {
+		flex: 1;
+	}
+}

@@ -1,0 +1,35 @@
+.reviewItem {
+	background-color: var(--bg);
+	padding: 1rem;
+	border: none;
+	border-radius: 1rem;
+	cursor: pointer;
+	box-shadow: var(--shadow-s);
+	transition:
+		transform 0.2s ease,
+		box-shadow 0.2s ease;
+}
+
+.reviewItem:hover {
+	transform: translateY(-4px);
+	box-shadow: var(--shadow-l);
+}
+
+.reviewItemHeader {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 0.25rem;
+}
+
+.stars {
+	color: var(--primary);
+	font-size: 1.1rem;
+	letter-spacing: 1px;
+}
+
+.reviewMeta {
+	font-size: 0.85rem;
+	color: var(--text-muted);
+	margin-bottom: 0.5rem;
+}

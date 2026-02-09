@@ -1,0 +1,68 @@
+@import url('https://fonts.googleapis.com/css2?family=Google+Sans:ital,opsz,wght@0,17..18,400..700;1,17..18,400..700&family=Libre+Baskerville:ital,wght@0,400..700;1,400..700&display=swap');
+
+:root {
+	color-scheme: light dark;
+
+	--bg-dark: light-dark(oklch(0.92 0.02 280), oklch(0.15 0.02 280));
+	--bg: light-dark(oklch(0.96 0.02 280), oklch(0.2 0.02 280));
+	--bg-light: light-dark(oklch(0.98 0.02 280), oklch(0.25 0.02 280));
+
+	--text: light-dark(oklch(0.15 0 0), oklch(0.96 0 0));
+	--text-muted: light-dark(oklch(0.4 0 0), oklch(0.76 0 0));
+	--text-on-primary: oklch(0.2 0.02 280);
+
+	--primary: oklch(0.75 0.15 85);
+	--secondary: oklch(0.75 0.02 280);
+
+	--shadow-s:
+		inset 0 1px 2px oklch(1 0 0 / 18.82%), 0 1px 2px oklch(0 0 0 / 18.82%),
+		0 2px 4px oklch(0 0 0 / 8.24%);
+	--shadow-m:
+		inset 0 1px 2px oklch(1 0 0 / 31.37%), 0 2px 4px oklch(0 0 0 / 18.82%),
+		0 4px 8px oklch(0 0 0 / 8.24%);
+	--shadow-l:
+		inset 0 1px 2px oklch(1 0 0 / 43.92%), 0 4px 6px oklch(0 0 0 / 18.82%),
+		0 6px 10px oklch(0 0 0 / 8.24%);
+}
+
+* {
+	box-sizing: border-box;
+	margin: 0;
+}
+
+body {
+	font-family: 'Google Sans', sans-serif;
+	line-height: 1.5;
+	color: var(--text);
+	background-color: var(--bg-light);
+}
+
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	overflow-wrap: break-word;
+}
+
+p {
+	text-wrap: pretty;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	text-wrap: balance;
+}
+
+input,
+button,
+textarea,
+select {
+	font: inherit;
+}
