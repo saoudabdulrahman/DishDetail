@@ -31,14 +31,6 @@ footer {
 	margin-bottom: 0.75rem;
 }
 
-.footerSocial a {
-	text-decoration: none;
-	color: inherit;
-	font-weight: bold;
-	font-size: 0.9rem;
-}
-
-.footerSocial a:hover {
-	text-decoration: underline;
-	color: var(--primary);
+.footerIcon {
+	color: var(--text);
 }

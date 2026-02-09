@@ -16,11 +16,13 @@ export default function Footer() {
 				<a
 					href="https://github.com/saoudabdulrahman/DishDetail"
 					target="_blank"
+					rel="noopener noreferrer"
+					className="footerIcon"
 				>
 					<SiGithub />
 				</a>
 			</div>
-			<p>&copy; 2026 Dish Detail. All rights reserved.</p>
+			<p>&copy; 2026 Dish Detail</p>
 		</footer>
 	);
 }
