@@ -22,10 +22,17 @@
 	margin-bottom: 0.25rem;
 }
 
+.starFilled,
+.starEmpty {
+	width: 1.25rem;
+}
+
+.starFilled {
+  fill: var(--primary);
+}
+
 .stars {
 	color: var(--primary);
-	font-size: 1.1rem;
-	letter-spacing: 1px;
 }
 
 .reviewMeta {
