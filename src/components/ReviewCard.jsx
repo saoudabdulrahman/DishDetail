@@ -1,9 +1,14 @@
+import { Star } from 'lucide-react';
 import './ReviewCard.css';
 
 // Helper to render stars
 const StarRating = ({ rating }) => {
 	return (
-		<span className="stars">{'★'.repeat(rating) + '☆'.repeat(5 - rating)}</span>
+		<span className="stars">
+			{[...Array(5)].map((_, i) => (
+				<Star key={i} className={i < rating ? 'starFilled' : 'starEmpty'} />
+			))}
+		</span>
 	);
 };
 
