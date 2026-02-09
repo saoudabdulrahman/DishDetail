@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import { Search } from 'lucide-react';
+import { Menu } from 'lucide-react';
 import './Header.css';
 
 export default function Header({ onSearch }) {
@@ -32,7 +34,7 @@ export default function Header({ onSearch }) {
 					onKeyDown={handleKeyDown}
 				/>
 				<button id="searchButton" onClick={handleSearch}>
-					Search
+					<Search />
 				</button>
 			</div>
 
@@ -42,7 +44,7 @@ export default function Header({ onSearch }) {
 				onClick={() => setIsMenuOpen(!isMenuOpen)}
 				aria-label="Toggle navigation menu"
 			>
-				&#9776;
+				<Menu />
 			</button>
 
 			{/* Conditional class based on state */}

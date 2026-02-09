@@ -1,3 +1,4 @@
+import { SiGithub } from '@icons-pack/react-simple-icons';
 import './Footer.css';
 
 export default function Footer() {
@@ -12,9 +13,12 @@ export default function Footer() {
 				</a>
 			</div>
 			<div className="footerSocial">
-				<a href="#">FB</a>
-				<a href="#">TW</a>
-				<a href="#">IG</a>
+				<a
+					href="https://github.com/saoudabdulrahman/DishDetail"
+					target="_blank"
+				>
+					<SiGithub />
+				</a>
 			</div>
 			<p>&copy; 2026 Dish Detail. All rights reserved.</p>
 		</footer>

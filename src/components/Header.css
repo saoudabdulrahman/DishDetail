@@ -62,6 +62,10 @@ header {
 		filter 0.2s ease;
 }
 
+#loginButton {
+	background-color: var(--secondary);
+}
+
 .headerActions button:hover {
 	transform: translateY(-1px);
 	filter: brightness(1.1);
@@ -73,17 +77,25 @@ header {
 }
 
 #searchInput {
-	padding: 0.25rem 0.75rem;
+	padding: 0.5rem 1rem;
 	border: none;
 	border-right: none;
 	border-radius: 0.5rem 0 0 0.5rem;
 	box-shadow: var(--shadow-s);
+	transition: filter 0.2s ease;
+}
+
+#searchInput:hover {
+	filter: brightness(1.1);
 }
 
 #searchButton {
+	display: flex;
+	align-items: center;
+	justify-content: center;
 	background-color: var(--primary);
 	color: var(--text-on-primary);
-	padding: 0.25rem 0.75rem;
+	padding: 0.5rem;
 	border: none;
 	border-radius: 0 0.5rem 0.5rem 0;
 	cursor: pointer;
