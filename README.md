@@ -32,8 +32,8 @@ A restaurant review browsing app built with React and Vite.
 
 ## Other Scripts
 
-| Command           | Description                        |
-| ----------------- | ---------------------------------- |
-| `npm run build`   | Build for production               |
-| `npm run preview` | Preview the production build       |
-| `npm run lint`    | Run ESLint to check for issues     |
+| Command           | Description                    |
+| ----------------- | ------------------------------ |
+| `npm run build`   | Build for production           |
+| `npm run preview` | Preview the production build   |
+| `npm run lint`    | Run ESLint to check for issues |
