@@ -11,7 +11,6 @@ export default function Header({ onSearch }) {
 		onSearch(query);
 	};
 
-	// Allow pressing "Enter" to search
 	const handleKeyDown = (e) => {
 		if (e.key === 'Enter') handleSearch();
 	};
@@ -20,7 +19,7 @@ export default function Header({ onSearch }) {
 		<header>
 			<div className="logo">
 				<h1>
-					<a href="/">Dish Detail</a>
+					<Link to="/">Dish Detail</Link>
 				</h1>
 			</div>
 
@@ -38,7 +37,6 @@ export default function Header({ onSearch }) {
 				</button>
 			</div>
 
-			{/* Hamburger Toggle */}
 			<button
 				id="hamburgerButton"
 				onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -47,7 +45,6 @@ export default function Header({ onSearch }) {
 				<Menu />
 			</button>
 
-			{/* Conditional class based on state */}
 			<nav className={`headerActions ${isMenuOpen ? 'open' : ''}`}>
 				<a href="#">Establishments</a>
 				<a href="#">Reviews</a>
