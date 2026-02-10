@@ -1,4 +1,5 @@
 header {
+	font-family: 'Fraunces', sans-serif;
 	background-color: var(--bg-dark);
 	border-bottom: 1px solid var(--primary);
 	display: flex;
@@ -8,10 +9,6 @@ header {
 	gap: 1rem;
 	position: relative;
 	flex-wrap: wrap;
-}
-
-.logo {
-	font-family: 'Libre Baskerville', sans-serif;
 }
 
 .logo a {
@@ -73,10 +70,13 @@ header {
 }
 
 .searchContainer {
+	flex: 1;
+	padding: 0 1rem;
 	display: flex;
 }
 
 #searchInput {
+	width: 100%;
 	padding: 0.5rem 1rem;
 	border: none;
 	border-right: none;
@@ -108,7 +108,7 @@ header {
 }
 
 /* --- Responsive (mobile) --- */
-@media (max-width: 768px) {
+@media (max-width: 920px) {
 	#hamburgerButton {
 		display: block;
 	}
@@ -133,8 +133,9 @@ header {
 	}
 
 	.searchContainer {
+		flex: 0 0 100%;
+		padding: 0;
 		order: 3;
-		width: 100%;
 	}
 
 	#searchInput {

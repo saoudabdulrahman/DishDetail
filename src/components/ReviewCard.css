@@ -28,7 +28,7 @@
 }
 
 .starFilled {
-  fill: var(--primary);
+	fill: var(--primary);
 }
 
 .stars {
