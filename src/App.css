@@ -1,6 +1,14 @@
+.app-container {
+	min-height: 100dvh;
+	display: grid;
+	grid-template-rows: auto 1fr auto;
+	grid-template-columns: minmax(0, 1fr);
+}
+
 main {
 	padding: 1.5rem;
-	max-width: 1200px;
+	width: 100%;
+	max-width: 100rem;
 	margin: 0 auto;
 }
 
