@@ -1,0 +1,118 @@
+
+.loginPage {
+  min-height: calc(100vh - 120px);
+  display: grid;
+  place-items: center;
+  padding: 24px;
+}
+
+.loginCard {
+  width: 100%;
+  max-width: 420px;
+  background: rgb(0, 0, 0);
+  border: 1px solid #e8e8e8;
+  border-radius: 14px;
+  padding: 20px;
+}
+
+.loginSubtext {
+  margin-top: 6px;
+  margin-bottom: 14px;
+  opacity: 0.8;
+}
+
+.loginError {
+  background: #000000;
+  border: 1px solid #ffd0d0;
+  padding: 10px;
+  border-radius: 10px;
+  margin: 12px 0;
+}
+
+.loginForm {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.loginForm label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-weight: 600;
+}
+
+.loginForm input[type="text"],
+.loginForm input[type="password"] {
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  font-weight: 400;
+
+  transition: filter 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.loginForm input[type="text"]:hover,
+.loginForm input[type="password"]:hover {
+  filter: brightness(1.05);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.10);
+}
+
+.loginForm input[type="text"]:focus,
+.loginForm input[type="password"]:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.14);
+}
+
+.rememberRow {
+  flex-direction: row !important;
+  align-items: center;
+  gap: 10px !important;
+  font-weight: 500 !important;
+}
+
+.loginBtn {
+  margin-top: 6px;
+  padding: 10px 12px;
+  background-color: light-dark(var(--text), var(--primary));
+  color: rgb(255, 255, 255);
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+
+  transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+}
+
+.loginBtn:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.1);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.16);
+}
+
+.loginAlt {
+  margin-top: 14px;
+  text-align: center;
+  opacity: 0.9;
+}
+
+.loginAltLink {
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.loginAltLink:hover {
+  text-decoration: underline;
+}
+
+@keyframes shakeX {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-6px); }
+  40% { transform: translateX(6px); }
+  60% { transform: translateX(-4px); }
+  80% { transform: translateX(4px); }
+}
+
+.loginError.shake {
+  animation: shakeX 0.45s ease;
+}
