@@ -1,7 +1,6 @@
 import { Star } from 'lucide-react';
 import './ReviewCard.css';
 
-// Helper to render stars
 const StarRating = ({ rating }) => {
 	return (
 		<span className="stars">
