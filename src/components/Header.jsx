@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Search } from 'lucide-react';
-import { Menu } from 'lucide-react';
+import { Search, Menu } from 'lucide-react';
 import './Header.css';
 
 export default function Header({ onSearch }) {
@@ -16,11 +15,15 @@ export default function Header({ onSearch }) {
 		if (e.key === 'Enter') handleSearch();
 	};
 
+	const closeMenu = () => setIsMenuOpen(false);
+
 	return (
 		<header>
 			<div className="logo">
 				<h1>
-					<Link to="/">Dish Detail</Link>
+					<Link to="/" onClick={closeMenu}>
+						Dish Detail
+					</Link>
 				</h1>
 			</div>
 
@@ -33,7 +36,7 @@ export default function Header({ onSearch }) {
 					onChange={(e) => setQuery(e.target.value)}
 					onKeyDown={handleKeyDown}
 				/>
-				<button id="searchButton" onClick={handleSearch}>
+				<button id="searchButton" onClick={handleSearch} aria-label="Search">
 					<Search />
 				</button>
 			</div>
@@ -42,25 +45,24 @@ export default function Header({ onSearch }) {
 				id="hamburgerButton"
 				onClick={() => setIsMenuOpen(!isMenuOpen)}
 				aria-label="Toggle navigation menu"
+				aria-expanded={isMenuOpen}
 			>
 				<Menu />
 			</button>
 
 			<nav className={`headerActions ${isMenuOpen ? 'open' : ''}`}>
-				<a href="#">Establishments</a>
-				<Link to="/reviews">Reviews</Link>
-				<button
-					id="loginButton"
-					onClick={() => alert('Login form would appear here.')}
-				>
+				<Link to="/establishments" onClick={closeMenu}>
+					Establishments
+				</Link>
+				<Link to="/reviews" onClick={closeMenu}>
+					Reviews
+				</Link>
+				<Link id="loginButton" to="/login" onClick={closeMenu}>
 					Log In
-				</button>
-				<button
-					id="signupButton"
-					onClick={() => alert('Sign-up form would appear here.')}
-				>
+				</Link>
+				<Link id="signupButton" to="/signup" onClick={closeMenu}>
 					Sign Up
-				</button>
+				</Link>
 			</nav>
 		</header>
 	);
