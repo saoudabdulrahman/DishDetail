@@ -48,7 +48,7 @@ export default function Header({ onSearch }) {
 
 			<nav className={`headerActions ${isMenuOpen ? 'open' : ''}`}>
 				<a href="#">Establishments</a>
-				<a href="#">Reviews</a>
+				<Link to="/reviews">Reviews</Link>
 				<button
 					id="loginButton"
 					onClick={() => alert('Login form would appear here.')}
