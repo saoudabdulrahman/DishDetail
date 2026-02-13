@@ -30,10 +30,8 @@ A restaurant review browsing app built with React and Vite.
 
    The app will be available at the local URL shown in the terminal (typically `http://localhost:5173`).
 
-## Other Scripts
-
-| Command           | Description                    |
-| ----------------- | ------------------------------ |
-| `npm run build`   | Build for production           |
-| `npm run preview` | Preview the production build   |
-| `npm run lint`    | Run ESLint to check for issues |
+## Resources Used
+- [React](https://react.dev/)
+- [Vite](https://vite.dev/)
+- [Lucide](https://lucide.dev/)
+- [Simple Icons](https://simpleicons.org/)
