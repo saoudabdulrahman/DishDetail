@@ -20,14 +20,23 @@ export default function ReviewCard({ review }) {
 
 	return (
 		<article className="reviewItem" onClick={handleClick}>
-			<div className="reviewItemHeader">
-				<h3>{review.restaurant}</h3>
-				<StarRating rating={review.rating} />
+			<div className="restaurantImageContainer">
+				<img
+					src={review.restaurantImage}
+					alt={`Food or ambiance from ${review.restaurant}`}
+					className="restaurantImg"
+				/>
 			</div>
-			<p className="reviewMeta">
-				Reviewed by <strong>{review.reviewer}</strong> · {review.date}
-			</p>
-			<p>{review.body}</p>
+			<div className="reviewItemContent">
+				<div className="reviewItemHeader">
+					<h3>{review.restaurant}</h3>
+					<StarRating rating={review.rating} />
+				</div>
+				<p className="reviewMeta">
+					Reviewed by <strong>{review.reviewer}</strong> · {review.date}
+				</p>
+				<p className="reviewBody">{review.body}</p>
+			</div>
 		</article>
 	);
 }
