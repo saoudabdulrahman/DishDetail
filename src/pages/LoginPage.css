@@ -68,8 +68,14 @@
 .loginForm .rememberRow {
 	flex-direction: row;
 	align-items: center;
-	gap: 0.5rem;
-	font-weight: 500;
+	padding: 0 0.5rem;
+	font-weight: 400;
+	font-size: 0.9rem;
+}
+
+.rememberRow input[type='checkbox'] {
+	accent-color: var(--primary);
+	scale: 1.5;
 }
 
 .loginBtn {
