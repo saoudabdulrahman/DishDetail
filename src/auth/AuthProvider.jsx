@@ -1,8 +1,8 @@
 import { useMemo, useState } from 'react';
 import { clearAuth, loadAuth, saveAuth } from './storage';
-import { AuthContext } from './authContext';
+import { AuthContext } from './context';
 
-export function AuthProvider({ children }) {
+export default function AuthProvider({ children }) {
 	const [user, setUser] = useState(() => loadAuth());
 
 	const value = useMemo(() => {

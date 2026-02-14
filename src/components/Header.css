@@ -19,7 +19,7 @@ header {
 
 .headerActions {
 	display: flex;
-	gap: 0.5rem;
+	gap: 1rem;
 	align-items: center;
 }
 
@@ -33,7 +33,6 @@ header {
 }
 
 .headerActions a {
-	margin-right: 0.5rem;
 	text-decoration: none;
 	color: var(--text);
 	cursor: pointer;
@@ -48,7 +47,7 @@ header {
 .headerActions button {
 	background-color: var(--primary);
 	color: var(--text-on-primary);
-	padding: 0.4rem 1rem;
+	padding: 0.5rem 1rem;
 	border: none;
 	border-radius: 1rem;
 	cursor: pointer;
