@@ -50,7 +50,7 @@ header {
 	color: var(--text-on-primary);
 	padding: 0.4rem 1rem;
 	border: none;
-	border-radius: 0.5rem;
+	border-radius: 1rem;
 	cursor: pointer;
 	box-shadow: var(--shadow-s);
 	transition:
@@ -59,20 +59,8 @@ header {
 		filter 0.2s ease;
 }
 
-/* Log In is a <Link>, so make it look like a normal link (not a button) */
 #loginButton {
-	background: transparent;
-	border: none;
-	color: inherit;
-	padding: 0;
-	text-decoration: none;
-}
-
-/* FIXED: this block was missing a closing brace */
-#loginButton:hover {
-	color: var(--primary);
-	cursor: pointer;
-	text-decoration: none;
+	background-color: var(--secondary);
 }
 
 .headerActions button:hover {
@@ -91,7 +79,7 @@ header {
 	width: 100%;
 	padding: 0.5rem 1rem;
 	border: none;
-	border-radius: 0.5rem 0 0 0.5rem;
+	border-radius: 1rem 0 0 1rem;
 	box-shadow: var(--shadow-s);
 	transition: filter 0.2s ease;
 }
@@ -108,7 +96,7 @@ header {
 	color: var(--text-on-primary);
 	padding: 0.5rem;
 	border: none;
-	border-radius: 0 0.5rem 0.5rem 0;
+	border-radius: 0 1rem 1rem 0;
 	cursor: pointer;
 	box-shadow: var(--shadow-s);
 	transition: filter 0.2s ease;

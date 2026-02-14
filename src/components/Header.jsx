@@ -57,11 +57,11 @@ export default function Header({ onSearch }) {
 				<Link to="/reviews" onClick={closeMenu}>
 					Reviews
 				</Link>
-				<Link id="loginButton" to="/login" onClick={closeMenu}>
-					Log In
+				<Link to="/login" onClick={closeMenu}>
+					<button id="loginButton">Log In</button>
 				</Link>
-				<Link id="signupButton" to="/signup" onClick={closeMenu}>
-					Sign Up
+				<Link to="/signup" onClick={closeMenu}>
+					<button id="signupButton">Sign Up</button>
 				</Link>
 			</nav>
 		</header>
