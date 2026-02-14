@@ -1,5 +1,5 @@
 import { Star } from 'lucide-react';
-import './ReviewCard.css';
+import './EstablishmentCard.css';
 
 const StarRating = ({ rating }) => {
 	return (
@@ -11,15 +11,15 @@ const StarRating = ({ rating }) => {
 	);
 };
 
-export default function ReviewCard({ review, restaurant }) {
+export default function EstablishmentCard({ restaurant }) {
 	const handleClick = () => {
 		alert(
-			`You clicked on "${restaurant.restaurantName}". This would navigate to the full review page.`,
+			`You clicked on "${restaurant.restaurantName}". This would navigate to the establishment page.`,
 		);
 	};
 
 	return (
-		<article className="reviewItem" onClick={handleClick}>
+		<article className="establishmentItem" onClick={handleClick}>
 			<div className="restaurantImageContainer">
 				<img
 					src={restaurant.restaurantImage}
@@ -27,15 +27,13 @@ export default function ReviewCard({ review, restaurant }) {
 					className="restaurantImg"
 				/>
 			</div>
-			<div className="reviewItemContent">
-				<div className="reviewItemHeader">
+			<div className="establishmentItemContent">
+				<div className="establishmentItemHeader">
 					<h3>{restaurant.restaurantName}</h3>
-					<StarRating rating={review.rating} />
+					<StarRating rating={restaurant.rating} />
 				</div>
-				<p className="reviewMeta">
-					Reviewed by <strong>{review.reviewer}</strong> · {review.date}
-				</p>
-				<p className="reviewBody">{review.body}</p>
+				<p className="establishmentCuisine">{restaurant.cuisine}</p>
+				<p className="establishmentDescription">{restaurant.description}</p>
 			</div>
 		</article>
 	);

@@ -1,13 +1,19 @@
 import { Link } from 'react-router-dom';
 import { ChefHat, Search, Star, UtensilsCrossed } from 'lucide-react';
 import ReviewCard from '../components/ReviewCard';
-import { reviewsData } from '../data';
+import { reviewsData, restaurantsData } from '../data';
 import './HomePage.css';
 
 export default function HomePage() {
+	const restaurantById = new Map(restaurantsData.map((r) => [r.id, r]));
 	const featured = [...reviewsData]
 		.sort((a, b) => b.rating - a.rating)
-		.slice(0, 4);
+		.slice(0, 4)
+		.map((review) => ({
+			review,
+			restaurant: restaurantById.get(review.restaurantId),
+		}))
+		.filter(({ restaurant }) => restaurant);
 
 	return (
 		<main>
@@ -32,7 +38,7 @@ export default function HomePage() {
 				</div>
 				<div className="stat">
 					<span className="statNumber">
-						{new Set(reviewsData.map((r) => r.restaurant)).size}
+						{new Set(reviewsData.map((r) => r.restaurantId)).size}
 					</span>
 					<span className="statLabel">Restaurants</span>
 				</div>
@@ -55,8 +61,8 @@ export default function HomePage() {
 			</div>
 
 			<section className="featuredGrid">
-				{featured.map((review) => (
-					<ReviewCard key={review.id} review={review} />
+				{featured.map(({ review, restaurant }) => (
+					<ReviewCard key={review.id} review={review} restaurant={restaurant} />
 				))}
 			</section>
 

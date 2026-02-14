@@ -6,6 +6,7 @@ import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
 import ReviewsPage from './pages/ReviewsPage';
+import EstablishmentsPage from './pages/EstablishmentsPage';
 import './App.css';
 
 function App() {
@@ -22,6 +23,10 @@ function App() {
 				<Route
 					path="/reviews"
 					element={<ReviewsPage searchQuery={searchQuery} />}
+				/>
+				<Route
+					path="/establishments"
+					element={<EstablishmentsPage searchQuery={searchQuery} />}
 				/>
 			</Routes>
 

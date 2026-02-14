@@ -1,0 +1,44 @@
+.establishmentItem {
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
+	background-color: var(--bg);
+	border: none;
+	border-radius: 1rem;
+	cursor: pointer;
+	box-shadow: var(--shadow-s);
+	transition:
+		transform 0.2s ease,
+		box-shadow 0.2s ease;
+}
+
+.establishmentItem:hover {
+	transform: translateY(-4px);
+	box-shadow: var(--shadow-l);
+}
+
+.establishmentItemContent {
+	padding: 0 1rem 1rem 1rem;
+	margin-top: -1rem;
+	position: relative;
+	z-index: 1;
+}
+
+.establishmentItemHeader {
+	display: flex;
+	justify-content: space-between;
+	align-items: flex-start;
+	margin-bottom: 0.25rem;
+}
+
+.establishmentCuisine {
+	font-size: 0.85rem;
+	color: var(--primary);
+	font-weight: 600;
+	margin-bottom: 0.5rem;
+}
+
+.establishmentDescription {
+	font-size: 0.9rem;
+	color: var(--text-muted);
+}
