@@ -1,11 +1,25 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Search, Menu } from 'lucide-react';
+import { Search, Menu, User, LogOut, ChevronDown } from 'lucide-react';
+import { useAuth } from '../auth/useAuth';
 import './Header.css';
 
 export default function Header({ onSearch }) {
+	const { user, logout } = useAuth();
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
+	const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 	const [query, setQuery] = useState('');
+	const dropdownRef = useRef(null);
+
+	useEffect(() => {
+		const handleClickOutside = (e) => {
+			if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+				setIsDropdownOpen(false);
+			}
+		};
+		document.addEventListener('mousedown', handleClickOutside);
+		return () => document.removeEventListener('mousedown', handleClickOutside);
+	}, []);
 
 	const handleSearch = () => {
 		onSearch(query);
@@ -57,12 +71,47 @@ export default function Header({ onSearch }) {
 				<Link to="/reviews" onClick={closeMenu}>
 					Reviews
 				</Link>
-				<Link to="/login" onClick={closeMenu}>
-					<button id="loginButton">Log In</button>
-				</Link>
-				<Link to="/signup" onClick={closeMenu}>
-					<button id="signupButton">Sign Up</button>
-				</Link>
+				{user ?
+					<>
+						<Link to="/submit-review" onClick={closeMenu}>
+							<button id="submitReviewButton">Submit Review</button>
+						</Link>
+						<div className="userDropdown" ref={dropdownRef}>
+							<button
+								className="userInfoToggle"
+								onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+								aria-expanded={isDropdownOpen}
+							>
+								<User size={18} />
+								<span className="username">{user.username}</span>
+								<ChevronDown
+									size={14}
+									className={`chevron ${isDropdownOpen ? 'open' : ''}`}
+								/>
+							</button>
+							<div className={`dropdownMenu ${isDropdownOpen ? 'open' : ''}`}>
+								<button
+									id="logoutButton"
+									onClick={() => {
+										logout();
+										setIsDropdownOpen(false);
+										closeMenu();
+									}}
+								>
+									<LogOut size={16} /> Log Out
+								</button>
+							</div>
+						</div>
+					</>
+				:	<>
+						<Link to="/login" onClick={closeMenu}>
+							<button id="loginButton">Log In</button>
+						</Link>
+						<Link to="/signup" onClick={closeMenu}>
+							<button id="signupButton">Sign Up</button>
+						</Link>
+					</>
+				}
 			</nav>
 		</header>
 	);
