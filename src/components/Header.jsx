@@ -47,22 +47,22 @@ export default function Header() {
 				</h1>
 			</div>
 
-			<div className="searchContainer">
+			<div className="search-container">
 				<input
-					id="searchInput"
+					id="search-input"
 					type="text"
 					placeholder="Search for restaurants..."
 					value={query}
 					onChange={(e) => setQuery(e.target.value)}
 					onKeyDown={handleKeyDown}
 				/>
-				<button id="searchButton" onClick={handleSearch} aria-label="Search">
+				<button id="search-button" onClick={handleSearch} aria-label="Search">
 					<Search />
 				</button>
 			</div>
 
 			<button
-				id="hamburgerButton"
+				id="hamburger-button"
 				onClick={() => setIsMenuOpen(!isMenuOpen)}
 				aria-label="Toggle navigation menu"
 				aria-expanded={isMenuOpen}
@@ -111,10 +111,10 @@ export default function Header() {
 					</>
 				:	<>
 						<Link to="/login" onClick={closeMenu}>
-							<button id="loginButton">Log In</button>
+							<button id="login-button">Log In</button>
 						</Link>
 						<Link to="/signup" onClick={closeMenu}>
-							<button id="signupButton">Sign Up</button>
+							<button id="signup-button">Sign Up</button>
 						</Link>
 					</>
 				}

@@ -6,28 +6,28 @@ import './EstablishmentPage.css';
 
 const DetailReviewCard = ({ review }) => {
 	return (
-		<article className="detailReviewCard">
-			<div className="detailReviewHeader">
-				<div className="reviewerInfo">
+		<article className="detail-review-card">
+			<div className="detail-review-header">
+				<div className="reviewer-info">
 					<img
 						src={review.reviewerAvatar}
 						alt={review.reviewer}
-						className="reviewerAvatar"
+						className="reviewer-avatar"
 					/>
 					<div>
-						<h4 className="reviewerName">{review.reviewer}</h4>
-						<p className="reviewDate">{review.date}</p>
+						<h4 className="reviewer-name">{review.reviewer}</h4>
+						<p className="review-date">{review.date}</p>
 					</div>
 				</div>
 				<StarRating rating={review.rating} />
 			</div>
-			<p className="detailReviewBody">{review.body}</p>
+			<p className="detail-review-body">{review.body}</p>
 			{review.reviewImage && (
-				<div className="detailReviewImageContainer">
+				<div className="detail-review-image-container">
 					<img
 						src={review.reviewImage}
 						alt="Review photo"
-						className="detailReviewImage"
+						className="detail-review-image"
 					/>
 				</div>
 			)}
@@ -52,9 +52,9 @@ export default function EstablishmentPage() {
 
 	if (!restaurant) {
 		return (
-			<main className="errorContainer">
+			<main className="error-container">
 				<p>Restaurant not found</p>
-				<button onClick={() => navigate('/establishments')} className="backBtn">
+				<button onClick={() => navigate('/establishments')} className="back-btn">
 					<ArrowLeft size={18} /> Go Back
 				</button>
 			</main>
@@ -62,79 +62,79 @@ export default function EstablishmentPage() {
 	}
 
 	return (
-		<main className="establishmentDetail">
-			<button onClick={() => navigate('/establishments')} className="backBtn">
+		<main className="establishment-detail">
+			<button onClick={() => navigate('/establishments')} className="back-btn">
 				<ArrowLeft size={18} /> Back to Establishments
 			</button>
 
-			<div className="detailBanner">
+			<div className="detail-banner">
 				<img
 					src={restaurant.restaurantImage}
 					alt={restaurant.restaurantName}
-					className="detailBannerImg"
+					className="detail-banner-img"
 				/>
 			</div>
 
-			<div className="detailHeader">
-				<div className="detailHeaderTop">
+			<div className="detail-header">
+				<div className="detail-header-top">
 					<div>
 						<h2>{restaurant.restaurantName}</h2>
-						<p className="detailCuisine">{restaurant.cuisine}</p>
+						<p className="detail-cuisine">{restaurant.cuisine}</p>
 					</div>
-					<div className="detailRatingBadge">
-						<Star className="starFilled" />
+					<div className="detail-rating-badge">
+						<Star className="star-filled" />
 						<span>{avgRating}</span>
 					</div>
 				</div>
-				<p className="detailDescription">{restaurant.description}</p>
+				<p className="detail-description">{restaurant.description}</p>
 			</div>
 
-			<div className="detailQuickInfo">
-				<div className="detailInfoItem">
+			<div className="detail-quick-info">
+				<div className="detail-info-item">
 					<MapPin size={18} />
 					<div>
-						<p className="detailInfoLabel">Address</p>
-						<p className="detailInfoValue">{restaurant.address}</p>
+						<p className="detail-info-label">Address</p>
+						<p className="detail-info-value">{restaurant.address}</p>
 					</div>
 				</div>
-				<div className="detailInfoItem">
+				<div className="detail-info-item">
 					<Clock size={18} />
 					<div>
-						<p className="detailInfoLabel">Hours</p>
-						<p className="detailInfoValue">{restaurant.hours}</p>
+						<p className="detail-info-label">Hours</p>
+						<p className="detail-info-value">{restaurant.hours}</p>
 					</div>
 				</div>
-				<div className="detailInfoItem">
+				<div className="detail-info-item">
 					<Phone size={18} />
 					<div>
-						<p className="detailInfoLabel">Phone</p>
-						<p className="detailInfoValue">{restaurant.phone}</p>
+						<p className="detail-info-label">Phone</p>
+						<p className="detail-info-value">{restaurant.phone}</p>
 					</div>
 				</div>
-				<div className="detailInfoItem">
+				<div className="detail-info-item">
 					<Globe size={18} />
 					<div>
-						<p className="detailInfoLabel">Website</p>
-						<p className="detailInfoValue">{restaurant.website}</p>
+						<p className="detail-info-label">Website</p>
+						<p className="detail-info-value">{restaurant.website}</p>
 					</div>
 				</div>
 			</div>
 
-			<section className="detailReviewsSection">
-				<div className="detailReviewsSectionHeader">
+			<section className="detail-reviews-section">
+				<div className="detail-reviews-section-header">
 					<h2>Reviews</h2>
-					<span className="detailReviewsCount">
+					<span className="detail-reviews-count">
 						{reviews.length} {reviews.length === 1 ? 'review' : 'reviews'}
 					</span>
 				</div>
 
 				{reviews.length > 0 ?
-					<div className="detailReviewsList">
+					<div className="detail-reviews-list">
 						{reviews.map((review) => (
 							<DetailReviewCard key={review.id} review={review} />
 						))}
 					</div>
-				:	<p className="noReviews">No reviews yet. Be the first to review!</p>}
+				:	<p className="no-reviews">No reviews yet. Be the first to review!</p>}
 			</section>
 		</main>
 	);

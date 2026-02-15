@@ -23,7 +23,7 @@
 	margin: 0 auto 1.5rem;
 }
 
-.heroCta {
+.hero-cta {
 	display: inline-flex;
 	align-items: center;
 	gap: 0.5rem;
@@ -43,13 +43,13 @@
 	text-decoration: none;
 }
 
-.heroCta:hover {
+.hero-cta:hover {
 	transform: translateY(-2px);
 	box-shadow: var(--shadow-l);
 	filter: brightness(1.1);
 }
 
-.statsRow {
+.stats-row {
 	display: flex;
 	justify-content: center;
 	gap: 3rem;
@@ -61,19 +61,19 @@
 	text-align: center;
 }
 
-.statNumber {
+.stat-number {
 	display: block;
 	font-size: 2rem;
 	font-weight: 700;
 	color: var(--primary);
 }
 
-.statLabel {
+.stat-label {
 	font-size: 0.9rem;
 	color: var(--text-muted);
 }
 
-.sectionHeader {
+.section-header {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
@@ -81,22 +81,26 @@
 	margin-bottom: 1rem;
 }
 
-.sectionHeader h2 {
+.section-header h2 {
 	font-size: 1.5rem;
 }
 
-.seeAll {
+.see-all {
 	font-size: 0.9rem;
 	font-weight: 600;
 	color: var(--primary);
 	text-decoration: none;
 }
 
-.seeAll:hover {
+.see-all:hover {
 	text-decoration: underline;
 }
 
-.howItWorks {
+.featured-grid {
+	margin-bottom: 2.5rem;
+}
+
+.how-it-works {
 	display: grid;
 	grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
 	gap: 1.5rem;
@@ -117,7 +121,7 @@
 	box-shadow: var(--shadow-l);
 }
 
-.stepIcon {
+.step-icon {
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -138,7 +142,6 @@
 	color: var(--text-muted);
 }
 
-/* ── Responsive ── */
 @media (max-width: 768px) {
 	.hero {
 		padding: 2.5rem 1rem;
@@ -148,7 +151,7 @@
 		font-size: 2rem;
 	}
 
-	.statsRow {
+	.stats-row {
 		gap: 1.5rem;
 	}
 }

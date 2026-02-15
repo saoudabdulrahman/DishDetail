@@ -1,5 +1,4 @@
-/* ── Back button ── */
-.backBtn {
+.back-btn {
 	display: inline-flex;
 	align-items: center;
 	gap: 0.5rem;
@@ -18,14 +17,13 @@
 	margin-bottom: 1.5rem;
 }
 
-.backBtn:hover {
+.back-btn:hover {
 	transform: translateY(-2px);
 	box-shadow: var(--shadow-l);
 	filter: brightness(1.1);
 }
 
-/* ── Banner ── */
-.detailBanner {
+.detail-banner {
 	width: 100%;
 	height: 20rem;
 	border-radius: 1rem;
@@ -34,19 +32,17 @@
 	box-shadow: var(--shadow-s);
 }
 
-.detailBannerImg {
+.detail-banner-img {
 	width: 100%;
 	height: 100%;
 	object-fit: cover;
-	display: block;
 }
 
-/* ── Header ── */
-.detailHeader {
+.detail-header {
 	margin-bottom: 1.5rem;
 }
 
-.detailHeaderTop {
+.detail-header-top {
 	display: flex;
 	justify-content: space-between;
 	align-items: flex-start;
@@ -54,14 +50,14 @@
 	margin-bottom: 0.75rem;
 }
 
-.detailCuisine {
+.detail-cuisine {
 	font-size: 0.85rem;
 	font-weight: 600;
 	color: var(--primary);
 	margin-top: 0.25rem;
 }
 
-.detailRatingBadge {
+.detail-rating-badge {
 	display: flex;
 	align-items: center;
 	gap: 0.35rem;
@@ -75,18 +71,17 @@
 	flex-shrink: 0;
 }
 
-.detailRatingBadge .starFilled {
+.detail-rating-badge .star-filled {
 	width: 1.1rem;
 	height: 1.1rem;
 }
 
-.detailDescription {
+.detail-description {
 	color: var(--text-muted);
 	line-height: 1.6;
 }
 
-/* ── Quick info ── */
-.detailQuickInfo {
+.detail-quick-info {
 	display: grid;
 	grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
 	gap: 1rem;
@@ -97,19 +92,19 @@
 	box-shadow: var(--shadow-s);
 }
 
-.detailInfoItem {
+.detail-info-item {
 	display: flex;
 	align-items: flex-start;
 	gap: 0.75rem;
 }
 
-.detailInfoItem svg {
+.detail-info-item svg {
 	flex-shrink: 0;
 	margin-top: 0.2rem;
 	color: var(--primary);
 }
 
-.detailInfoLabel {
+.detail-info-label {
 	font-size: 0.7rem;
 	font-weight: 600;
 	text-transform: uppercase;
@@ -118,39 +113,37 @@
 	margin: 0 0 0.15rem 0;
 }
 
-.detailInfoValue {
+.detail-info-value {
 	font-size: 0.9rem;
 	font-weight: 500;
 	color: var(--text);
 	margin: 0;
 }
 
-/* ── Reviews section ── */
-.detailReviewsSection {
+.detail-reviews-section {
 	margin-top: 2rem;
 }
 
-.detailReviewsSectionHeader {
+.detail-reviews-section-header {
 	display: flex;
 	justify-content: space-between;
 	align-items: baseline;
 	margin-bottom: 1rem;
 }
 
-.detailReviewsCount {
+.detail-reviews-count {
 	font-size: 0.85rem;
 	font-weight: 600;
 	color: var(--text-muted);
 }
 
-.detailReviewsList {
+.detail-reviews-list {
 	display: flex;
 	flex-direction: column;
 	gap: 1rem;
 }
 
-/* ── Review card (detail page) ── */
-.detailReviewCard {
+.detail-review-card {
 	background-color: var(--bg);
 	border-radius: 1rem;
 	padding: 1.5rem;
@@ -160,61 +153,60 @@
 		box-shadow 0.2s ease;
 }
 
-.detailReviewCard:hover {
+.detail-review-card:hover {
 	transform: translateY(-2px);
 	box-shadow: var(--shadow-l);
 }
 
-.detailReviewHeader {
+.detail-review-header {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
 	margin-bottom: 0.75rem;
 }
 
-.reviewerInfo {
+.reviewer-info {
 	display: flex;
 	align-items: center;
 	gap: 0.75rem;
 }
 
-.reviewerAvatar {
+.reviewer-avatar {
 	width: 40px;
 	height: 40px;
 	border-radius: 50%;
 	object-fit: cover;
 }
 
-.reviewerName {
+.reviewer-name {
 	font-weight: 600;
 	margin: 0;
 }
 
-.reviewDate {
+.review-date {
 	font-size: 0.8rem;
 	color: var(--text-muted);
 	margin: 0;
 }
 
-.detailReviewBody {
+.detail-review-body {
 	color: var(--text-muted);
 	line-height: 1.6;
 }
 
-.detailReviewImageContainer {
+.detail-review-image-container {
 	border-radius: 0.75rem;
 	overflow: hidden;
 	margin-top: 0.75rem;
 }
 
-.detailReviewImage {
+.detail-review-image {
 	width: 100%;
 	height: auto;
 	display: block;
 }
 
-/* ── No-reviews state ── */
-.noReviews {
+.no-reviews {
 	text-align: center;
 	padding: 2rem;
 	color: var(--text-muted);
@@ -223,8 +215,7 @@
 	box-shadow: var(--shadow-s);
 }
 
-/* ── Error state ── */
-.errorContainer {
+.error-container {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
@@ -233,26 +224,25 @@
 	padding: 4rem 2rem;
 }
 
-.errorContainer p {
+.error-container p {
 	font-size: 1.15rem;
 	color: var(--text-muted);
 }
 
-/* ── Responsive ── */
 @media (max-width: 768px) {
-	.detailBanner {
+	.detail-banner {
 		height: 14rem;
 	}
 
-	.detailHeaderTop {
+	.detail-header-top {
 		flex-direction: column;
 	}
 
-	.detailQuickInfo {
+	.detail-quick-info {
 		grid-template-columns: 1fr;
 	}
 
-	.detailReviewCard {
+	.detail-review-card {
 		padding: 1rem;
 	}
 }

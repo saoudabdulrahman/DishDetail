@@ -1,4 +1,4 @@
-.reviewItem {
+.review-item {
 	display: flex;
 	flex-direction: column;
 	overflow: hidden;
@@ -12,19 +12,19 @@
 		box-shadow 0.2s ease;
 }
 
-.reviewItem:hover {
+.review-item:hover {
 	transform: translateY(-4px);
 	box-shadow: var(--shadow-l);
 }
 
-.reviewItemContent {
+.review-item-content {
 	padding: 0 1rem 1rem 1rem;
 	margin-top: -1rem;
 	position: relative;
 	z-index: 1;
 }
 
-.restaurantImageContainer {
+.restaurant-image-container {
 	width: 100%;
 	height: 12rem;
 	margin-bottom: 1rem;
@@ -34,29 +34,20 @@
 	mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
 }
 
-.restaurantImg {
-	width: 100%;
-	height: 100%;
+.restaurant-img {
+	height: auto;
 	object-fit: cover;
-	display: block;
 }
 
-.reviewItemHeader {
+.review-item-header {
 	display: flex;
 	justify-content: space-between;
 	align-items: flex-start;
 	margin-bottom: 0.25rem;
 }
 
-.reviewMeta {
+.review-meta {
 	font-size: 0.85rem;
 	color: var(--text-muted);
 	margin-bottom: 0.5rem;
 }
-/* 
-.reviewBody {
-	display: -webkit-box;
-	-webkit-line-clamp: 3;
-	-webkit-box-orient: vertical;
-	overflow: hidden;
-} */

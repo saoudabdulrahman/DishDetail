@@ -1,4 +1,4 @@
-.establishmentItem {
+.establishment-item {
 	display: flex;
 	flex-direction: column;
 	overflow: hidden;
@@ -12,33 +12,33 @@
 		box-shadow 0.2s ease;
 }
 
-.establishmentItem:hover {
+.establishment-item:hover {
 	transform: translateY(-4px);
 	box-shadow: var(--shadow-l);
 }
 
-.establishmentItemContent {
+.establishment-item-content {
 	padding: 0 1rem 1rem 1rem;
 	margin-top: -1rem;
 	position: relative;
 	z-index: 1;
 }
 
-.establishmentItemHeader {
+.establishment-item-header {
 	display: flex;
 	justify-content: space-between;
 	align-items: flex-start;
 	margin-bottom: 0.25rem;
 }
 
-.establishmentCuisine {
+.establishment-cuisine {
 	font-size: 0.85rem;
 	color: var(--primary);
 	font-weight: 600;
 	margin-bottom: 0.5rem;
 }
 
-.establishmentDescription {
+.establishment-description {
 	font-size: 0.9rem;
 	color: var(--text-muted);
 }

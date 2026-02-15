@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import ReviewCard from '../components/ReviewCard';
 import { reviewsData, restaurantsData } from '../data';
+import './ReviewsPage.css';
 
 export default function ReviewsPage() {
 	const [searchParams] = useSearchParams();
@@ -32,7 +33,7 @@ export default function ReviewsPage() {
 
 	return (
 		<main>
-			<h2 className="reviewHeader">Latest Reviews</h2>
+			<h2 className="review-header">Latest Reviews</h2>
 			<section className="card-grid">
 				{filteredReviews.length > 0 ?
 					filteredReviews.map(({ review, restaurant }) => (

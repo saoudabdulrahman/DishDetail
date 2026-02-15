@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import EstablishmentCard from '../components/EstablishmentCard';
 import { restaurantsData } from '../data.js';
+import './EstablishmentsPage.css';
 
 export default function EstablishmentsPage() {
 	const [searchParams] = useSearchParams();
@@ -24,7 +25,7 @@ export default function EstablishmentsPage() {
 
 	return (
 		<main>
-			<h2 className="establishmentsHeader">Establishments</h2>
+			<h2 className="establishments-header">Establishments</h2>
 			<section className="card-grid">
 				{filteredEstablishments.length > 0 ?
 					filteredEstablishments.map((restaurant) => (

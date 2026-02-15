@@ -5,23 +5,23 @@ import './ReviewCard.css';
 export default function ReviewCard({ review, restaurant }) {
 	return (
 		<Link to={`/establishments/${restaurant.id}`} className="card-link">
-			<article className="reviewItem">
-				<div className="restaurantImageContainer">
+			<article className="review-item">
+				<div className="restaurant-image-container">
 					<img
 						src={review.reviewImage}
 						alt={`Food or ambiance from ${restaurant.restaurantName}`}
-						className="restaurantImg"
+						className="restaurant-img"
 					/>
 				</div>
-				<div className="reviewItemContent">
-					<div className="reviewItemHeader">
+				<div className="review-item-content">
+					<div className="review-item-header">
 						<h3>{restaurant.restaurantName}</h3>
 						<StarRating rating={review.rating} />
 					</div>
-					<p className="reviewMeta">
+					<p className="review-meta">
 						Reviewed by <strong>{review.reviewer}</strong> · {review.date}
 					</p>
-					<p className="reviewBody">{review.body}</p>
+					<p className="review-body">{review.body}</p>
 				</div>
 			</article>
 		</Link>

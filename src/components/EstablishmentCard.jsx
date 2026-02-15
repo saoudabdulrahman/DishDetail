@@ -5,21 +5,21 @@ import './EstablishmentCard.css';
 export default function EstablishmentCard({ restaurant }) {
 	return (
 		<Link to={`/establishments/${restaurant.id}`} className="card-link">
-			<article className="establishmentItem">
-				<div className="restaurantImageContainer">
+			<article className="establishment-item">
+				<div className="restaurant-image-container">
 					<img
 						src={restaurant.restaurantImage}
 						alt={`Food or ambiance from ${restaurant.restaurantName}`}
-						className="restaurantImg"
+						className="restaurant-img"
 					/>
 				</div>
-				<div className="establishmentItemContent">
-					<div className="establishmentItemHeader">
+				<div className="establishment-item-content">
+					<div className="establishment-item-header">
 						<h3>{restaurant.restaurantName}</h3>
 						<StarRating rating={restaurant.rating} />
 					</div>
-					<p className="establishmentCuisine">{restaurant.cuisine}</p>
-					<p className="establishmentDescription">{restaurant.description}</p>
+					<p className="establishment-cuisine">{restaurant.cuisine}</p>
+					<p className="establishment-description">{restaurant.description}</p>
 				</div>
 			</article>
 		</Link>

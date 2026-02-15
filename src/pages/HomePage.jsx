@@ -25,54 +25,54 @@ export default function HomePage() {
 					Find the best restaurants near you, read real reviews from fellow
 					diners, and share your own dining experiences with the community.
 				</p>
-				<Link to="/reviews" className="heroCta">
+				<Link to="/reviews" className="hero-cta">
 					<Search size={18} />
 					Browse Reviews
 				</Link>
 			</section>
 
-			<div className="statsRow">
+			<div className="stats-row">
 				<div className="stat">
-					<span className="statNumber">{reviewsData.length}</span>
-					<span className="statLabel">Reviews</span>
+					<span className="stat-number">{reviewsData.length}</span>
+					<span className="stat-label">Reviews</span>
 				</div>
 				<div className="stat">
-					<span className="statNumber">
+					<span className="stat-number">
 						{new Set(reviewsData.map((r) => r.restaurantId)).size}
 					</span>
-					<span className="statLabel">Restaurants</span>
+					<span className="stat-label">Restaurants</span>
 				</div>
 				<div className="stat">
-					<span className="statNumber">
+					<span className="stat-number">
 						{(
 							reviewsData.reduce((sum, r) => sum + r.rating, 0) /
 							reviewsData.length
 						).toFixed(1)}
 					</span>
-					<span className="statLabel">Avg Rating</span>
+					<span className="stat-label">Avg Rating</span>
 				</div>
 			</div>
 
-			<div className="sectionHeader">
+			<div className="section-header">
 				<h2>Top Rated</h2>
-				<Link to="/reviews" className="seeAll">
+				<Link to="/reviews" className="see-all">
 					See all &rarr;
 				</Link>
 			</div>
 
-			<section className="card-grid" style={{ marginBottom: '2.5rem' }}>
+			<section className="card-grid featured-grid">
 				{featured.map(({ review, restaurant }) => (
 					<ReviewCard key={review.id} review={review} restaurant={restaurant} />
 				))}
 			</section>
 
-			<div className="sectionHeader">
+			<div className="section-header">
 				<h2>How It Works</h2>
 			</div>
 
-			<section className="howItWorks">
+			<section className="how-it-works">
 				<div className="step">
-					<div className="stepIcon">
+					<div className="step-icon">
 						<Search size={20} />
 					</div>
 					<h3>Search</h3>
@@ -80,7 +80,7 @@ export default function HomePage() {
 				</div>
 
 				<div className="step">
-					<div className="stepIcon">
+					<div className="step-icon">
 						<UtensilsCrossed size={20} />
 					</div>
 					<h3>Dine</h3>
@@ -88,7 +88,7 @@ export default function HomePage() {
 				</div>
 
 				<div className="step">
-					<div className="stepIcon">
+					<div className="step-icon">
 						<Star size={20} />
 					</div>
 					<h3>Rate</h3>
@@ -96,7 +96,7 @@ export default function HomePage() {
 				</div>
 
 				<div className="step">
-					<div className="stepIcon">
+					<div className="step-icon">
 						<ChefHat size={20} />
 					</div>
 					<h3>Share</h3>
