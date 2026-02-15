@@ -69,3 +69,23 @@ textarea,
 select {
 	font: inherit;
 }
+
+.card-grid {
+	padding: 0;
+	display: grid;
+	grid-template-columns: repeat(auto-fill, 20rem);
+	gap: 1rem;
+	justify-content: center;
+}
+
+.card-link {
+	text-decoration: none;
+	color: inherit;
+	display: block;
+}
+
+@media (max-width: 768px) {
+	.card-grid {
+		grid-template-columns: 1fr;
+	}
+}

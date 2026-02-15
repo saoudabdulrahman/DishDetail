@@ -1,0 +1,258 @@
+/* ── Back button ── */
+.backBtn {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.5rem;
+	padding: 0.5rem 1.25rem;
+	font-weight: 600;
+	border: none;
+	border-radius: 0.75rem;
+	cursor: pointer;
+	background-color: var(--secondary);
+	color: var(--text-on-primary);
+	box-shadow: var(--shadow-s);
+	transition:
+		transform 0.2s ease,
+		box-shadow 0.2s ease,
+		filter 0.2s ease;
+	margin-bottom: 1.5rem;
+}
+
+.backBtn:hover {
+	transform: translateY(-2px);
+	box-shadow: var(--shadow-l);
+	filter: brightness(1.1);
+}
+
+/* ── Banner ── */
+.detailBanner {
+	width: 100%;
+	height: 20rem;
+	border-radius: 1rem;
+	overflow: hidden;
+	margin-bottom: 1.5rem;
+	box-shadow: var(--shadow-s);
+}
+
+.detailBannerImg {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	display: block;
+}
+
+/* ── Header ── */
+.detailHeader {
+	margin-bottom: 1.5rem;
+}
+
+.detailHeaderTop {
+	display: flex;
+	justify-content: space-between;
+	align-items: flex-start;
+	gap: 1rem;
+	margin-bottom: 0.75rem;
+}
+
+.detailCuisine {
+	font-size: 0.85rem;
+	font-weight: 600;
+	color: var(--primary);
+	margin-top: 0.25rem;
+}
+
+.detailRatingBadge {
+	display: flex;
+	align-items: center;
+	gap: 0.35rem;
+	background-color: var(--primary);
+	color: var(--text-on-primary);
+	padding: 0.5rem 1rem;
+	border-radius: 0.75rem;
+	font-weight: 700;
+	font-size: 1.1rem;
+	box-shadow: var(--shadow-s);
+	flex-shrink: 0;
+}
+
+.detailRatingBadge .starFilled {
+	width: 1.1rem;
+	height: 1.1rem;
+}
+
+.detailDescription {
+	color: var(--text-muted);
+	line-height: 1.6;
+}
+
+/* ── Quick info ── */
+.detailQuickInfo {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+	gap: 1rem;
+	margin-bottom: 2rem;
+	padding: 1.5rem;
+	background-color: var(--bg);
+	border-radius: 1rem;
+	box-shadow: var(--shadow-s);
+}
+
+.detailInfoItem {
+	display: flex;
+	align-items: flex-start;
+	gap: 0.75rem;
+}
+
+.detailInfoItem svg {
+	flex-shrink: 0;
+	margin-top: 0.2rem;
+	color: var(--primary);
+}
+
+.detailInfoLabel {
+	font-size: 0.7rem;
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 0.06em;
+	color: var(--text-muted);
+	margin: 0 0 0.15rem 0;
+}
+
+.detailInfoValue {
+	font-size: 0.9rem;
+	font-weight: 500;
+	color: var(--text);
+	margin: 0;
+}
+
+/* ── Reviews section ── */
+.detailReviewsSection {
+	margin-top: 2rem;
+}
+
+.detailReviewsSectionHeader {
+	display: flex;
+	justify-content: space-between;
+	align-items: baseline;
+	margin-bottom: 1rem;
+}
+
+.detailReviewsCount {
+	font-size: 0.85rem;
+	font-weight: 600;
+	color: var(--text-muted);
+}
+
+.detailReviewsList {
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+}
+
+/* ── Review card (detail page) ── */
+.detailReviewCard {
+	background-color: var(--bg);
+	border-radius: 1rem;
+	padding: 1.5rem;
+	box-shadow: var(--shadow-s);
+	transition:
+		transform 0.2s ease,
+		box-shadow 0.2s ease;
+}
+
+.detailReviewCard:hover {
+	transform: translateY(-2px);
+	box-shadow: var(--shadow-l);
+}
+
+.detailReviewHeader {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 0.75rem;
+}
+
+.reviewerInfo {
+	display: flex;
+	align-items: center;
+	gap: 0.75rem;
+}
+
+.reviewerAvatar {
+	width: 40px;
+	height: 40px;
+	border-radius: 50%;
+	object-fit: cover;
+}
+
+.reviewerName {
+	font-weight: 600;
+	margin: 0;
+}
+
+.reviewDate {
+	font-size: 0.8rem;
+	color: var(--text-muted);
+	margin: 0;
+}
+
+.detailReviewBody {
+	color: var(--text-muted);
+	line-height: 1.6;
+}
+
+.detailReviewImageContainer {
+	border-radius: 0.75rem;
+	overflow: hidden;
+	margin-top: 0.75rem;
+}
+
+.detailReviewImage {
+	width: 100%;
+	height: auto;
+	display: block;
+}
+
+/* ── No-reviews state ── */
+.noReviews {
+	text-align: center;
+	padding: 2rem;
+	color: var(--text-muted);
+	background-color: var(--bg);
+	border-radius: 1rem;
+	box-shadow: var(--shadow-s);
+}
+
+/* ── Error state ── */
+.errorContainer {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 1.5rem;
+	padding: 4rem 2rem;
+}
+
+.errorContainer p {
+	font-size: 1.15rem;
+	color: var(--text-muted);
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+	.detailBanner {
+		height: 14rem;
+	}
+
+	.detailHeaderTop {
+		flex-direction: column;
+	}
+
+	.detailQuickInfo {
+		grid-template-columns: 1fr;
+	}
+
+	.detailReviewCard {
+		padding: 1rem;
+	}
+}

@@ -96,14 +96,6 @@
 	text-decoration: underline;
 }
 
-.featuredGrid {
-	display: grid;
-	grid-template-columns: repeat(auto-fill, 20rem);
-	gap: 1rem;
-	justify-content: center;
-	margin-bottom: 2.5rem;
-}
-
 .howItWorks {
 	display: grid;
 	grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
@@ -158,9 +150,5 @@
 
 	.statsRow {
 		gap: 1.5rem;
-	}
-
-	.featuredGrid {
-		grid-template-columns: 1fr;
 	}
 }

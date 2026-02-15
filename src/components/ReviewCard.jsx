@@ -1,42 +1,29 @@
-import { Star } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import StarRating from './StarRating';
 import './ReviewCard.css';
 
-const StarRating = ({ rating }) => {
-	return (
-		<span className="stars">
-			{[...Array(5)].map((_, i) => (
-				<Star key={i} className={i < rating ? 'starFilled' : 'starEmpty'} />
-			))}
-		</span>
-	);
-};
-
 export default function ReviewCard({ review, restaurant }) {
-	const handleClick = () => {
-		alert(
-			`You clicked on "${restaurant.restaurantName}". This would navigate to the full review page.`,
-		);
-	};
-
 	return (
-		<article className="reviewItem" onClick={handleClick}>
-			<div className="restaurantImageContainer">
-				<img
-					src={review.reviewImage}
-					alt={`Food or ambiance from ${restaurant.restaurantName}`}
-					className="restaurantImg"
-				/>
-			</div>
-			<div className="reviewItemContent">
-				<div className="reviewItemHeader">
-					<h3>{restaurant.restaurantName}</h3>
-					<StarRating rating={review.rating} />
+		<Link to={`/establishments/${restaurant.id}`} className="card-link">
+			<article className="reviewItem">
+				<div className="restaurantImageContainer">
+					<img
+						src={review.reviewImage}
+						alt={`Food or ambiance from ${restaurant.restaurantName}`}
+						className="restaurantImg"
+					/>
 				</div>
-				<p className="reviewMeta">
-					Reviewed by <strong>{review.reviewer}</strong> · {review.date}
-				</p>
-				<p className="reviewBody">{review.body}</p>
-			</div>
-		</article>
+				<div className="reviewItemContent">
+					<div className="reviewItemHeader">
+						<h3>{restaurant.restaurantName}</h3>
+						<StarRating rating={review.rating} />
+					</div>
+					<p className="reviewMeta">
+						Reviewed by <strong>{review.reviewer}</strong> · {review.date}
+					</p>
+					<p className="reviewBody">{review.body}</p>
+				</div>
+			</article>
+		</Link>
 	);
 }

@@ -60,7 +60,7 @@ export default function HomePage() {
 				</Link>
 			</div>
 
-			<section className="featuredGrid">
+			<section className="card-grid" style={{ marginBottom: '2.5rem' }}>
 				{featured.map(({ review, restaurant }) => (
 					<ReviewCard key={review.id} review={review} restaurant={restaurant} />
 				))}

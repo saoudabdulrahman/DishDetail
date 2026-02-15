@@ -1,15 +1,23 @@
 import { useState, useRef, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { Search, Menu, User, LogOut, ChevronDown } from 'lucide-react';
 import { useAuth } from '../auth/useAuth';
 import './Header.css';
 
-export default function Header({ onSearch }) {
+export default function Header() {
 	const { user, logout } = useAuth();
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
 	const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-	const [query, setQuery] = useState('');
+	const [searchParams] = useSearchParams();
+	const navigate = useNavigate();
 	const dropdownRef = useRef(null);
+
+	const currentQuery = searchParams.get('q') || '';
+	const [query, setQuery] = useState(currentQuery);
+
+	useEffect(() => {
+		setQuery(currentQuery);
+	}, [currentQuery]);
 
 	useEffect(() => {
 		const handleClickOutside = (e) => {
@@ -22,13 +30,11 @@ export default function Header({ onSearch }) {
 	}, []);
 
 	const handleSearch = () => {
-		onSearch(query);
+		const params = query.trim() ? `?q=${encodeURIComponent(query.trim())}` : '';
+		navigate(`/establishments${params}`);
 	};
 
-	const handleKeyDown = (e) => {
-		if (e.key === 'Enter') handleSearch();
-	};
-
+	const handleKeyDown = (e) => e.key === 'Enter' && handleSearch();
 	const closeMenu = () => setIsMenuOpen(false);
 
 	return (
