@@ -4,7 +4,7 @@ import './Footer.css';
 export default function Footer() {
 	return (
 		<footer>
-			<div className="footerLinks">
+			<div className="footer-links">
 				<a href="#">About</a>
 				<a href="#">Privacy Policy</a>
 				<a href="#">Terms of Service</a>
@@ -12,12 +12,12 @@ export default function Footer() {
 					Contact Us
 				</a>
 			</div>
-			<div className="footerSocial">
+			<div className="footer-social">
 				<a
 					href="https://github.com/saoudabdulrahman/DishDetail"
 					target="_blank"
 					rel="noopener noreferrer"
-					className="footerIcon"
+					className="footer-icon"
 				>
 					<SiGithub />
 				</a>

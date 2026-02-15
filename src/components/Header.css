@@ -17,13 +17,13 @@ header {
 	cursor: pointer;
 }
 
-.headerActions {
+.header-actions {
 	display: flex;
 	gap: 0.5rem;
 	align-items: center;
 }
 
-#hamburgerButton {
+#hamburger-button {
 	display: none;
 	background: none;
 	border: none;
@@ -32,7 +32,7 @@ header {
 	padding: 0.25rem;
 }
 
-.headerActions a {
+.header-actions a {
 	margin-right: 0.5rem;
 	text-decoration: none;
 	color: var(--text);
@@ -41,16 +41,16 @@ header {
 	transition: color 0.2s ease;
 }
 
-.headerActions a:hover {
+.header-actions a:hover {
 	color: var(--primary);
 }
 
-.headerActions button {
+.header-actions button {
 	background-color: var(--primary);
 	color: var(--text-on-primary);
-	padding: 0.4rem 1rem;
+	padding: 0.5rem 1rem;
 	border: none;
-	border-radius: 0.5rem;
+	border-radius: 1rem;
 	cursor: pointer;
 	box-shadow: var(--shadow-s);
 	transition:
@@ -59,37 +59,118 @@ header {
 		filter 0.2s ease;
 }
 
-#loginButton {
+#login-button {
 	background-color: var(--secondary);
 }
 
-.headerActions button:hover {
+#submit-review-button {
+	background-color: var(--primary);
+}
+
+#logout-button {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.4rem;
+	background-color: var(--secondary);
+	width: 100%;
+	justify-content: center;
+}
+
+.user-dropdown {
+	position: relative;
+}
+
+.header-actions .user-info-toggle {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.4rem;
+	background-color: var(--secondary);
+	border: 1px solid var(--secondary);
+	color: var(--text-on-primary);
+	padding: 0.5rem 0.8rem;
+	border-radius: 1rem;
+	cursor: pointer;
+	font-weight: 500;
+	box-shadow: var(--shadow-s);
+	transition: filter 0.2s ease;
+}
+
+.header-actions .user-info-toggle:hover {
+	transform: none;
+	filter: brightness(1.1);
+	box-shadow: var(--shadow-s);
+}
+
+.chevron {
+	transition: transform 0.2s ease;
+}
+
+.chevron.open {
+	transform: rotate(180deg);
+}
+
+.dropdown-menu {
+	position: absolute;
+	top: calc(100% + 0.5rem);
+	right: 0;
+	min-width: 100%;
+	background-color: var(--bg-dark);
+	border-radius: 0.75rem;
+	padding: 0.4rem;
+	box-shadow: var(--shadow-l);
+	z-index: 100;
+	opacity: 0;
+	transform: translateY(-8px) scale(0.95);
+	pointer-events: none;
+	transition:
+		opacity 0.2s ease,
+		transform 0.2s ease;
+}
+
+.dropdown-menu.open {
+	opacity: 1;
+	transform: translateY(0) scale(1);
+	pointer-events: auto;
+}
+
+.user-info {
+	display: flex;
+	align-items: center;
+	gap: 0.4rem;
+	color: var(--text);
+	font-weight: 500;
+}
+
+.username {
+	white-space: nowrap;
+}
+
+.header-actions button:hover {
 	transform: translateY(-1px);
 	filter: brightness(1.1);
 	box-shadow: var(--shadow-l);
 }
 
-.searchContainer {
+.search-container {
 	flex: 1;
 	padding: 0 1rem;
 	display: flex;
 }
 
-#searchInput {
+#search-input {
 	width: 100%;
 	padding: 0.5rem 1rem;
 	border: none;
-	border-right: none;
-	border-radius: 0.5rem 0 0 0.5rem;
+	border-radius: 1rem 0 0 1rem;
 	box-shadow: var(--shadow-s);
 	transition: filter 0.2s ease;
 }
 
-#searchInput:hover {
+#search-input:hover {
 	filter: brightness(1.1);
 }
 
-#searchButton {
+#search-button {
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -97,23 +178,22 @@ header {
 	color: var(--text-on-primary);
 	padding: 0.5rem;
 	border: none;
-	border-radius: 0 0.5rem 0.5rem 0;
+	border-radius: 0 1rem 1rem 0;
 	cursor: pointer;
 	box-shadow: var(--shadow-s);
 	transition: filter 0.2s ease;
 }
 
-#searchButton:hover {
+#search-button:hover {
 	filter: brightness(1.1);
 }
 
-/* --- Responsive (mobile) --- */
-@media (max-width: 920px) {
-	#hamburgerButton {
+@media (max-width: 768px) {
+	#hamburger-button {
 		display: block;
 	}
 
-	.headerActions {
+	.header-actions {
 		display: none;
 		width: 100%;
 		flex-direction: column;
@@ -122,23 +202,35 @@ header {
 		padding-bottom: 1rem;
 	}
 
-	.headerActions.open {
+	.header-actions.open {
 		display: flex;
 	}
 
-	.headerActions a,
-	.headerActions button {
+	.header-actions a,
+	.header-actions button {
 		text-align: center;
 		margin-right: 0;
 	}
 
-	.searchContainer {
+	.user-dropdown {
+		position: static;
+	}
+
+	.dropdown-menu {
+		position: static;
+		border: none;
+		box-shadow: none;
+		padding: 0;
+		background: transparent;
+	}
+
+	.search-container {
 		flex: 0 0 100%;
 		padding: 0;
 		order: 3;
 	}
 
-	#searchInput {
+	#search-input {
 		flex: 1;
 	}
 }
