@@ -4,7 +4,7 @@ import { Search } from 'lucide-react';
 import './SelectRestaurant.css';
 import { useNavigate } from "react-router-dom";
 
-function RestaurantSearch() {
+function SelectRestaurant() {
 	const navigate = useNavigate();
 	const [query, setQuery] = useState("");
 	const [selectedRestaurant, setSelectedRestaurant] = useState("");
@@ -30,7 +30,9 @@ function RestaurantSearch() {
 				<button
 					id="searchButton"
 					onClick={() =>
-						navigate("/submitReview")
+						navigate("/submitReview", {
+							state: { restaurant: selectedRestaurant }
+						})
 					}
 				>
 					<Search size={20} />
@@ -57,5 +59,4 @@ function RestaurantSearch() {
 	);
 }
 
-
-export default RestaurantSearch;
+export default SelectRestaurant;
