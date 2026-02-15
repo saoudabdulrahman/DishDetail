@@ -13,7 +13,8 @@
 	gap: 1rem;
 }
 
-#reviewbox {
+#review-box,
+.review-box {
 	width: 100%;
 	height: 300px;
 	border: 1px solid #c3c3c3;
@@ -33,13 +34,13 @@
 	text-align: left;
 }
 
-#submitButton {
+#submit-button {
 	height: 50px;
 	padding: 0 1.5rem;
 	border-radius: 0.5rem;
 	border: none;
 	cursor: pointer;
-    background-color: var(--primary);
+	background-color: var(--primary);
 	color: var(--text-on-primary);
 	font-weight: 600;
 	white-space: nowrap;
@@ -47,7 +48,7 @@
 	margin-top: 0.8rem;
 }
 
-#submitButton:hover {
+#submit-button:hover {
 	filter: brightness(1.1);
 }
 
@@ -61,7 +62,9 @@
 .star {
 	cursor: pointer;
 	color: #555;
-	transition: color 0.2s ease, transform 0.1s ease;
+	transition:
+		color 0.2s ease,
+		transform 0.1s ease;
 }
 
 .star:hover {
@@ -70,9 +73,10 @@
 
 .star.filled {
 	color: var(--primary);
+	fill: var(--primary);
 }
 
-.submitLayout {
+.submit-layout {
 	display: grid;
 	grid-template-columns: 1fr 420px;
 	gap: 2.5rem;
@@ -93,7 +97,7 @@
 }
 
 @media (max-width: 900px) {
-	.submitLayout {
+	.submit-layout {
 		grid-template-columns: 1fr;
 	}
 }

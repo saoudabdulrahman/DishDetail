@@ -23,8 +23,8 @@ function App() {
 				<Route path="/reviews" element={<ReviewsPage />} />
 				<Route path="/establishments" element={<EstablishmentsPage />} />
 				<Route path="/establishments/:id" element={<EstablishmentPage />} />
-				<Route path="/submitReview" element={<SubmitReview />} />
-				<Route path="/selectRestaurant" element={<SelectRestaurant />} />
+				<Route path="/submit-review" element={<SubmitReview />} />
+				<Route path="/select-restaurant" element={<SelectRestaurant />} />
 				<Route path="*" element={<p>Page not found</p>} />
 			</Routes>
 
