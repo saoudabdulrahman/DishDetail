@@ -3,7 +3,6 @@
 	background-color: var(--bg-dark);
 	border-radius: 1.5rem;
 	margin-bottom: 2.5rem;
-	margin-right: 38%;
 	box-shadow: var(--shadow-s);
 }
 
@@ -71,4 +70,30 @@
 
 .star.filled {
 	color: var(--primary);
+}
+
+.submitLayout {
+	display: grid;
+	grid-template-columns: 1fr 420px;
+	gap: 2.5rem;
+	align-items: start;
+	padding: 2rem;
+}
+
+.suggested h2 {
+	margin-bottom: 1rem;
+	font-size: 1.5rem;
+	color: white;
+	text-align: center;
+}
+
+.suggested {
+	position: sticky;
+	top: 2rem;
+}
+
+@media (max-width: 900px) {
+	.submitLayout {
+		grid-template-columns: 1fr;
+	}
 }

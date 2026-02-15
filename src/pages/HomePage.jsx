@@ -93,7 +93,6 @@ export default function HomePage() {
 					</div>
 					<h3>Rate</h3>
 					<p>Leave an honest rating and detailed review.</p>
-					<Link to="/submitReview">Submit Review</Link>
 				</div>
 
 				<div className="step">
