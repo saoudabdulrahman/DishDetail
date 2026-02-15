@@ -1,21 +1,8 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../auth/useAuth';
+import { saveUser } from '../auth/userStorage';
 import './SignupPage.css';
-
-const USERS_KEY = 'dishdetail_users';
-
-function loadUsers() {
-	try {
-		return JSON.parse(localStorage.getItem(USERS_KEY)) ?? [];
-	} catch {
-		return [];
-	}
-}
-
-function saveUsers(users) {
-	localStorage.setItem(USERS_KEY, JSON.stringify(users));
-}
 
 export default function SignupPage() {
 	const navigate = useNavigate();
@@ -65,40 +52,33 @@ export default function SignupPage() {
 			return;
 		}
 
-		// Frontend-only mock signup storage
-		const users = loadUsers();
+		try {
+			// Frontend-only mock signup storage
+			// DEMO ONLY: storing password in plain text (replace with backend later)
+			saveUser({ email: e1, username: u1, password });
 
-		const usernameTaken = users.some(
-			(u) => u.username.toLowerCase() === u1.toLowerCase(),
-		);
-		if (usernameTaken) {
-			setError('That username is already taken.');
+			// Auto-login after signup (remembered)
+			login(u1, true);
+			navigate('/');
+		} catch (err) {
+			setError(err.message);
 			triggerShake();
-			return;
 		}
-
-		// DEMO ONLY: storing password in plain text (replace with backend later)
-		users.push({ email: e1, username: u1, password });
-		saveUsers(users);
-
-		// Auto-login after signup (remembered)
-		login(u1, true);
-		navigate('/');
 	};
 
 	return (
-		<main className="signupPage">
-			<div className="signupCard">
+		<main className="signup-page">
+			<div className="signup-card">
 				<h2>Sign Up</h2>
-				<p className="signupSubtext">Create your Dish Detail account.</p>
+				<p className="signup-subtext">Create your Dish Detail account.</p>
 
 				{error ?
-					<div className={`signupError ${shakeError ? 'shake' : ''}`}>
+					<div className={`signup-error ${shakeError ? 'shake' : ''}`}>
 						{error}
 					</div>
 				:	null}
 
-				<form onSubmit={handleSubmit} className="signupForm">
+				<form onSubmit={handleSubmit} className="signup-form">
 					<label>
 						Email
 						<input
@@ -143,14 +123,14 @@ export default function SignupPage() {
 						/>
 					</label>
 
-					<button type="submit" className="signupBtn">
+					<button type="submit" className="signup-btn">
 						Create Account
 					</button>
 				</form>
 
-				<div className="signupAlt">
+				<div className="signup-alt">
 					Already have an account?{' '}
-					<Link to="/login" className="signupAltLink">
+					<Link to="/login" className="signup-alt-link">
 						Log in
 					</Link>
 				</div>

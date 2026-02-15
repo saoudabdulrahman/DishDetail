@@ -5,7 +5,7 @@ footer {
 	text-align: center;
 }
 
-.footerLinks {
+.footer-links {
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -13,24 +13,24 @@ footer {
 	margin-bottom: 0.5rem;
 }
 
-.footerLinks a {
+.footer-links a {
 	text-decoration: none;
 	color: inherit;
 	font-size: 0.9rem;
 }
 
-.footerLinks a:hover {
+.footer-links a:hover {
 	text-decoration: underline;
 	color: var(--primary);
 }
 
-.footerSocial {
+.footer-social {
 	display: flex;
 	justify-content: center;
 	gap: 1rem;
 	margin-bottom: 0.5rem;
 }
 
-.footerIcon {
+.footer-icon {
 	color: var(--text);
 }

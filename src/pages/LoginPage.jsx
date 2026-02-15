@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../auth/useAuth';
+import { validateUser } from '../auth/userStorage';
 import './LoginPage.css';
 
 export default function LoginPage() {
@@ -30,12 +31,7 @@ export default function LoginPage() {
 			return;
 		}
 
-		const users = JSON.parse(localStorage.getItem('dishdetail_users')) || [];
-		const validUser = users.find(
-			(user) =>
-				user.username.toLowerCase() === u.toLowerCase() &&
-				user.password === password,
-		);
+		const validUser = validateUser(u, password);
 
 		if (!validUser) {
 			setError('Invalid username or password.');
@@ -48,18 +44,18 @@ export default function LoginPage() {
 	};
 
 	return (
-		<main className="loginPage">
-			<div className="loginCard">
+		<main className="login-page">
+			<div className="login-card">
 				<h2>Log In</h2>
-				<p className="loginSubtext">Welcome back to Dish Detail.</p>
+				<p className="login-subtext">Welcome back to Dish Detail.</p>
 
 				{error ?
-					<div className={`loginError ${shakeError ? 'shake' : ''}`}>
+					<div className={`login-error ${shakeError ? 'shake' : ''}`}>
 						{error}
 					</div>
 				:	null}
 
-				<form onSubmit={handleSubmit} className="loginForm">
+				<form onSubmit={handleSubmit} className="login-form">
 					<label>
 						Username
 						<input
@@ -82,7 +78,7 @@ export default function LoginPage() {
 						/>
 					</label>
 
-					<label className="rememberRow">
+					<label className="remember-row">
 						<input
 							type="checkbox"
 							checked={rememberMe}
@@ -91,14 +87,14 @@ export default function LoginPage() {
 						Remember me for 3 weeks
 					</label>
 
-					<button type="submit" className="loginBtn">
+					<button type="submit" className="login-btn">
 						Log In
 					</button>
 				</form>
 
-				<div className="loginAlt">
+				<div className="login-alt">
 					Don&apos;t have an account yet?{' '}
-					<Link to="/signup" className="loginAltLink">
+					<Link to="/signup" className="login-alt-link">
 						Sign up
 					</Link>
 				</div>

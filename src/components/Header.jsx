@@ -1,15 +1,23 @@
 import { useState, useRef, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { Search, Menu, User, LogOut, ChevronDown } from 'lucide-react';
 import { useAuth } from '../auth/useAuth';
 import './Header.css';
 
-export default function Header({ onSearch }) {
+export default function Header() {
 	const { user, logout } = useAuth();
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
 	const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-	const [query, setQuery] = useState('');
+	const [searchParams] = useSearchParams();
+	const navigate = useNavigate();
 	const dropdownRef = useRef(null);
+
+	const currentQuery = searchParams.get('q') || '';
+	const [query, setQuery] = useState(currentQuery);
+
+	useEffect(() => {
+		setQuery(currentQuery);
+	}, [currentQuery]);
 
 	useEffect(() => {
 		const handleClickOutside = (e) => {
@@ -22,13 +30,11 @@ export default function Header({ onSearch }) {
 	}, []);
 
 	const handleSearch = () => {
-		onSearch(query);
+		const params = query.trim() ? `?q=${encodeURIComponent(query.trim())}` : '';
+		navigate(`/establishments${params}`);
 	};
 
-	const handleKeyDown = (e) => {
-		if (e.key === 'Enter') handleSearch();
-	};
-
+	const handleKeyDown = (e) => e.key === 'Enter' && handleSearch();
 	const closeMenu = () => setIsMenuOpen(false);
 
 	return (
@@ -41,22 +47,22 @@ export default function Header({ onSearch }) {
 				</h1>
 			</div>
 
-			<div className="searchContainer">
+			<div className="search-container">
 				<input
-					id="searchInput"
+					id="search-input"
 					type="text"
 					placeholder="Search for restaurants..."
 					value={query}
 					onChange={(e) => setQuery(e.target.value)}
 					onKeyDown={handleKeyDown}
 				/>
-				<button id="searchButton" onClick={handleSearch} aria-label="Search">
+				<button id="search-button" onClick={handleSearch} aria-label="Search">
 					<Search />
 				</button>
 			</div>
 
 			<button
-				id="hamburgerButton"
+				id="hamburger-button"
 				onClick={() => setIsMenuOpen(!isMenuOpen)}
 				aria-label="Toggle navigation menu"
 				aria-expanded={isMenuOpen}
@@ -64,7 +70,7 @@ export default function Header({ onSearch }) {
 				<Menu />
 			</button>
 
-			<nav className={`headerActions ${isMenuOpen ? 'open' : ''}`}>
+			<nav className={`header-actions ${isMenuOpen ? 'open' : ''}`}>
 				<Link to="/establishments" onClick={closeMenu}>
 					Establishments
 				</Link>
@@ -74,11 +80,11 @@ export default function Header({ onSearch }) {
 				{user ?
 					<>
 						<Link to="/submit-review" onClick={closeMenu}>
-							<button id="submitReviewButton">Submit Review</button>
+							<button id="submit-review-button">Submit Review</button>
 						</Link>
-						<div className="userDropdown" ref={dropdownRef}>
+						<div className="user-dropdown" ref={dropdownRef}>
 							<button
-								className="userInfoToggle"
+								className="user-info-toggle"
 								onClick={() => setIsDropdownOpen(!isDropdownOpen)}
 								aria-expanded={isDropdownOpen}
 							>
@@ -89,9 +95,9 @@ export default function Header({ onSearch }) {
 									className={`chevron ${isDropdownOpen ? 'open' : ''}`}
 								/>
 							</button>
-							<div className={`dropdownMenu ${isDropdownOpen ? 'open' : ''}`}>
+							<div className={`dropdown-menu ${isDropdownOpen ? 'open' : ''}`}>
 								<button
-									id="logoutButton"
+									id="logout-button"
 									onClick={() => {
 										logout();
 										setIsDropdownOpen(false);
@@ -105,10 +111,10 @@ export default function Header({ onSearch }) {
 					</>
 				:	<>
 						<Link to="/login" onClick={closeMenu}>
-							<button id="loginButton">Log In</button>
+							<button id="login-button">Log In</button>
 						</Link>
 						<Link to="/signup" onClick={closeMenu}>
-							<button id="signupButton">Sign Up</button>
+							<button id="signup-button">Sign Up</button>
 						</Link>
 					</>
 				}
