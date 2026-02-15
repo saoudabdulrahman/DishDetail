@@ -1,12 +1,25 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Search } from 'lucide-react';
-import { Menu } from 'lucide-react';
+import { Search, Menu, User, LogOut, ChevronDown } from 'lucide-react';
+import { useAuth } from '../auth/useAuth';
 import './Header.css';
 
 export default function Header({ onSearch }) {
+	const { user, logout } = useAuth();
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
+	const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 	const [query, setQuery] = useState('');
+	const dropdownRef = useRef(null);
+
+	useEffect(() => {
+		const handleClickOutside = (e) => {
+			if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+				setIsDropdownOpen(false);
+			}
+		};
+		document.addEventListener('mousedown', handleClickOutside);
+		return () => document.removeEventListener('mousedown', handleClickOutside);
+	}, []);
 
 	const handleSearch = () => {
 		onSearch(query);
@@ -16,11 +29,15 @@ export default function Header({ onSearch }) {
 		if (e.key === 'Enter') handleSearch();
 	};
 
+	const closeMenu = () => setIsMenuOpen(false);
+
 	return (
 		<header>
 			<div className="logo">
 				<h1>
-					<Link to="/">Dish Detail</Link>
+					<Link to="/" onClick={closeMenu}>
+						Dish Detail
+					</Link>
 				</h1>
 			</div>
 
@@ -33,7 +50,7 @@ export default function Header({ onSearch }) {
 					onChange={(e) => setQuery(e.target.value)}
 					onKeyDown={handleKeyDown}
 				/>
-				<button id="searchButton" onClick={handleSearch}>
+				<button id="searchButton" onClick={handleSearch} aria-label="Search">
 					<Search />
 				</button>
 			</div>
@@ -42,25 +59,59 @@ export default function Header({ onSearch }) {
 				id="hamburgerButton"
 				onClick={() => setIsMenuOpen(!isMenuOpen)}
 				aria-label="Toggle navigation menu"
+				aria-expanded={isMenuOpen}
 			>
 				<Menu />
 			</button>
 
 			<nav className={`headerActions ${isMenuOpen ? 'open' : ''}`}>
-				<a href="#">Establishments</a>
-				<Link to="/reviews">Reviews</Link>
-				<button
-					id="loginButton"
-					onClick={() => alert('Login form would appear here.')}
-				>
-					Log In
-				</button>
-				<button
-					id="signupButton"
-					onClick={() => alert('Sign-up form would appear here.')}
-				>
-					Sign Up
-				</button>
+				<Link to="/establishments" onClick={closeMenu}>
+					Establishments
+				</Link>
+				<Link to="/reviews" onClick={closeMenu}>
+					Reviews
+				</Link>
+				{user ?
+					<>
+						<Link to="/submit-review" onClick={closeMenu}>
+							<button id="submitReviewButton">Submit Review</button>
+						</Link>
+						<div className="userDropdown" ref={dropdownRef}>
+							<button
+								className="userInfoToggle"
+								onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+								aria-expanded={isDropdownOpen}
+							>
+								<User size={18} />
+								<span className="username">{user.username}</span>
+								<ChevronDown
+									size={14}
+									className={`chevron ${isDropdownOpen ? 'open' : ''}`}
+								/>
+							</button>
+							<div className={`dropdownMenu ${isDropdownOpen ? 'open' : ''}`}>
+								<button
+									id="logoutButton"
+									onClick={() => {
+										logout();
+										setIsDropdownOpen(false);
+										closeMenu();
+									}}
+								>
+									<LogOut size={16} /> Log Out
+								</button>
+							</div>
+						</div>
+					</>
+				:	<>
+						<Link to="/login" onClick={closeMenu}>
+							<button id="loginButton">Log In</button>
+						</Link>
+						<Link to="/signup" onClick={closeMenu}>
+							<button id="signupButton">Sign Up</button>
+						</Link>
+					</>
+				}
 			</nav>
 		</header>
 	);

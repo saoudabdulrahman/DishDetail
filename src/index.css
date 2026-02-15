@@ -12,6 +12,11 @@
 	--primary: oklch(0.75 0.15 85);
 	--secondary: oklch(0.75 0.02 280);
 
+	--danger: light-dark(oklch(0.5 0.18 25), oklch(0.7 0.15 25));
+	--warning: light-dark(oklch(0.5 0.18 100), oklch(0.7 0.15 100));
+	--success: light-dark(oklch(0.5 0.18 160), oklch(0.7 0.15 160));
+	--info: light-dark(oklch(0.5 0.18 260), oklch(0.7 0.15 260));
+
 	--shadow-s:
 		inset 0 1px 2px oklch(1 0 0 / 18.82%), 0 1px 2px oklch(0 0 0 / 18.82%),
 		0 2px 4px oklch(0 0 0 / 8.24%);
