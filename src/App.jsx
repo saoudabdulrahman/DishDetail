@@ -5,6 +5,7 @@ import Footer from './components/Footer';
 import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
+import ReviewsPage from './pages/ReviewsPage';
 import './App.css';
 
 function App() {
@@ -18,6 +19,10 @@ function App() {
 				<Route path="/" element={<HomePage searchQuery={searchQuery} />} />
 				<Route path="/login" element={<LoginPage />} />
 				<Route path="/signup" element={<SignupPage />} />
+				<Route
+					path="/reviews"
+					element={<ReviewsPage searchQuery={searchQuery} />}
+				/>
 			</Routes>
 
 			<Footer />

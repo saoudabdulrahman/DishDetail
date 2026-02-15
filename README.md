@@ -35,3 +35,5 @@ A restaurant review browsing app built with React and Vite.
 - [Vite](https://vite.dev/)
 - [Lucide](https://lucide.dev/)
 - [Simple Icons](https://simpleicons.org/)
+- [Pravatar](https://pravatar.cc/)
+- [LoremFlickr](https://loremflickr.com/)
