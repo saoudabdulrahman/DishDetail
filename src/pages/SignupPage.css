@@ -1,10 +1,10 @@
-.signupPage {
+.signup-page {
 	display: grid;
 	place-items: center;
 	padding: 2rem;
 }
 
-.signupCard {
+.signup-card {
 	width: 100%;
 	max-width: 25rem;
 	background-color: var(--bg);
@@ -13,13 +13,13 @@
 	box-shadow: var(--shadow-m);
 }
 
-.signupSubtext {
+.signup-subtext {
 	margin-top: 0.5rem;
 	margin-bottom: 1rem;
 	color: var(--text-muted);
 }
 
-.signupError {
+.signup-error {
 	background-color: var(--bg-dark);
 	border: 1px solid var(--danger);
 	color: var(--danger);
@@ -28,22 +28,22 @@
 	margin: 0.5rem 0;
 }
 
-.signupForm {
+.signup-form {
 	display: flex;
 	flex-direction: column;
 	gap: 1rem;
 }
 
-.signupForm label {
+.signup-form label {
 	display: flex;
 	flex-direction: column;
 	gap: 0.5rem;
 	font-weight: 600;
 }
 
-.signupForm input[type='text'],
-.signupForm input[type='password'],
-.signupForm input[type='email'] {
+.signup-form input[type='text'],
+.signup-form input[type='password'],
+.signup-form input[type='email'] {
 	padding: 0.5rem 1rem;
 	border-radius: 1rem;
 	border: none;
@@ -54,16 +54,16 @@
 		box-shadow 0.2s ease;
 }
 
-.signupForm input:hover {
+.signup-form input:hover {
 	filter: brightness(1.1);
 }
 
-.signupForm input:focus {
+.signup-form input:focus {
 	outline: none;
 	box-shadow: var(--shadow-l);
 }
 
-.signupBtn {
+.signup-btn {
 	margin-top: 0.5rem;
 	padding: 0.5rem 1rem;
 	background-color: var(--primary);
@@ -79,25 +79,25 @@
 		filter 0.2s ease;
 }
 
-.signupBtn:hover {
+.signup-btn:hover {
 	transform: translateY(-1px);
 	filter: brightness(1.1);
 	box-shadow: var(--shadow-l);
 }
 
-.signupAlt {
+.signup-alt {
 	margin-top: 1rem;
 	text-align: center;
 	color: var(--text-muted);
 }
 
-.signupAltLink {
+.signup-alt-link {
 	text-decoration: none;
 	font-weight: 600;
 	color: var(--primary);
 }
 
-.signupAltLink:hover {
+.signup-alt-link:hover {
 	text-decoration: underline;
 }
 
@@ -121,6 +121,6 @@
 	}
 }
 
-.signupError.shake {
+.signup-error.shake {
 	animation: shakeX 0.5s ease-out;
 }

@@ -70,7 +70,7 @@ export default function Header() {
 				<Menu />
 			</button>
 
-			<nav className={`headerActions ${isMenuOpen ? 'open' : ''}`}>
+			<nav className={`header-actions ${isMenuOpen ? 'open' : ''}`}>
 				<Link to="/establishments" onClick={closeMenu}>
 					Establishments
 				</Link>
@@ -80,11 +80,11 @@ export default function Header() {
 				{user ?
 					<>
 						<Link to="/submit-review" onClick={closeMenu}>
-							<button id="submitReviewButton">Submit Review</button>
+							<button id="submit-review-button">Submit Review</button>
 						</Link>
-						<div className="userDropdown" ref={dropdownRef}>
+						<div className="user-dropdown" ref={dropdownRef}>
 							<button
-								className="userInfoToggle"
+								className="user-info-toggle"
 								onClick={() => setIsDropdownOpen(!isDropdownOpen)}
 								aria-expanded={isDropdownOpen}
 							>
@@ -95,9 +95,9 @@ export default function Header() {
 									className={`chevron ${isDropdownOpen ? 'open' : ''}`}
 								/>
 							</button>
-							<div className={`dropdownMenu ${isDropdownOpen ? 'open' : ''}`}>
+							<div className={`dropdown-menu ${isDropdownOpen ? 'open' : ''}`}>
 								<button
-									id="logoutButton"
+									id="logout-button"
 									onClick={() => {
 										logout();
 										setIsDropdownOpen(false);
