@@ -79,7 +79,7 @@ export default function Header() {
 				</Link>
 				{user ?
 					<>
-						<Link to="/submit-review" onClick={closeMenu}>
+						<Link to="/select-restaurant" onClick={closeMenu}>
 							<button id="submit-review-button">Submit Review</button>
 						</Link>
 						<div className="user-dropdown" ref={dropdownRef}>

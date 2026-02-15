@@ -29,6 +29,10 @@ export default function HomePage() {
 					<Search size={18} />
 					Browse Reviews
 				</Link>
+				<Link to="/select-restaurant" className="hero-cta">
+					<Star size={18} />
+					Submit Review
+				</Link>
 			</section>
 
 			<div className="stats-row">
