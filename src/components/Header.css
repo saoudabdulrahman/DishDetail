@@ -113,10 +113,10 @@ header {
 	position: absolute;
 	top: calc(100% + 0.5rem);
 	right: 0;
-	min-width: 100%;
+	min-width: 180px;
 	background-color: var(--bg-dark);
 	border-radius: 0.75rem;
-	padding: 0.4rem;
+	padding: 0.5rem;
 	box-shadow: var(--shadow-l);
 	z-index: 100;
 	opacity: 0;
@@ -125,12 +125,68 @@ header {
 	transition:
 		opacity 0.2s ease,
 		transform 0.2s ease;
+	display: flex;
+	flex-direction: column;
+	gap: 0.25rem;
 }
 
 .dropdown-menu.open {
 	opacity: 1;
 	transform: translateY(0) scale(1);
 	pointer-events: auto;
+}
+
+.dropdown-item {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	padding: 0.5rem 1rem;
+	width: 100%;
+	color: var(--text);
+	text-decoration: none;
+	border-radius: 0.5rem;
+	transition: background-color 0.2s;
+	font-weight: 500;
+	box-sizing: border-box;
+}
+
+.dropdown-item:hover {
+	background-color: rgba(0, 0, 0, 0.05);
+	color: var(--primary);
+}
+
+.dropdown-menu button {
+	background: none;
+	color: var(--text);
+	box-shadow: none;
+	justify-content: flex-start;
+	padding: 0.5rem 1rem;
+	border-radius: 0.5rem;
+	width: 100%;
+	margin: 0;
+}
+
+.dropdown-menu button:hover {
+	background-color: rgba(0, 0, 0, 0.05);
+	color: var(--primary);
+	transform: none;
+	box-shadow: none;
+}
+
+.dropdown-menu #logout-button {
+	background: none;
+	background-color: transparent;
+	color: var(--text);
+	width: 100%;
+	justify-content: flex-start;
+	box-shadow: none;
+	margin: 0;
+	padding: 0.5rem 1rem;
+}
+
+.dropdown-menu #logout-button:hover {
+	background-color: rgba(0, 0, 0, 0.05);
+	color: var(--primary);
 }
 
 .user-info {

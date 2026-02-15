@@ -1,0 +1,111 @@
+.submit-review-page {
+	display: grid;
+	grid-template-columns: 1fr 420px;
+	gap: 2.5rem;
+	align-items: start;
+	padding: 2rem;
+}
+
+.submit-review-page .box {
+	padding: 4rem 1.5rem;
+	background-color: var(--bg-dark);
+	border-radius: 1.5rem;
+	margin-bottom: 2.5rem;
+	box-shadow: var(--shadow-s);
+}
+
+.submit-review-page .review-container {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 1rem;
+}
+
+.submit-review-page #review-box,
+.submit-review-page .review-box {
+	width: 100%;
+	height: 300px;
+	display: flex;
+	align-content: left;
+	font-size: 1.25rem;
+	border-radius: 0.5rem;
+	border: 1px solid var(--secondary);
+	box-sizing: border-box;
+	flex: 1;
+	padding-top: 1rem;
+	padding-left: 1rem;
+}
+
+.submit-review-page #title {
+	text-align: left;
+}
+
+.submit-review-page #submit-button {
+	height: 50px;
+	padding: 0 1.5rem;
+	border-radius: 0.5rem;
+	border: none;
+	cursor: pointer;
+	background-color: var(--primary);
+	color: var(--text-on-primary);
+	font-weight: 600;
+	white-space: nowrap;
+	transition: filter 0.2s ease;
+	margin-top: 0.8rem;
+}
+
+.submit-review-page #submit-button:hover {
+	filter: brightness(1.1);
+}
+
+.submit-review-page .star-rating {
+	display: flex;
+	gap: 0.5rem;
+	margin: 1rem 0;
+	margin-top: 0;
+}
+
+.submit-review-page .star {
+	cursor: pointer;
+	color: var(--text-muted);
+	transition:
+		color 0.2s ease,
+		transform 0.1s ease;
+}
+
+.submit-review-page .star:hover {
+	transform: scale(1.1);
+}
+
+.submit-review-page .star.filled {
+	color: var(--primary);
+	fill: var(--primary);
+}
+
+.submit-review-page .suggested h2 {
+	margin-bottom: 1rem;
+	font-size: 1.5rem;
+	color: var(--text);
+	text-align: center;
+}
+
+.submit-review-page .suggested {
+	position: sticky;
+	top: 2rem;
+}
+
+.submit-review-page .error-message {
+	color: var(--danger);
+	background-color: var(--bg);
+	padding: 0.75rem;
+	border-radius: 0.5rem;
+	border: 1px solid var(--danger);
+	margin-bottom: 1rem;
+	font-weight: 500;
+}
+
+@media (max-width: 900px) {
+	.submit-review-page {
+		grid-template-columns: 1fr;
+	}
+}

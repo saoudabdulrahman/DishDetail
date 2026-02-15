@@ -21,7 +21,11 @@ export default function ReviewCard({ review, restaurant }) {
 					<p className="review-meta">
 						Reviewed by <strong>{review.reviewer}</strong> · {review.date}
 					</p>
-					<p className="review-body">{review.body}</p>
+					<p className="review-body">
+						{review.body.length > 150
+							? review.body.substring(0, 150) + '...'
+							: review.body}
+					</p>
 				</div>
 			</article>
 		</Link>

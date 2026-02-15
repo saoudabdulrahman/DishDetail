@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 import { clearAuth, loadAuth, saveAuth } from './storage';
+import { updateUser as updateStorageUser } from './userStorage';
 import { AuthContext } from './context';
 
 export default function AuthProvider({ children }) {
@@ -8,15 +9,28 @@ export default function AuthProvider({ children }) {
 	const value = useMemo(() => {
 		return {
 			user,
-			login: (username, rememberMe) => {
-				const newUser = { username };
-				saveAuth(newUser, rememberMe);
-				setUser(newUser);
+			login: (userData, rememberMe) => {
+				saveAuth(userData, rememberMe);
+				setUser(userData);
 			},
 			logout: () => {
 				clearAuth();
 				setUser(null);
 			},
+			updateProfile: (updates) => {
+				if (!user) return;
+				const updatedUser = { ...user, ...updates };
+				
+				try {
+					updateStorageUser(user.username, updates);
+				} catch (e) {
+					console.error("Failed to update user storage", e);
+				}
+
+				const isRemembered = !!localStorage.getItem('dishdetail_auth');
+				saveAuth(updatedUser, isRemembered);
+				setUser(updatedUser);
+			}
 		};
 	}, [user]);
 

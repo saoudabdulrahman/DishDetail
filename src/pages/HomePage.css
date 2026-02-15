@@ -155,3 +155,9 @@
 		gap: 1.5rem;
 	}
 }
+
+.button-group {
+	display: flex;
+	justify-content: center;
+	gap: 1rem;
+}

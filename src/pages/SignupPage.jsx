@@ -55,10 +55,11 @@ export default function SignupPage() {
 		try {
 			// Frontend-only mock signup storage
 			// DEMO ONLY: storing password in plain text (replace with backend later)
-			saveUser({ email: e1, username: u1, password });
+			const newUser = { email: e1, username: u1, password };
+			saveUser(newUser);
 
 			// Auto-login after signup (remembered)
-			login(u1, true);
+			login(newUser, true);
 			navigate('/');
 		} catch (err) {
 			setError(err.message);
