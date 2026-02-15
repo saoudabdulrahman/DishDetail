@@ -22,7 +22,7 @@ export default function ReviewCard({ review, restaurant }) {
 		<article className="reviewItem" onClick={handleClick}>
 			<div className="restaurantImageContainer">
 				<img
-					src={restaurant.restaurantImage}
+					src={review.reviewImage}
 					alt={`Food or ambiance from ${restaurant.restaurantName}`}
 					className="restaurantImg"
 				/>

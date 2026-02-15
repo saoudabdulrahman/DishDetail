@@ -7,6 +7,7 @@ export const reviewsData = [
 		reviewerAvatar: 'https://i.pravatar.cc/150?u=khalid',
 		date: 'Jan 15, 2026',
 		body: 'Absolutely fantastic Lebanese food. The hummus and mixed grill were cooked to perfection. A great spot to grab dinner after a long day of classes.',
+		reviewImage: 'https://loremflickr.com/600/400/lebanese,food?lock=1',
 	},
 	{
 		id: 2,
@@ -16,6 +17,7 @@ export const reviewsData = [
 		reviewerAvatar: 'https://i.pravatar.cc/150?u=sarah',
 		date: 'Jan 20, 2026',
 		body: 'Great atmosphere and the black cod is a must-try. It gets quite busy on the weekends, so make sure to book in advance. A bit on the pricey side but worth it for a special occasion.',
+		reviewImage: 'https://loremflickr.com/600/400/sushi,japanese?lock=2',
 	},
 	{
 		id: 3,
@@ -25,6 +27,7 @@ export const reviewsData = [
 		reviewerAvatar: 'https://i.pravatar.cc/150?u=jimin',
 		date: 'Jan 22, 2026',
 		body: 'The best Korean BBQ in the city! The meat cuts are premium, and the side dishes keep coming. They even played some of my favorite K-pop tracks in the background, which was a huge plus.',
+		reviewImage: 'https://loremflickr.com/600/400/korean,bbq?lock=3',
 	},
 	{
 		id: 4,
@@ -34,6 +37,7 @@ export const reviewsData = [
 		reviewerAvatar: 'https://i.pravatar.cc/150?u=david',
 		date: 'Jan 25, 2026',
 		body: 'An absolute institution. The butter chicken and garlic naan are unmatched for the price. It’s no-frills, but the flavor is incredible.',
+		reviewImage: 'https://loremflickr.com/600/400/curry,naan?lock=4',
 	},
 	{
 		id: 5,
@@ -43,6 +47,7 @@ export const reviewsData = [
 		reviewerAvatar: 'https://i.pravatar.cc/150?u=elena',
 		date: 'Jan 28, 2026',
 		body: "The views of the Marina are stunning, especially at sunset. However, the service was a bit slow, and the food didn't entirely live up to the hype. Good for photos, though.",
+		reviewImage: 'https://loremflickr.com/600/400/cocktail,beach?lock=5',
 	},
 	{
 		id: 6,
@@ -52,6 +57,7 @@ export const reviewsData = [
 		reviewerAvatar: 'https://i.pravatar.cc/150?u=fahad',
 		date: 'Feb 1, 2026',
 		body: 'You can never go wrong with their sliders and lotus milkshakes. Perfect place to chill by the beach when the weather is nice.',
+		reviewImage: 'https://loremflickr.com/600/400/burger,fries?lock=6',
 	},
 	{
 		id: 7,
@@ -61,6 +67,7 @@ export const reviewsData = [
 		reviewerAvatar: 'https://i.pravatar.cc/150?u=grace',
 		date: 'Feb 3, 2026',
 		body: 'An unforgettable dining experience! The portions are massive, and the presentation is a show in itself. The kunefe for dessert is highly recommended.',
+		reviewImage: 'https://loremflickr.com/600/400/kebab,turkish?lock=7',
 	},
 	{
 		id: 8,
@@ -70,6 +77,7 @@ export const reviewsData = [
 		reviewerAvatar: 'https://i.pravatar.cc/150?u=henry',
 		date: 'Feb 5, 2026',
 		body: 'Consistent quality as always. The soup dumplings (Xiao Long Bao) are the reason I keep coming back. Be prepared to wait in line if you go during peak mall hours.',
+		reviewImage: 'https://loremflickr.com/600/400/dumplings,dimsum?lock=8',
 	},
 	{
 		id: 9,
@@ -79,6 +87,7 @@ export const reviewsData = [
 		reviewerAvatar: 'https://i.pravatar.cc/150?u=irene',
 		date: 'Feb 6, 2026',
 		body: 'Solid, reliable street food. The classic falafel wrap hits the spot when you need a quick, satisfying bite while studying or working late.',
+		reviewImage: 'https://loremflickr.com/600/400/falafel,wrap?lock=9',
 	},
 	{
 		id: 10,
@@ -88,6 +97,7 @@ export const reviewsData = [
 		reviewerAvatar: 'https://i.pravatar.cc/150?u=jack',
 		date: 'Feb 7, 2026',
 		body: 'Breathtaking views of the Burj Al Arab and phenomenal seafood. The tasting menu was an incredible culinary journey. Perfect for a very special evening out.',
+		reviewImage: 'https://loremflickr.com/600/400/seafood,finedining?lock=10',
 	},
 ];
 
@@ -97,7 +107,8 @@ export const restaurantsData = [
 		restaurantName: 'Al Safadi Restaurant',
 		cuisine: 'Lebanese',
 		rating: 5,
-		restaurantImage: 'https://loremflickr.com/600/400/lebanese,food?lock=1',
+		restaurantImage:
+			'https://loremflickr.com/600/400/restaurant,interior?lock=101',
 		description:
 			'Authentic Lebanese cuisine in the heart of the city. Known for its hummus, mixed grills, and warm hospitality.',
 	},
@@ -106,7 +117,8 @@ export const restaurantsData = [
 		restaurantName: 'Zuma Dubai',
 		cuisine: 'Japanese',
 		rating: 4,
-		restaurantImage: 'https://loremflickr.com/600/400/sushi,japanese?lock=2',
+		restaurantImage:
+			'https://loremflickr.com/600/400/finedining,interior?lock=102',
 		description:
 			'Contemporary Japanese cuisine with a sophisticated atmosphere. Famous for its black cod and robata grill.',
 	},
@@ -115,7 +127,8 @@ export const restaurantsData = [
 		restaurantName: 'Sonamu Korean Restaurant',
 		cuisine: 'Korean BBQ',
 		rating: 5,
-		restaurantImage: 'https://loremflickr.com/600/400/korean,bbq?lock=3',
+		restaurantImage:
+			'https://loremflickr.com/600/400/authentic,restaurant?lock=103',
 		description:
 			'Premium Korean BBQ experience with high-quality meat cuts and an extensive selection of banchan side dishes.',
 	},
@@ -124,7 +137,7 @@ export const restaurantsData = [
 		restaurantName: 'Ravi Restaurant',
 		cuisine: 'Pakistani / Indian',
 		rating: 4,
-		restaurantImage: 'https://loremflickr.com/600/400/curry,naan?lock=4',
+		restaurantImage: 'https://loremflickr.com/600/400/diner,exterior?lock=104',
 		description:
 			'A beloved institution serving flavorful Pakistani and Indian dishes at unbeatable prices since 1978.',
 	},
@@ -133,7 +146,8 @@ export const restaurantsData = [
 		restaurantName: 'Koko Bay',
 		cuisine: 'Asian / Continental',
 		rating: 3,
-		restaurantImage: 'https://loremflickr.com/600/400/cocktail,beach?lock=5',
+		restaurantImage:
+			'https://loremflickr.com/600/400/beach,restaurant?lock=105',
 		description:
 			'Trendy waterfront dining with stunning Marina views. A popular spot for sunset cocktails and Asian-inspired bites.',
 	},
@@ -142,7 +156,7 @@ export const restaurantsData = [
 		restaurantName: 'SALT Kite Beach',
 		cuisine: 'Burgers / Fast Food',
 		rating: 4,
-		restaurantImage: 'https://loremflickr.com/600/400/burger,fries?lock=6',
+		restaurantImage: 'https://loremflickr.com/600/400/foodtruck,beach?lock=106',
 		description:
 			'Iconic beachside food truck turned restaurant. Known for gourmet sliders and their signature lotus milkshake.',
 	},
@@ -151,7 +165,8 @@ export const restaurantsData = [
 		restaurantName: 'CZN Burak',
 		cuisine: 'Turkish',
 		rating: 5,
-		restaurantImage: 'https://loremflickr.com/600/400/kebab,turkish?lock=7',
+		restaurantImage:
+			'https://loremflickr.com/600/400/turkish,restaurant?lock=107',
 		description:
 			'A theatrical dining experience with massive portions and show-stopping Turkish cuisine presentations.',
 	},
@@ -160,7 +175,8 @@ export const restaurantsData = [
 		restaurantName: 'Din Tai Fung',
 		cuisine: 'Taiwanese / Dim Sum',
 		rating: 4,
-		restaurantImage: 'https://loremflickr.com/600/400/dumplings,dimsum?lock=8',
+		restaurantImage:
+			'https://loremflickr.com/600/400/restaurant,exterior?lock=108',
 		description:
 			'World-renowned Taiwanese restaurant chain famous for its meticulously crafted Xiao Long Bao soup dumplings.',
 	},
@@ -169,7 +185,7 @@ export const restaurantsData = [
 		restaurantName: 'Operation: Falafel',
 		cuisine: 'Middle Eastern Street Food',
 		rating: 4,
-		restaurantImage: 'https://loremflickr.com/600/400/falafel,wrap?lock=9',
+		restaurantImage: 'https://loremflickr.com/600/400/streetfood,shop?lock=109',
 		description:
 			'Quick-service Middle Eastern eatery serving fresh, affordable falafel wraps and shawarma platters.',
 	},
@@ -178,8 +194,7 @@ export const restaurantsData = [
 		restaurantName: 'Pierchic',
 		cuisine: 'Seafood / Fine Dining',
 		rating: 5,
-		restaurantImage:
-			'https://loremflickr.com/600/400/seafood,finedining?lock=10',
+		restaurantImage: 'https://loremflickr.com/600/400/pier,restaurant?lock=110',
 		description:
 			'Award-winning overwater fine dining restaurant with panoramic views and an exquisite seafood tasting menu.',
 	},
