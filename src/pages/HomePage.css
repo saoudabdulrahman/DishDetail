@@ -164,3 +164,9 @@
 		grid-template-columns: 1fr;
 	}
 }
+
+.buttonGroup {
+	display: flex;
+	justify-content: center;
+	gap: 1rem;
+}

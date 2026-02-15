@@ -19,10 +19,16 @@ export default function HomePage() {
 					Find the best restaurants near you, read real reviews from fellow
 					diners, and share your own dining experiences with the community.
 				</p>
-				<Link to="/reviews" className="heroCta">
-					<Search size={18} />
-					Browse Reviews
-				</Link>
+				<div className="buttonGroup">
+					<Link to="/reviews" className="heroCta">
+						<Search size={18} />
+						Browse Reviews
+					</Link>
+					<Link to="/selectRestaurant" className="heroCta">
+							<Star size={18} />
+							Submit Review
+					</Link>
+				</div>
 			</section>
 
 			<div className="statsRow">
@@ -87,6 +93,7 @@ export default function HomePage() {
 					</div>
 					<h3>Rate</h3>
 					<p>Leave an honest rating and detailed review.</p>
+					<Link to="/submitReview">Submit Review</Link>
 				</div>
 
 				<div className="step">

@@ -1,0 +1,7 @@
+.reviewbox {
+	width: 400px;
+	height: 100px;
+	border: 1px solid #c3c3c3;
+	display: flex;
+	justify-content: center;
+}

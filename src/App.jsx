@@ -4,6 +4,8 @@ import Header from './components/Header';
 import Footer from './components/Footer';
 import HomePage from './pages/HomePage';
 import ReviewsPage from './pages/ReviewsPage';
+import SubmitReview from './pages/SubmitReview';
+import SelectRestaurant from './pages/SelectRestaurant';
 import './App.css';
 
 function App() {
@@ -18,6 +20,14 @@ function App() {
 				<Route
 					path="/reviews"
 					element={<ReviewsPage searchQuery={searchQuery} />}
+				/>
+				<Route
+					path="/submitReview"
+					element={<SubmitReview searchQuery={searchQuery} />}
+				/>
+				<Route
+					path="/selectRestaurant"
+					element={<SelectRestaurant searchQuery={searchQuery} />}
 				/>
 			</Routes>
 
