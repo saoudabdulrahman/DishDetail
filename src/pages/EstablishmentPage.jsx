@@ -1,39 +1,9 @@
+import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Star, MapPin, Clock, Phone, Globe, ArrowLeft } from 'lucide-react';
 import { restaurantsData, reviewsData } from '../data.js';
-import StarRating from '../components/StarRating';
+import DetailReviewCard from '../components/DetailReviewCard';
 import './EstablishmentPage.css';
-
-const DetailReviewCard = ({ review }) => {
-	return (
-		<article className="detail-review-card">
-			<div className="detail-review-header">
-				<div className="reviewer-info">
-					<img
-						src={review.reviewerAvatar}
-						alt={review.reviewer}
-						className="reviewer-avatar"
-					/>
-					<div>
-						<h4 className="reviewer-name">{review.reviewer}</h4>
-						<p className="review-date">{review.date}</p>
-					</div>
-				</div>
-				<StarRating rating={review.rating} />
-			</div>
-			<p className="detail-review-body">{review.body}</p>
-			{review.reviewImage && (
-				<div className="detail-review-image-container">
-					<img
-						src={review.reviewImage}
-						alt="Review photo"
-						className="detail-review-image"
-					/>
-				</div>
-			)}
-		</article>
-	);
-};
 
 export default function EstablishmentPage() {
 	const { id } = useParams();
@@ -41,7 +11,35 @@ export default function EstablishmentPage() {
 	const restaurantId = Number(id);
 
 	const restaurant = restaurantsData.find((r) => r.id === restaurantId);
-	const reviews = reviewsData.filter((r) => r.restaurantId === restaurantId);
+	const [reviews, setReviews] = useState(() =>
+		reviewsData.filter((r) => r.restaurantId === restaurantId),
+	);
+	const [visibleCount, setVisibleCount] = useState(2);
+
+	const handleUpdateReview = (reviewId, updates) => {
+		const idx = reviewsData.findIndex((r) => r.id === reviewId);
+		if (idx !== -1) {
+			reviewsData[idx] = { ...reviewsData[idx], ...updates, isEdited: true };
+			setReviews((prev) =>
+				prev.map((r) =>
+					r.id === reviewId ? { ...r, ...updates, isEdited: true } : r,
+				),
+			);
+		}
+	};
+
+	const handleDeleteReview = (reviewId) => {
+		const idx = reviewsData.findIndex((r) => r.id === reviewId);
+		if (idx !== -1) {
+			reviewsData.splice(idx, 1);
+			setReviews((prev) => prev.filter((r) => r.id !== reviewId));
+		}
+	};
+
+	const sortedReviews = [...reviews].sort(
+		(a, b) => b.rating - a.rating || new Date(b.date) - new Date(a.date),
+	);
+	const displayedReviews = sortedReviews.slice(0, visibleCount);
 
 	const avgRating =
 		reviews.length > 0 ?
@@ -54,7 +52,10 @@ export default function EstablishmentPage() {
 		return (
 			<main className="error-container">
 				<p>Restaurant not found</p>
-				<button onClick={() => navigate('/establishments')} className="back-btn">
+				<button
+					onClick={() => navigate('/establishments')}
+					className="back-btn"
+				>
 					<ArrowLeft size={18} /> Go Back
 				</button>
 			</main>
@@ -130,9 +131,24 @@ export default function EstablishmentPage() {
 
 				{reviews.length > 0 ?
 					<div className="detail-reviews-list">
-						{reviews.map((review) => (
-							<DetailReviewCard key={review.id} review={review} />
+						{displayedReviews.map((review) => (
+							<DetailReviewCard
+								key={review.id}
+								review={review}
+								onUpdate={handleUpdateReview}
+								onDelete={handleDeleteReview}
+							/>
 						))}
+						{visibleCount < reviews.length && (
+							<div className="load-more-container">
+								<button
+									onClick={() => setVisibleCount((c) => c + 3)}
+									className="load-more-btn"
+								>
+									Load More
+								</button>
+							</div>
+						)}
 					</div>
 				:	<p className="no-reviews">No reviews yet. Be the first to review!</p>}
 			</section>

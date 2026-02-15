@@ -9,6 +9,18 @@ export const reviewsData = [
 		body: 'The sinigang here is next level — perfectly sour with fall-off-the-bone pork ribs. Paired it with garlic rice and I was in heaven. Super affordable and generous servings!',
 		reviewImage:
 			'https://images.unsplash.com/photo-1536489885071-87983c3e2859?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+		comments: [
+			{
+				id: 101,
+				author: 'Camille S.',
+				date: 'Jan 16, 2026',
+				body: 'Totally agree! The garlic rice is a must.',
+			},
+		],
+		ownerResponse: {
+			date: 'Jan 16, 2026',
+			body: 'Thank you so much for the kind words, Marco! We are thrilled you enjoyed the sinigang. Hope to see you again soon!',
+		},
 	},
 	{
 		id: 2,
@@ -108,6 +120,16 @@ export const reviewsData = [
 		body: 'The seafood boodle fight was an epic experience! Super fresh catch cooked multiple ways. The view of Manila Bay during golden hour made it even more special.',
 		reviewImage:
 			'https://images.unsplash.com/photo-1650435489945-96b2b19b943b?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+	},
+	{
+		id: 11,
+		restaurantId: 1,
+		rating: 3,
+		reviewer: 'New User',
+		reviewerAvatar: 'https://i.pravatar.cc/150?u=newuser',
+		date: 'Feb 15, 2026',
+		body: 'Good food but service was a bit slow today. The place was packed!',
+		reviewImage: null,
 	},
 ];
 

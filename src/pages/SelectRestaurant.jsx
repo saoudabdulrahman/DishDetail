@@ -27,7 +27,7 @@ function SelectRestaurant() {
 	};
 
 	return (
-		<main>
+		<main className="select-restaurant-page">
 			<h1 className="title">Which restaurant would you like to review?</h1>
 
 			<div className="search-wrapper">

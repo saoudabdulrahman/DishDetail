@@ -96,6 +96,16 @@ export default function Header() {
 								/>
 							</button>
 							<div className={`dropdown-menu ${isDropdownOpen ? 'open' : ''}`}>
+								<Link
+									to="/profile"
+									className="dropdown-item"
+									onClick={() => {
+										setIsDropdownOpen(false);
+										closeMenu();
+									}}
+								>
+									<User size={16} /> Profile
+								</Link>
 								<button
 									id="logout-button"
 									onClick={() => {

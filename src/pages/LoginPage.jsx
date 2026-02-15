@@ -39,7 +39,7 @@ export default function LoginPage() {
 			return;
 		}
 
-		login(validUser.username, rememberMe);
+		login(validUser, rememberMe);
 		navigate('/');
 	};
 
