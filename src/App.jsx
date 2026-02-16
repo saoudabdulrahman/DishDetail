@@ -8,10 +8,12 @@ import EstablishmentPage from './pages/EstablishmentPage';
 import SubmitReview from './pages/SubmitReview';
 import SelectRestaurant from './pages/SelectRestaurant';
 import ProfilePage from './pages/ProfilePage';
-import ProtectedRoute from './components/ProtectedRoute';
-import GuestRoute from './components/GuestRoute';
-import './App.css';
+import NotFoundPage from './pages/NotFoundPage';
 import MainLayout from './components/MainLayout';
+import GuestRoute from './components/GuestRoute';
+import ProtectedRoute from './components/ProtectedRoute';
+
+import './App.css';
 
 function App() {
 	return (
@@ -34,7 +36,7 @@ function App() {
 						<Route path="/select-restaurant" element={<SelectRestaurant />} />
 					</Route>
 
-					<Route path="*" element={<main>Page not found</main>} />
+					<Route path="*" element={<NotFoundPage />} />
 				</Route>
 			</Routes>
 		</div>

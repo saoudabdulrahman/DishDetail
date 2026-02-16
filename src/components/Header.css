@@ -258,7 +258,7 @@ header {
 	justify-content: center;
 	background-color: var(--primary);
 	color: var(--text-on-primary);
-	padding: 0.5rem;
+	padding: 0.5rem 1rem;
 	border: none;
 	border-radius: 0 1rem 1rem 0;
 	cursor: pointer;
