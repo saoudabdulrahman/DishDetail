@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { Link, useNavigate, useSearchParams } from 'react-router';
+import { Link, NavLink, useNavigate, useSearchParams } from 'react-router';
 import { Search, Menu, User, LogOut, ChevronDown } from 'lucide-react';
 import { useAuth } from '../auth/useAuth';
 import './Header.css';
@@ -71,16 +71,22 @@ export default function Header() {
 			</button>
 
 			<nav className={`header-actions ${isMenuOpen ? 'open' : ''}`}>
-				<Link to="/establishments" onClick={closeMenu}>
+				<NavLink to="/establishments" onClick={closeMenu}>
 					Establishments
-				</Link>
-				<Link to="/reviews" onClick={closeMenu}>
+				</NavLink>
+				<NavLink to="/reviews" onClick={closeMenu}>
 					Reviews
-				</Link>
+				</NavLink>
+
 				{user ?
 					<>
-						<Link to="/select-restaurant" onClick={closeMenu}>
-							<button id="submit-review-button">Submit Review</button>
+						<Link
+							to="/select-restaurant"
+							id="submit-review-button"
+							className="button-link"
+							onClick={closeMenu}
+						>
+							Submit Review
 						</Link>
 						<div className="user-dropdown" ref={dropdownRef}>
 							<button
@@ -96,7 +102,7 @@ export default function Header() {
 								/>
 							</button>
 							<div className={`dropdown-menu ${isDropdownOpen ? 'open' : ''}`}>
-								<Link
+								<NavLink
 									to="/profile"
 									className="dropdown-item"
 									onClick={() => {
@@ -105,7 +111,7 @@ export default function Header() {
 									}}
 								>
 									<User size={16} /> Profile
-								</Link>
+								</NavLink>
 								<button
 									id="logout-button"
 									onClick={() => {
@@ -120,12 +126,22 @@ export default function Header() {
 						</div>
 					</>
 				:	<>
-						<Link to="/login" onClick={closeMenu}>
-							<button id="login-button">Log In</button>
-						</Link>
-						<Link to="/signup" onClick={closeMenu}>
-							<button id="signup-button">Sign Up</button>
-						</Link>
+						<NavLink
+							to="/login"
+							id="login-button"
+							className="button-link"
+							onClick={closeMenu}
+						>
+							Log In
+						</NavLink>
+						<NavLink
+							to="/signup"
+							id="signup-button"
+							className="button-link"
+							onClick={closeMenu}
+						>
+							Sign Up
+						</NavLink>
 					</>
 				}
 			</nav>
