@@ -11,6 +11,7 @@ import SubmitReview from './pages/SubmitReview';
 import SelectRestaurant from './pages/SelectRestaurant';
 import ProfilePage from './pages/ProfilePage';
 import ProtectedRoute from './components/ProtectedRoute';
+import GuestRoute from './components/GuestRoute';
 import './App.css';
 
 function App() {
@@ -20,12 +21,15 @@ function App() {
 
 			<Routes>
 				<Route index element={<HomePage />} />
-				<Route path="/login" element={<LoginPage />} />
-				<Route path="/signup" element={<SignupPage />} />
 				<Route path="/reviews" element={<ReviewsPage />} />
 				<Route path="/establishments" element={<EstablishmentsPage />} />
 				<Route path="/establishments/:id" element={<EstablishmentPage />} />
-				
+
+				<Route element={<GuestRoute />}>
+					<Route path="/login" element={<LoginPage />} />
+					<Route path="/signup" element={<SignupPage />} />
+				</Route>
+
 				<Route element={<ProtectedRoute />}>
 					<Route path="/profile" element={<ProfilePage />} />
 					<Route path="/submit-review" element={<SubmitReview />} />

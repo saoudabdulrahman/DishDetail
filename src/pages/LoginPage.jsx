@@ -1,12 +1,15 @@
 import { useState } from 'react';
-import { useNavigate, Link } from 'react-router';
+import { useNavigate, Link, useLocation } from 'react-router';
 import { useAuth } from '../auth/useAuth';
 import { validateUser } from '../auth/userStorage';
 import './LoginPage.css';
 
 export default function LoginPage() {
 	const navigate = useNavigate();
+	const location = useLocation();
 	const { login } = useAuth();
+
+	const from = location.state?.from || '/';
 
 	const [username, setUsername] = useState('');
 	const [password, setPassword] = useState('');
@@ -40,7 +43,7 @@ export default function LoginPage() {
 		}
 
 		login(validUser, rememberMe);
-		navigate('/');
+		navigate(from, { replace: true});
 	};
 
 	return (
