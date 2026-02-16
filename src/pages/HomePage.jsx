@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { ChefHat, Search, Star, UtensilsCrossed } from 'lucide-react';
 import ReviewCard from '../components/ReviewCard';
 import { reviewsData, restaurantsData } from '../data';

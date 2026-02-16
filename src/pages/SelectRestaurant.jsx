@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import { Search } from 'lucide-react';
 import { restaurantsData } from '../data';
 import './SelectRestaurant.css';
@@ -51,10 +51,7 @@ function SelectRestaurant() {
 				{query && !selectedRestaurant && (
 					<ul className="search-results">
 						{filteredRestaurants.map((restaurant) => (
-							<li
-								key={restaurant.id}
-								onClick={() => handleSelect(restaurant)}
-							>
+							<li key={restaurant.id} onClick={() => handleSelect(restaurant)}>
 								{restaurant.restaurantName}
 							</li>
 						))}

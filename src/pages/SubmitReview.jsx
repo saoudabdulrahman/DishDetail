@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router';
 import { Star } from 'lucide-react';
 import ReviewCard from '../components/ReviewCard';
 import { reviewsData, restaurantsData } from '../data';
@@ -20,10 +20,8 @@ function SubmitReview() {
 	useEffect(() => {
 		if (!restaurant) {
 			navigate('/select-restaurant');
-		} else if (!user) {
-			navigate('/login');
 		}
-	}, [restaurant, user, navigate]);
+	}, [restaurant, navigate]);
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
@@ -62,14 +60,12 @@ function SubmitReview() {
 		.sort((a, b) => b.rating - a.rating)
 		.slice(0, 4);
 
-	if (!restaurant || !user) return null;
+	if (!restaurant) return null;
 
 	return (
 		<main className="submit-review-page">
 			<div className="box">
-				<h1 id="title">
-					Submit a Review for {restaurant.restaurantName}
-				</h1>
+				<h1 id="title">Submit a Review for {restaurant.restaurantName}</h1>
 
 				{error && <div className="error-message">{error}</div>}
 

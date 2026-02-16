@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { Link, useNavigate, useSearchParams } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router';
 import { Search, Menu, User, LogOut, ChevronDown } from 'lucide-react';
 import { useAuth } from '../auth/useAuth';
 import './Header.css';

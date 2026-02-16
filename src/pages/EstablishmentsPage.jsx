@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router';
 import EstablishmentCard from '../components/EstablishmentCard';
 import { restaurantsData } from '../data.js';
 import './EstablishmentsPage.css';
@@ -12,7 +12,7 @@ export default function EstablishmentsPage() {
 	const filteredEstablishments = useMemo(() => {
 		return restaurantsData.filter((restaurant) => {
 			if (restaurant.rating < minRating) return false;
-			
+
 			if (!query) return true;
 
 			const nameMatch =
@@ -29,12 +29,12 @@ export default function EstablishmentsPage() {
 	return (
 		<main>
 			<h2 className="establishments-header">Establishments</h2>
-			
+
 			<div className="filter-bar">
 				<label>
 					<span>Filter by Rating: </span>
-					<select 
-						value={minRating} 
+					<select
+						value={minRating}
 						onChange={(e) => setMinRating(Number(e.target.value))}
 					>
 						<option value={0}>All Ratings</option>

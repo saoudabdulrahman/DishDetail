@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../auth/useAuth';
 import { reviewsData, restaurantsData } from '../data';
 import ReviewCard from '../components/ReviewCard';
@@ -7,16 +6,10 @@ import './ProfilePage.css';
 
 export default function ProfilePage() {
 	const { user, updateProfile } = useAuth();
-	const navigate = useNavigate();
 
 	const [isEditing, setIsEditing] = useState(false);
 	const [avatarUrl, setAvatarUrl] = useState(user?.avatar || '');
 	const [bio, setBio] = useState(user?.bio || '');
-
-	if (!user) {
-		navigate('/login');
-		return null;
-	}
 
 	const userReviews = reviewsData.filter((r) => r.reviewer === user.username);
 

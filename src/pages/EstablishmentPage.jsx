@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router';
 import { Star, MapPin, Clock, Phone, Globe, ArrowLeft } from 'lucide-react';
 import { restaurantsData, reviewsData } from '../data.js';
 import DetailReviewCard from '../components/DetailReviewCard';

@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router';
 import ReviewCard from '../components/ReviewCard';
 import { reviewsData, restaurantsData } from '../data';
 import './ReviewsPage.css';

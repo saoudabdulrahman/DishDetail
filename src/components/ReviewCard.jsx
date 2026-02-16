@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import StarRating from './StarRating';
 import './ReviewCard.css';
 
@@ -22,9 +22,9 @@ export default function ReviewCard({ review, restaurant }) {
 						Reviewed by <strong>{review.reviewer}</strong> · {review.date}
 					</p>
 					<p className="review-body">
-						{review.body.length > 150
-							? review.body.substring(0, 150) + '...'
-							: review.body}
+						{review.body.length > 150 ?
+							review.body.substring(0, 150) + '...'
+						:	review.body}
 					</p>
 				</div>
 			</article>
