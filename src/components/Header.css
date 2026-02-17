@@ -17,12 +17,6 @@ header {
 	cursor: pointer;
 }
 
-.header-actions {
-	display: flex;
-	gap: 0.5rem;
-	align-items: center;
-}
-
 #hamburger-button {
 	display: none;
 	background: none;
@@ -32,8 +26,68 @@ header {
 	padding: 0.25rem;
 }
 
+.search-container {
+	position: relative;
+	flex: 1;
+	padding: 0 0.5rem;
+	display: flex;
+}
+
+#search-input {
+	width: 100%;
+	padding: 0.5rem 4rem 0.5rem 1rem;
+	border: none;
+	border-radius: 2rem;
+	box-shadow: var(--shadow-s);
+	transition:
+		filter 0.2s ease,
+		box-shadow 0.2s ease;
+}
+
+#search-input:hover {
+	filter: brightness(1.1);
+}
+
+#search-input:focus {
+	outline: none;
+	box-shadow:
+		var(--shadow-s),
+		0 0 0 2px var(--primary);
+}
+
+#search-button {
+	position: absolute;
+	right: 0.7rem;
+	top: 0.2rem;
+	bottom: 0.2rem;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background-color: var(--primary);
+	color: var(--text-on-primary);
+	padding: 0.5rem 1rem;
+	border: none;
+	border-radius: 2rem;
+	cursor: pointer;
+	box-shadow: var(--shadow-s);
+	transition: filter 0.2s ease;
+}
+
+#search-button:hover {
+	filter: brightness(1.1);
+}
+
+#search-button:active {
+	filter: brightness(1.25);
+}
+
+.header-actions {
+	display: flex;
+	gap: 1rem;
+	align-items: center;
+}
+
 .header-actions a {
-	margin-right: 0.5rem;
 	text-decoration: none;
 	color: var(--text);
 	cursor: pointer;
@@ -59,7 +113,7 @@ header {
 	color: var(--text-on-primary);
 	padding: 0.5rem 1rem;
 	border: none;
-	border-radius: 1rem;
+	border-radius: 2rem;
 	cursor: pointer;
 	box-shadow: var(--shadow-s);
 	transition:
@@ -70,6 +124,19 @@ header {
 	display: inline-block;
 }
 
+.header-actions button:hover,
+.header-actions a.button-link:hover {
+	transform: translateY(-1px);
+	filter: brightness(1.1);
+	box-shadow: var(--shadow-l);
+	text-decoration: none;
+}
+
+.header-actions a.button-link.active {
+	text-decoration: none;
+	filter: brightness(1.1);
+}
+
 #login-button {
 	background-color: var(--secondary);
 }
@@ -78,17 +145,20 @@ header {
 	background-color: var(--primary);
 }
 
-#logout-button {
-	display: inline-flex;
-	align-items: center;
-	gap: 0.4rem;
-	background-color: var(--secondary);
-	width: 100%;
-	justify-content: center;
-}
-
 .user-dropdown {
 	position: relative;
+}
+
+.user-info {
+	display: flex;
+	align-items: center;
+	gap: 0.4rem;
+	color: var(--text);
+	font-weight: 500;
+}
+
+.username {
+	white-space: nowrap;
 }
 
 .header-actions .user-info-toggle {
@@ -99,7 +169,7 @@ header {
 	border: 1px solid var(--secondary);
 	color: var(--text-on-primary);
 	padding: 0.5rem 0.8rem;
-	border-radius: 1rem;
+	border-radius: 2rem;
 	cursor: pointer;
 	font-weight: 500;
 	box-shadow: var(--shadow-s);
@@ -126,7 +196,7 @@ header {
 	right: 0;
 	min-width: 180px;
 	background-color: var(--bg-dark);
-	border-radius: 0.75rem;
+	border-radius: 1rem;
 	padding: 0.5rem;
 	box-shadow: var(--shadow-l);
 	z-index: 100;
@@ -147,7 +217,7 @@ header {
 	pointer-events: auto;
 }
 
-.dropdown-item {
+#profile-button {
 	display: flex;
 	align-items: center;
 	gap: 0.5rem;
@@ -155,122 +225,39 @@ header {
 	width: 100%;
 	color: var(--text);
 	text-decoration: none;
-	border-radius: 0.5rem;
-	transition: background-color 0.2s;
+	border-radius: 2rem;
+	transition:
+		color 0.2s ease,
+		background-color 0.2s ease;
 	font-weight: 500;
 	box-sizing: border-box;
 }
 
-.dropdown-item:hover {
+#profile-button:hover {
 	background-color: rgba(0, 0, 0, 0.05);
 	color: var(--primary);
 }
 
-.dropdown-item.active {
+#profile-button.active {
 	background-color: rgba(0, 0, 0, 0.05);
 	color: var(--primary);
 	font-weight: 700;
 }
 
-.dropdown-menu button {
-	background: none;
-	color: var(--text);
-	box-shadow: none;
-	justify-content: flex-start;
-	padding: 0.5rem 1rem;
-	border-radius: 0.5rem;
-	width: 100%;
-	margin: 0;
-}
-
-.dropdown-menu button:hover {
-	background-color: rgba(0, 0, 0, 0.05);
-	color: var(--primary);
-	transform: none;
-	box-shadow: none;
-}
-
-.dropdown-menu #logout-button {
-	background: none;
-	background-color: transparent;
-	color: var(--text);
-	width: 100%;
-	justify-content: flex-start;
-	box-shadow: none;
-	margin: 0;
-	padding: 0.5rem 1rem;
-}
-
-.dropdown-menu #logout-button:hover {
-	background-color: rgba(0, 0, 0, 0.05);
-	color: var(--primary);
-}
-
-.user-info {
-	display: flex;
+#logout-button {
+	display: inline-flex;
 	align-items: center;
 	gap: 0.4rem;
-	color: var(--text);
-	font-weight: 500;
-}
-
-.username {
-	white-space: nowrap;
-}
-
-.header-actions button:hover,
-.header-actions a.button-link:hover {
-	transform: translateY(-1px);
-	filter: brightness(1.1);
-	box-shadow: var(--shadow-l);
-	text-decoration: none;
-}
-
-.header-actions a.button-link.active {
-	text-decoration: none;
-	filter: brightness(
-		1.1
-	);
-}
-
-.search-container {
-	flex: 1;
-	padding: 0 1rem;
-	display: flex;
-}
-
-#search-input {
-	width: 100%;
-	padding: 0.5rem 1rem;
-	border: none;
-	border-radius: 1rem 0 0 1rem;
-	box-shadow: var(--shadow-s);
-	transition: filter 0.2s ease;
-}
-
-#search-input:hover {
-	filter: brightness(1.1);
-}
-
-#search-button {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	background-color: var(--primary);
+	background-color: var(--secondary);
 	color: var(--text-on-primary);
+	width: 100%;
+	justify-content: flex-start;
+	box-shadow: none;
+	margin: 0;
 	padding: 0.5rem 1rem;
-	border: none;
-	border-radius: 0 1rem 1rem 0;
-	cursor: pointer;
-	box-shadow: var(--shadow-s);
-	transition: filter 0.2s ease;
 }
 
-#search-button:hover {
-	filter: brightness(1.1);
-}
-
-@media (max-width: 768px) {
+@media (max-width: 900px) {
 	#hamburger-button {
 		display: block;
 	}
@@ -314,5 +301,9 @@ header {
 
 	#search-input {
 		flex: 1;
+	}
+
+	#search-button {
+		right: 0.2rem;
 	}
 }

@@ -7,7 +7,6 @@ import ReviewsPage from './pages/ReviewsPage';
 import EstablishmentsPage from './pages/EstablishmentsPage';
 import EstablishmentPage from './pages/EstablishmentPage';
 import SubmitReview from './pages/SubmitReview';
-import SelectRestaurant from './pages/SelectRestaurant';
 import ProfilePage from './pages/ProfilePage';
 import NotFoundPage from './pages/NotFoundPage';
 import MainLayout from './components/MainLayout';
@@ -37,7 +36,6 @@ export const routes = createBrowserRouter([
 						children: [
 							{ path: '/profile', element: <ProfilePage /> },
 							{ path: '/submit-review', element: <SubmitReview /> },
-							{ path: '/select-restaurant', element: <SelectRestaurant /> },
 						],
 					},
 					{ path: '*', element: <NotFoundPage /> },

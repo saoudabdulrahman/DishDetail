@@ -17,13 +17,6 @@
 	box-shadow: var(--shadow-l);
 }
 
-.review-item-content {
-	padding: 0 1rem 1rem 1rem;
-	margin-top: -1rem;
-	position: relative;
-	z-index: 1;
-}
-
 .restaurant-image-container {
 	width: 100%;
 	height: 12rem;
@@ -37,6 +30,13 @@
 .restaurant-img {
 	height: auto;
 	object-fit: cover;
+}
+
+.review-item-content {
+	padding: 0 1rem 1rem 1rem;
+	margin-top: -1rem;
+	position: relative;
+	z-index: 1;
 }
 
 .review-item-header {

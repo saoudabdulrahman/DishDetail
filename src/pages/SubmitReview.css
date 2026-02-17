@@ -1,111 +1,227 @@
 .submit-review-page {
 	display: grid;
-	grid-template-columns: 1fr 420px;
+	grid-template-columns: 1fr 25rem;
 	gap: 2.5rem;
 	align-items: start;
 	padding: 2rem;
 }
 
-.submit-review-page .box {
-	padding: 4rem 1.5rem;
-	background-color: var(--bg-dark);
-	border-radius: 1.5rem;
-	margin-bottom: 2.5rem;
-	box-shadow: var(--shadow-s);
+.box {
+	padding: 2rem;
+	background-color: var(--bg);
+	border-radius: 2rem;
+	box-shadow: var(--shadow-m);
 }
 
-.submit-review-page .review-container {
+#title {
+	text-align: left;
+	margin-bottom: 1.5rem;
+}
+
+.error-message {
+	display: inline-block;
+	color: var(--danger);
+	background-color: var(--bg-light);
+	padding: 0.5rem 1rem;
+	border-radius: 2rem;
+	border: 2px solid var(--danger);
+	margin-bottom: 1rem;
+	font-weight: 500;
+}
+
+.review-container {
 	display: flex;
 	flex-direction: column;
 	align-items: flex-start;
 	gap: 1rem;
 }
 
-.submit-review-page #review-box,
-.submit-review-page .review-box {
+.search-wrapper {
 	width: 100%;
-	height: 300px;
+	position: relative;
+	margin-bottom: 1rem;
+}
+
+.search-bar {
 	display: flex;
-	align-content: left;
-	font-size: 1.25rem;
-	border-radius: 0.5rem;
-	border: 1px solid var(--secondary);
-	box-sizing: border-box;
-	flex: 1;
-	padding-top: 1rem;
-	padding-left: 1rem;
+	align-items: center;
 }
 
-.submit-review-page #title {
-	text-align: left;
+#search-icon {
+	position: absolute;
+	left: 1rem;
+	pointer-events: none;
+	z-index: 1;
 }
 
-.submit-review-page #submit-button {
-	height: 50px;
-	padding: 0 1.5rem;
-	border-radius: 0.5rem;
+.search-input {
+	font-size: 1rem;
 	border: none;
-	cursor: pointer;
-	background-color: var(--primary);
-	color: var(--text-on-primary);
-	font-weight: 600;
-	white-space: nowrap;
-	transition: filter 0.2s ease;
-	margin-top: 0.8rem;
+	border-radius: 2rem;
+	padding: 0.75rem 1.25rem 0.75rem 3.25rem;
+	flex: 1;
+	box-shadow: var(--shadow-s);
+	transition:
+		filter 0.2s ease,
+		box-shadow 0.2s ease;
 }
 
-.submit-review-page #submit-button:hover {
+.search-input:hover {
 	filter: brightness(1.1);
 }
 
-.submit-review-page .star-rating {
-	display: flex;
-	gap: 0.5rem;
-	margin: 1rem 0;
-	margin-top: 0;
+.search-input:focus {
+	outline: none;
+	box-shadow:
+		var(--shadow-s),
+		0 0 0 2px var(--primary);
 }
 
-.submit-review-page .star {
+#review-search-button:hover {
+	filter: brightness(1.1);
+}
+
+.search-results {
+	list-style: none;
+	padding: 0;
+	margin: 0.5rem 0;
+	border-radius: 1rem;
+	background: var(--bg);
+	max-height: 12rem;
+	overflow-y: auto;
+	width: 100%;
+	position: absolute;
+	top: 100%;
+	z-index: 2;
+	box-shadow: var(--shadow-l);
+}
+
+.search-results li {
+	padding: 0.5rem 1rem;
+	cursor: pointer;
+	transition: background-color 0.2s ease;
+}
+
+.search-results li:hover {
+	background-color: var(--bg-dark);
+}
+
+.review-details {
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	animation: fadeIn 0.3s ease;
+}
+
+.star-rating {
+	display: flex;
+	gap: 0.5rem;
+	margin-bottom: 1rem;
+}
+
+.star {
 	cursor: pointer;
 	color: var(--text-muted);
 	transition:
 		color 0.2s ease,
-		transform 0.1s ease;
+		transform 0.2s ease;
 }
 
-.submit-review-page .star:hover {
+.star:hover {
 	transform: scale(1.1);
 }
 
-.submit-review-page .star.filled {
+.star.filled {
 	color: var(--primary);
 	fill: var(--primary);
 }
 
-.submit-review-page .suggested h2 {
+#review-box {
+	min-height: 10rem;
+	border: none;
+	border-radius: 1rem;
+	padding: 1rem;
+	field-sizing: content;
+	resize: none;
+	box-shadow: var(--shadow-s);
+	transition:
+		filter 0.2s ease,
+		box-shadow 0.2s ease;
+}
+
+#review-box:hover {
+	filter: brightness(1.1);
+}
+
+#review-box:focus {
+	outline: none;
+	box-shadow:
+		var(--shadow-s),
+		0 0 0 2px var(--primary);
+}
+
+#submit-button {
+	background-color: var(--primary);
+	color: var(--text-on-primary);
+	padding: 0.5rem 1rem;
+	margin-top: 1rem;
+	align-self: flex-start;
+	border-radius: 2rem;
+	border: none;
+	cursor: pointer;
+	font-weight: 600;
+	box-shadow: var(--shadow-s);
+	transition:
+		transform 0.2s ease,
+		filter 0.2s ease,
+		box-shadow 0.2s ease;
+}
+
+#submit-button:hover {
+	transform: translateY(-1px);
+	filter: brightness(1.1);
+	box-shadow: var(--shadow-l);
+}
+
+#submit-button:active {
+	filter: brightness(1.25);
+}
+
+.suggested {
+	position: sticky;
+	top: 2rem;
+}
+
+.suggested h2 {
 	margin-bottom: 1rem;
 	font-size: 1.5rem;
 	color: var(--text);
 	text-align: center;
 }
 
-.submit-review-page .suggested {
-	position: sticky;
-	top: 2rem;
+.featured-grid {
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
 }
 
-.submit-review-page .error-message {
-	color: var(--danger);
-	background-color: var(--bg);
-	padding: 0.75rem;
-	border-radius: 0.5rem;
-	border: 1px solid var(--danger);
-	margin-bottom: 1rem;
-	font-weight: 500;
+@keyframes fadeIn {
+	from {
+		opacity: 0;
+		transform: translateY(-5px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
 }
 
 @media (max-width: 900px) {
 	.submit-review-page {
 		grid-template-columns: 1fr;
+	}
+
+	.suggested {
+		position: static;
 	}
 }

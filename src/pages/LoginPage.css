@@ -28,6 +28,10 @@
 	margin: 0.5rem 0;
 }
 
+.login-error.shake {
+	animation: shakeX 0.5s ease-out;
+}
+
 .login-form {
 	display: flex;
 	flex-direction: column;
@@ -48,7 +52,6 @@
 	border: none;
 	box-shadow: var(--shadow-s);
 	font-weight: 400;
-
 	transition:
 		filter 0.2s ease,
 		box-shadow 0.2s ease;
@@ -88,7 +91,6 @@
 	cursor: pointer;
 	font-weight: 600;
 	box-shadow: var(--shadow-s);
-
 	transition:
 		transform 0.2s ease,
 		box-shadow 0.2s ease,
@@ -134,8 +136,4 @@
 	80% {
 		transform: translateX(4px);
 	}
-}
-
-.login-error.shake {
-	animation: shakeX 0.5s ease-out;
 }

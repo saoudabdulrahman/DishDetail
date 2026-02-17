@@ -28,6 +28,10 @@
 	margin: 0.5rem 0;
 }
 
+.signup-error.shake {
+	animation: shakeX 0.5s ease-out;
+}
+
 .signup-form {
 	display: flex;
 	flex-direction: column;
@@ -101,7 +105,6 @@
 	text-decoration: underline;
 }
 
-/* Shake animation */
 @keyframes shakeX {
 	0%,
 	100% {
@@ -119,8 +122,4 @@
 	80% {
 		transform: translateX(4px);
 	}
-}
-
-.signup-error.shake {
-	animation: shakeX 0.5s ease-out;
 }

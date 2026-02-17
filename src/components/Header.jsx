@@ -81,7 +81,7 @@ export default function Header() {
 				{user ?
 					<>
 						<Link
-							to="/select-restaurant"
+							to="/submit-review"
 							id="submit-review-button"
 							className="button-link"
 							onClick={closeMenu}
@@ -104,7 +104,7 @@ export default function Header() {
 							<div className={`dropdown-menu ${isDropdownOpen ? 'open' : ''}`}>
 								<NavLink
 									to="/profile"
-									className="dropdown-item"
+									id="profile-button"
 									onClick={() => {
 										setIsDropdownOpen(false);
 										closeMenu();

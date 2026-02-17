@@ -23,6 +23,12 @@
 	margin: 0 auto 1.5rem;
 }
 
+.button-group {
+	display: flex;
+	justify-content: center;
+	gap: 1rem;
+}
+
 .hero-cta {
 	display: inline-flex;
 	align-items: center;
@@ -32,7 +38,7 @@
 	font-size: 1rem;
 	font-weight: 600;
 	border: none;
-	border-radius: 1rem;
+	border-radius: 2rem;
 	cursor: pointer;
 	background-color: var(--primary);
 	color: var(--text-on-primary);
@@ -97,7 +103,7 @@
 	text-decoration: underline;
 }
 
-.featured-grid {
+.top-rated-grid {
 	margin-bottom: 2.5rem;
 }
 
@@ -155,10 +161,4 @@
 	.stats-row {
 		gap: 1.5rem;
 	}
-}
-
-.button-group {
-	display: flex;
-	justify-content: center;
-	gap: 1rem;
 }

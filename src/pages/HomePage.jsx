@@ -26,11 +26,11 @@ export default function HomePage() {
 					diners, and share your own dining experiences with the community.
 				</p>
 				<Link to="/reviews" className="hero-cta">
-					<Search size={18} />
+					<Search size={24} />
 					Browse Reviews
 				</Link>
-				<Link to="/select-restaurant" className="hero-cta">
-					<Star size={18} />
+				<Link to="/submit-review" className="hero-cta">
+					<Star size={24} />
 					Submit Review
 				</Link>
 			</section>
@@ -64,7 +64,7 @@ export default function HomePage() {
 				</Link>
 			</div>
 
-			<section className="card-grid featured-grid">
+			<section className="card-grid top-rated-grid">
 				{featured.map(({ review, restaurant }) => (
 					<ReviewCard key={review.id} review={review} restaurant={restaurant} />
 				))}
