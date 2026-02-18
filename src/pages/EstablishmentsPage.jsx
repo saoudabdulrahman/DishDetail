@@ -3,6 +3,7 @@ import { useSearchParams } from 'react-router';
 import EstablishmentCard from '../components/EstablishmentCard';
 import { restaurantsData } from '../data.js';
 import './EstablishmentsPage.css';
+import { ChevronDown } from 'lucide-react';
 
 export default function EstablishmentsPage() {
 	const [searchParams] = useSearchParams();
@@ -31,18 +32,23 @@ export default function EstablishmentsPage() {
 			<h2 className="establishments-header">Establishments</h2>
 
 			<div className="filter-bar">
-				<label>
-					<span>Filter by Rating: </span>
-					<select
-						value={minRating}
-						onChange={(e) => setMinRating(Number(e.target.value))}
-					>
-						<option value={0}>All Ratings</option>
-						<option value={5}>5 Stars</option>
-						<option value={4}>4+ Stars</option>
-						<option value={3}>3+ Stars</option>
-					</select>
-				</label>
+				<span>Filter by Rating: </span>
+				<div className="rating-filter-container">
+					<label>
+						<select
+							className="rating-filter"
+							value={minRating}
+							onChange={(e) => setMinRating(Number(e.target.value))}
+						>
+							<option value={0}>All Ratings</option>
+							<option value={5}>5 Stars</option>
+							<option value={4}>4+ Stars</option>
+							<option value={3}>3+ Stars</option>
+						</select>
+					</label>
+					
+					<ChevronDown className="select-icon" size={18} />
+				</div>
 			</div>
 
 			<section className="card-grid">

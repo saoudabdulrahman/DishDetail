@@ -54,7 +54,7 @@ export default function EstablishmentPage() {
 				<p>Restaurant not found</p>
 				<button
 					onClick={() => navigate('/establishments')}
-					className="back-btn"
+					className="back-button"
 				>
 					<ArrowLeft size={18} /> Go Back
 				</button>
@@ -64,7 +64,10 @@ export default function EstablishmentPage() {
 
 	return (
 		<main className="establishment-detail">
-			<button onClick={() => navigate('/establishments')} className="back-btn">
+			<button
+				onClick={() => navigate('/establishments')}
+				className="back-button"
+			>
 				<ArrowLeft size={18} /> Back to Establishments
 			</button>
 
@@ -83,7 +86,7 @@ export default function EstablishmentPage() {
 						<p className="detail-cuisine">{restaurant.cuisine}</p>
 					</div>
 					<div className="detail-rating-badge">
-						<Star className="star-filled" />
+						<Star className='star-filled' />
 						<span>{avgRating}</span>
 					</div>
 				</div>
@@ -143,7 +146,7 @@ export default function EstablishmentPage() {
 							<div className="load-more-container">
 								<button
 									onClick={() => setVisibleCount((c) => c + 3)}
-									className="load-more-btn"
+									className="load-more-button"
 								>
 									Load More
 								</button>

@@ -124,7 +124,7 @@ export default function SignupPage() {
 						/>
 					</label>
 
-					<button type="submit" className="signup-btn">
+					<button type="submit" className="signup-button">
 						Create Account
 					</button>
 				</form>

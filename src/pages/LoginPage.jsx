@@ -43,7 +43,7 @@ export default function LoginPage() {
 		}
 
 		login(validUser, rememberMe);
-		navigate(from, { replace: true});
+		navigate(from, { replace: true });
 	};
 
 	return (
@@ -90,7 +90,7 @@ export default function LoginPage() {
 						Remember me for 3 weeks
 					</label>
 
-					<button type="submit" className="login-btn">
+					<button type="submit" className="login-button">
 						Log In
 					</button>
 				</form>

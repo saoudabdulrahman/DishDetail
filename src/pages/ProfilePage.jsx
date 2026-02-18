@@ -49,10 +49,10 @@ export default function ProfilePage() {
 								/>
 							</label>
 							<div className="edit-actions">
-								<button onClick={handleSave} className="save-btn">
+								<button onClick={handleSave} className="save-button">
 									Save
 								</button>
-								<button onClick={handleCancel} className="cancel-btn">
+								<button onClick={handleCancel} className="cancel-button">
 									Cancel
 								</button>
 							</div>
@@ -68,7 +68,7 @@ export default function ProfilePage() {
 								<p className="profile-bio">{user.bio || 'No bio yet.'}</p>
 								<button
 									onClick={() => setIsEditing(true)}
-									className="edit-profile-btn"
+									className="edit-profile-button"
 								>
 									Edit Profile
 								</button>

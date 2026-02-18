@@ -178,7 +178,7 @@
 }
 
 #submit-button:hover {
-	transform: translateY(-1px);
+	transform: translateY(-2px);
 	filter: brightness(1.1);
 	box-shadow: var(--shadow-l);
 }

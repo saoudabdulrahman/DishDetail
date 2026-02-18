@@ -67,7 +67,7 @@
 	box-shadow: var(--shadow-l);
 }
 
-.signup-btn {
+.signup-button {
 	margin-top: 0.5rem;
 	padding: 0.5rem 1rem;
 	background-color: var(--primary);
@@ -83,8 +83,8 @@
 		filter 0.2s ease;
 }
 
-.signup-btn:hover {
-	transform: translateY(-1px);
+.signup-button:hover {
+	transform: translateY(-2px);
 	filter: brightness(1.1);
 	box-shadow: var(--shadow-l);
 }

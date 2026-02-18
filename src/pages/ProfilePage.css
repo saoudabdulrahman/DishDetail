@@ -44,7 +44,7 @@
 	white-space: pre-wrap;
 }
 
-.edit-profile-btn {
+.edit-profile-button {
 	background-color: var(--primary);
 	color: var(--text-on-primary);
 	border: none;
@@ -59,8 +59,8 @@
 		filter 0.2s ease;
 }
 
-.edit-profile-btn:hover {
-	transform: translateY(-1px);
+.edit-profile-button:hover {
+	transform: translateY(-2px);
 	filter: brightness(1.1);
 	box-shadow: var(--shadow-l);
 }
@@ -114,7 +114,7 @@
 	margin-top: 1rem;
 }
 
-.save-btn {
+.save-button {
 	background-color: var(--success);
 	color: var(--bg);
 	border: none;
@@ -129,13 +129,13 @@
 		box-shadow 0.2s ease;
 }
 
-.save-btn:hover {
-	transform: translateY(-1px);
+.save-button:hover {
+	transform: translateY(-2px);
 	filter: brightness(1.1);
 	box-shadow: var(--shadow-l);
 }
 
-.cancel-btn {
+.cancel-button {
 	background-color: var(--danger);
 	color: var(--bg);
 	border: none;
@@ -150,8 +150,8 @@
 		box-shadow 0.2s ease;
 }
 
-.cancel-btn:hover {
-	transform: translateY(-1px);
+.cancel-button:hover {
+	transform: translateY(-2px);
 	filter: brightness(1.1);
 	box-shadow: var(--shadow-l);
 }

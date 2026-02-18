@@ -1,7 +1,7 @@
 header {
 	font-family: 'Fraunces', sans-serif;
 	background-color: var(--bg-dark);
-	border-bottom: 1px solid var(--primary);
+	border-bottom: 2px solid var(--primary);
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
@@ -101,7 +101,6 @@ header {
 
 .header-actions a.active {
 	color: var(--primary);
-	font-weight: 700;
 	text-decoration: underline;
 	text-underline-offset: 6px;
 	text-decoration-thickness: 2px;
@@ -126,7 +125,7 @@ header {
 
 .header-actions button:hover,
 .header-actions a.button-link:hover {
-	transform: translateY(-1px);
+	transform: translateY(-2px);
 	filter: brightness(1.1);
 	box-shadow: var(--shadow-l);
 	text-decoration: none;

@@ -4,14 +4,12 @@
 	padding: 1.5rem;
 	box-shadow: var(--shadow-s);
 	transition:
-		transform 0.2s ease,
 		box-shadow 0.2s ease;
 	position: relative;
 }
 
 .detail-review-card:hover {
-	transform: translateY(-2px);
-	box-shadow: var(--shadow-l);
+	box-shadow: var(--shadow-m);
 }
 
 .detail-review-header {
@@ -85,7 +83,7 @@
 	border-left: 1px solid var(--secondary);
 }
 
-.icon-btn {
+.icon-button {
 	background: none;
 	border: none;
 	cursor: pointer;
@@ -97,11 +95,11 @@
 	justify-content: center;
 }
 
-.icon-btn:hover {
+.icon-button:hover {
 	color: var(--primary);
 }
 
-.icon-btn.delete:hover {
+.icon-button.delete:hover {
 	color: var(--danger);
 }
 
@@ -111,26 +109,26 @@
 	margin-top: 1rem;
 }
 
-.vote-btn {
+.vote-button {
 	display: flex;
 	align-items: center;
 	gap: 0.4rem;
 	background: none;
-	border: 1px solid var(--secondary);
+	border: 2px solid var(--secondary);
 	padding: 0.35rem 0.75rem;
-	border-radius: 1rem;
+	border-radius: 2rem;
 	cursor: pointer;
 	font-size: 0.85rem;
 	color: var(--text-muted);
 	transition: all 0.2s ease;
 }
 
-.vote-btn:hover {
+.vote-button:hover {
 	background-color: var(--bg-light);
 	border-color: var(--secondary);
 }
 
-.vote-btn.active {
+.vote-button.active {
 	background-color: var(--bg-light);
 	border-color: var(--primary);
 	color: var(--primary);
@@ -159,8 +157,8 @@
 	justify-content: flex-end;
 }
 
-.save-btn,
-.cancel-btn {
+.save-button,
+.cancel-button {
 	padding: 0.5rem 1rem;
 	border: none;
 	border-radius: 0.5rem;
@@ -168,12 +166,12 @@
 	font-weight: 500;
 }
 
-.save-btn {
+.save-button {
 	background-color: var(--primary);
 	color: var(--text-on-primary);
 }
 
-.cancel-btn {
+.cancel-button {
 	background-color: var(--secondary);
 	color: var(--text-on-primary);
 }
@@ -206,7 +204,7 @@
 	justify-content: flex-end;
 }
 
-.respond-btn {
+.respond-button {
 	margin-top: 1rem;
 	background-color: var(--secondary);
 	color: var(--text-on-primary);
@@ -240,8 +238,9 @@
 .comment-item {
 	background-color: var(--bg-light);
 	padding: 0.75rem;
-	border-radius: 0.5rem;
+	border-radius: 1rem;
 	font-size: 0.9rem;
+	box-shadow: var(--shadow-s);
 }
 
 .comment-header {
@@ -273,7 +272,7 @@
 	justify-content: flex-end;
 }
 
-.comment-action-btn {
+.comment-action-button {
 	background: none;
 	border: none;
 	font-size: 0.75rem;
@@ -282,12 +281,12 @@
 	padding: 0;
 }
 
-.comment-action-btn:hover {
+.comment-action-button:hover {
 	text-decoration: underline;
 	color: var(--primary);
 }
 
-.comment-action-btn.delete:hover {
+.comment-action-button.delete:hover {
 	color: var(--danger);
 }
 
@@ -298,26 +297,42 @@
 
 .comment-input {
 	flex: 1;
-	padding: 0.5rem;
-	border: 1px solid var(--secondary);
-	border-radius: 0.5rem;
+	padding: 0.5rem 1rem;
+	border: none;
+	border-radius: 2rem;
 	font-size: 0.9rem;
+	box-shadow: var(--shadow-s);
+	transition: filter 0.2s ease, box-shadow 0.2s ease;
 }
 
-.submit-comment-btn {
+.comment-input:hover {
+	filter: brightness(1.1);
+}
+
+.comment-input:focus {
+	outline: none;
+	box-shadow: var(--shadow-s), 0 0 0 2px var(--primary);
+}
+
+.submit-comment-button {
 	background-color: var(--primary);
 	color: var(--text-on-primary);
 	border: none;
 	padding: 0.5rem 1rem;
-	border-radius: 0.5rem;
+	border-radius: 2rem;
 	cursor: pointer;
 	font-size: 0.9rem;
 	font-weight: 500;
+	transition: filter 0.2s ease;
 }
 
-.submit-comment-btn:disabled {
+.submit-comment-button:disabled {
 	opacity: 0.6;
 	cursor: not-allowed;
+}
+
+.submit-comment-button:hover:not([disabled]) {
+	filter: brightness(1.1);
 }
 
 .edit-comment-box {
