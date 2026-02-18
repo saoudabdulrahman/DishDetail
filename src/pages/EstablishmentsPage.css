@@ -76,7 +76,7 @@
 }
 
 .load-more-button:hover {
-	background-color: var(--bg);
+	filter: brightness(1.05);
 	transform: translateY(-2px);
 	box-shadow: var(--shadow-m);
 }

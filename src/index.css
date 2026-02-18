@@ -1,7 +1,7 @@
 :root {
 	color-scheme: light dark;
 
-	--bg-dark: light-dark(oklch(0.92 0.02 280), oklch(0.15 0.02 280));
+	--bg-dark: light-dark(oklch(0.92 0.02 280), oklch(0.16 0.02 280));
 	--bg: light-dark(oklch(0.96 0.02 280), oklch(0.2 0.02 280));
 	--bg-light: light-dark(oklch(0.98 0.02 280), oklch(0.25 0.02 280));
 
@@ -37,7 +37,7 @@ body {
 	font-family: 'Google Sans', sans-serif;
 	line-height: 1.5;
 	color: var(--text);
-	background-color: var(--bg-light);
+	background-color: var(--bg-dark);
 }
 
 img,

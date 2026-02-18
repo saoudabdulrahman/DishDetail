@@ -1,6 +1,6 @@
 header {
 	font-family: 'Fraunces', sans-serif;
-	background-color: var(--bg-dark);
+	background-color: var(--bg);
 	border-bottom: 2px solid var(--primary);
 	display: flex;
 	align-items: center;
@@ -194,7 +194,7 @@ header {
 	top: calc(100% + 0.5rem);
 	right: 0;
 	min-width: 180px;
-	background-color: var(--bg-dark);
+	background-color: var(--bg-light);
 	border-radius: 1rem;
 	padding: 0.5rem;
 	box-shadow: var(--shadow-l);

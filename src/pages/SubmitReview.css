@@ -103,7 +103,7 @@
 }
 
 .search-results li:hover {
-	background-color: var(--bg-dark);
+	background-color: var(--bg-light);
 }
 
 .review-details {

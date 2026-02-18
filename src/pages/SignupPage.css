@@ -20,7 +20,7 @@
 }
 
 .signup-error {
-	background-color: var(--bg-dark);
+	background-color: var(--bg-light);
 	border: 1px solid var(--danger);
 	color: var(--danger);
 	padding: 0.5rem;

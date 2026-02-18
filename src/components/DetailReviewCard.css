@@ -3,8 +3,7 @@
 	border-radius: 1rem;
 	padding: 1.5rem;
 	box-shadow: var(--shadow-s);
-	transition:
-		box-shadow 0.2s ease;
+	transition: box-shadow 0.2s ease;
 	position: relative;
 }
 
@@ -302,7 +301,9 @@
 	border-radius: 2rem;
 	font-size: 0.9rem;
 	box-shadow: var(--shadow-s);
-	transition: filter 0.2s ease, box-shadow 0.2s ease;
+	transition:
+		filter 0.2s ease,
+		box-shadow 0.2s ease;
 }
 
 .comment-input:hover {
@@ -311,7 +312,9 @@
 
 .comment-input:focus {
 	outline: none;
-	box-shadow: var(--shadow-s), 0 0 0 2px var(--primary);
+	box-shadow:
+		var(--shadow-s),
+		0 0 0 2px var(--primary);
 }
 
 .submit-comment-button {
