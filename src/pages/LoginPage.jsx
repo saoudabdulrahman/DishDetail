@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate, Link, useLocation } from 'react-router';
 import { useAuth } from '../auth/useAuth';
 import { validateUser } from '../auth/userStorage';
+import { Check } from 'lucide-react';
 import './LoginPage.css';
 
 export default function LoginPage() {
@@ -84,10 +85,14 @@ export default function LoginPage() {
 					<label className="remember-row">
 						<input
 							type="checkbox"
+							className="hidden-checkbox"
 							checked={rememberMe}
 							onChange={(e) => setRememberMe(e.target.checked)}
 						/>
-						Remember me for 3 weeks
+						<div className="custom-checkbox">
+							<Check size={14} strokeWidth={3} className="check-icon" />
+						</div>
+						<span className="label-text">Remember me for 3 weeks</span>
 					</label>
 
 					<button type="submit" className="login-button">

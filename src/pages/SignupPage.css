@@ -48,6 +48,7 @@
 .signup-form input[type='text'],
 .signup-form input[type='password'],
 .signup-form input[type='email'] {
+	background-color: var(--bg-light);
 	padding: 0.5rem 1rem;
 	border-radius: 2rem;
 	border: none;
