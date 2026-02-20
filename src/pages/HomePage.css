@@ -13,7 +13,10 @@
 }
 
 .hero .highlight {
-	color: var(--primary);
+	background-color: var(--primary);
+	color: var(--text-on-primary);
+	padding: 0 0.4rem;
+	border-radius: 1rem;
 }
 
 .hero p {

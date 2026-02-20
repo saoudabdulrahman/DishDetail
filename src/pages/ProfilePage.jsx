@@ -34,18 +34,19 @@ export default function ProfilePage() {
 								Avatar URL:
 								<input
 									type="text"
+									placeholder="https://example.com/avatar.jpg"
+									id="avatar-input"
 									value={avatarUrl}
 									onChange={(e) => setAvatarUrl(e.target.value)}
-									placeholder="https://example.com/avatar.jpg"
 								/>
 							</label>
 							<label>
 								Bio:
 								<textarea
+									placeholder="Tell us about yourself..."
+									id="bio-box"
 									value={bio}
 									onChange={(e) => setBio(e.target.value)}
-									placeholder="Tell us about yourself..."
-									rows={4}
 								/>
 							</label>
 							<div className="edit-actions">

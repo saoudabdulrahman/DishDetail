@@ -6,7 +6,7 @@
 
 .profile-header {
 	background-color: var(--bg);
-	border-radius: 1rem;
+	border-radius: 2rem;
 	padding: 2rem;
 	box-shadow: var(--shadow-m);
 	margin-bottom: 2rem;
@@ -49,7 +49,7 @@
 	color: var(--text-on-primary);
 	border: none;
 	padding: 0.5rem 1rem;
-	border-radius: 1rem;
+	border-radius: 2rem;
 	cursor: pointer;
 	font-weight: 600;
 	box-shadow: var(--shadow-s);
@@ -80,17 +80,37 @@
 	color: var(--text);
 }
 
-.edit-profile-form input,
-.edit-profile-form textarea {
+#avatar-input {
 	padding: 0.5rem 1rem;
 	border: none;
-	border-radius: 1rem;
+	border-radius: 2rem;
 	font-size: 1rem;
 	font-family: inherit;
 	box-shadow: var(--shadow-s);
 	transition:
 		filter 0.2s ease,
 		box-shadow 0.2s ease;
+}
+
+#bio-box {
+	min-height: 10rem;
+	border: none;
+	border-radius: 1rem;
+	padding: 1rem;
+	field-sizing: content;
+	resize: none;
+	box-shadow: var(--shadow-s);
+	transition:
+		filter 0.2s ease,
+		box-shadow 0.2s ease;
+}
+
+#avatar-input:focus,
+#bio-box:focus {
+	outline: none;
+	box-shadow:
+		var(--shadow-s),
+		0 0 0 2px var(--primary);
 }
 
 .edit-profile-form input:hover,

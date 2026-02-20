@@ -39,12 +39,23 @@ export default function Header() {
 
 	return (
 		<header>
-			<div className="logo">
-				<h1>
-					<Link to="/" onClick={closeMenu}>
-						Dish Detail
-					</Link>
-				</h1>
+			<div className="left-header-actions">
+				<div className="logo">
+					<h2>
+						<Link to="/" onClick={closeMenu}>
+							Dish Detail
+						</Link>
+					</h2>
+				</div>
+
+				<nav className={`main-nav ${isMenuOpen ? 'open' : ''}`}>
+					<NavLink to="/establishments" onClick={closeMenu}>
+						Establishments
+					</NavLink>
+					<NavLink to="/reviews" onClick={closeMenu}>
+						Reviews
+					</NavLink>
+				</nav>
 			</div>
 
 			<div className="search-container">
@@ -57,7 +68,7 @@ export default function Header() {
 					onKeyDown={handleKeyDown}
 				/>
 				<button id="search-button" onClick={handleSearch} aria-label="Search">
-					<Search />
+					<Search size={18} />
 				</button>
 			</div>
 
@@ -70,14 +81,7 @@ export default function Header() {
 				<Menu />
 			</button>
 
-			<nav className={`header-actions ${isMenuOpen ? 'open' : ''}`}>
-				<NavLink to="/establishments" onClick={closeMenu}>
-					Establishments
-				</NavLink>
-				<NavLink to="/reviews" onClick={closeMenu}>
-					Reviews
-				</NavLink>
-
+			<div className={`header-actions ${isMenuOpen ? 'open' : ''}`}>
 				{user ?
 					<>
 						<Link
@@ -97,7 +101,7 @@ export default function Header() {
 								<User size={18} />
 								<span className="username">{user.username}</span>
 								<ChevronDown
-									size={14}
+									size={18}
 									className={`chevron ${isDropdownOpen ? 'open' : ''}`}
 								/>
 							</button>
@@ -144,7 +148,7 @@ export default function Header() {
 						</NavLink>
 					</>
 				}
-			</nav>
+			</div>
 		</header>
 	);
 }

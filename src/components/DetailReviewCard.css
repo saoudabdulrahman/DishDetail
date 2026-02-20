@@ -179,8 +179,9 @@
 	margin-top: 1.5rem;
 	padding: 1rem;
 	background-color: var(--bg-light);
-	border-radius: 0.5rem;
+	border-radius: 1rem;
 	border-left: 4px solid var(--primary);
+	box-shadow: var(--shadow-s);
 }
 
 .owner-response h5 {

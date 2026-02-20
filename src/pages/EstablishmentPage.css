@@ -1,6 +1,6 @@
 .back-button {
-	background-color: var(--secondary);
-	color: var(--text-on-primary);
+	background-color: light-dark(var(--bg-light), var(--secondary));
+	color: light-dark(var(--text), var(--text-on-primary));
 	display: inline-flex;
 	align-items: center;
 	gap: 0.5rem;
