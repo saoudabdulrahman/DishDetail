@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { Link, NavLink, useNavigate, useSearchParams } from 'react-router';
-import { Search, Menu, User, LogOut, ChevronDown } from 'lucide-react';
+import { ChevronDown, Dot, LogOut, Menu, Search, User } from 'lucide-react';
 import { useAuth } from '../auth/useAuth';
 import './Header.css';
 
@@ -50,10 +50,20 @@ export default function Header() {
 
 				<nav className={`main-nav ${isMenuOpen ? 'open' : ''}`}>
 					<NavLink to="/establishments" onClick={closeMenu}>
-						Establishments
+						{({ isActive }) => (
+							<>
+								Establishments
+								{isActive && <Dot size={32} className="nav-active-dot" />}
+							</>
+						)}
 					</NavLink>
 					<NavLink to="/reviews" onClick={closeMenu}>
-						Reviews
+						{({ isActive }) => (
+							<>
+								Reviews
+								{isActive && <Dot size={32} className="nav-active-dot" />}
+							</>
+						)}
 					</NavLink>
 				</nav>
 			</div>

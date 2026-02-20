@@ -50,16 +50,13 @@ header {
 	color: var(--primary);
 }
 
-.main-nav a.active::after {
-	content: '';
+.nav-active-dot {
 	position: absolute;
-	bottom: -0.5rem;
+	bottom: -1.2rem; /* Pushes the icon slightly below the text */
 	left: 50%;
 	transform: translateX(-50%);
-	width: 0.5rem;
-	height: 0.5rem;
-	background-color: var(--primary);
-	border-radius: 50%;
+	color: var(--primary);
+	pointer-events: none; /* Ensures the dot doesn't block clicks */
 }
 
 .search-container {
@@ -332,10 +329,9 @@ header {
 		background-color: var(--bg-light);
 	}
 
-	/* Adapt active dot to left indicator for vertical layout */
-	.main-nav a.active::after {
+	.nav-active-dot {
 		bottom: 50%;
-		left: 0.25rem;
+		left: -0.25rem; /* Positions it nicely on the left side of the pill */
 		transform: translateY(50%);
 	}
 
