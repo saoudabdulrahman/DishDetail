@@ -55,6 +55,7 @@
 }
 
 .search-input {
+	background-color: var(--bg-light);
 	font-size: 1rem;
 	border: none;
 	border-radius: 2rem;
@@ -137,6 +138,7 @@
 }
 
 #review-box {
+	background-color: var(--bg-light);
 	min-height: 10rem;
 	border: none;
 	border-radius: 1rem;

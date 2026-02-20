@@ -189,10 +189,10 @@ export default function DetailReviewCard({ review, onDelete, onUpdate }) {
 						rows={4}
 					/>
 					<div className="edit-actions">
-						<button className="save-button" onClick={handleSave}>
+						<button className="review-save-button" onClick={handleSave}>
 							Save
 						</button>
-						<button className="cancel-button" onClick={handleCancel}>
+						<button className="review-cancel-button" onClick={handleCancel}>
 							Cancel
 						</button>
 					</div>
@@ -282,18 +282,21 @@ export default function DetailReviewCard({ review, onDelete, onUpdate }) {
 					{isEditingResponse ?
 						<div className="edit-comment-box">
 							<textarea
-								className="comment-input"
+								className="comment-edit-input"
 								value={responseBody}
 								onChange={(e) => setResponseBody(e.target.value)}
 								placeholder="Write your response..."
 								rows={3}
 							/>
 							<div className="comment-actions">
-								<button className="save-button" onClick={handleSaveResponse}>
+								<button
+									className="comment-save-button"
+									onClick={handleSaveResponse}
+								>
 									Save
 								</button>
 								<button
-									className="cancel-button"
+									className="comment-cancel-button"
 									onClick={() => setIsEditingResponse(false)}
 								>
 									Cancel
@@ -350,19 +353,19 @@ export default function DetailReviewCard({ review, onDelete, onUpdate }) {
 								{editingCommentId === comment.id ?
 									<div className="edit-comment-box">
 										<textarea
-											className="comment-input"
+											className="comment-edit-input"
 											value={editCommentText}
 											onChange={(e) => setEditCommentText(e.target.value)}
 										/>
 										<div className="comment-actions">
 											<button
-												className="comment-action-button"
+												className="comment-save-button"
 												onClick={() => saveEditComment(comment.id)}
 											>
 												Save
 											</button>
 											<button
-												className="comment-action-button"
+												className="comment-cancel-button"
 												onClick={() => setEditingCommentId(null)}
 											>
 												Cancel
