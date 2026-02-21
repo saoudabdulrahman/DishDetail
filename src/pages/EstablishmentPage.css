@@ -1,23 +1,23 @@
-.back-btn {
+.back-button {
+	background-color: light-dark(var(--bg-light), var(--secondary));
+	color: light-dark(var(--text), var(--text-on-primary));
 	display: inline-flex;
 	align-items: center;
 	gap: 0.5rem;
-	padding: 0.5rem 1.25rem;
+	padding: 0.5rem 1rem;
+	margin-bottom: 1.5rem;
 	font-weight: 600;
 	border: none;
-	border-radius: 0.75rem;
+	border-radius: 2rem;
 	cursor: pointer;
-	background-color: var(--secondary);
-	color: var(--text-on-primary);
 	box-shadow: var(--shadow-s);
 	transition:
 		transform 0.2s ease,
 		box-shadow 0.2s ease,
 		filter 0.2s ease;
-	margin-bottom: 1.5rem;
 }
 
-.back-btn:hover {
+.back-button:hover {
 	transform: translateY(-2px);
 	box-shadow: var(--shadow-l);
 	filter: brightness(1.1);
@@ -64,11 +64,15 @@
 	background-color: var(--primary);
 	color: var(--text-on-primary);
 	padding: 0.5rem 1rem;
-	border-radius: 0.75rem;
+	border-radius: 2rem;
 	font-weight: 700;
 	font-size: 1.1rem;
 	box-shadow: var(--shadow-s);
-	flex-shrink: 0;
+	transition: box-shadow 0.2s ease;
+}
+
+.detail-rating-badge:hover {
+	box-shadow: var(--shadow-m);
 }
 
 .detail-rating-badge .star-filled {
@@ -88,8 +92,13 @@
 	margin-bottom: 2rem;
 	padding: 1.5rem;
 	background-color: var(--bg);
-	border-radius: 1rem;
+	border-radius: 2rem;
 	box-shadow: var(--shadow-s);
+	transition: box-shadow 0.2s ease;
+}
+
+.detail-quick-info:hover {
+	box-shadow: var(--shadow-m);
 }
 
 .detail-info-item {
@@ -127,8 +136,45 @@
 .detail-reviews-section-header {
 	display: flex;
 	justify-content: space-between;
-	align-items: baseline;
+	align-items: center;
 	margin-bottom: 1rem;
+}
+
+.detail-reviews-actions {
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+}
+
+.review-sort-container {
+	position: relative;
+	display: flex;
+	align-items: center;
+}
+
+.review-sort-select {
+	appearance: none;
+	background-color: var(--bg-light);
+	color: var(--text);
+	padding: 0.5rem 2rem 0.5rem 1rem;
+	border: none;
+	border-radius: 1rem;
+	cursor: pointer;
+	box-shadow: var(--shadow-s);
+	transition: box-shadow 0.2s ease;
+	font-size: 0.85rem;
+	font-weight: 500;
+}
+
+.review-sort-select:hover {
+	box-shadow: var(--shadow-m);
+}
+
+.select-icon {
+	position: absolute;
+	right: 0.5rem;
+	color: var(--text);
+	pointer-events: none;
 }
 
 .detail-reviews-count {
@@ -172,7 +218,7 @@
 	margin-top: 2rem;
 }
 
-.load-more-btn {
+.load-more-button {
 	background-color: var(--bg-light);
 	border: 1px solid var(--secondary);
 	padding: 0.75rem 2rem;
@@ -184,8 +230,8 @@
 	box-shadow: var(--shadow-s);
 }
 
-.load-more-btn:hover {
-	background-color: var(--bg);
+.load-more-button:hover {
+	filter: brightness(1.05);
 	transform: translateY(-2px);
 	box-shadow: var(--shadow-m);
 }

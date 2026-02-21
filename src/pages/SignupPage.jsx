@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router';
 import { useAuth } from '../auth/useAuth';
 import { saveUser } from '../auth/userStorage';
 import './SignupPage.css';
@@ -124,7 +124,7 @@ export default function SignupPage() {
 						/>
 					</label>
 
-					<button type="submit" className="signup-btn">
+					<button type="submit" className="signup-button">
 						Create Account
 					</button>
 				</form>

@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../auth/useAuth';
 import { reviewsData, restaurantsData } from '../data';
 import ReviewCard from '../components/ReviewCard';
@@ -7,16 +6,10 @@ import './ProfilePage.css';
 
 export default function ProfilePage() {
 	const { user, updateProfile } = useAuth();
-	const navigate = useNavigate();
 
 	const [isEditing, setIsEditing] = useState(false);
 	const [avatarUrl, setAvatarUrl] = useState(user?.avatar || '');
 	const [bio, setBio] = useState(user?.bio || '');
-
-	if (!user) {
-		navigate('/login');
-		return null;
-	}
 
 	const userReviews = reviewsData.filter((r) => r.reviewer === user.username);
 
@@ -41,25 +34,26 @@ export default function ProfilePage() {
 								Avatar URL:
 								<input
 									type="text"
+									placeholder="https://example.com/avatar.jpg"
+									id="avatar-input"
 									value={avatarUrl}
 									onChange={(e) => setAvatarUrl(e.target.value)}
-									placeholder="https://example.com/avatar.jpg"
 								/>
 							</label>
 							<label>
 								Bio:
 								<textarea
+									placeholder="Tell us about yourself..."
+									id="bio-box"
 									value={bio}
 									onChange={(e) => setBio(e.target.value)}
-									placeholder="Tell us about yourself..."
-									rows={4}
 								/>
 							</label>
 							<div className="edit-actions">
-								<button onClick={handleSave} className="save-btn">
+								<button onClick={handleSave} className="save-button">
 									Save
 								</button>
-								<button onClick={handleCancel} className="cancel-btn">
+								<button onClick={handleCancel} className="cancel-button">
 									Cancel
 								</button>
 							</div>
@@ -75,7 +69,7 @@ export default function ProfilePage() {
 								<p className="profile-bio">{user.bio || 'No bio yet.'}</p>
 								<button
 									onClick={() => setIsEditing(true)}
-									className="edit-profile-btn"
+									className="edit-profile-button"
 								>
 									Edit Profile
 								</button>

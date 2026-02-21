@@ -1,12 +1,16 @@
 import { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, useLocation } from 'react-router';
 import { useAuth } from '../auth/useAuth';
 import { validateUser } from '../auth/userStorage';
+import { Check } from 'lucide-react';
 import './LoginPage.css';
 
 export default function LoginPage() {
 	const navigate = useNavigate();
+	const location = useLocation();
 	const { login } = useAuth();
+
+	const from = location.state?.from || '/';
 
 	const [username, setUsername] = useState('');
 	const [password, setPassword] = useState('');
@@ -40,7 +44,7 @@ export default function LoginPage() {
 		}
 
 		login(validUser, rememberMe);
-		navigate('/');
+		navigate(from, { replace: true });
 	};
 
 	return (
@@ -81,13 +85,17 @@ export default function LoginPage() {
 					<label className="remember-row">
 						<input
 							type="checkbox"
+							className="hidden-checkbox"
 							checked={rememberMe}
 							onChange={(e) => setRememberMe(e.target.checked)}
 						/>
-						Remember me for 3 weeks
+						<div className="custom-checkbox">
+							<Check size={14} strokeWidth={3} className="check-icon" />
+						</div>
+						<span className="label-text">Remember me for 3 weeks</span>
 					</label>
 
-					<button type="submit" className="login-btn">
+					<button type="submit" className="login-button">
 						Log In
 					</button>
 				</form>
