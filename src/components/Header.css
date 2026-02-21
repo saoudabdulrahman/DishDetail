@@ -347,18 +347,35 @@ header {
 
 	.dropdown-menu {
 		position: static;
-		opacity: 1;
 		transform: none;
 		pointer-events: auto;
-		display: none;
-		padding: 0.5rem;
+		display: flex;
+		flex-direction: column;
 		background-color: var(--bg);
 		border-radius: 1.5rem;
-		box-shadow: var(--shadow-s);
+
+		/* Animation props */
+		max-height: 0;
+		opacity: 0;
+		visibility: hidden;
+		overflow: hidden;
+		margin-top: 0;
+		padding: 0 0.5rem;
+		box-shadow: none;
+		transition:
+			max-height 0.3s ease,
+			opacity 0.3s ease,
+			margin-top 0.3s ease,
+			padding 0.3s ease,
+			visibility 0.3s;
 	}
 
 	.dropdown-menu.open {
-		display: flex;
+		max-height: 20rem;
+		opacity: 1;
+		visibility: visible;
 		margin-top: 0.5rem;
+		padding: 0.5rem;
+		box-shadow: var(--shadow-s);
 	}
 }

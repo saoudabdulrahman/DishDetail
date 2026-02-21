@@ -86,7 +86,7 @@ export default function EstablishmentPage() {
 						<p className="detail-cuisine">{restaurant.cuisine}</p>
 					</div>
 					<div className="detail-rating-badge">
-						<Star className='star-filled' />
+						<Star className="star-filled" aria-hidden="true" />
 						<span>{avgRating}</span>
 					</div>
 				</div>

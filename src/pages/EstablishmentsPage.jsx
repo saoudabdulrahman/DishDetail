@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { useSearchParams } from 'react-router';
 import EstablishmentCard from '../components/EstablishmentCard';
 import { restaurantsData } from '../data.js';
@@ -6,9 +6,24 @@ import './EstablishmentsPage.css';
 import { ChevronDown } from 'lucide-react';
 
 export default function EstablishmentsPage() {
-	const [searchParams] = useSearchParams();
-	const [minRating, setMinRating] = useState(0);
+	const [searchParams, setSearchParams] = useSearchParams();
+	const minRating = Number(searchParams.get('minRating') || 0);
 	const query = (searchParams.get('q') || '').toLowerCase();
+
+	const handleRatingChange = (e) => {
+		const rating = e.target.value;
+		setSearchParams(
+			(prev) => {
+				if (rating === '0') {
+					prev.delete('minRating');
+				} else {
+					prev.set('minRating', rating);
+				}
+				return prev;
+			},
+			{ replace: true },
+		);
+	};
 
 	const filteredEstablishments = useMemo(() => {
 		return restaurantsData.filter((restaurant) => {
@@ -32,22 +47,22 @@ export default function EstablishmentsPage() {
 			<h2 className="establishments-header">Establishments</h2>
 
 			<div className="filter-bar">
-				<span>Filter by Rating: </span>
+				<label htmlFor="rating-filter">Filter by Rating: </label>
 				<div className="rating-filter-container">
-					<label>
-						<select
-							className="rating-filter"
-							value={minRating}
-							onChange={(e) => setMinRating(Number(e.target.value))}
-						>
-							<option value={0}>All Ratings</option>
-							<option value={5}>5 Stars</option>
-							<option value={4}>4+ Stars</option>
-							<option value={3}>3+ Stars</option>
-						</select>
-					</label>
-					
-					<ChevronDown className="select-icon" size={18} />
+					<select
+						id="rating-filter"
+						className="rating-filter"
+						value={minRating}
+						onChange={handleRatingChange}
+						aria-label="Filter establishments by minimum rating"
+					>
+						<option value={0}>All Ratings</option>
+						<option value={5}>5 Stars</option>
+						<option value={4}>4+ Stars</option>
+						<option value={3}>3+ Stars</option>
+					</select>
+
+					<ChevronDown className="select-icon" size={18} aria-hidden="true" />
 				</div>
 			</div>
 

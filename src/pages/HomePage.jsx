@@ -48,10 +48,12 @@ export default function HomePage() {
 				</div>
 				<div className="stat">
 					<span className="stat-number">
-						{(
-							reviewsData.reduce((sum, r) => sum + r.rating, 0) /
-							reviewsData.length
-						).toFixed(1)}
+						{reviewsData.length > 0 ?
+							(
+								reviewsData.reduce((sum, r) => sum + r.rating, 0) /
+								reviewsData.length
+							).toFixed(1)
+						:	'0.0'}
 					</span>
 					<span className="stat-label">Avg Rating</span>
 				</div>
@@ -59,7 +61,11 @@ export default function HomePage() {
 
 			<div className="section-header">
 				<h2>Top Rated</h2>
-				<Link to="/reviews" className="see-all">
+				<Link
+					to="/reviews"
+					className="see-all"
+					aria-label="See all top rated reviews"
+				>
 					See all &rarr;
 				</Link>
 			</div>
@@ -76,7 +82,7 @@ export default function HomePage() {
 
 			<section className="how-it-works">
 				<div className="step">
-					<div className="step-icon">
+					<div className="step-icon" aria-hidden="true">
 						<Search size={20} />
 					</div>
 					<h3>Search</h3>
@@ -84,7 +90,7 @@ export default function HomePage() {
 				</div>
 
 				<div className="step">
-					<div className="step-icon">
+					<div className="step-icon" aria-hidden="true">
 						<UtensilsCrossed size={20} />
 					</div>
 					<h3>Dine</h3>
@@ -92,7 +98,7 @@ export default function HomePage() {
 				</div>
 
 				<div className="step">
-					<div className="step-icon">
+					<div className="step-icon" aria-hidden="true">
 						<Star size={20} />
 					</div>
 					<h3>Rate</h3>
@@ -100,7 +106,7 @@ export default function HomePage() {
 				</div>
 
 				<div className="step">
-					<div className="step-icon">
+					<div className="step-icon" aria-hidden="true">
 						<ChefHat size={20} />
 					</div>
 					<h3>Share</h3>

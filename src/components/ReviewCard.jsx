@@ -23,7 +23,8 @@ export default function ReviewCard({ review, restaurant }) {
 					</p>
 					<p className="review-body">
 						{review.body.length > 150 ?
-							review.body.substring(0, 150) + '...'
+							review.body.substring(0, 150).split(' ').slice(0, -1).join(' ') +
+							'...'
 						:	review.body}
 					</p>
 				</div>

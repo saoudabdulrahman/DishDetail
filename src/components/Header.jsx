@@ -76,6 +76,7 @@ export default function Header() {
 					value={query}
 					onChange={(e) => setQuery(e.target.value)}
 					onKeyDown={handleKeyDown}
+					aria-label="Search restaurants"
 				/>
 				<button id="search-button" onClick={handleSearch} aria-label="Search">
 					<Search size={18} />
