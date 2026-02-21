@@ -125,7 +125,9 @@
 }
 
 .edit-profile-form textarea {
-	resize: vertical;
+	field-sizing: content;
+	resize: none;
+	min-height: 6rem;
 }
 
 .edit-actions {

@@ -267,7 +267,7 @@ header {
 }
 
 /* --- Mobile / Responsive --- */
-@media (max-width: 900px) {
+@media (max-width: 768px) {
 	.left-header-actions {
 		display: contents;
 	}
@@ -351,7 +351,7 @@ header {
 		transform: none;
 		pointer-events: auto;
 		display: none;
-		padding: 0.5rem 0 0.5rem 1rem;
+		padding: 0.5rem;
 		background-color: var(--bg);
 		border-radius: 1.5rem;
 		box-shadow: var(--shadow-s);
@@ -359,5 +359,6 @@ header {
 
 	.dropdown-menu.open {
 		display: flex;
+		margin-top: 0.5rem;
 	}
 }

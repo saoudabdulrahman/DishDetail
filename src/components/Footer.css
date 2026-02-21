@@ -1,7 +1,7 @@
 footer {
-	background-color: var(--bg);
+	background: linear-gradient(to bottom, var(--bg-dark) 0%, var(--bg) 15%, var(--bg) 100%);
 	color: var(--text-muted);
-	padding: 1.5rem 1rem;
+	padding: 2rem;
 	text-align: center;
 }
 
@@ -16,7 +16,6 @@ footer {
 .footer-links a {
 	text-decoration: none;
 	color: inherit;
-	font-size: 0.9rem;
 }
 
 .footer-links a:hover {
@@ -32,4 +31,16 @@ footer {
 
 .footer-icon {
 	color: var(--text);
+}
+
+/* Add this at the bottom of your Footer.css */
+@media (max-width: 768px) {
+	.footer-links {
+		flex-direction: column;
+		gap: 0.5rem; /* Slightly smaller gap since they are stacked */
+	}
+
+	.footer-links a {
+		padding: 0rem; /* Increases the clickable area (touch target) */
+	}
 }

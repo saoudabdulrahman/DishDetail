@@ -218,12 +218,41 @@
 	}
 }
 
-@media (max-width: 900px) {
+@media (max-width: 768px) {
 	.submit-review-page {
 		grid-template-columns: 1fr;
+		padding: 1rem;
+		gap: 1.5rem;
+	}
+
+	.box {
+		padding: 1.25rem;
+		border-radius: 1.25rem;
+	}
+
+	#title {
+		font-size: 1.25rem;
+		margin-bottom: 1rem;
+	}
+
+	.search-input {
+		font-size: 0.9rem;
+		padding: 0.6rem 1rem 0.6rem 2.75rem;
+	}
+
+	#search-icon {
+		left: 0.75rem;
+	}
+
+	#review-box {
+		min-height: 8rem;
 	}
 
 	.suggested {
 		position: static;
+	}
+
+	.suggested h2 {
+		font-size: 1.25rem;
 	}
 }

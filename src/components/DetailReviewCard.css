@@ -89,7 +89,9 @@
 	padding: 0.5rem;
 	color: var(--text-muted);
 	border-radius: 50%;
-	transition: color 0.2s ease, background-color 0.2s ease;
+	transition:
+		color 0.2s ease,
+		background-color 0.2s ease;
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -144,12 +146,13 @@
 .edit-review-textarea {
 	background-color: var(--bg-light);
 	width: 100%;
-	min-height: 100px;
+	min-height: 6rem;
 	padding: 0.75rem;
 	border: none;
 	border-radius: 1rem;
 	font-family: inherit;
 	font-size: 1rem;
+	field-sizing: content;
 	resize: none;
 	box-shadow: var(--shadow-m);
 	transition:
@@ -388,10 +391,12 @@
 .comment-edit-input {
 	background-color: color-mix(in oklch, var(--bg-light), white 10%);
 	flex: 1;
+	min-height: 4rem;
 	padding: 0.5rem 1rem;
 	border: none;
 	border-radius: 1rem;
 	font-size: 0.9rem;
+	field-sizing: content;
 	resize: none;
 	box-shadow: var(--shadow-s);
 	transition:
