@@ -57,15 +57,18 @@
 }
 
 .detail-review-image-container {
+	width: fit-content;
 	border-radius: 1rem;
 	overflow: hidden;
 	margin-top: 0.75rem;
 }
 
 .detail-review-image {
-	width: 100%;
+	max-width: 200px;
+	max-height: 200px;
+	width: auto;
 	height: auto;
-	display: block;
+	object-fit: cover;
 }
 
 .review-actions-container {
