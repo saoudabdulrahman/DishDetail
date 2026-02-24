@@ -4,9 +4,9 @@ import { Star, Search } from 'lucide-react';
 import ReviewCard from '../components/ReviewCard';
 import { reviewsData, restaurantsData } from '../data';
 import { useAuth } from '../auth/useAuth';
-import './SubmitReview.css';
+import './SubmitReviewPage.css';
 
-function SubmitReview() {
+function SubmitReviewPage() {
 	const navigate = useNavigate();
 	const { state } = useLocation();
 	const { user } = useAuth();
@@ -160,4 +160,4 @@ function SubmitReview() {
 	);
 }
 
-export default SubmitReview;
+export default SubmitReviewPage;

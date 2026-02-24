@@ -228,21 +228,44 @@ function SignupForm({ onSwitch, onSuccess }) {
 export default function AuthModal() {
 	const { authModal, setAuthModal } = useAuth();
 
+	const [activeModal, setActiveModal] = useState(null);
+
+	if (authModal && authModal !== activeModal) {
+		setActiveModal(authModal);
+	}
+
+	const isClosing = !authModal && !!activeModal;
+
 	useEffect(() => {
 		const handleKeyDown = (e) => {
 			if (e.key === 'Escape') setAuthModal(null);
 		};
-		if (authModal) document.addEventListener('keydown', handleKeyDown);
+		if (authModal) {
+			document.addEventListener('keydown', handleKeyDown);
+		}
 		return () => document.removeEventListener('keydown', handleKeyDown);
 	}, [authModal, setAuthModal]);
 
-	if (!authModal) return null;
+	if (!activeModal) return null;
 
 	const closeModal = () => setAuthModal(null);
 
+	const handleAnimationEnd = (e) => {
+		if (isClosing && e.target.classList.contains('auth-modal-overlay')) {
+			setActiveModal(null);
+		}
+	};
+
 	return createPortal(
-		<div className="auth-modal-overlay" onClick={closeModal}>
-			<div className="auth-modal-content" onClick={(e) => e.stopPropagation()}>
+		<div
+			className={`auth-modal-overlay ${isClosing ? 'closing' : ''}`}
+			onClick={closeModal}
+			onAnimationEnd={handleAnimationEnd}
+		>
+			<div
+				className={`auth-modal-content ${isClosing ? 'closing' : ''}`}
+				onClick={(e) => e.stopPropagation()}
+			>
 				<button
 					className="auth-modal-close"
 					onClick={closeModal}
@@ -251,14 +274,14 @@ export default function AuthModal() {
 					<X size={24} />
 				</button>
 
-				{authModal === 'login' && (
+				{activeModal === 'login' && (
 					<LoginForm
 						onSwitch={() => setAuthModal('signup')}
 						onSuccess={closeModal}
 					/>
 				)}
 
-				{authModal === 'signup' && (
+				{activeModal === 'signup' && (
 					<SignupForm
 						onSwitch={() => setAuthModal('login')}
 						onSuccess={closeModal}

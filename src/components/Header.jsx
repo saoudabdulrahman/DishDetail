@@ -146,7 +146,6 @@ export default function Header() {
 							className="button-link"
 							onClick={() => {
 								setAuthModal('login');
-								closeMenu();
 							}}
 						>
 							Log In
@@ -156,7 +155,6 @@ export default function Header() {
 							className="button-link"
 							onClick={() => {
 								setAuthModal('signup');
-								closeMenu();
 							}}
 						>
 							Sign Up

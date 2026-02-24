@@ -43,11 +43,11 @@ header {
 }
 
 .main-nav a:hover {
-	color: var(--primary);
+	color: var(--text);
 }
 
 .main-nav a.active {
-	color: var(--primary);
+	color: var(--text);
 }
 
 .nav-active-dot {
@@ -343,6 +343,7 @@ header {
 	.header-actions .user-info-toggle {
 		width: 100%;
 		justify-content: space-between;
+		padding: 0.6rem 1.2rem;
 	}
 
 	.dropdown-menu {

@@ -15,6 +15,10 @@
 	animation: fadeInOverlay 0.3s ease-out;
 }
 
+.auth-modal-overlay.closing {
+	animation: fadeOutOverlay 0.3s ease-in forwards;
+}
+
 @keyframes fadeInOverlay {
 	from {
 		background-color: oklch(0 0 0 / 0);
@@ -23,6 +27,17 @@
 	to {
 		background-color: oklch(0 0 0 / 0.5);
 		backdrop-filter: blur(0.5rem) saturate(150%);
+	}
+}
+
+@keyframes fadeOutOverlay {
+	from {
+		background-color: oklch(0 0 0 / 0.5);
+		backdrop-filter: blur(0.5rem) saturate(150%);
+	}
+	to {
+		background-color: oklch(0 0 0 / 0);
+		backdrop-filter: blur(0) saturate(100%);
 	}
 }
 
@@ -39,6 +54,10 @@
 	overflow-y: auto;
 }
 
+.auth-modal-content.closing {
+	animation: slideDown 0.3s ease-in forwards;
+}
+
 @keyframes slideUp {
 	from {
 		opacity: 0;
@@ -47,6 +66,17 @@
 	to {
 		opacity: 1;
 		transform: translateY(0);
+	}
+}
+
+@keyframes slideDown {
+	from {
+		opacity: 1;
+		transform: translateY(0);
+	}
+	to {
+		opacity: 0;
+		transform: translateY(20px);
 	}
 }
 
