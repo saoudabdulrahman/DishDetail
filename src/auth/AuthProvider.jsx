@@ -23,17 +23,17 @@ export default function AuthProvider({ children }) {
 			updateProfile: (updates) => {
 				if (!user) return;
 				const updatedUser = { ...user, ...updates };
-				
+
 				try {
 					updateStorageUser(user.username, updates);
 				} catch (e) {
-					console.error("Failed to update user storage", e);
+					console.error('Failed to update user storage', e);
 				}
 
 				const isRemembered = !!localStorage.getItem('dishdetail_auth');
 				saveAuth(updatedUser, isRemembered);
 				setUser(updatedUser);
-			}
+			},
 		};
 	}, [user, authModal]);
 

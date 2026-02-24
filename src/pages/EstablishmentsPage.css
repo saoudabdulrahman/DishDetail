@@ -52,7 +52,9 @@
 
 .rating-filter:focus {
 	outline: none;
-	box-shadow: var(--shadow-m), 0 0 0 2px var(--primary);
+	box-shadow:
+		var(--shadow-m),
+		0 0 0 2px var(--primary);
 }
 
 .select-icon {

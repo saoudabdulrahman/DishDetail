@@ -78,7 +78,9 @@ function LoginForm({ onSwitch, onSuccess }) {
 							onClick={() => setShowPassword(!showPassword)}
 							aria-label={showPassword ? 'Hide password' : 'Show password'}
 						>
-							{showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+							{showPassword ?
+								<EyeOff size={18} />
+							:	<Eye size={18} />}
 						</button>
 					</div>
 				</label>
@@ -217,7 +219,9 @@ function SignupForm({ onSwitch, onSuccess }) {
 							onClick={() => setShowPassword(!showPassword)}
 							aria-label={showPassword ? 'Hide password' : 'Show password'}
 						>
-							{showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+							{showPassword ?
+								<EyeOff size={18} />
+							:	<Eye size={18} />}
 						</button>
 					</div>
 				</label>
@@ -236,9 +240,13 @@ function SignupForm({ onSwitch, onSuccess }) {
 							type="button"
 							className="password-toggle"
 							onClick={() => setShowConfirm(!showConfirm)}
-							aria-label={showConfirm ? 'Hide confirm password' : 'Show confirm password'}
+							aria-label={
+								showConfirm ? 'Hide confirm password' : 'Show confirm password'
+							}
 						>
-							{showConfirm ? <EyeOff size={18} /> : <Eye size={18} />}
+							{showConfirm ?
+								<EyeOff size={18} />
+							:	<Eye size={18} />}
 						</button>
 					</div>
 				</label>
@@ -262,6 +270,7 @@ export default function AuthModal() {
 	const { authModal, setAuthModal } = useAuth();
 
 	const [activeModal, setActiveModal] = useState(null);
+	const [mouseDownOnOverlay, setMouseDownOnOverlay] = useState(false);
 
 	if (authModal && authModal !== activeModal) {
 		setActiveModal(authModal);
@@ -281,7 +290,28 @@ export default function AuthModal() {
 
 	if (!activeModal) return null;
 
-	const closeModal = () => setAuthModal(null);
+	const closeModal = () => {
+		setAuthModal(null);
+		setMouseDownOnOverlay(false);
+	};
+
+	const handleOverlayMouseDown = (e) => {
+		if (e.target.classList.contains('auth-modal-overlay')) {
+			setMouseDownOnOverlay(true);
+		} else {
+			setMouseDownOnOverlay(false);
+		}
+	};
+
+	const handleOverlayClick = (e) => {
+		if (
+			mouseDownOnOverlay &&
+			e.target.classList.contains('auth-modal-overlay')
+		) {
+			closeModal();
+		}
+		setMouseDownOnOverlay(false);
+	};
 
 	const handleAnimationEnd = (e) => {
 		if (isClosing && e.target.classList.contains('auth-modal-overlay')) {
@@ -292,12 +322,14 @@ export default function AuthModal() {
 	return createPortal(
 		<div
 			className={`auth-modal-overlay ${isClosing ? 'closing' : ''}`}
-			onClick={closeModal}
+			onMouseDown={handleOverlayMouseDown}
+			onClick={handleOverlayClick}
 			onAnimationEnd={handleAnimationEnd}
 		>
 			<div
 				className={`auth-modal-content ${isClosing ? 'closing' : ''}`}
 				onClick={(e) => e.stopPropagation()}
+				onMouseDown={(e) => e.stopPropagation()}
 			>
 				<button
 					className="auth-modal-close"
