@@ -1,4 +1,5 @@
 import { Outlet, ScrollRestoration } from 'react-router';
+import AuthModal from './components/AuthModal';
 import './App.css';
 
 function App() {
@@ -6,6 +7,7 @@ function App() {
 		<div className="app-container">
 			<Outlet />
 			<ScrollRestoration />
+			<AuthModal />
 		</div>
 	);
 }

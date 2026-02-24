@@ -5,7 +5,7 @@ import { useAuth } from '../auth/useAuth';
 import './Header.css';
 
 export default function Header() {
-	const { user, logout } = useAuth();
+	const { user, logout, setAuthModal } = useAuth();
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
 	const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 	const [searchParams] = useSearchParams();
@@ -141,22 +141,26 @@ export default function Header() {
 						</div>
 					</>
 				:	<>
-						<NavLink
-							to="/login"
+						<button
 							id="login-button"
 							className="button-link"
-							onClick={closeMenu}
+							onClick={() => {
+								setAuthModal('login');
+								closeMenu();
+							}}
 						>
 							Log In
-						</NavLink>
-						<NavLink
-							to="/signup"
+						</button>
+						<button
 							id="signup-button"
 							className="button-link"
-							onClick={closeMenu}
+							onClick={() => {
+								setAuthModal('signup');
+								closeMenu();
+							}}
 						>
 							Sign Up
-						</NavLink>
+						</button>
 					</>
 				}
 			</div>
