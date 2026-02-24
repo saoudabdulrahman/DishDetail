@@ -15,9 +15,11 @@ const ProtectedRoute = ({ children }) => {
 		return (
 			<div style={{ padding: '4rem 2rem', textAlign: 'center' }}>
 				<h2>Authentication Required</h2>
-				<p style={{ marginTop: '1rem', color: 'var(--text-muted)' }}>Please log in to view this page.</p>
-				<button 
-					onClick={() => setAuthModal('login')} 
+				<p style={{ marginTop: '1rem', color: 'var(--text-muted)' }}>
+					Please log in to view this page.
+				</p>
+				<button
+					onClick={() => setAuthModal('login')}
 					style={{
 						marginTop: '1.5rem',
 						padding: '0.5rem 1rem',
@@ -26,7 +28,7 @@ const ProtectedRoute = ({ children }) => {
 						border: 'none',
 						borderRadius: '2rem',
 						cursor: 'pointer',
-						fontWeight: '600'
+						fontWeight: '600',
 					}}
 				>
 					Log In

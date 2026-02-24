@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { useAuth } from '../auth/useAuth';
 import { validateUser, saveUser } from '../auth/userStorage';
 import { Check, X } from 'lucide-react';
@@ -45,9 +46,7 @@ function LoginForm({ onSwitch, onSuccess }) {
 			<p className="auth-subtext">Welcome back to Dish Detail.</p>
 
 			{error && (
-				<div className={`auth-error ${shakeError ? 'shake' : ''}`}>
-					{error}
-				</div>
+				<div className={`auth-error ${shakeError ? 'shake' : ''}`}>{error}</div>
 			)}
 
 			<form onSubmit={handleSubmit} className="auth-form">
@@ -163,9 +162,7 @@ function SignupForm({ onSwitch, onSuccess }) {
 			<p className="auth-subtext">Create your Dish Detail account.</p>
 
 			{error && (
-				<div className={`auth-error ${shakeError ? 'shake' : ''}`}>
-					{error}
-				</div>
+				<div className={`auth-error ${shakeError ? 'shake' : ''}`}>{error}</div>
 			)}
 
 			<form onSubmit={handleSubmit} className="auth-form">
@@ -231,31 +228,44 @@ function SignupForm({ onSwitch, onSuccess }) {
 export default function AuthModal() {
 	const { authModal, setAuthModal } = useAuth();
 
+	useEffect(() => {
+		const handleKeyDown = (e) => {
+			if (e.key === 'Escape') setAuthModal(null);
+		};
+		if (authModal) document.addEventListener('keydown', handleKeyDown);
+		return () => document.removeEventListener('keydown', handleKeyDown);
+	}, [authModal, setAuthModal]);
+
 	if (!authModal) return null;
 
 	const closeModal = () => setAuthModal(null);
 
-	return (
+	return createPortal(
 		<div className="auth-modal-overlay" onClick={closeModal}>
 			<div className="auth-modal-content" onClick={(e) => e.stopPropagation()}>
-				<button className="auth-modal-close" onClick={closeModal} aria-label="Close">
+				<button
+					className="auth-modal-close"
+					onClick={closeModal}
+					aria-label="Close"
+				>
 					<X size={24} />
 				</button>
-				
+
 				{authModal === 'login' && (
-					<LoginForm 
-						onSwitch={() => setAuthModal('signup')} 
-						onSuccess={closeModal} 
+					<LoginForm
+						onSwitch={() => setAuthModal('signup')}
+						onSuccess={closeModal}
 					/>
 				)}
 
 				{authModal === 'signup' && (
-					<SignupForm 
-						onSwitch={() => setAuthModal('login')} 
-						onSuccess={closeModal} 
+					<SignupForm
+						onSwitch={() => setAuthModal('login')}
+						onSuccess={closeModal}
 					/>
 				)}
 			</div>
-		</div>
+		</div>,
+		document.body,
 	);
 }

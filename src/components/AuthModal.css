@@ -4,13 +4,26 @@
 	left: 0;
 	width: 100vw;
 	height: 100vh;
-	background-color: rgba(0, 0, 0, 0.5);
+	background-color: oklch(0 0 0 / 0.5);
+	backdrop-filter: blur(0.5rem) saturate(150%);
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	z-index: 1000;
 	padding: 1rem;
 	box-sizing: border-box;
+	animation: fadeInOverlay 0.3s ease-out;
+}
+
+@keyframes fadeInOverlay {
+	from {
+		background-color: oklch(0 0 0 / 0);
+		backdrop-filter: blur(0) saturate(100%);
+	}
+	to {
+		background-color: oklch(0 0 0 / 0.5);
+		backdrop-filter: blur(0.5rem) saturate(150%);
+	}
 }
 
 .auth-modal-content {
@@ -50,7 +63,9 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	transition: background-color 0.2s, color 0.2s;
+	transition:
+		background-color 0.2s,
+		color 0.2s;
 }
 
 .auth-modal-close:hover {
