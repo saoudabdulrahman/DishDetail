@@ -188,7 +188,7 @@ header {
 	gap: 0.5rem;
 	background-color: var(--bg-light);
 	color: var(--text);
-	padding: 0.5rem 1rem;
+	padding: 0.5rem 1.2rem;
 	border: none;
 	border-radius: 2rem;
 	cursor: pointer;

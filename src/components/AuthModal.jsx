@@ -2,13 +2,14 @@ import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useAuth } from '../auth/useAuth';
 import { validateUser, saveUser } from '../auth/userStorage';
-import { Check, X } from 'lucide-react';
+import { Check, X, Eye, EyeOff } from 'lucide-react';
 import './AuthModal.css';
 
 function LoginForm({ onSwitch, onSuccess }) {
 	const { login } = useAuth();
 	const [username, setUsername] = useState('');
 	const [password, setPassword] = useState('');
+	const [showPassword, setShowPassword] = useState(false);
 	const [rememberMe, setRememberMe] = useState(false);
 	const [error, setError] = useState('');
 	const [shakeError, setShakeError] = useState(false);
@@ -63,13 +64,23 @@ function LoginForm({ onSwitch, onSuccess }) {
 
 				<label>
 					Password
-					<input
-						type="password"
-						value={password}
-						onChange={(e) => setPassword(e.target.value)}
-						autoComplete="current-password"
-						placeholder="••••••••"
-					/>
+					<div className="password-input-wrapper">
+						<input
+							type={showPassword ? 'text' : 'password'}
+							value={password}
+							onChange={(e) => setPassword(e.target.value)}
+							autoComplete="current-password"
+							placeholder="••••••••"
+						/>
+						<button
+							type="button"
+							className="password-toggle"
+							onClick={() => setShowPassword(!showPassword)}
+							aria-label={showPassword ? 'Hide password' : 'Show password'}
+						>
+							{showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+						</button>
+					</div>
 				</label>
 
 				<label className="remember-row">
@@ -106,6 +117,8 @@ function SignupForm({ onSwitch, onSuccess }) {
 	const [username, setUsername] = useState('');
 	const [password, setPassword] = useState('');
 	const [confirm, setConfirm] = useState('');
+	const [showPassword, setShowPassword] = useState(false);
+	const [showConfirm, setShowConfirm] = useState(false);
 	const [error, setError] = useState('');
 	const [shakeError, setShakeError] = useState(false);
 
@@ -190,24 +203,44 @@ function SignupForm({ onSwitch, onSuccess }) {
 
 				<label>
 					Password
-					<input
-						type="password"
-						value={password}
-						onChange={(e) => setPassword(e.target.value)}
-						autoComplete="new-password"
-						placeholder="••••••••"
-					/>
+					<div className="password-input-wrapper">
+						<input
+							type={showPassword ? 'text' : 'password'}
+							value={password}
+							onChange={(e) => setPassword(e.target.value)}
+							autoComplete="new-password"
+							placeholder="••••••••"
+						/>
+						<button
+							type="button"
+							className="password-toggle"
+							onClick={() => setShowPassword(!showPassword)}
+							aria-label={showPassword ? 'Hide password' : 'Show password'}
+						>
+							{showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+						</button>
+					</div>
 				</label>
 
 				<label>
 					Confirm Password
-					<input
-						type="password"
-						value={confirm}
-						onChange={(e) => setConfirm(e.target.value)}
-						autoComplete="new-password"
-						placeholder="••••••••"
-					/>
+					<div className="password-input-wrapper">
+						<input
+							type={showConfirm ? 'text' : 'password'}
+							value={confirm}
+							onChange={(e) => setConfirm(e.target.value)}
+							autoComplete="new-password"
+							placeholder="••••••••"
+						/>
+						<button
+							type="button"
+							className="password-toggle"
+							onClick={() => setShowConfirm(!showConfirm)}
+							aria-label={showConfirm ? 'Hide confirm password' : 'Show confirm password'}
+						>
+							{showConfirm ? <EyeOff size={18} /> : <Eye size={18} />}
+						</button>
+					</div>
 				</label>
 
 				<button type="submit" className="auth-submit-button">
