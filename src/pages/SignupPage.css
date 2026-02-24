@@ -8,7 +8,7 @@
 	width: 100%;
 	max-width: 25rem;
 	background-color: var(--bg);
-	border-radius: 1rem;
+	border-radius: 2rem;
 	padding: 1.5rem;
 	box-shadow: var(--shadow-m);
 }
@@ -20,12 +20,16 @@
 }
 
 .signup-error {
-	background-color: var(--bg-dark);
-	border: 1px solid var(--danger);
+	background-color: var(--bg-light);
+	border: 2px solid var(--danger);
 	color: var(--danger);
-	padding: 0.5rem;
-	border-radius: 1rem;
+	padding: 0.5rem 1rem;
+	border-radius: 2rem;
 	margin: 0.5rem 0;
+}
+
+.signup-error.shake {
+	animation: shakeX 0.5s ease-out;
 }
 
 .signup-form {
@@ -44,8 +48,9 @@
 .signup-form input[type='text'],
 .signup-form input[type='password'],
 .signup-form input[type='email'] {
+	background-color: var(--bg-light);
 	padding: 0.5rem 1rem;
-	border-radius: 1rem;
+	border-radius: 2rem;
 	border: none;
 	box-shadow: var(--shadow-s);
 	font-weight: 400;
@@ -60,15 +65,15 @@
 
 .signup-form input:focus {
 	outline: none;
-	box-shadow: var(--shadow-l);
+	box-shadow: var(--shadow-l), 0 0 0 2px var(--primary);
 }
 
-.signup-btn {
+.signup-button {
 	margin-top: 0.5rem;
 	padding: 0.5rem 1rem;
 	background-color: var(--primary);
 	color: var(--text-on-primary);
-	border-radius: 1rem;
+	border-radius: 2rem;
 	border: none;
 	cursor: pointer;
 	font-weight: 600;
@@ -79,8 +84,8 @@
 		filter 0.2s ease;
 }
 
-.signup-btn:hover {
-	transform: translateY(-1px);
+.signup-button:hover {
+	transform: translateY(-2px);
 	filter: brightness(1.1);
 	box-shadow: var(--shadow-l);
 }
@@ -101,7 +106,6 @@
 	text-decoration: underline;
 }
 
-/* Shake animation */
 @keyframes shakeX {
 	0%,
 	100% {
@@ -119,8 +123,4 @@
 	80% {
 		transform: translateX(4px);
 	}
-}
-
-.signup-error.shake {
-	animation: shakeX 0.5s ease-out;
 }

@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
-import { Link, useNavigate, useSearchParams } from 'react-router-dom';
-import { Search, Menu, User, LogOut, ChevronDown } from 'lucide-react';
+import { Link, NavLink, useNavigate, useSearchParams } from 'react-router';
+import { ChevronDown, Dot, LogOut, Menu, Search, User } from 'lucide-react';
 import { useAuth } from '../auth/useAuth';
 import './Header.css';
 
@@ -39,12 +39,33 @@ export default function Header() {
 
 	return (
 		<header>
-			<div className="logo">
-				<h1>
-					<Link to="/" onClick={closeMenu}>
-						Dish Detail
-					</Link>
-				</h1>
+			<div className="left-header-actions">
+				<div className="logo">
+					<h2>
+						<Link to="/" onClick={closeMenu}>
+							Dish Detail
+						</Link>
+					</h2>
+				</div>
+
+				<nav className={`main-nav ${isMenuOpen ? 'open' : ''}`}>
+					<NavLink to="/establishments" onClick={closeMenu}>
+						{({ isActive }) => (
+							<>
+								Establishments
+								{isActive && <Dot size={32} className="nav-active-dot" />}
+							</>
+						)}
+					</NavLink>
+					<NavLink to="/reviews" onClick={closeMenu}>
+						{({ isActive }) => (
+							<>
+								Reviews
+								{isActive && <Dot size={32} className="nav-active-dot" />}
+							</>
+						)}
+					</NavLink>
+				</nav>
 			</div>
 
 			<div className="search-container">
@@ -55,9 +76,10 @@ export default function Header() {
 					value={query}
 					onChange={(e) => setQuery(e.target.value)}
 					onKeyDown={handleKeyDown}
+					aria-label="Search restaurants"
 				/>
 				<button id="search-button" onClick={handleSearch} aria-label="Search">
-					<Search />
+					<Search size={18} />
 				</button>
 			</div>
 
@@ -70,17 +92,16 @@ export default function Header() {
 				<Menu />
 			</button>
 
-			<nav className={`header-actions ${isMenuOpen ? 'open' : ''}`}>
-				<Link to="/establishments" onClick={closeMenu}>
-					Establishments
-				</Link>
-				<Link to="/reviews" onClick={closeMenu}>
-					Reviews
-				</Link>
+			<div className={`header-actions ${isMenuOpen ? 'open' : ''}`}>
 				{user ?
 					<>
-						<Link to="/select-restaurant" onClick={closeMenu}>
-							<button id="submit-review-button">Submit Review</button>
+						<Link
+							to="/submit-review"
+							id="submit-review-button"
+							className="button-link"
+							onClick={closeMenu}
+						>
+							Submit Review
 						</Link>
 						<div className="user-dropdown" ref={dropdownRef}>
 							<button
@@ -91,21 +112,21 @@ export default function Header() {
 								<User size={18} />
 								<span className="username">{user.username}</span>
 								<ChevronDown
-									size={14}
+									size={18}
 									className={`chevron ${isDropdownOpen ? 'open' : ''}`}
 								/>
 							</button>
 							<div className={`dropdown-menu ${isDropdownOpen ? 'open' : ''}`}>
-								<Link
+								<NavLink
 									to="/profile"
-									className="dropdown-item"
+									id="profile-button"
 									onClick={() => {
 										setIsDropdownOpen(false);
 										closeMenu();
 									}}
 								>
 									<User size={16} /> Profile
-								</Link>
+								</NavLink>
 								<button
 									id="logout-button"
 									onClick={() => {
@@ -120,15 +141,25 @@ export default function Header() {
 						</div>
 					</>
 				:	<>
-						<Link to="/login" onClick={closeMenu}>
-							<button id="login-button">Log In</button>
-						</Link>
-						<Link to="/signup" onClick={closeMenu}>
-							<button id="signup-button">Sign Up</button>
-						</Link>
+						<NavLink
+							to="/login"
+							id="login-button"
+							className="button-link"
+							onClick={closeMenu}
+						>
+							Log In
+						</NavLink>
+						<NavLink
+							to="/signup"
+							id="signup-button"
+							className="button-link"
+							onClick={closeMenu}
+						>
+							Sign Up
+						</NavLink>
 					</>
 				}
-			</nav>
+			</div>
 		</header>
 	);
 }

@@ -189,10 +189,10 @@ export default function DetailReviewCard({ review, onDelete, onUpdate }) {
 						rows={4}
 					/>
 					<div className="edit-actions">
-						<button className="save-btn" onClick={handleSave}>
+						<button className="review-save-button" onClick={handleSave}>
 							Save
 						</button>
-						<button className="cancel-btn" onClick={handleCancel}>
+						<button className="review-cancel-button" onClick={handleCancel}>
 							Cancel
 						</button>
 					</div>
@@ -228,14 +228,14 @@ export default function DetailReviewCard({ review, onDelete, onUpdate }) {
 					{isOwner && (
 						<div className="review-actions">
 							<button
-								className="icon-btn"
+								className="icon-button"
 								onClick={() => setIsEditing(true)}
 								aria-label="Edit review"
 							>
 								<Edit size={16} />
 							</button>
 							<button
-								className="icon-btn delete"
+								className="icon-button delete"
 								onClick={handleDelete}
 								aria-label="Delete review"
 							>
@@ -258,13 +258,13 @@ export default function DetailReviewCard({ review, onDelete, onUpdate }) {
 
 			<div className="helpfulness-actions">
 				<button
-					className={`vote-btn ${userVote === 'helpful' ? 'active' : ''}`}
+					className={`vote-button ${userVote === 'helpful' ? 'active' : ''}`}
 					onClick={() => handleVote('helpful')}
 				>
 					<ThumbsUp size={14} /> Helpful ({helpfulCount})
 				</button>
 				<button
-					className={`vote-btn ${userVote === 'unhelpful' ? 'active' : ''}`}
+					className={`vote-button ${userVote === 'unhelpful' ? 'active' : ''}`}
 					onClick={() => handleVote('unhelpful')}
 				>
 					<ThumbsDown size={14} /> Unhelpful ({unhelpfulCount})
@@ -282,18 +282,21 @@ export default function DetailReviewCard({ review, onDelete, onUpdate }) {
 					{isEditingResponse ?
 						<div className="edit-comment-box">
 							<textarea
-								className="comment-input"
+								className="comment-edit-input"
 								value={responseBody}
 								onChange={(e) => setResponseBody(e.target.value)}
 								placeholder="Write your response..."
 								rows={3}
 							/>
 							<div className="comment-actions">
-								<button className="save-btn" onClick={handleSaveResponse}>
+								<button
+									className="comment-save-button"
+									onClick={handleSaveResponse}
+								>
 									Save
 								</button>
 								<button
-									className="cancel-btn"
+									className="comment-cancel-button"
 									onClick={() => setIsEditingResponse(false)}
 								>
 									Cancel
@@ -305,13 +308,13 @@ export default function DetailReviewCard({ review, onDelete, onUpdate }) {
 							{isEstablishmentOwner && (
 								<div className="owner-actions">
 									<button
-										className="comment-action-btn"
+										className="comment-action-button"
 										onClick={startEditResponse}
 									>
 										Edit
 									</button>
 									<button
-										className="comment-action-btn delete"
+										className="comment-action-button delete"
 										onClick={handleDeleteResponse}
 									>
 										Delete
@@ -324,7 +327,7 @@ export default function DetailReviewCard({ review, onDelete, onUpdate }) {
 			)}
 
 			{isEstablishmentOwner && !review.ownerResponse && !isEditingResponse && (
-				<button className="respond-btn" onClick={startEditResponse}>
+				<button className="respond-button" onClick={startEditResponse}>
 					Respond to Review
 				</button>
 			)}
@@ -350,19 +353,19 @@ export default function DetailReviewCard({ review, onDelete, onUpdate }) {
 								{editingCommentId === comment.id ?
 									<div className="edit-comment-box">
 										<textarea
-											className="comment-input"
+											className="comment-edit-input"
 											value={editCommentText}
 											onChange={(e) => setEditCommentText(e.target.value)}
 										/>
 										<div className="comment-actions">
 											<button
-												className="comment-action-btn"
+												className="comment-save-button"
 												onClick={() => saveEditComment(comment.id)}
 											>
 												Save
 											</button>
 											<button
-												className="comment-action-btn"
+												className="comment-cancel-button"
 												onClick={() => setEditingCommentId(null)}
 											>
 												Cancel
@@ -374,13 +377,13 @@ export default function DetailReviewCard({ review, onDelete, onUpdate }) {
 										{user && user.username === comment.author && (
 											<div className="comment-actions">
 												<button
-													className="comment-action-btn"
+													className="comment-action-button"
 													onClick={() => startEditComment(comment)}
 												>
 													Edit
 												</button>
 												<button
-													className="comment-action-btn delete"
+													className="comment-action-button delete"
 													onClick={() => handleDeleteComment(comment.id)}
 												>
 													Delete
@@ -405,7 +408,7 @@ export default function DetailReviewCard({ review, onDelete, onUpdate }) {
 						/>
 						<button
 							type="submit"
-							className="submit-comment-btn"
+							className="submit-comment-button"
 							disabled={!commentText.trim()}
 						>
 							Post

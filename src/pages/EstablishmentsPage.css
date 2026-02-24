@@ -7,12 +7,20 @@
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	gap: 1rem;
-	margin-bottom: 2rem;
-	padding: 1rem;
+	width: fit-content;
+	gap: 0.5rem;
+	margin-left: auto;
+	margin-right: auto;
+	margin-bottom: 1rem;
+	padding: 1rem 2rem;
 	background-color: var(--bg);
-	border-radius: 0.5rem;
+	border-radius: 2rem;
 	box-shadow: var(--shadow-s);
+	transition: box-shadow 0.2s ease;
+}
+
+.filter-bar:hover {
+	box-shadow: var(--shadow-m);
 }
 
 .filter-bar span {
@@ -20,18 +28,33 @@
 	color: var(--text);
 }
 
-.filter-bar select {
-	padding: 0.5rem 1rem;
-	border: 1px solid var(--secondary);
-	border-radius: 0.25rem;
-	font-size: 1rem;
-	color: var(--text);
-	cursor: pointer;
+.rating-filter-container {
+	position: relative;
+	display: flex;
+	align-items: center;
 }
 
-.filter-bar select:focus {
-	outline: none;
-	border-color: var(--primary);
+.rating-filter {
+	appearance: none;
+	background-color: var(--bg-light);
+	color: var(--text);
+	padding: 0.5rem 2rem 0.5rem 1rem;
+	border: none;
+	border-radius: 1rem;
+	cursor: pointer;
+	box-shadow: var(--shadow-s);
+	transition: box-shadow 0.2s ease;
+}
+
+.rating-filter:hover {
+	box-shadow: var(--shadow-m);
+}
+
+.select-icon {
+	position: absolute;
+	right: 0.5rem;
+	color: var(--text);
+	pointer-events: none;
 }
 
 .load-more-container {
@@ -40,7 +63,7 @@
 	margin-top: 2rem;
 }
 
-.load-more-btn {
+.load-more-button {
 	background-color: var(--bg-light);
 	border: 1px solid var(--secondary);
 	padding: 0.75rem 2rem;
@@ -52,8 +75,8 @@
 	box-shadow: var(--shadow-s);
 }
 
-.load-more-btn:hover {
-	background-color: var(--bg);
+.load-more-button:hover {
+	filter: brightness(1.05);
 	transform: translateY(-2px);
 	box-shadow: var(--shadow-m);
 }

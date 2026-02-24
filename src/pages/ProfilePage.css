@@ -6,7 +6,7 @@
 
 .profile-header {
 	background-color: var(--bg);
-	border-radius: 1rem;
+	border-radius: 2rem;
 	padding: 2rem;
 	box-shadow: var(--shadow-m);
 	margin-bottom: 2rem;
@@ -23,7 +23,7 @@
 	height: 150px;
 	border-radius: 50%;
 	object-fit: cover;
-	border: 4px solid var(--bg-light);
+	border: 4px solid var(--bg-dark);
 	box-shadow: var(--shadow-s);
 }
 
@@ -44,12 +44,12 @@
 	white-space: pre-wrap;
 }
 
-.edit-profile-btn {
+.edit-profile-button {
 	background-color: var(--primary);
 	color: var(--text-on-primary);
 	border: none;
 	padding: 0.5rem 1rem;
-	border-radius: 1rem;
+	border-radius: 2rem;
 	cursor: pointer;
 	font-weight: 600;
 	box-shadow: var(--shadow-s);
@@ -59,13 +59,12 @@
 		filter 0.2s ease;
 }
 
-.edit-profile-btn:hover {
-	transform: translateY(-1px);
+.edit-profile-button:hover {
+	transform: translateY(-2px);
 	filter: brightness(1.1);
 	box-shadow: var(--shadow-l);
 }
 
-/* Edit Form */
 .edit-profile-form {
 	flex: 1;
 	display: flex;
@@ -81,17 +80,37 @@
 	color: var(--text);
 }
 
-.edit-profile-form input,
-.edit-profile-form textarea {
+#avatar-input {
 	padding: 0.5rem 1rem;
 	border: none;
-	border-radius: 1rem;
+	border-radius: 2rem;
 	font-size: 1rem;
 	font-family: inherit;
 	box-shadow: var(--shadow-s);
 	transition:
 		filter 0.2s ease,
 		box-shadow 0.2s ease;
+}
+
+#bio-box {
+	min-height: 10rem;
+	border: none;
+	border-radius: 1rem;
+	padding: 1rem;
+	field-sizing: content;
+	resize: none;
+	box-shadow: var(--shadow-s);
+	transition:
+		filter 0.2s ease,
+		box-shadow 0.2s ease;
+}
+
+#avatar-input:focus,
+#bio-box:focus {
+	outline: none;
+	box-shadow:
+		var(--shadow-s),
+		0 0 0 2px var(--primary);
 }
 
 .edit-profile-form input:hover,
@@ -106,7 +125,9 @@
 }
 
 .edit-profile-form textarea {
-	resize: vertical;
+	field-sizing: content;
+	resize: none;
+	min-height: 6rem;
 }
 
 .edit-actions {
@@ -115,9 +136,9 @@
 	margin-top: 1rem;
 }
 
-.save-btn {
+.save-button {
 	background-color: var(--success);
-	color: var(--text-on-primary);
+	color: var(--bg);
 	border: none;
 	padding: 0.5rem 1.5rem;
 	border-radius: 1rem;
@@ -130,15 +151,15 @@
 		box-shadow 0.2s ease;
 }
 
-.save-btn:hover {
-	transform: translateY(-1px);
+.save-button:hover {
+	transform: translateY(-2px);
 	filter: brightness(1.1);
 	box-shadow: var(--shadow-l);
 }
 
-.cancel-btn {
+.cancel-button {
 	background-color: var(--danger);
-	color: var(--text-on-primary);
+	color: var(--bg);
 	border: none;
 	padding: 0.5rem 1.5rem;
 	border-radius: 1rem;
@@ -151,19 +172,18 @@
 		box-shadow 0.2s ease;
 }
 
-.cancel-btn:hover {
-	transform: translateY(-1px);
+.cancel-button:hover {
+	transform: translateY(-2px);
 	filter: brightness(1.1);
 	box-shadow: var(--shadow-l);
 }
 
-/* Reviews Section */
 .user-reviews-section h3 {
 	font-size: 1.5rem;
 	color: var(--text);
 	margin-bottom: 1.5rem;
 	padding-bottom: 0.5rem;
-	border-bottom: 2px solid var(--bg-dark);
+	border-bottom: 2px solid var(--bg-light);
 }
 
 .reviews-grid {
