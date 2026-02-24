@@ -19,10 +19,10 @@ export default function EstablishmentPage() {
 	const handleUpdateReview = (reviewId, updates) => {
 		const idx = reviewsData.findIndex((r) => r.id === reviewId);
 		if (idx !== -1) {
-			reviewsData[idx] = { ...reviewsData[idx], ...updates, isEdited: true };
+			reviewsData[idx] = { ...reviewsData[idx], ...updates };
 			setReviews((prev) =>
 				prev.map((r) =>
-					r.id === reviewId ? { ...r, ...updates, isEdited: true } : r,
+					r.id === reviewId ? { ...r, ...updates } : r,
 				),
 			);
 		}

@@ -29,7 +29,7 @@ export default function DetailReviewCard({ review, onDelete, onUpdate }) {
 		user && (user.username === 'owner' || user.role === 'owner');
 
 	const handleSave = () => {
-		onUpdate(review.id, { body: editBody, rating: editRating });
+		onUpdate(review.id, { body: editBody, rating: editRating, isEdited: true });
 		setIsEditing(false);
 	};
 
