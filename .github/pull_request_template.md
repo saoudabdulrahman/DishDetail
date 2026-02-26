@@ -8,5 +8,7 @@ Closes/Fixes/Resolves: #[Issue Number]
 
 ## Changes
 
-* [Brief summary of change]: [Detailed explanation of what was changed, added, or removed.] (`path/to/file`, link-to-specific-lines)
-* [Brief summary of change]: [Detailed explanation of what was changed, added, or removed.] (`path/to/file`, link-to-specific-lines)
+-  `filepath/file.x`:
+    - Change 1.1
+    - Change 1.2
+- `filepath/file.x`: Change 2
