@@ -21,9 +21,7 @@ export default function EstablishmentPage() {
 		if (idx !== -1) {
 			reviewsData[idx] = { ...reviewsData[idx], ...updates };
 			setReviews((prev) =>
-				prev.map((r) =>
-					r.id === reviewId ? { ...r, ...updates } : r,
-				),
+				prev.map((r) => (r.id === reviewId ? { ...r, ...updates } : r)),
 			);
 		}
 	};

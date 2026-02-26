@@ -10,8 +10,12 @@ export function getUsers() {
 
 export function saveUser(user) {
 	const users = getUsers();
-	
-	if (users.some(u => u.username.toLowerCase() === user.username.trim().toLowerCase())) {
+
+	if (
+		users.some(
+			(u) => u.username.toLowerCase() === user.username.trim().toLowerCase(),
+		)
+	) {
 		throw new Error('That username is already taken.');
 	}
 
@@ -28,8 +32,8 @@ export function saveUser(user) {
 
 export function updateUser(username, updates) {
 	const users = getUsers();
-	const index = users.findIndex(u => u.username === username);
-	
+	const index = users.findIndex((u) => u.username === username);
+
 	if (index !== -1) {
 		users[index] = { ...users[index], ...updates };
 		localStorage.setItem(USERS_KEY, JSON.stringify(users));
@@ -41,6 +45,8 @@ export function updateUser(username, updates) {
 export function validateUser(username, password) {
 	const users = getUsers();
 	return users.find(
-		user => user.username.toLowerCase() === username.trim().toLowerCase() && user.password === password
+		(user) =>
+			user.username.toLowerCase() === username.trim().toLowerCase() &&
+			user.password === password,
 	);
 }

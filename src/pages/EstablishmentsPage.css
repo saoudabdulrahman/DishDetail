@@ -50,6 +50,13 @@
 	box-shadow: var(--shadow-m);
 }
 
+.rating-filter:focus {
+	outline: none;
+	box-shadow:
+		var(--shadow-m),
+		0 0 0 2px var(--primary);
+}
+
 .select-icon {
 	position: absolute;
 	right: 0.5rem;

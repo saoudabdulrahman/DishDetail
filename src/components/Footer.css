@@ -1,5 +1,10 @@
 footer {
-	background: linear-gradient(to bottom, var(--bg-dark) 0%, var(--bg) 15%, var(--bg) 100%);
+	background: linear-gradient(
+		to bottom,
+		var(--bg-dark) 0%,
+		var(--bg) 15%,
+		var(--bg) 100%
+	);
 	color: var(--text-muted);
 	padding: 2rem;
 	text-align: center;

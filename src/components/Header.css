@@ -43,11 +43,11 @@ header {
 }
 
 .main-nav a:hover {
-	color: var(--primary);
+	color: var(--text);
 }
 
 .main-nav a.active {
-	color: var(--primary);
+	color: var(--text);
 }
 
 .nav-active-dot {
@@ -188,7 +188,7 @@ header {
 	gap: 0.5rem;
 	background-color: var(--bg-light);
 	color: var(--text);
-	padding: 0.5rem 1rem;
+	padding: 0.5rem 1.2rem;
 	border: none;
 	border-radius: 2rem;
 	cursor: pointer;
@@ -343,6 +343,7 @@ header {
 	.header-actions .user-info-toggle {
 		width: 100%;
 		justify-content: space-between;
+		padding: 0.6rem 1.2rem;
 	}
 
 	.dropdown-menu {
