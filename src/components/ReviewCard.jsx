@@ -19,7 +19,7 @@ export default function ReviewCard({ review, restaurant }) {
 						<StarRating rating={review.rating} />
 					</div>
 					<p className="review-meta">
-						Reviewed by <strong>{review.reviewer}</strong> · {review.date}
+						Reviewed by {review.reviewer} · {review.date}
 					</p>
 					<p className="review-body">
 						{review.body.length > 150 ?

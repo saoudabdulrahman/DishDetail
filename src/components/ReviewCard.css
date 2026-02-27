@@ -39,6 +39,7 @@
 }
 
 .review-item-header {
+	font-family: 'Fraunces', serif;
 	display: flex;
 	justify-content: space-between;
 	align-items: flex-start;
@@ -46,7 +47,7 @@
 }
 
 .review-meta {
-	font-size: 0.85rem;
+	font-size: 0.825rem;
 	color: var(--text-muted);
 	margin-bottom: 0.5rem;
 }

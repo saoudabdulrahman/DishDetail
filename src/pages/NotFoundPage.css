@@ -46,7 +46,7 @@
 	background-color: var(--primary);
 	color: var(--text-on-primary);
 	padding: 0.75rem 1.5rem;
-	border-radius: 1rem;
+	border-radius: 2rem;
 	text-decoration: none;
 	font-weight: 600;
 	box-shadow: var(--shadow-s);

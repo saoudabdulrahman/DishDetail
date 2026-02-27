@@ -8,16 +8,20 @@
 }
 
 .hero h2 {
+	font-family: 'Fraunces', serif;
 	font-size: 2.5rem;
 	margin-bottom: 1rem;
 }
 
 .hero .highlight {
+	display: inline-block;
 	background-color: var(--primary);
 	color: var(--text-on-primary);
-	padding: 0 0.4rem;
+	padding: 0rem 0.5rem;
 	border-radius: 1rem;
 	white-space: nowrap;
+	transform: rotate(-2deg);
+	box-shadow: var(--shadow-s);
 }
 
 .hero p {
@@ -69,7 +73,19 @@
 }
 
 .stat {
+	position: relative;
 	text-align: center;
+}
+
+.stat:not(:last-child)::after {
+	content: '';
+	position: absolute;
+	right: -1.5rem;
+	top: 15%;
+	height: 70%;
+	width: 1px;
+	background-color: var(--text-muted);
+	opacity: 0.3;
 }
 
 .stat-number {
@@ -85,6 +101,7 @@
 }
 
 .section-header {
+	font-family: 'Fraunces', serif;
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
@@ -167,6 +184,10 @@
 
 	.stats-row {
 		gap: 1.5rem;
+	}
+
+	.stat:not(:last-child)::after {
+		display: none;
 	}
 
 	.top-rated-grid {
