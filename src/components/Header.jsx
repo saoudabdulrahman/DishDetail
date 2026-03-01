@@ -53,7 +53,13 @@ export default function Header() {
 						{({ isActive }) => (
 							<>
 								Establishments
-								{isActive && <Dot size={32} className="nav-active-dot" />}
+								{isActive && (
+									<Dot
+										size={32}
+										className="nav-active-dot"
+										style={{ viewTransitionName: 'nav-active-dot' }}
+									/>
+								)}
 							</>
 						)}
 					</NavLink>
@@ -61,7 +67,13 @@ export default function Header() {
 						{({ isActive }) => (
 							<>
 								Reviews
-								{isActive && <Dot size={32} className="nav-active-dot" />}
+								{isActive && (
+									<Dot
+										size={32}
+										className="nav-active-dot"
+										style={{ viewTransitionName: 'nav-active-dot' }}
+									/>
+								)}
 							</>
 						)}
 					</NavLink>
