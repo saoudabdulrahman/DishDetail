@@ -8,7 +8,7 @@ Closes/Fixes/Resolves: #[Issue Number]
 
 ## Changes
 
--  `filepath/file.x`:
-    - Change 1.1
-    - Change 1.2
+- `filepath/file.x`:
+  - Change 1.1
+  - Change 1.2
 - `filepath/file.x`: Change 2

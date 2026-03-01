@@ -31,6 +31,7 @@ A restaurant review browsing app built with React and Vite.
    The app will be available at the local URL shown in the terminal (typically `http://localhost:5173`).
 
 ## Resources Used
+
 - [React](https://react.dev/)
 - [Vite](https://vite.dev/)
 - [Google Fonts](https://fonts.google.com/)
