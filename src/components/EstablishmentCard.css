@@ -25,7 +25,7 @@
 }
 
 .establishment-item-header {
-	font-family: 'Fraunces', serif;
+	font-family: var(--font-heading);
 	display: flex;
 	justify-content: space-between;
 	align-items: flex-start;

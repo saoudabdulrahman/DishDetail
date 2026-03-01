@@ -1,6 +1,9 @@
 :root {
 	color-scheme: light dark;
 
+	--font-heading: 'Fraunces', serif;
+	--font-body: 'Google Sans', sans-serif;
+
 	--bg-dark: light-dark(oklch(0.92 0.02 280), oklch(0.16 0.02 280));
 	--bg: light-dark(oklch(0.96 0.02 280), oklch(0.2 0.02 280));
 	--bg-light: light-dark(oklch(0.98 0.02 280), oklch(0.25 0.02 280));
@@ -34,10 +37,12 @@
 }
 
 body {
-	font-family: 'Google Sans', sans-serif;
+	font-family: var(--font-body);
 	line-height: 1.5;
+	background: var(--bg-dark);
+	background: linear-gradient(to bottom, var(--bg-dark) 50%, var(--bg) 100%);
+	background-attachment: fixed;
 	color: var(--text);
-	background-color: var(--bg-dark);
 }
 
 img,
@@ -66,17 +71,18 @@ h6 {
 	overflow-wrap: break-word;
 }
 
-p {
-	text-wrap: pretty;
-}
-
 h1,
 h2,
 h3,
 h4,
 h5,
 h6 {
+	font-family: var(--font-heading);
 	text-wrap: balance;
+}
+
+p {
+	text-wrap: pretty;
 }
 
 .card-grid {

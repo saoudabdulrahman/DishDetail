@@ -50,7 +50,7 @@
 }
 
 .detail-header-top h2 {
-	font-family: 'Fraunces', serif;
+	/* font-family will be inherited from global h2 */
 }
 
 .detail-cuisine {
@@ -61,6 +61,7 @@
 }
 
 .detail-rating-badge {
+	font-family: var(--font-heading);
 	display: flex;
 	align-items: center;
 	gap: 0.35rem;
@@ -137,7 +138,7 @@
 }
 
 .detail-reviews-section-header {
-	font-family: 'Fraunces', serif;
+	font-family: var(--font-heading);
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
