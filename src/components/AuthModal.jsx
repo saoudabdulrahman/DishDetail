@@ -19,7 +19,7 @@ function LoginForm({ onSwitch, onSuccess }) {
 		window.setTimeout(() => setShakeError(false), 450);
 	};
 
-	const handleSubmit = (e) => {
+	const handleSubmit = async (e) => {
 		e.preventDefault();
 		setError('');
 
@@ -30,15 +30,14 @@ function LoginForm({ onSwitch, onSuccess }) {
 			return;
 		}
 
-		const validUser = validateUser(u, password);
-		if (!validUser) {
-			setError('Invalid username or password.');
+		try {
+			const validUser = await validateUser(u, password);
+			login(validUser, rememberMe);
+			onSuccess();
+		} catch (err) {
+			setError(err.message || 'Invalid username or password.');
 			triggerShake();
-			return;
 		}
-
-		login(validUser, rememberMe);
-		onSuccess();
 	};
 
 	return (
@@ -129,7 +128,7 @@ function SignupForm({ onSwitch, onSuccess }) {
 		window.setTimeout(() => setShakeError(false), 450);
 	};
 
-	const handleSubmit = (e) => {
+	const handleSubmit = async (e) => {
 		e.preventDefault();
 		setError('');
 
@@ -162,11 +161,11 @@ function SignupForm({ onSwitch, onSuccess }) {
 
 		try {
 			const newUser = { email: e1, username: u1, password };
-			saveUser(newUser);
-			login(newUser, true);
+			const created = await saveUser(newUser);
+			login(created, true);
 			onSuccess();
 		} catch (err) {
-			setError(err.message);
+			setError(err.message || 'Signup failed.');
 			triggerShake();
 		}
 	};
