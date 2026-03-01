@@ -1,8 +1,8 @@
-import { useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import { Star, Search } from 'lucide-react';
 import ReviewCard from '../components/ReviewCard';
-import { reviewsData, restaurantsData } from '../data';
+import { api } from '../api';
 import { useAuth } from '../auth/useAuth';
 import './SubmitReviewPage.css';
 
@@ -15,15 +15,38 @@ function SubmitReviewPage() {
 		state?.restaurant || null,
 	);
 	const [query, setQuery] = useState('');
+	const [restaurants, setRestaurants] = useState([]);
+	const [featured, setFeatured] = useState([]);
 
 	const [rating, setRating] = useState(0);
 	const [hover, setHover] = useState(0);
 	const [reviewText, setReviewText] = useState('');
 	const [error, setError] = useState('');
 
-	const filteredRestaurants = restaurantsData.filter((r) =>
-		r.restaurantName.toLowerCase().includes(query.toLowerCase()),
-	);
+	useEffect(() => {
+		let cancelled = false;
+		Promise.all([api().getEstablishments(), api().getReviews()])
+			.then(([estRes, revRes]) => {
+				if (cancelled) return;
+				setRestaurants(estRes.establishments);
+				const top = [...revRes.reviews]
+					.sort((a, b) => b.rating - a.rating)
+					.slice(0, 4);
+				setFeatured(top);
+			})
+			.catch(() => {
+				// ignore; page still usable
+			});
+		return () => {
+			cancelled = true;
+		};
+	}, []);
+
+	const filteredRestaurants = useMemo(() => {
+		return restaurants.filter((r) =>
+			r.restaurantName.toLowerCase().includes(query.toLowerCase()),
+		);
+	}, [restaurants, query]);
 
 	const handleSelect = (restaurant) => {
 		setSelectedRestaurant(restaurant);
@@ -31,7 +54,7 @@ function SubmitReviewPage() {
 		setError('');
 	};
 
-	const handleSubmit = (e) => {
+	const handleSubmit = async (e) => {
 		e.preventDefault();
 		setError('');
 
@@ -50,28 +73,19 @@ function SubmitReviewPage() {
 			return;
 		}
 
-		const newReview = {
-			id: Math.max(...reviewsData.map((r) => r.id), 0) + 1,
-			restaurantId: selectedRestaurant.id,
-			rating,
-			reviewer: user?.username || 'Anonymous',
-			reviewerAvatar: `https://i.pravatar.cc/150?u=${user?.username}`,
-			date: new Date().toLocaleDateString('en-US', {
-				month: 'short',
-				day: 'numeric',
-				year: 'numeric',
-			}),
-			body: reviewText,
-			reviewImage: null,
-		};
-
-		reviewsData.unshift(newReview);
-		navigate(`/establishments/${selectedRestaurant.id}`);
+		try {
+			await api().createReview(selectedRestaurant._id, {
+				rating,
+				reviewer: user?.username || 'Anonymous',
+				reviewerAvatar: user?.avatar,
+				body: reviewText,
+				reviewImage: null,
+			});
+			navigate(`/establishments/${selectedRestaurant._id}`);
+		} catch (err) {
+			setError(err.message || 'Failed to submit review.');
+		}
 	};
-
-	const featured = [...reviewsData]
-		.sort((a, b) => b.rating - a.rating)
-		.slice(0, 4);
 
 	return (
 		<main className="submit-review-page">
@@ -104,7 +118,7 @@ function SubmitReviewPage() {
 							<ul className="search-results">
 								{filteredRestaurants.map((restaurant) => (
 									<li
-										key={restaurant.id}
+										key={restaurant._id}
 										onClick={() => handleSelect(restaurant)}
 									>
 										{restaurant.restaurantName}
@@ -147,10 +161,10 @@ function SubmitReviewPage() {
 				<section className="featured-grid">
 					{featured.map((review) => (
 						<ReviewCard
-							key={review.id}
+							key={review._id}
 							review={review}
-							restaurant={restaurantsData.find(
-								(r) => r.id === review.restaurantId,
+							restaurant={restaurants.find(
+								(r) => r._id === review.establishment,
 							)}
 						/>
 					))}
