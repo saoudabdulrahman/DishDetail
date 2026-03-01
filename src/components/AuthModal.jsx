@@ -319,6 +319,16 @@ export default function AuthModal() {
 		}
 	};
 
+	const handleSwitch = (type) => {
+		if (document.startViewTransition) {
+			document.startViewTransition(() => {
+				setAuthModal(type);
+			});
+		} else {
+			setAuthModal(type);
+		}
+	};
+
 	return createPortal(
 		<div
 			className={`auth-modal-overlay ${isClosing ? 'closing' : ''}`}
@@ -341,14 +351,14 @@ export default function AuthModal() {
 
 				{activeModal === 'login' && (
 					<LoginForm
-						onSwitch={() => setAuthModal('signup')}
+						onSwitch={() => handleSwitch('signup')}
 						onSuccess={closeModal}
 					/>
 				)}
 
 				{activeModal === 'signup' && (
 					<SignupForm
-						onSwitch={() => setAuthModal('login')}
+						onSwitch={() => handleSwitch('login')}
 						onSuccess={closeModal}
 					/>
 				)}
