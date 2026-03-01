@@ -1,7 +1,7 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router';
 import EstablishmentCard from '../components/EstablishmentCard';
-import { restaurantsData } from '../data.js';
+import { api } from '../api';
 import './EstablishmentsPage.css';
 import { ChevronDown } from 'lucide-react';
 
@@ -9,6 +9,30 @@ export default function EstablishmentsPage() {
 	const [searchParams, setSearchParams] = useSearchParams();
 	const minRating = Number(searchParams.get('minRating') || 0);
 	const query = (searchParams.get('q') || '').toLowerCase();
+	const [establishments, setEstablishments] = useState([]);
+	const [loading, setLoading] = useState(true);
+	const [error, setError] = useState('');
+
+	useEffect(() => {
+		let cancelled = false;
+		setLoading(true);
+		setError('');
+		api()
+			.getEstablishments({ q: query, minRating })
+			.then(({ establishments }) => {
+				if (!cancelled) setEstablishments(establishments);
+			})
+			.catch((e) => {
+				if (!cancelled) setError(e.message || 'Failed to load establishments.');
+			})
+			.finally(() => {
+				if (!cancelled) setLoading(false);
+			});
+
+		return () => {
+			cancelled = true;
+		};
+	}, [query, minRating]);
 
 	const handleRatingChange = (e) => {
 		const rating = e.target.value;
@@ -25,22 +49,7 @@ export default function EstablishmentsPage() {
 		);
 	};
 
-	const filteredEstablishments = useMemo(() => {
-		return restaurantsData.filter((restaurant) => {
-			if (restaurant.rating < minRating) return false;
-
-			if (!query) return true;
-
-			const nameMatch =
-				restaurant?.restaurantName?.toLowerCase().includes(query) ?? false;
-			const cuisineMatch =
-				restaurant?.cuisine?.toLowerCase().includes(query) ?? false;
-			const descMatch =
-				restaurant?.description?.toLowerCase().includes(query) ?? false;
-
-			return nameMatch || cuisineMatch || descMatch;
-		});
-	}, [query, minRating]);
+	const filteredEstablishments = useMemo(() => establishments, [establishments]);
 
 	return (
 		<main>
@@ -67,9 +76,16 @@ export default function EstablishmentsPage() {
 			</div>
 
 			<section className="card-grid">
-				{filteredEstablishments.length > 0 ?
+				{loading ?
+					<p>Loading…</p>
+				: error ?
+					<p>{error}</p>
+				: filteredEstablishments.length > 0 ?
 					filteredEstablishments.map((restaurant) => (
-						<EstablishmentCard key={restaurant.id} restaurant={restaurant} />
+						<EstablishmentCard
+							key={restaurant._id}
+							restaurant={restaurant}
+						/>
 					))
 				:	<p>No establishments found.</p>}
 			</section>
