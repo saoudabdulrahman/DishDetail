@@ -68,8 +68,13 @@ export default function EstablishmentsPage() {
 
 			<section className="card-grid">
 				{filteredEstablishments.length > 0 ?
-					filteredEstablishments.map((restaurant) => (
-						<EstablishmentCard key={restaurant.id} restaurant={restaurant} />
+					filteredEstablishments.map((restaurant, index) => (
+						<div
+							key={restaurant.id}
+							className={`animate-slide-up stagger-${index % 7}`}
+						>
+							<EstablishmentCard restaurant={restaurant} />
+						</div>
 					))
 				:	<p>No establishments found.</p>}
 			</section>

@@ -17,7 +17,7 @@ export default function HomePage() {
 
 	return (
 		<main>
-			<section className="hero">
+			<section className="hero animate-slide-up stagger-0">
 				<h2>
 					Discover &amp; Share <span className="highlight">Honest Reviews</span>
 				</h2>
@@ -25,17 +25,17 @@ export default function HomePage() {
 					Find the best restaurants near you, read real reviews from fellow
 					diners, and share your own dining experiences with the community.
 				</p>
-				<Link to="/reviews" className="hero-cta">
+				<Link to="/establishments" className="hero-cta" viewTransition>
 					<Search size={24} />
 					Browse Reviews
 				</Link>
-				<Link to="/submit-review" className="hero-cta">
+				<Link to="/submit-review" className="hero-cta" viewTransition>
 					<Star size={24} />
 					Submit Review
 				</Link>
 			</section>
 
-			<div className="stats-row">
+			<div className="stats-row animate-slide-up stagger-1">
 				<div className="stat">
 					<span className="stat-number">{reviewsData.length}</span>
 					<span className="stat-label">Reviews</span>
@@ -59,28 +59,29 @@ export default function HomePage() {
 				</div>
 			</div>
 
-			<div className="section-header">
+			<div className="section-header animate-slide-up stagger-2">
 				<h2>Top Rated</h2>
 				<Link
 					to="/reviews"
 					className="see-all"
 					aria-label="See all top rated reviews"
+					viewTransition
 				>
 					See all &rarr;
 				</Link>
 			</div>
 
-			<section className="card-grid top-rated-grid">
+			<section className="card-grid top-rated-grid animate-slide-up stagger-3">
 				{featured.map(({ review, restaurant }) => (
 					<ReviewCard key={review.id} review={review} restaurant={restaurant} />
 				))}
 			</section>
 
-			<div className="section-header">
+			<div className="section-header animate-slide-up stagger-4">
 				<h2>How It Works</h2>
 			</div>
 
-			<section className="how-it-works">
+			<section className="how-it-works animate-slide-up stagger-5">
 				<div className="step">
 					<div className="step-icon" aria-hidden="true">
 						<Search size={20} />

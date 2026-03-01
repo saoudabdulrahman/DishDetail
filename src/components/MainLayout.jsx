@@ -7,7 +7,7 @@ const MainLayout = () => {
 	return (
 		<div className="main-layout">
 			<Header />
-			<div className="main-content">
+			<div className="main-content animate-fade-in">
 				<Outlet />
 			</div>
 			<Footer />

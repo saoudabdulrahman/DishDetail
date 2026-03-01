@@ -66,7 +66,9 @@ function SubmitReviewPage() {
 		};
 
 		reviewsData.unshift(newReview);
-		navigate(`/establishments/${selectedRestaurant.id}`);
+		navigate(`/establishments/${selectedRestaurant.id}`, {
+			viewTransition: true,
+		});
 	};
 
 	const featured = [...reviewsData]
@@ -74,8 +76,8 @@ function SubmitReviewPage() {
 		.slice(0, 4);
 
 	return (
-		<main className="submit-review-page">
-			<div className="box">
+		<main className="submit-review-page animate-fade-in">
+			<div className="box animate-slide-up stagger-0">
 				<h1 id="title">
 					{selectedRestaurant ?
 						`Submit a Review for ${selectedRestaurant.restaurantName}`
@@ -115,7 +117,7 @@ function SubmitReviewPage() {
 					</div>
 
 					{selectedRestaurant && (
-						<div className="review-details">
+						<div className="review-details animate-scale-in">
 							<div className="star-rating" onMouseLeave={() => setHover(0)}>
 								{[1, 2, 3, 4, 5].map((star) => (
 									<Star
@@ -142,17 +144,21 @@ function SubmitReviewPage() {
 				</form>
 			</div>
 
-			<aside className="suggested">
+			<aside className="suggested animate-slide-up stagger-1">
 				<h2>Hear what others are saying:</h2>
 				<section className="featured-grid">
-					{featured.map((review) => (
-						<ReviewCard
+					{featured.map((review, index) => (
+						<div
 							key={review.id}
-							review={review}
-							restaurant={restaurantsData.find(
-								(r) => r.id === review.restaurantId,
-							)}
-						/>
+							className={`animate-slide-up stagger-${index + 2}`}
+						>
+							<ReviewCard
+								review={review}
+								restaurant={restaurantsData.find(
+									(r) => r.id === review.restaurantId,
+								)}
+							/>
+						</div>
 					))}
 				</section>
 			</aside>
