@@ -47,11 +47,6 @@ npm start
 
 Open: `http://localhost:3000`
 
-### Optional: Vite dev mode
-
-You can still run the frontend dev server (API calls will hit the same origin only if you proxy).
-For Phase 2 submission, use `npm run build` + `npm start`.
-
 ## Resources Used
 - [React](https://react.dev/)
 - [Vite](https://vite.dev/)
