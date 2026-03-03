@@ -108,6 +108,10 @@
 	flex-direction: column;
 }
 
+.auth-card h2 {
+	font-family: 'Fraunces', serif;
+}
+
 .auth-subtext {
 	margin-top: 0.5rem;
 	margin-bottom: 1rem;

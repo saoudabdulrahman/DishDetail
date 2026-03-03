@@ -51,7 +51,7 @@ export default function EstablishmentPage() {
 			<main className="error-container">
 				<p>Restaurant not found</p>
 				<button
-					onClick={() => navigate('/establishments')}
+					onClick={() => navigate('/establishments', { viewTransition: true })}
 					className="back-button"
 				>
 					<ArrowLeft size={18} /> Go Back
@@ -61,15 +61,15 @@ export default function EstablishmentPage() {
 	}
 
 	return (
-		<main className="establishment-detail">
+		<main className="establishment-detail animate-fade-in">
 			<button
-				onClick={() => navigate('/establishments')}
+				onClick={() => navigate('/establishments', { viewTransition: true })}
 				className="back-button"
 			>
 				<ArrowLeft size={18} /> Back to Establishments
 			</button>
 
-			<div className="detail-banner">
+			<div className="detail-banner animate-scale-in stagger-0">
 				<img
 					src={restaurant.restaurantImage}
 					alt={restaurant.restaurantName}
@@ -77,7 +77,7 @@ export default function EstablishmentPage() {
 				/>
 			</div>
 
-			<div className="detail-header">
+			<div className="detail-header animate-slide-up stagger-1">
 				<div className="detail-header-top">
 					<div>
 						<h2>{restaurant.restaurantName}</h2>
@@ -91,7 +91,7 @@ export default function EstablishmentPage() {
 				<p className="detail-description">{restaurant.description}</p>
 			</div>
 
-			<div className="detail-quick-info">
+			<div className="detail-quick-info animate-slide-up stagger-2">
 				<div className="detail-info-item">
 					<MapPin size={18} />
 					<div>
@@ -122,7 +122,7 @@ export default function EstablishmentPage() {
 				</div>
 			</div>
 
-			<section className="detail-reviews-section">
+			<section className="detail-reviews-section animate-slide-up stagger-3">
 				<div className="detail-reviews-section-header">
 					<h2>Reviews</h2>
 					<span className="detail-reviews-count">

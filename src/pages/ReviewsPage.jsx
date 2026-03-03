@@ -36,12 +36,13 @@ export default function ReviewsPage() {
 			<h2 className="review-header">Latest Reviews</h2>
 			<section className="card-grid">
 				{filteredReviews.length > 0 ?
-					filteredReviews.map(({ review, restaurant }) => (
-						<ReviewCard
+					filteredReviews.map(({ review, restaurant }, index) => (
+						<div
 							key={review.id}
-							review={review}
-							restaurant={restaurant}
-						/>
+							className={`animate-slide-up stagger-${index % 7}`}
+						>
+							<ReviewCard review={review} restaurant={restaurant} />
+						</div>
 					))
 				:	<p>No reviews found.</p>}
 			</section>

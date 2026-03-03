@@ -31,7 +31,7 @@ export default function Header() {
 
 	const handleSearch = () => {
 		const params = query.trim() ? `?q=${encodeURIComponent(query.trim())}` : '';
-		navigate(`/establishments${params}`);
+		navigate(`/establishments${params}`, { viewTransition: true });
 	};
 
 	const handleKeyDown = (e) => e.key === 'Enter' && handleSearch();
@@ -42,26 +42,38 @@ export default function Header() {
 			<div className="left-header-actions">
 				<div className="logo">
 					<h2>
-						<Link to="/" onClick={closeMenu}>
+						<Link to="/" onClick={closeMenu} viewTransition>
 							Dish Detail
 						</Link>
 					</h2>
 				</div>
 
 				<nav className={`main-nav ${isMenuOpen ? 'open' : ''}`}>
-					<NavLink to="/establishments" onClick={closeMenu}>
+					<NavLink to="/establishments" onClick={closeMenu} viewTransition>
 						{({ isActive }) => (
 							<>
 								Establishments
-								{isActive && <Dot size={32} className="nav-active-dot" />}
+								{isActive && (
+									<Dot
+										size={32}
+										className="nav-active-dot"
+										style={{ viewTransitionName: 'nav-active-dot' }}
+									/>
+								)}
 							</>
 						)}
 					</NavLink>
-					<NavLink to="/reviews" onClick={closeMenu}>
+					<NavLink to="/reviews" onClick={closeMenu} viewTransition>
 						{({ isActive }) => (
 							<>
 								Reviews
-								{isActive && <Dot size={32} className="nav-active-dot" />}
+								{isActive && (
+									<Dot
+										size={32}
+										className="nav-active-dot"
+										style={{ viewTransitionName: 'nav-active-dot' }}
+									/>
+								)}
 							</>
 						)}
 					</NavLink>
@@ -100,6 +112,7 @@ export default function Header() {
 							id="submit-review-button"
 							className="button-link"
 							onClick={closeMenu}
+							viewTransition
 						>
 							Submit Review
 						</Link>
@@ -124,6 +137,7 @@ export default function Header() {
 										setIsDropdownOpen(false);
 										closeMenu();
 									}}
+									viewTransition
 								>
 									<User size={16} /> Profile
 								</NavLink>

@@ -38,6 +38,11 @@
 	z-index: 1;
 }
 
+.review-item-content.no-image {
+	margin-top: 0;
+	padding-top: 1rem;
+}
+
 .review-item-header {
 	font-family: 'Fraunces', serif;
 	display: flex;

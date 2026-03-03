@@ -25,8 +25,8 @@ export default function ProfilePage() {
 	};
 
 	return (
-		<main className="profile-page">
-			<div className="profile-header">
+		<main className="profile-page animate-fade-in">
+			<div className="profile-header animate-slide-up stagger-0">
 				<div className="profile-info">
 					{isEditing ?
 						<div className="edit-profile-form">
@@ -62,9 +62,9 @@ export default function ProfilePage() {
 							<img
 								src={user.avatar}
 								alt={user.username}
-								className="profile-avatar"
+								className="profile-avatar animate-scale-in stagger-1"
 							/>
-							<div className="profile-details">
+							<div className="profile-details animate-slide-up stagger-2">
 								<h2>{user.username}</h2>
 								<p className="profile-bio">{user.bio || 'No bio yet.'}</p>
 								<button
@@ -79,20 +79,21 @@ export default function ProfilePage() {
 				</div>
 			</div>
 
-			<section className="user-reviews-section">
+			<section className="user-reviews-section animate-slide-up stagger-3">
 				<h3>Your Reviews ({userReviews.length})</h3>
 				{userReviews.length > 0 ?
 					<div className="reviews-grid">
-						{userReviews.map((review) => {
+						{userReviews.map((review, index) => {
 							const restaurant = restaurantsData.find(
 								(r) => r.id === review.restaurantId,
 							);
 							return (
-								<ReviewCard
+								<div
 									key={review.id}
-									review={review}
-									restaurant={restaurant}
-								/>
+									className={`animate-slide-up stagger-${(index % 4) + 4}`}
+								>
+									<ReviewCard review={review} restaurant={restaurant} />
+								</div>
 							);
 						})}
 					</div>

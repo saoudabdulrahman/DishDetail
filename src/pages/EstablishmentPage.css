@@ -49,6 +49,10 @@
 	margin-bottom: 0.75rem;
 }
 
+.detail-header-top h2 {
+	font-family: 'Fraunces', serif;
+}
+
 .detail-cuisine {
 	font-size: 0.85rem;
 	font-weight: 600;
@@ -133,6 +137,7 @@
 }
 
 .detail-reviews-section-header {
+	font-family: 'Fraunces', serif;
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
