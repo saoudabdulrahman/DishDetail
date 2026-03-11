@@ -102,12 +102,12 @@ export default function ProfilePage() {
 				{userReviews.length > 0 ?
 					<div className="reviews-grid">
 						{userReviews.map((review) => {
-						const restaurant = restaurants.find(
-							(r) => r._id === review.establishment,
-						);
+							const restaurant = restaurants.find(
+								(r) => r._id === review.establishment,
+							);
 							return (
 								<ReviewCard
-								key={review._id}
+									key={review._id}
 									review={review}
 									restaurant={restaurant}
 								/>

@@ -6,9 +6,9 @@ Restaurant review web app (React + Node.js + MongoDB).
 
 - [Node.js](https://nodejs.org/) (v18 or later)
 - npm (comes with Node.js)
-- MongoDB (local install or Atlas)
+- MongoDB (local install or MongoDB Atlas)
 
-## Running locally (Phase 2 backend)
+## Initial Setup
 
 ### 1) Install dependencies
 
@@ -16,38 +16,73 @@ Restaurant review web app (React + Node.js + MongoDB).
 npm install
 ```
 
-### 2) Configure MongoDB
+### 2) Configure Environment Variables
 
-Create a `.env` file in the project root:
+Create a `.env` file in the root of the project and add your database configuration:
 
 ```env
 MONGODB_URI=mongodb://127.0.0.1:27017/dishdetail
 PORT=3000
 ```
 
-If you use MongoDB Atlas, set `MONGODB_URI` to your Atlas connection string.
+_(If you are using MongoDB Atlas, replace the URI with your Atlas connection string)._
 
-### 3) Seed sample data
+### 3) Seed the Database
+
+Populate the database with sample establishments, users, and reviews:
 
 ```sh
 npm run seed
 ```
 
-### 4) Build the React app
+---
 
-```sh
-npm run build
-```
+## Running the Application
 
-### 5) Run the Node server
+There are two ways to run the application depending on your needs: **Development Mode** (recommended for coding) and **Production Mode**.
 
-```sh
-npm start
-```
+### Option A: Development Mode (Hot-Reloading)
 
-Open: `http://localhost:3000`
+This mode runs the Vite frontend development server and the Node.js backend server simultaneously. It supports hot-reloading for frontend changes.
+
+1. **Start the backend server** (in one terminal terminal):
+
+   ```sh
+   npm start
+   ```
+
+   _The backend will run on `http://localhost:3000`._
+
+2. **Start the Vite frontend dev server** (in a second terminal):
+
+   ```sh
+   npm run dev
+   ```
+
+   _Vite will automatically open the app or provide a local URL (usually `http://localhost:5173`). API requests are automatically proxied to the backend._
+
+### Option B: Production Mode
+
+This mode builds the optimized React frontend and serves it directly through the Node.js Express backend.
+
+1. **Build the React app**:
+
+   ```sh
+   npm run build
+   ```
+
+2. **Start the Node server**:
+
+   ```sh
+   npm start
+   ```
+
+3. Open your browser and navigate to: **`http://localhost:3000`**
+
+---
 
 ## Resources Used
+
 - [React](https://react.dev/)
 - [Vite](https://vite.dev/)
 - [Express](https://expressjs.com/)

@@ -14,20 +14,27 @@ export default function ReviewsPage() {
 
 	useEffect(() => {
 		let cancelled = false;
-		setLoading(true);
-		setError('');
-		Promise.all([api().getEstablishments(), api().getReviews({ q: query })])
-			.then(([estRes, revRes]) => {
-				if (cancelled) return;
-				setRestaurants(estRes.establishments);
-				setReviews(revRes.reviews);
-			})
-			.catch((e) => {
+
+		const fetchReviews = async () => {
+			setLoading(true);
+			setError('');
+			try {
+				const [estRes, revRes] = await Promise.all([
+					api().getEstablishments(),
+					api().getReviews({ q: query }),
+				]);
+				if (!cancelled) {
+					setRestaurants(estRes.establishments);
+					setReviews(revRes.reviews);
+				}
+			} catch (e) {
 				if (!cancelled) setError(e.message || 'Failed to load reviews.');
-			})
-			.finally(() => {
+			} finally {
 				if (!cancelled) setLoading(false);
-			});
+			}
+		};
+
+		fetchReviews();
 
 		return () => {
 			cancelled = true;

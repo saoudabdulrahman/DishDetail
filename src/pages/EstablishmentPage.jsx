@@ -17,21 +17,26 @@ export default function EstablishmentPage() {
 
 	useEffect(() => {
 		let cancelled = false;
-		setLoading(true);
-		setError('');
-		api()
-			.getEstablishment(restaurantId)
-			.then(({ establishment, reviews }) => {
-				if (cancelled) return;
-				setRestaurant(establishment);
-				setReviews(reviews);
-			})
-			.catch((e) => {
+
+		const fetchEstablishment = async () => {
+			setLoading(true);
+			setError('');
+			try {
+				const { establishment, reviews } =
+					await api().getEstablishment(restaurantId);
+				if (!cancelled) {
+					setRestaurant(establishment);
+					setReviews(reviews);
+				}
+			} catch (e) {
 				if (!cancelled) setError(e.message || 'Failed to load.');
-			})
-			.finally(() => {
+			} finally {
 				if (!cancelled) setLoading(false);
-			});
+			}
+		};
+
+		fetchEstablishment();
+
 		return () => {
 			cancelled = true;
 		};
@@ -40,9 +45,7 @@ export default function EstablishmentPage() {
 	const handleUpdateReview = async (reviewId, updates) => {
 		try {
 			const { review } = await api().updateReview(reviewId, updates);
-			setReviews((prev) =>
-				prev.map((r) => (r._id === reviewId ? review : r)),
-			);
+			setReviews((prev) => prev.map((r) => (r._id === reviewId ? review : r)));
 		} catch (e) {
 			alert(e.message || 'Failed to update review.');
 		}
@@ -165,7 +168,7 @@ export default function EstablishmentPage() {
 					<div className="detail-reviews-list">
 						{displayedReviews.map((review) => (
 							<DetailReviewCard
-							key={review._id}
+								key={review._id}
 								review={review}
 								onUpdate={handleUpdateReview}
 								onDelete={handleDeleteReview}

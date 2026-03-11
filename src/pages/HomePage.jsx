@@ -41,8 +41,10 @@ export default function HomePage() {
 
 	const avgRating =
 		reviews.length > 0 ?
-			(reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length).toFixed(1)
-		: '0.0';
+			(reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length).toFixed(
+				1,
+			)
+		:	'0.0';
 
 	return (
 		<main>

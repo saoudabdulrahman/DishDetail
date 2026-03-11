@@ -45,7 +45,8 @@ router.post('/:id/reviews', async (req, res) => {
 		const est = await Establishment.findById(req.params.id);
 		if (!est) return res.status(404).json({ error: 'Not found.' });
 
-		const { rating, reviewer, reviewerAvatar, body, reviewImage } = req.body || {};
+		const { rating, reviewer, reviewerAvatar, body, reviewImage } =
+			req.body || {};
 		if (!rating || !reviewer || !body) {
 			return res.status(400).json({ error: 'Missing required fields.' });
 		}
@@ -61,7 +62,8 @@ router.post('/:id/reviews', async (req, res) => {
 			rating: Number(rating),
 			reviewer,
 			reviewerAvatar:
-				reviewerAvatar || `https://i.pravatar.cc/150?u=${encodeURIComponent(reviewer)}`,
+				reviewerAvatar ||
+				`https://i.pravatar.cc/150?u=${encodeURIComponent(reviewer)}`,
 			date,
 			body,
 			reviewImage: reviewImage || null,

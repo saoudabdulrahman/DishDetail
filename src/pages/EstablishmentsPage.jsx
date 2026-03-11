@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router';
 import EstablishmentCard from '../components/EstablishmentCard';
 import { api } from '../api';
@@ -15,19 +15,22 @@ export default function EstablishmentsPage() {
 
 	useEffect(() => {
 		let cancelled = false;
-		setLoading(true);
-		setError('');
-		api()
-			.getEstablishments({ q: query, minRating })
-			.then(({ establishments }) => {
-				if (!cancelled) setEstablishments(establishments);
-			})
-			.catch((e) => {
+
+		const fetchEstablishments = async () => {
+			setLoading(true);
+			setError('');
+			try {
+				const { establishments: fetchedEstablishments } =
+					await api().getEstablishments({ q: query, minRating });
+				if (!cancelled) setEstablishments(fetchedEstablishments);
+			} catch (e) {
 				if (!cancelled) setError(e.message || 'Failed to load establishments.');
-			})
-			.finally(() => {
+			} finally {
 				if (!cancelled) setLoading(false);
-			});
+			}
+		};
+
+		fetchEstablishments();
 
 		return () => {
 			cancelled = true;
@@ -48,8 +51,6 @@ export default function EstablishmentsPage() {
 			{ replace: true },
 		);
 	};
-
-	const filteredEstablishments = useMemo(() => establishments, [establishments]);
 
 	return (
 		<main>
@@ -80,12 +81,9 @@ export default function EstablishmentsPage() {
 					<p>Loading…</p>
 				: error ?
 					<p>{error}</p>
-				: filteredEstablishments.length > 0 ?
-					filteredEstablishments.map((restaurant) => (
-						<EstablishmentCard
-							key={restaurant._id}
-							restaurant={restaurant}
-						/>
+				: establishments.length > 0 ?
+					establishments.map((restaurant) => (
+						<EstablishmentCard key={restaurant._id} restaurant={restaurant} />
 					))
 				:	<p>No establishments found.</p>}
 			</section>

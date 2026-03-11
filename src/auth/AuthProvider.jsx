@@ -28,7 +28,6 @@ export default function AuthProvider({ children }) {
 					saveAuth(updated, isRemembered);
 					setUser(updated);
 				} catch (e) {
-					// eslint-disable-next-line no-console
 					console.error('Failed to update user profile', e);
 				}
 			},

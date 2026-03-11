@@ -93,17 +93,15 @@ async function main() {
 						date: ensureString(r.ownerResponse.date),
 						body: ensureString(r.ownerResponse.body),
 					}
-				: null,
+				:	null,
 		})),
 	);
 
-	// eslint-disable-next-line no-console
 	console.log('✅ Seed complete.');
 	process.exit(0);
 }
 
 main().catch((e) => {
-	// eslint-disable-next-line no-console
 	console.error('Seed failed:', e);
 	process.exit(1);
 });

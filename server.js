@@ -46,6 +46,5 @@ app.get('*', (req, res) => {
 });
 
 app.listen(PORT, () => {
-	// eslint-disable-next-line no-console
 	console.log(`DishDetail server running on http://localhost:${PORT}`);
 });

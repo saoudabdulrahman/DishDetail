@@ -38,7 +38,7 @@ router.post('/signup', async (req, res) => {
 		});
 
 		return res.status(201).json({ user: publicUser(u) });
-	} catch (e) {
+	} catch {
 		return res.status(500).json({ error: 'Signup failed.' });
 	}
 });
@@ -54,7 +54,7 @@ router.post('/login', async (req, res) => {
 			return res.status(401).json({ error: 'Invalid username or password.' });
 		}
 		return res.json({ user: publicUser(u) });
-	} catch (e) {
+	} catch {
 		return res.status(500).json({ error: 'Login failed.' });
 	}
 });
