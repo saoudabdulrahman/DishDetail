@@ -7,13 +7,10 @@
 	border-radius: 1rem;
 	cursor: pointer;
 	box-shadow: var(--shadow-s);
-	transition:
-		transform 0.2s ease,
-		box-shadow 0.2s ease;
+	transition: box-shadow 0.2s ease;
 }
 
-.review-item:hover {
-	transform: translateY(-4px);
+.card-link:hover .review-item {
 	box-shadow: var(--shadow-l);
 }
 
@@ -38,8 +35,11 @@
 	z-index: 1;
 }
 
+.review-item-content.no-image {
+	margin-top: 1rem;
+}
+
 .review-item-header {
-	font-family: 'Fraunces', serif;
 	display: flex;
 	justify-content: space-between;
 	align-items: flex-start;

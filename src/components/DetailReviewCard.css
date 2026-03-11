@@ -1,14 +1,14 @@
 .detail-review-card {
 	background-color: var(--bg);
-	border-radius: 2rem;
-	padding: 1.5rem;
+	border-radius: 1rem;
+	padding: 1rem;
 	box-shadow: var(--shadow-s);
 	transition: box-shadow 0.2s ease;
 	position: relative;
 }
 
 .detail-review-card:hover {
-	box-shadow: var(--shadow-m);
+	box-shadow: var(--shadow-l);
 }
 
 .detail-review-header {
@@ -215,7 +215,7 @@
 	margin-top: 1.5rem;
 	padding: 1rem;
 	background-color: var(--bg-light);
-	border-radius: 1.5rem;
+	border-radius: 1rem;
 	border-left: 4px solid var(--primary);
 	box-shadow: var(--shadow-s);
 	transition: box-shadow 0.2s ease;
@@ -278,7 +278,7 @@
 .comment-item {
 	background-color: var(--bg-light);
 	padding: 0.75rem;
-	border-radius: 1.5rem;
+	border-radius: 1rem;
 	font-size: 0.9rem;
 	box-shadow: var(--shadow-s);
 	transition: box-shadow 0.2s ease;

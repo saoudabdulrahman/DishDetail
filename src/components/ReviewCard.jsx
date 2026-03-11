@@ -4,16 +4,18 @@ import './ReviewCard.css';
 
 export default function ReviewCard({ review, restaurant }) {
 	return (
-		<Link to={`/establishments/${restaurant.id}`} className="card-link">
+		<Link to={`/establishments/${restaurant._id}`} className="card-link">
 			<article className="review-item">
-				<div className="restaurant-image-container">
-					<img
-						src={review.reviewImage}
-						alt={`Food or ambiance from ${restaurant.restaurantName}`}
-						className="restaurant-img"
-					/>
-				</div>
-				<div className="review-item-content">
+				{review.reviewImage && (
+					<div className="restaurant-image-container">
+						<img
+							src={review.reviewImage}
+							alt={`Food or ambiance from ${restaurant.restaurantName}`}
+							className="restaurant-img"
+						/>
+					</div>
+				)}
+				<div className={`review-item-content ${!review.reviewImage ? 'no-image' : ''}`}>
 					<div className="review-item-header">
 						<h3>{restaurant.restaurantName}</h3>
 						<StarRating rating={review.rating} />

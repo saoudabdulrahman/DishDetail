@@ -29,13 +29,13 @@ export default function DetailReviewCard({ review, onDelete, onUpdate }) {
 		user && (user.username === 'owner' || user.role === 'owner');
 
 	const handleSave = () => {
-		onUpdate(review.id, { body: editBody, rating: editRating, isEdited: true });
+		onUpdate(review._id, { body: editBody, rating: editRating, isEdited: true });
 		setIsEditing(false);
 	};
 
 	const handleDelete = () => {
 		if (window.confirm('Are you sure you want to delete this review?')) {
-			onDelete(review.id);
+			onDelete(review._id);
 		}
 	};
 
@@ -79,7 +79,7 @@ export default function DetailReviewCard({ review, onDelete, onUpdate }) {
 		setUnhelpfulCount(newUnhelpful);
 		setUserVote(newVote);
 
-		onUpdate(review.id, {
+		onUpdate(review._id, {
 			helpfulCount: newHelpful,
 			unhelpfulCount: newUnhelpful,
 		});
@@ -87,7 +87,7 @@ export default function DetailReviewCard({ review, onDelete, onUpdate }) {
 
 	const handleSaveResponse = () => {
 		if (!responseBody.trim()) return;
-		onUpdate(review.id, {
+		onUpdate(review._id, {
 			ownerResponse: {
 				date: new Date().toLocaleDateString('en-US', {
 					month: 'short',
@@ -102,7 +102,7 @@ export default function DetailReviewCard({ review, onDelete, onUpdate }) {
 
 	const handleDeleteResponse = () => {
 		if (window.confirm('Delete your response?')) {
-			onUpdate(review.id, { ownerResponse: null });
+			onUpdate(review._id, { ownerResponse: null });
 		}
 	};
 
@@ -116,7 +116,7 @@ export default function DetailReviewCard({ review, onDelete, onUpdate }) {
 		if (!commentText.trim()) return;
 
 		const newComment = {
-			id: Date.now(),
+			_id: Date.now().toString(), // Using string to match MongoDB behavior
 			author: user.username,
 			date: new Date().toLocaleDateString('en-US', {
 				month: 'short',
@@ -127,27 +127,27 @@ export default function DetailReviewCard({ review, onDelete, onUpdate }) {
 		};
 
 		const updatedComments = [...(review.comments || []), newComment];
-		onUpdate(review.id, { comments: updatedComments });
+		onUpdate(review._id, { comments: updatedComments });
 		setCommentText('');
 	};
 
 	const handleDeleteComment = (commentId) => {
 		if (window.confirm('Delete this comment?')) {
-			const updatedComments = review.comments.filter((c) => c.id !== commentId);
-			onUpdate(review.id, { comments: updatedComments });
+			const updatedComments = review.comments.filter((c) => c._id !== commentId);
+			onUpdate(review._id, { comments: updatedComments });
 		}
 	};
 
 	const startEditComment = (comment) => {
-		setEditingCommentId(comment.id);
+		setEditingCommentId(comment._id);
 		setEditCommentText(comment.body);
 	};
 
 	const saveEditComment = (commentId) => {
 		const updatedComments = review.comments.map((c) =>
-			c.id === commentId ? { ...c, body: editCommentText, isEdited: true } : c,
+			c._id === commentId ? { ...c, body: editCommentText, isEdited: true } : c,
 		);
-		onUpdate(review.id, { comments: updatedComments });
+		onUpdate(review._id, { comments: updatedComments });
 		setEditingCommentId(null);
 		setEditCommentText('');
 	};
@@ -339,7 +339,7 @@ export default function DetailReviewCard({ review, onDelete, onUpdate }) {
 							Comments ({review.comments.length})
 						</h4>
 						{review.comments.map((comment) => (
-							<div key={comment.id} className="comment-item">
+							<div key={comment._id} className="comment-item">
 								<div className="comment-header">
 									<span className="comment-author">{comment.author}</span>
 									<span className="comment-date">
@@ -350,7 +350,7 @@ export default function DetailReviewCard({ review, onDelete, onUpdate }) {
 									</span>
 								</div>
 
-								{editingCommentId === comment.id ?
+								{editingCommentId === comment._id ?
 									<div className="edit-comment-box">
 										<textarea
 											className="comment-edit-input"
@@ -360,7 +360,7 @@ export default function DetailReviewCard({ review, onDelete, onUpdate }) {
 										<div className="comment-actions">
 											<button
 												className="comment-save-button"
-												onClick={() => saveEditComment(comment.id)}
+												onClick={() => saveEditComment(comment._id)}
 											>
 												Save
 											</button>
@@ -384,7 +384,7 @@ export default function DetailReviewCard({ review, onDelete, onUpdate }) {
 												</button>
 												<button
 													className="comment-action-button delete"
-													onClick={() => handleDeleteComment(comment.id)}
+													onClick={() => handleDeleteComment(comment._id)}
 												>
 													Delete
 												</button>

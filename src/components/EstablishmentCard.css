@@ -7,13 +7,10 @@
 	border-radius: 1rem;
 	cursor: pointer;
 	box-shadow: var(--shadow-s);
-	transition:
-		transform 0.2s ease,
-		box-shadow 0.2s ease;
+	transition: box-shadow 0.2s ease;
 }
 
-.establishment-item:hover {
-	transform: translateY(-4px);
+.card-link:hover .establishment-item {
 	box-shadow: var(--shadow-l);
 }
 

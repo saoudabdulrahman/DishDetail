@@ -9,7 +9,7 @@ header {
 	z-index: 1000;
 	flex-wrap: wrap;
 	background: color-mix(in oklch, var(--bg-dark), transparent 50%);
-	backdrop-filter: blur(0.5rem) saturate(150%);
+	backdrop-filter: blur(0.5rem);
 }
 
 .left-header-actions {
@@ -18,7 +18,7 @@ header {
 }
 
 .logo a {
-	font-family: 'Fraunces', sans-serif;
+	font-family: 'Fraunces', serif;
 	text-decoration: none;
 	color: light-dark(var(--text), var(--primary));
 	margin-right: 1rem;

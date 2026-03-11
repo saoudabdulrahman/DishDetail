@@ -21,7 +21,7 @@
 }
 
 .not-found-content h2 {
-	font-family: 'Fraunces', sans-serif;
+	font-family: 'Fraunces', serif;
 	font-size: 4rem;
 	margin: 0;
 	color: var(--text);
