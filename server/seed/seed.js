@@ -4,7 +4,7 @@ import { connectDb } from '../model/db.js';
 import Establishment from '../model/Establishment.js';
 import Review from '../model/Review.js';
 import User from '../model/User.js';
-import { restaurantsData, reviewsData } from '../src/data.js';
+import { restaurantsData, reviewsData } from '../../client/src/data.js';
 
 dotenv.config();
 

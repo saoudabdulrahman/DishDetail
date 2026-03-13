@@ -2,6 +2,13 @@
 
 Restaurant review web app (React + Node.js + MongoDB).
 
+## Project Structure
+
+This project is organized as a monorepo with separate directories for the frontend and backend:
+
+- `client/`: React frontend (Vite)
+- `server/`: Express backend (Node.js + Mongoose)
+
 ## Prerequisites
 
 - [Node.js](https://nodejs.org/) (v18 or later)
@@ -12,13 +19,15 @@ Restaurant review web app (React + Node.js + MongoDB).
 
 ### 1) Install dependencies
 
+Install dependencies for the root, client, and server:
+
 ```sh
-npm install
+npm run install:all
 ```
 
 ### 2) Configure Environment Variables
 
-Create a `.env` file in the root of the project and add your database configuration:
+Create a `.env` file in the **root** of the project and add your database configuration:
 
 ```env
 MONGODB_URI=mongodb://127.0.0.1:27017/dishdetail
@@ -39,45 +48,31 @@ npm run seed
 
 ## Running the Application
 
-There are two ways to run the application depending on your needs: **Development Mode** (recommended for coding) and **Production Mode**.
+### Development Mode (Recommended)
 
-### Option A: Development Mode (Hot-Reloading)
+This mode runs the Vite frontend development server and the Node.js backend server simultaneously from the root directory.
 
-This mode runs the Vite frontend development server and the Node.js backend server simultaneously. It supports hot-reloading for frontend changes.
+```sh
+npm run dev
+```
 
-1. **Start the backend server** (in one terminal terminal):
+- **Frontend**: `http://localhost:5173` (with hot-reloading)
+- **Backend API**: `http://localhost:3000`
+- API requests are automatically proxied from the frontend to the backend.
 
-   ```sh
-   npm start
-   ```
+### Running Separately
 
-   _The backend will run on `http://localhost:3000`._
+If you prefer to run them in separate terminals:
 
-2. **Start the Vite frontend dev server** (in a second terminal):
+**To run the Backend only:**
+```sh
+npm run dev:server
+```
 
-   ```sh
-   npm run dev
-   ```
-
-   _Vite will automatically open the app or provide a local URL (usually `http://localhost:5173`). API requests are automatically proxied to the backend._
-
-### Option B: Production Mode
-
-This mode builds the optimized React frontend and serves it directly through the Node.js Express backend.
-
-1. **Build the React app**:
-
-   ```sh
-   npm run build
-   ```
-
-2. **Start the Node server**:
-
-   ```sh
-   npm start
-   ```
-
-3. Open your browser and navigate to: **`http://localhost:3000`**
+**To run the Frontend only:**
+```sh
+npm run dev:client
+```
 
 ---
 
@@ -88,7 +83,7 @@ This mode builds the optimized React frontend and serves it directly through the
 - [Express](https://expressjs.com/)
 - [MongoDB](https://www.mongodb.com/)
 - [Mongoose](https://mongoosejs.com/)
-- [Google Fonts](https://fonts.google.com/)
+- [slugify](https://www.npmjs.com/package/slugify) (used for clean URL slugs)
 - [Lucide](https://lucide.dev/)
 - [Simple Icons](https://simpleicons.org/)
 - [Pravatar](https://pravatar.cc/)

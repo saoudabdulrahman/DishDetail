@@ -1,0 +1,17 @@
+{
+	"name": "dishdetail-server",
+	"private": true,
+	"version": "0.0.0",
+	"type": "module",
+	"scripts": {
+		"seed": "node seed/seed.js",
+		"start": "node server.js"
+	},
+	"dependencies": {
+		"cors": "^2.8.5",
+		"dotenv": "^16.4.5",
+		"express": "^4.19.2",
+		"mongoose": "^8.10.0",
+		"slugify": "^1.6.6"
+	}
+}
