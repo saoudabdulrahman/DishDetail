@@ -5,26 +5,31 @@ import Review from '../model/Review.js';
 const router = Router();
 
 router.get('/', async (req, res) => {
-	const q = (req.query.q || '').toString().trim();
-	const minRating = Number(req.query.minRating || 0);
+	try {
+		const q = (req.query.q || '').toString().trim();
+		const minRating = Number(req.query.minRating || 0);
 
-	const filter = {};
-	if (q) {
-		filter.$or = [
-			{ restaurantName: { $regex: q, $options: 'i' } },
-			{ cuisine: { $regex: q, $options: 'i' } },
-			{ description: { $regex: q, $options: 'i' } },
-		];
+		const filter = {};
+		if (q) {
+			filter.$or = [
+				{ restaurantName: { $regex: q, $options: 'i' } },
+				{ cuisine: { $regex: q, $options: 'i' } },
+				{ description: { $regex: q, $options: 'i' } },
+			];
+		}
+		if (!Number.isNaN(minRating) && minRating > 0) {
+			filter.rating = { $gte: minRating };
+		}
+
+		const establishments = await Establishment.find(filter)
+			.sort({ rating: -1, restaurantName: 1 })
+			.lean();
+
+		return res.json({ establishments });
+	} catch (e) {
+		console.error(e);
+		return res.status(500).json({ error: 'Failed to fetch establishments.' });
 	}
-	if (!Number.isNaN(minRating) && minRating > 0) {
-		filter.rating = { $gte: minRating };
-	}
-
-	const establishments = await Establishment.find(filter)
-		.sort({ rating: -1, restaurantName: 1 })
-		.lean();
-
-	return res.json({ establishments });
 });
 
 router.get('/:slug', async (req, res) => {
@@ -69,6 +74,13 @@ router.post('/:slug/reviews', async (req, res) => {
 			body,
 			reviewImage: reviewImage || null,
 		});
+
+		const reviews = await Review.find({ establishment: est._id });
+		const avgRating = reviews.length > 0
+			? reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length
+			: 0;
+		est.rating = avgRating;
+		await est.save();
 
 		return res.status(201).json({ review });
 	} catch {

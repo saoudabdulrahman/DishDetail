@@ -32,6 +32,14 @@ export const reviewsData = [
 		body: 'Amazing ramen with rich, flavorful broth. The gyoza is also a must-order. Gets packed during weekends so come early or be ready to wait. Worth every peso.',
 		reviewImage:
 			'https://images.unsplash.com/photo-1569718212165-3a8278d5f624?q=80&w=880&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+		comments: [
+			{
+				id: 102,
+				author: 'Marco R.',
+				date: 'Jan 21, 2026',
+				body: 'I tried it last week and you are right about the gyoza!',
+			}
+		]
 	},
 	{
 		id: 3,
@@ -43,6 +51,20 @@ export const reviewsData = [
 		body: 'Samgyupsal heaven! Unlimited meat with all the side dishes you could want. The staff was super friendly and attentive. Best KBBQ value in BGC for sure.',
 		reviewImage:
 			'https://images.unsplash.com/photo-1708388064672-6536507fdf6e?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+		comments: [
+			{
+				id: 103,
+				author: 'Diana L.',
+				date: 'Jan 23, 2026',
+				body: 'Did you try their cheese dip?',
+			},
+			{
+				id: 104,
+				author: 'Jolo P.',
+				date: 'Jan 23, 2026',
+				body: 'Yes! It was amazing.',
+			}
+		]
 	},
 	{
 		id: 4,
@@ -54,6 +76,14 @@ export const reviewsData = [
 		body: 'The kare-kare is outstanding — rich, nutty sauce with perfectly tender oxtail. Bagoong on the side is a must. A true taste of classic Filipino cooking.',
 		reviewImage:
 			'https://images.unsplash.com/photo-1688084403060-3594a4b8ff8d?q=80&w=1632&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+		comments: [
+			{
+				id: 105,
+				author: 'Elaine V.',
+				date: 'Jan 26, 2026',
+				body: 'I need to visit this place ASAP.',
+			}
+		]
 	},
 	{
 		id: 5,

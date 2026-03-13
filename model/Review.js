@@ -29,7 +29,7 @@ const ReviewSchema = new mongoose.Schema(
 		rating: { type: Number, required: true, min: 1, max: 5 },
 		reviewer: { type: String, required: true },
 		reviewerAvatar: { type: String, default: '' },
-		date: { type: String, required: true },
+		date: { type: Date, default: Date.now },
 		body: { type: String, required: true },
 		reviewImage: { type: String, default: null },
 		helpfulCount: { type: Number, default: 0 },

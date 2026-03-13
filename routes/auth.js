@@ -23,10 +23,11 @@ router.post('/signup', async (req, res) => {
 		}
 
 		const existing = await User.findOne({
-			username: username.trim(),
+			$or: [{ username: username.trim() }, { email: email.trim() }]
 		}).lean();
 		if (existing) {
-			return res.status(409).json({ error: 'That username is already taken.' });
+			const field = existing.username === username.trim() ? 'username' : 'email';
+			return res.status(409).json({ error: `That ${field} is already taken.` });
 		}
 
 		const u = await User.create({

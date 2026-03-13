@@ -12,26 +12,18 @@ router.get('/', async (req, res) => {
 		filter.establishment = req.query.establishmentId;
 	}
 
-	let reviews = await Review.find(filter).lean();
-
-	// Simple text search across review body & reviewer & establishment name
 	if (q) {
 		const estMatches = await Establishment.find({
 			restaurantName: { $regex: q, $options: 'i' },
-		})
-			.select('_id')
-			.lean();
-		const estIds = new Set(estMatches.map((e) => e._id.toString()));
-
-		reviews = reviews.filter((r) => {
-			const bodyMatch = (r.body || '').toLowerCase().includes(q.toLowerCase());
-			const reviewerMatch = (r.reviewer || '')
-				.toLowerCase()
-				.includes(q.toLowerCase());
-			const estMatch = estIds.has(r.establishment.toString());
-			return bodyMatch || reviewerMatch || estMatch;
-		});
+		}).select('_id');
+		filter.$or = [
+			{ body: { $regex: q, $options: 'i' } },
+			{ reviewer: { $regex: q, $options: 'i' } },
+			{ establishment: { $in: estMatches.map((e) => e._id) } },
+		];
 	}
+
+	const reviews = await Review.find(filter).lean();
 
 	return res.json({ reviews });
 });
@@ -57,6 +49,20 @@ router.put('/:id', async (req, res) => {
 			new: true,
 		});
 		if (!review) return res.status(404).json({ error: 'Review not found.' });
+
+		if (updates.rating !== undefined) {
+			const est = await Establishment.findById(review.establishment);
+			if (est) {
+				const reviews = await Review.find({ establishment: est._id });
+				const avgRating =
+					reviews.length > 0 ?
+						reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length
+					:	0;
+				est.rating = avgRating;
+				await est.save();
+			}
+		}
+
 		return res.json({ review });
 	} catch {
 		return res.status(400).json({ error: 'Failed to update review.' });
@@ -67,6 +73,18 @@ router.delete('/:id', async (req, res) => {
 	try {
 		const r = await Review.findByIdAndDelete(req.params.id);
 		if (!r) return res.status(404).json({ error: 'Review not found.' });
+
+		const est = await Establishment.findById(r.establishment);
+		if (est) {
+			const reviews = await Review.find({ establishment: est._id });
+			const avgRating =
+				reviews.length > 0 ?
+					reviews.reduce((sum, rev) => sum + rev.rating, 0) / reviews.length
+				:	0;
+			est.rating = avgRating;
+			await est.save();
+		}
+
 		return res.json({ ok: true });
 	} catch {
 		return res.status(400).json({ error: 'Failed to delete review.' });
