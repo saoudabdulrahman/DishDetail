@@ -1,9 +1,8 @@
 import express from 'express';
 import cors from 'cors';
-import path from 'path';
+import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 import dotenv from 'dotenv';
-
 import { connectDb } from './model/db.js';
 import authRoutes from './routes/auth.js';
 import userRoutes from './routes/users.js';
@@ -35,14 +34,14 @@ app.use('/api/reviews', reviewRoutes);
 
 // Serve the built React app (Vite build output)
 const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const distDir = path.join(__dirname, 'dist');
+const __dirname = dirname(__filename);
+const distDir = join(__dirname, 'dist');
 
 app.use(express.static(distDir));
 
 // SPA fallback (let React Router handle client-side routes)
 app.get('*', (req, res) => {
-	res.sendFile(path.join(distDir, 'index.html'));
+	res.sendFile(join(distDir, 'index.html'));
 });
 
 app.listen(PORT, () => {

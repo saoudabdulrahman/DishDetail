@@ -1,4 +1,5 @@
 import dotenv from 'dotenv';
+import slugify from 'slugify';
 import { connectDb } from '../model/db.js';
 import Establishment from '../model/Establishment.js';
 import Review from '../model/Review.js';
@@ -26,6 +27,7 @@ async function main() {
 		restaurantsData.map((r) => ({
 			legacyId: r.id,
 			restaurantName: r.restaurantName,
+			slug: slugify(r.restaurantName, { lower: true, strict: true }),
 			cuisine: r.cuisine,
 			rating: r.rating,
 			restaurantImage: r.restaurantImage,
@@ -97,7 +99,7 @@ async function main() {
 		})),
 	);
 
-	console.log('✅ Seed complete.');
+	console.log('Seed complete.');
 	process.exit(0);
 }
 

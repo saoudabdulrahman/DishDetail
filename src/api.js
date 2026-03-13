@@ -20,9 +20,9 @@ export function api() {
 					...(minRating ? { minRating: String(minRating) } : {}),
 				})}`,
 			),
-		getEstablishment: (id) => fetchJson(`/api/establishments/${id}`),
-		createReview: (establishmentId, payload) =>
-			fetchJson(`/api/establishments/${establishmentId}/reviews`, {
+		getEstablishment: (slug) => fetchJson(`/api/establishments/${slug}`),
+		createReview: (slug, payload) =>
+			fetchJson(`/api/establishments/${slug}/reviews`, {
 				method: 'POST',
 				body: JSON.stringify(payload),
 			}),

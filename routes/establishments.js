@@ -27,22 +27,23 @@ router.get('/', async (req, res) => {
 	return res.json({ establishments });
 });
 
-router.get('/:id', async (req, res) => {
+router.get('/:slug', async (req, res) => {
 	try {
-		const est = await Establishment.findById(req.params.id).lean();
+		const est = await Establishment.findOne({ slug: req.params.slug }).lean();
 		if (!est) return res.status(404).json({ error: 'Not found.' });
 
 		const reviews = await Review.find({ establishment: est._id }).lean();
 		return res.json({ establishment: est, reviews });
-	} catch {
-		return res.status(400).json({ error: 'Invalid establishment id.' });
+	} catch (e) {
+		console.error(e);
+		return res.status(400).json({ error: 'Could not fetch establishment.' });
 	}
 });
 
 // Create a review under an establishment
-router.post('/:id/reviews', async (req, res) => {
+router.post('/:slug/reviews', async (req, res) => {
 	try {
-		const est = await Establishment.findById(req.params.id);
+		const est = await Establishment.findOne({ slug: req.params.slug });
 		if (!est) return res.status(404).json({ error: 'Not found.' });
 
 		const { rating, reviewer, reviewerAvatar, body, reviewImage } =

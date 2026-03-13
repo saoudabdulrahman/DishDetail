@@ -4,7 +4,7 @@ import './EstablishmentCard.css';
 
 export default function EstablishmentCard({ restaurant }) {
 	return (
-		<Link to={`/establishments/${restaurant._id}`} className="card-link">
+		<Link to={`/establishments/${restaurant.slug}`} className="card-link">
 			<article className="establishment-item">
 				<div className="restaurant-image-container">
 					<img

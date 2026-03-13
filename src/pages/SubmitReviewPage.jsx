@@ -74,14 +74,14 @@ function SubmitReviewPage() {
 		}
 
 		try {
-			await api().createReview(selectedRestaurant._id, {
+			const { review } = await api().createReview(selectedRestaurant.slug, {
 				rating,
 				reviewer: user?.username || 'Anonymous',
 				reviewerAvatar: user?.avatar,
 				body: reviewText,
 				reviewImage: null,
 			});
-			navigate(`/establishments/${selectedRestaurant._id}`);
+			navigate(`/establishments/${selectedRestaurant.slug}#${review._id}`);
 		} catch (err) {
 			setError(err.message || 'Failed to submit review.');
 		}

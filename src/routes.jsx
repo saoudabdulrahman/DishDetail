@@ -20,7 +20,7 @@ export const routes = createBrowserRouter([
 					{ index: true, element: <HomePage /> },
 					{ path: '/reviews', element: <ReviewsPage /> },
 					{ path: '/establishments', element: <EstablishmentsPage /> },
-					{ path: '/establishments/:id', element: <EstablishmentPage /> },
+					{ path: '/establishments/:slug', element: <EstablishmentPage /> },
 					{
 						element: <ProtectedRoute />,
 						children: [

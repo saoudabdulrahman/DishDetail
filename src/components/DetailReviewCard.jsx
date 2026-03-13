@@ -202,7 +202,7 @@ export default function DetailReviewCard({ review, onDelete, onUpdate }) {
 	}
 
 	return (
-		<article className="detail-review-card">
+		<article className="detail-review-card" id={review._id}>
 			<div className="detail-review-header">
 				<div className="reviewer-info">
 					<img

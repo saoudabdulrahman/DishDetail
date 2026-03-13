@@ -4,7 +4,7 @@ import './ReviewCard.css';
 
 export default function ReviewCard({ review, restaurant }) {
 	return (
-		<Link to={`/establishments/${restaurant._id}`} className="card-link">
+		<Link to={`/establishments/${restaurant.slug}#${review._id}`} className="card-link">
 			<article className="review-item">
 				{review.reviewImage && (
 					<div className="restaurant-image-container">

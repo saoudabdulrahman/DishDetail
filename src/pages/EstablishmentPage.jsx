@@ -6,9 +6,8 @@ import DetailReviewCard from '../components/DetailReviewCard';
 import './EstablishmentPage.css';
 
 export default function EstablishmentPage() {
-	const { id } = useParams();
+	const { slug } = useParams();
 	const navigate = useNavigate();
-	const restaurantId = id;
 	const [restaurant, setRestaurant] = useState(null);
 	const [reviews, setReviews] = useState([]);
 	const [visibleCount, setVisibleCount] = useState(2);
@@ -22,8 +21,7 @@ export default function EstablishmentPage() {
 			setLoading(true);
 			setError('');
 			try {
-				const { establishment, reviews } =
-					await api().getEstablishment(restaurantId);
+				const { establishment, reviews } = await api().getEstablishment(slug);
 				if (!cancelled) {
 					setRestaurant(establishment);
 					setReviews(reviews);
@@ -40,7 +38,7 @@ export default function EstablishmentPage() {
 		return () => {
 			cancelled = true;
 		};
-	}, [restaurantId]);
+	}, [slug]);
 
 	const handleUpdateReview = async (reviewId, updates) => {
 		try {
