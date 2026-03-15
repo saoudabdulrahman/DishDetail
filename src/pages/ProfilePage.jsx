@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useAuth } from '../auth/useAuth';
-import { reviewsData, restaurantsData } from '../data';
+import { api } from '../api';
 import ReviewCard from '../components/ReviewCard';
 import './ProfilePage.css';
 
@@ -10,11 +10,29 @@ export default function ProfilePage() {
 	const [isEditing, setIsEditing] = useState(false);
 	const [avatarUrl, setAvatarUrl] = useState(user?.avatar || '');
 	const [bio, setBio] = useState(user?.bio || '');
+	const [restaurants, setRestaurants] = useState([]);
+	const [reviews, setReviews] = useState([]);
 
-	const userReviews = reviewsData.filter((r) => r.reviewer === user.username);
+	useEffect(() => {
+		let cancelled = false;
+		Promise.all([api().getEstablishments(), api().getReviews()])
+			.then(([estRes, revRes]) => {
+				if (cancelled) return;
+				setRestaurants(estRes.establishments);
+				setReviews(revRes.reviews);
+			})
+			.catch(() => {});
+		return () => {
+			cancelled = true;
+		};
+	}, []);
 
-	const handleSave = () => {
-		updateProfile({ avatar: avatarUrl, bio });
+	const userReviews = useMemo(() => {
+		return reviews.filter((r) => r.reviewer === user.username);
+	}, [reviews, user.username]);
+
+	const handleSave = async () => {
+		await updateProfile({ avatar: avatarUrl, bio });
 		setIsEditing(false);
 	};
 
@@ -84,12 +102,12 @@ export default function ProfilePage() {
 				{userReviews.length > 0 ?
 					<div className="reviews-grid">
 						{userReviews.map((review) => {
-							const restaurant = restaurantsData.find(
-								(r) => r.id === review.restaurantId,
+							const restaurant = restaurants.find(
+								(r) => r._id === review.establishment,
 							);
 							return (
 								<ReviewCard
-									key={review.id}
+									key={review._id}
 									review={review}
 									restaurant={restaurant}
 								/>

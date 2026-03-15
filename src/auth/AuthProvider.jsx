@@ -20,19 +20,16 @@ export default function AuthProvider({ children }) {
 				clearAuth();
 				setUser(null);
 			},
-			updateProfile: (updates) => {
-				if (!user) return;
-				const updatedUser = { ...user, ...updates };
-
+			updateProfile: async (updates) => {
+				if (!user?.id) return;
 				try {
-					updateStorageUser(user.username, updates);
+					const updated = await updateStorageUser(user.id, updates);
+					const isRemembered = !!localStorage.getItem('dishdetail_auth');
+					saveAuth(updated, isRemembered);
+					setUser(updated);
 				} catch (e) {
-					console.error('Failed to update user storage', e);
+					console.error('Failed to update user profile', e);
 				}
-
-				const isRemembered = !!localStorage.getItem('dishdetail_auth');
-				saveAuth(updatedUser, isRemembered);
-				setUser(updatedUser);
 			},
 		};
 	}, [user, authModal]);

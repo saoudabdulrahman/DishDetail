@@ -1,36 +1,60 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router';
 import { Star, MapPin, Clock, Phone, Globe, ArrowLeft } from 'lucide-react';
-import { restaurantsData, reviewsData } from '../data.js';
+import { api } from '../api';
 import DetailReviewCard from '../components/DetailReviewCard';
 import './EstablishmentPage.css';
 
 export default function EstablishmentPage() {
-	const { id } = useParams();
+	const { slug } = useParams();
 	const navigate = useNavigate();
-	const restaurantId = Number(id);
-
-	const restaurant = restaurantsData.find((r) => r.id === restaurantId);
-	const [reviews, setReviews] = useState(() =>
-		reviewsData.filter((r) => r.restaurantId === restaurantId),
-	);
+	const [restaurant, setRestaurant] = useState(null);
+	const [reviews, setReviews] = useState([]);
 	const [visibleCount, setVisibleCount] = useState(2);
+	const [loading, setLoading] = useState(true);
+	const [error, setError] = useState('');
 
-	const handleUpdateReview = (reviewId, updates) => {
-		const idx = reviewsData.findIndex((r) => r.id === reviewId);
-		if (idx !== -1) {
-			reviewsData[idx] = { ...reviewsData[idx], ...updates };
-			setReviews((prev) =>
-				prev.map((r) => (r.id === reviewId ? { ...r, ...updates } : r)),
-			);
+	useEffect(() => {
+		let cancelled = false;
+
+		const fetchEstablishment = async () => {
+			setLoading(true);
+			setError('');
+			try {
+				const { establishment, reviews } = await api().getEstablishment(slug);
+				if (!cancelled) {
+					setRestaurant(establishment);
+					setReviews(reviews);
+				}
+			} catch (e) {
+				if (!cancelled) setError(e.message || 'Failed to load.');
+			} finally {
+				if (!cancelled) setLoading(false);
+			}
+		};
+
+		fetchEstablishment();
+
+		return () => {
+			cancelled = true;
+		};
+	}, [slug]);
+
+	const handleUpdateReview = async (reviewId, updates) => {
+		try {
+			const { review } = await api().updateReview(reviewId, updates);
+			setReviews((prev) => prev.map((r) => (r._id === reviewId ? review : r)));
+		} catch (e) {
+			alert(e.message || 'Failed to update review.');
 		}
 	};
 
-	const handleDeleteReview = (reviewId) => {
-		const idx = reviewsData.findIndex((r) => r.id === reviewId);
-		if (idx !== -1) {
-			reviewsData.splice(idx, 1);
-			setReviews((prev) => prev.filter((r) => r.id !== reviewId));
+	const handleDeleteReview = async (reviewId) => {
+		try {
+			await api().deleteReview(reviewId);
+			setReviews((prev) => prev.filter((r) => r._id !== reviewId));
+		} catch (e) {
+			alert(e.message || 'Failed to delete review.');
 		}
 	};
 
@@ -46,10 +70,18 @@ export default function EstablishmentPage() {
 			)
 		:	(restaurant?.rating ?? 0);
 
-	if (!restaurant) {
+	if (loading) {
 		return (
 			<main className="error-container">
-				<p>Restaurant not found</p>
+				<p>Loading…</p>
+			</main>
+		);
+	}
+
+	if (error || !restaurant) {
+		return (
+			<main className="error-container">
+				<p>{error || 'Restaurant not found'}</p>
 				<button
 					onClick={() => navigate('/establishments')}
 					className="back-button"
@@ -134,7 +166,7 @@ export default function EstablishmentPage() {
 					<div className="detail-reviews-list">
 						{displayedReviews.map((review) => (
 							<DetailReviewCard
-								key={review.id}
+								key={review._id}
 								review={review}
 								onUpdate={handleUpdateReview}
 								onDelete={handleDeleteReview}

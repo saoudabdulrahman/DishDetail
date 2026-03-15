@@ -14,7 +14,7 @@
 	margin-bottom: 1rem;
 	padding: 1rem 2rem;
 	background-color: var(--bg);
-	border-radius: 2rem;
+	border-radius: 1rem;
 	box-shadow: var(--shadow-s);
 	transition: box-shadow 0.2s ease;
 }

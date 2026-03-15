@@ -31,6 +31,8 @@
 * {
 	box-sizing: border-box;
 	margin: 0;
+	scrollbar-width: thin;
+	scrollbar-color: dimgray transparent;
 }
 
 body {
@@ -76,7 +78,16 @@ h3,
 h4,
 h5,
 h6 {
+	font-family: 'Fraunces', serif;
 	text-wrap: balance;
+}
+
+.font-display {
+	font-family: 'Fraunces', serif;
+}
+
+.font-sans {
+	font-family: 'Google Sans', sans-serif;
 }
 
 .card-grid {
@@ -85,12 +96,20 @@ h6 {
 	grid-template-columns: repeat(auto-fill, 20rem);
 	gap: 1rem;
 	justify-content: center;
+	align-items: start;
 }
 
 .card-link {
 	text-decoration: none;
 	color: inherit;
-	display: block;
+	display: flex;
+	flex-direction: column;
+	transition: transform 0.2s ease;
+	border-radius: 1rem;
+}
+
+.card-link:hover {
+	transform: translateY(-4px);
 }
 
 @media (max-width: 768px) {
@@ -110,20 +129,63 @@ h6 {
 	}
 }
 
-@media (prefers-contrast: more) {
-	:root {
-		--bg-dark: light-dark(white, black);
-		--bg: light-dark(oklch(0.98 0 0), oklch(0.1 0 0));
-		--bg-light: light-dark(oklch(0.95 0 0), oklch(0.2 0 0));
+/* Component Utility Classes */
+.card-base {
+	background-color: var(--bg);
+	border-radius: 1rem;
+	box-shadow: var(--shadow-s);
+	transition: box-shadow 0.2s ease;
+}
 
-		--text: light-dark(black, white);
-		--text-muted: light-dark(oklch(0.2 0 0), oklch(0.9 0 0));
-		--text-on-primary: black;
+.card-base:hover {
+	box-shadow: var(--shadow-l);
+}
 
-		--primary: light-dark(oklch(0.6 0.2 85), oklch(0.85 0.2 85));
-		--secondary: light-dark(oklch(0.6 0.2 280), oklch(0.85 0.1 280));
+.interactive-pill {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.5rem;
+	padding: 0.5rem 1rem;
+	border-radius: 2rem;
+	border: none;
+	cursor: pointer;
+	font-weight: 600;
+	box-shadow: var(--shadow-s);
+	transition:
+		transform 0.2s ease,
+		box-shadow 0.2s ease,
+		filter 0.2s ease;
+}
 
-		/* Enhance border visibility for inputs/cards in high contrast mode */
-		--shadow-s: 0 0 0 1px solid currentColor;
-	}
+.interactive-pill:hover {
+	transform: translateY(-2px);
+	box-shadow: var(--shadow-l);
+	filter: brightness(1.1);
+}
+
+.interactive-pill:active {
+	transform: translateY(0);
+}
+
+.input-base {
+	background-color: var(--bg-light);
+	border: none;
+	border-radius: 1rem;
+	padding: 0.75rem 1rem;
+	font-family: inherit;
+	box-shadow: var(--shadow-s);
+	transition:
+		filter 0.2s ease,
+		box-shadow 0.2s ease;
+}
+
+.input-base:hover {
+	filter: brightness(1.1);
+}
+
+.input-base:focus {
+	outline: none;
+	box-shadow:
+		var(--shadow-s),
+		0 0 0 2px var(--primary);
 }

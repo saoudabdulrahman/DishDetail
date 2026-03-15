@@ -1,19 +1,50 @@
+import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router';
 import { ChefHat, Search, Star, UtensilsCrossed } from 'lucide-react';
 import ReviewCard from '../components/ReviewCard';
-import { reviewsData, restaurantsData } from '../data';
+import { api } from '../api';
 import './HomePage.css';
 
 export default function HomePage() {
-	const restaurantById = new Map(restaurantsData.map((r) => [r.id, r]));
-	const featured = [...reviewsData]
-		.sort((a, b) => b.rating - a.rating)
-		.slice(0, 4)
-		.map((review) => ({
-			review,
-			restaurant: restaurantById.get(review.restaurantId),
-		}))
-		.filter(({ restaurant }) => restaurant);
+	const [restaurants, setRestaurants] = useState([]);
+	const [reviews, setReviews] = useState([]);
+
+	useEffect(() => {
+		let cancelled = false;
+		Promise.all([api().getEstablishments(), api().getReviews()])
+			.then(([estRes, revRes]) => {
+				if (cancelled) return;
+				setRestaurants(estRes.establishments);
+				setReviews(revRes.reviews);
+			})
+			.catch(() => {});
+		return () => {
+			cancelled = true;
+		};
+	}, []);
+
+	const restaurantById = useMemo(
+		() => new Map(restaurants.map((r) => [r._id, r])),
+		[restaurants],
+	);
+
+	const featured = useMemo(() => {
+		return [...reviews]
+			.sort((a, b) => b.rating - a.rating)
+			.slice(0, 4)
+			.map((review) => ({
+				review,
+				restaurant: restaurantById.get(review.establishment),
+			}))
+			.filter(({ restaurant }) => restaurant);
+	}, [reviews, restaurantById]);
+
+	const avgRating =
+		reviews.length > 0 ?
+			(reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length).toFixed(
+				1,
+			)
+		:	'0.0';
 
 	return (
 		<main>
@@ -37,24 +68,17 @@ export default function HomePage() {
 
 			<div className="stats-row">
 				<div className="stat">
-					<span className="stat-number">{reviewsData.length}</span>
+					<span className="stat-number">{reviews.length}</span>
 					<span className="stat-label">Reviews</span>
 				</div>
 				<div className="stat">
 					<span className="stat-number">
-						{new Set(reviewsData.map((r) => r.restaurantId)).size}
+						{new Set(reviews.map((r) => r.establishment)).size}
 					</span>
 					<span className="stat-label">Restaurants</span>
 				</div>
 				<div className="stat">
-					<span className="stat-number">
-						{reviewsData.length > 0 ?
-							(
-								reviewsData.reduce((sum, r) => sum + r.rating, 0) /
-								reviewsData.length
-							).toFixed(1)
-						:	'0.0'}
-					</span>
+					<span className="stat-number">{avgRating}</span>
 					<span className="stat-label">Avg Rating</span>
 				</div>
 			</div>
@@ -72,7 +96,11 @@ export default function HomePage() {
 
 			<section className="card-grid top-rated-grid">
 				{featured.map(({ review, restaurant }) => (
-					<ReviewCard key={review.id} review={review} restaurant={restaurant} />
+					<ReviewCard
+						key={review._id}
+						review={review}
+						restaurant={restaurant}
+					/>
 				))}
 			</section>
 
