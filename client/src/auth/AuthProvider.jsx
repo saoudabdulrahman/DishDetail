@@ -10,35 +10,35 @@ import { AuthContext } from './context';
  * a unified interface for login, logout, and profile updates.
  */
 export default function AuthProvider({ children }) {
-	const [user, setUser] = useState(() => loadAuth());
-	const [authModal, setAuthModal] = useState(null); // 'login' | 'signup' | null
+  const [user, setUser] = useState(() => loadAuth());
+  const [authModal, setAuthModal] = useState(null); // 'login' | 'signup' | null
 
-	const value = useMemo(() => {
-		return {
-			user,
-			authModal,
-			setAuthModal,
-			login: (userData, rememberMe) => {
-				saveAuth(userData, rememberMe);
-				setUser(userData);
-			},
-			logout: () => {
-				clearAuth();
-				setUser(null);
-			},
-			updateProfile: async (updates) => {
-				if (!user?.id) return;
-				try {
-					const updated = await updateStorageUser(user.id, updates);
-					const isRemembered = !!localStorage.getItem('dishdetail_auth');
-					saveAuth(updated, isRemembered);
-					setUser(updated);
-				} catch (e) {
-					console.error('Failed to update user profile', e);
-				}
-			},
-		};
-	}, [user, authModal]);
+  const value = useMemo(() => {
+    return {
+      user,
+      authModal,
+      setAuthModal,
+      login: (userData, rememberMe) => {
+        saveAuth(userData, rememberMe);
+        setUser(userData);
+      },
+      logout: () => {
+        clearAuth();
+        setUser(null);
+      },
+      updateProfile: async (updates) => {
+        if (!user?.id) return;
+        try {
+          const updated = await updateStorageUser(user.id, updates);
+          const isRemembered = !!localStorage.getItem('dishdetail_auth');
+          saveAuth(updated, isRemembered);
+          setUser(updated);
+        } catch (e) {
+          console.error('Failed to update user profile', e);
+        }
+      },
+    };
+  }, [user, authModal]);
 
-	return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

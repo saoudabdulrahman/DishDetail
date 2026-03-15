@@ -22,7 +22,7 @@ This project is organized as a monorepo with separate directories for the fronte
 Install dependencies for the root, client, and server:
 
 ```sh
-npm run install:all
+npm run install
 ```
 
 ### 2) Configure Environment Variables

@@ -34,6 +34,7 @@ export default [
         { allowConstantExport: true },
       ],
       'no-unused-vars': ['error', { varsIgnorePattern: '^[A-Z_]' }],
+      'react/prop-types': 'off',
     },
     settings: {
       react: { version: 'detect' },

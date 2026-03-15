@@ -3,34 +3,39 @@ import StarRating from './StarRating';
 import './ReviewCard.css';
 
 export default function ReviewCard({ review, restaurant }) {
-	return (
-		<Link to={`/establishments/${restaurant.slug}#${review._id}`} className="card-link">
-			<article className="review-item">
-				{review.reviewImage && (
-					<div className="restaurant-image-container">
-						<img
-							src={review.reviewImage}
-							alt={`Food or ambiance from ${restaurant.restaurantName}`}
-							className="restaurant-img"
-						/>
-					</div>
-				)}
-				<div className={`review-item-content ${!review.reviewImage ? 'no-image' : ''}`}>
-					<div className="review-item-header">
-						<h3>{restaurant.restaurantName}</h3>
-						<StarRating rating={review.rating} />
-					</div>
-					<p className="review-meta">
-						Reviewed by {review.reviewer} · {review.date}
-					</p>
-					<p className="review-body">
-						{review.body.length > 150 ?
-							review.body.substring(0, 150).split(' ').slice(0, -1).join(' ') +
-							'...'
-						:	review.body}
-					</p>
-				</div>
-			</article>
-		</Link>
-	);
+  return (
+    <Link
+      to={`/establishments/${restaurant.slug}#${review._id}`}
+      className="card-link"
+    >
+      <article className="review-item">
+        {review.reviewImage && (
+          <div className="restaurant-image-container">
+            <img
+              src={review.reviewImage}
+              alt={`Food or ambiance from ${restaurant.restaurantName}`}
+              className="restaurant-img"
+            />
+          </div>
+        )}
+        <div
+          className={`review-item-content ${!review.reviewImage ? 'no-image' : ''}`}
+        >
+          <div className="review-item-header">
+            <h3>{restaurant.restaurantName}</h3>
+            <StarRating rating={review.rating} />
+          </div>
+          <p className="review-meta">
+            Reviewed by {review.reviewer} · {review.date}
+          </p>
+          <p className="review-body">
+            {review.body.length > 150 ?
+              review.body.substring(0, 150).split(' ').slice(0, -1).join(' ') +
+              '...'
+            : review.body}
+          </p>
+        </div>
+      </article>
+    </Link>
+  );
 }

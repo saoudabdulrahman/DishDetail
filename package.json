@@ -1,22 +1,36 @@
 {
-	"name": "dishdetail",
-	"private": true,
-	"version": "1.0.0",
-	"workspaces": [
-		"client",
-		"server"
-	],
-	"scripts": {
-		"dev": "npm-run-all --parallel dev:client dev:server",
-		"dev:client": "npm run dev --workspace=client",
-		"dev:server": "npm run start --workspace=server",
-		"seed": "npm run seed --workspace=server",
-		"install:all": "npm install && npm install --workspace=client && npm install --workspace=server",
-		"format": "prettier --write .",
-    "lint": "npm run lint --prefix client && npm run lint --prefix server"
-	},
-	"devDependencies": {
-		"npm-run-all": "^4.1.5",
-		"prettier": "3.8.1"
-	}
+  "name": "dishdetail",
+  "private": true,
+  "version": "1.0.0",
+  "workspaces": [
+    "client",
+    "server"
+  ],
+  "scripts": {
+    "dev": "npm-run-all --parallel dev:client dev:server",
+    "dev:client": "npm run dev --workspace=client",
+    "dev:server": "npm run start --workspace=server",
+    "seed": "npm run seed --workspace=server",
+    "format": "prettier --write .",
+    "lint": "npm run lint --workspaces --if-present",
+    "prepare": "husky"
+  },
+  "devDependencies": {
+    "husky": "^9.1.7",
+    "npm-run-all": "^4.1.5",
+    "prettier": "3.8.1"
+  },
+  "lint-staged": {
+    "client/**/*.{js,jsx}": [
+      "eslint --config client/eslint.config.js --fix",
+      "prettier --write"
+    ],
+    "server/**/*.{js,cjs,mjs}": [
+      "eslint --config server/eslint.config.js --fix",
+      "prettier --write"
+    ],
+    "**/*.{json,md,css,html}": [
+      "prettier --write"
+    ]
+  }
 }
