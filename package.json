@@ -11,9 +11,12 @@
 		"dev:client": "npm run dev --workspace=client",
 		"dev:server": "npm run start --workspace=server",
 		"seed": "npm run seed --workspace=server",
-		"install:all": "npm install && npm install --workspace=client && npm install --workspace=server"
+		"install:all": "npm install && npm install --workspace=client && npm install --workspace=server",
+		"format": "prettier --write .",
+    "lint": "npm run lint --prefix client && npm run lint --prefix server"
 	},
 	"devDependencies": {
-		"npm-run-all": "^4.1.5"
+		"npm-run-all": "^4.1.5",
+		"prettier": "3.8.1"
 	}
 }

@@ -1,0 +1,28 @@
+# Dependency directories
+node_modules/
+dist/
+build/
+out/
+
+# Environment files (don't format secrets!)
+.env
+.env.*
+
+# Version control
+.git
+.gitignore
+
+# Build logs and coverage reports
+debug.log*
+npm-debug.log*
+coverage/
+
+# Database files (if you have local MongoDB data)
+data/
+db/
+
+# Static assets (images/fonts don't need formatting)
+public/
+vendor/
+*.min.js
+*.min.css

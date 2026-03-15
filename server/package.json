@@ -5,7 +5,9 @@
 	"type": "module",
 	"scripts": {
 		"seed": "node seed/seed.js",
-		"start": "node server.js"
+		"start": "node server.js",
+		"lint": "eslint .",
+		"lint:fix": "eslint . --fix"
 	},
 	"dependencies": {
 		"cors": "^2.8.5",
@@ -13,5 +15,11 @@
 		"express": "^4.19.2",
 		"mongoose": "^8.10.0",
 		"slugify": "^1.6.6"
+	},
+	"devDependencies": {
+		"@eslint/js": "^9.39.2",
+		"eslint": "^9.39.2",
+		"eslint-config-prettier": "^10.1.8",
+		"globals": "^16.5.0"
 	}
 }
