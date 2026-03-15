@@ -30,6 +30,7 @@ router.post('/signup', async (req, res) => {
 			return res.status(409).json({ error: `That ${field} is already taken.` });
 		}
 
+		// This is a simplified auth implementation for development only.
 		const u = await User.create({
 			email: email.trim(),
 			username: username.trim(),

@@ -1,5 +1,5 @@
 {
-	"name": "dishdetail-monorepo",
+	"name": "dishdetail",
 	"private": true,
 	"version": "1.0.0",
 	"workspaces": [

@@ -3,6 +3,12 @@ import { clearAuth, loadAuth, saveAuth } from './storage';
 import { updateUser as updateStorageUser } from './userStorage';
 import { AuthContext } from './context';
 
+/**
+ * AuthProvider serves as the single source of truth for user authentication state.
+ * It manages the synchronization between the React application state and browser storage,
+ * ensuring that the user session persists across page reloads while providing
+ * a unified interface for login, logout, and profile updates.
+ */
 export default function AuthProvider({ children }) {
 	const [user, setUser] = useState(() => loadAuth());
 	const [authModal, setAuthModal] = useState(null); // 'login' | 'signup' | null

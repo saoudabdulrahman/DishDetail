@@ -1,3 +1,9 @@
+/**
+ * Centralized API client wrapper.
+ * This handles common tasks like setting content headers and parsing JSON,
+ * but more importantly, it standardizes error responses into throw/catch blocks
+ * so the UI components only need to deal with the final data or a generic error.
+ */
 async function fetchJson(url, options = {}) {
 	const res = await fetch(url, {
 		headers: { 'Content-Type': 'application/json', ...(options.headers || {}) },

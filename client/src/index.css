@@ -31,8 +31,6 @@
 * {
 	box-sizing: border-box;
 	margin: 0;
-	scrollbar-width: thin;
-	scrollbar-color: dimgray transparent;
 }
 
 body {

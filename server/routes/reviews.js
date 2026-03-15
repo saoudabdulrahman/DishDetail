@@ -53,6 +53,9 @@ router.put('/:id', async (req, res) => {
 		if (updates.rating !== undefined) {
 			const est = await Establishment.findById(review.establishment);
 			if (est) {
+				// Re-syncing the establishment rating after an update.
+				// NOTE: This logic is duplicated across create, update, and delete routes.
+				// In a larger app, we'd probably move this to a Mongoose middleware or a shared service.
 				const reviews = await Review.find({ establishment: est._id });
 				const avgRating =
 					reviews.length > 0 ?

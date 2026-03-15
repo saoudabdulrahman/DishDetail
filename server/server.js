@@ -9,12 +9,15 @@ import reviewRoutes from './routes/reviews.js';
 
 dotenv.config();
 
+// Entry point for the DishDetail Express server. 
+// Sets up database connections, shared middleware, and primary API routes.
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 await connectDb(process.env.MONGODB_URI);
 
-// Middleware
+// Standard middleware stack: CORS for cross-origin client requests
+// and JSON parsing with a 2mb limit to accommodate base64 review images.
 app.use(
 	cors({
 		origin: true,

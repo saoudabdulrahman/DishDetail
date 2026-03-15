@@ -75,6 +75,9 @@ router.post('/:slug/reviews', async (req, res) => {
 			reviewImage: reviewImage || null,
 		});
 
+		// We're manually recalculating and updating the establishment's average rating here.
+		// Denormalizing the rating onto the Establishment model allows for faster sorting
+		// and filtering on the main list page without having to aggregate reviews on every read.
 		const reviews = await Review.find({ establishment: est._id });
 		const avgRating = reviews.length > 0
 			? reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length

@@ -20,6 +20,8 @@ const OwnerResponseSchema = new mongoose.Schema(
 
 const ReviewSchema = new mongoose.Schema(
 	{
+		// The legacyId field is used to map reviews imported from our previous system.
+		// It's indexed to allow for efficient lookups during periodic data syncs.
 		legacyId: { type: Number, index: true },
 		establishment: {
 			type: mongoose.Schema.Types.ObjectId,
