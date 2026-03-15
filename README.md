@@ -65,11 +65,13 @@ npm run dev
 If you prefer to run them in separate terminals:
 
 **To run the Backend only:**
+
 ```sh
 npm run dev:server
 ```
 
 **To run the Frontend only:**
+
 ```sh
 npm run dev:client
 ```
@@ -83,7 +85,7 @@ npm run dev:client
 - [Express](https://expressjs.com/)
 - [MongoDB](https://www.mongodb.com/)
 - [Mongoose](https://mongoosejs.com/)
-- [slugify](https://www.npmjs.com/package/slugify) (used for clean URL slugs)
+- [slugify](https://www.npmjs.com/package/slugify)
 - [Lucide](https://lucide.dev/)
 - [Simple Icons](https://simpleicons.org/)
 - [Pravatar](https://pravatar.cc/)
