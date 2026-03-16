@@ -1,44 +1,43 @@
 # DishDetail
 
-Restaurant review web app (React + Node.js + MongoDB).
+DishDetail is a full-stack restaurant review application built with **React**, **Node.js**, **Express**, and **MongoDB**. It allows users to discover local restaurants, read community reviews, and share their own dining experiences.
 
 ## Project Structure
 
-This project is organized as a monorepo with separate directories for the frontend and backend:
+This project uses **npm Workspaces** to manage both the frontend and backend in a single repository:
 
-- `client/`: React frontend (Vite)
-- `server/`: Express backend (Node.js + Mongoose)
+- `client/`: React frontend (Vite, React Router 7, Lucide Icons)
+- `server/`: Express backend (Node.js, Mongoose, JWT-style auth simulation)
+- `server/seed/`: Database seeding scripts and sample data
 
 ## Prerequisites
 
 - [Node.js](https://nodejs.org/) (v18 or later)
-- npm (comes with Node.js)
-- MongoDB (local install or MongoDB Atlas)
+- [npm](https://www.npmjs.com/) (v9 or later)
+- [MongoDB](https://www.mongodb.com/try/download/community) (local instance or MongoDB Atlas)
 
 ## Initial Setup
 
-### 1) Install dependencies
+### 1) Install Dependencies
 
-Install dependencies for the root, client, and server:
+From the root directory, run the following to install dependencies for all workspaces:
 
 ```sh
-npm run install
+npm install
 ```
 
 ### 2) Configure Environment Variables
 
-Create a `.env` file in the **root** of the project and add your database configuration:
+Create a `.env` file in the **server/** directory (or the root if running locally) with your configuration:
 
 ```env
 MONGODB_URI=mongodb://127.0.0.1:27017/dishdetail
 PORT=3000
 ```
 
-_(If you are using MongoDB Atlas, replace the URI with your Atlas connection string)._
-
 ### 3) Seed the Database
 
-Populate the database with sample establishments, users, and reviews:
+Populate the database with sample establishments and reviews:
 
 ```sh
 npm run seed
@@ -48,29 +47,28 @@ npm run seed
 
 ## Running the Application
 
-### Development Mode (Recommended)
+### Development Mode
 
-This mode runs the Vite frontend development server and the Node.js backend server simultaneously from the root directory.
+Run both the frontend and backend simultaneously using the root development script:
 
 ```sh
 npm run dev
 ```
 
-- **Frontend**: `http://localhost:5173` (with hot-reloading)
-- **Backend API**: `http://localhost:3000`
-- API requests are automatically proxied from the frontend to the backend.
+- **Frontend**: [http://localhost:5173](http://localhost:5173)
+- **Backend API**: [http://localhost:3000](http://localhost:3000)
 
-### Running Separately
+### Individual Workspaces
 
-If you prefer to run them in separate terminals:
+You can also run components separately:
 
-**To run the Backend only:**
+**Backend Server:**
 
 ```sh
 npm run dev:server
 ```
 
-**To run the Frontend only:**
+**Frontend Client:**
 
 ```sh
 npm run dev:client
@@ -78,15 +76,33 @@ npm run dev:client
 
 ---
 
-## Resources Used
+## Key Features
+
+- **Authentication**: User signup and login with persistent sessions.
+- **Restaurant Discovery**: Search by name or filter by minimum rating.
+- **Rich Reviews**: Star ratings, body text, and image support.
+- **Social Interaction**: Vote reviews as "Helpful" or "Unhelpful" and leave comments.
+- **Owner Responses**: Establishment owners can respond to customer feedback.
+- **Deep Linking**: Direct navigation to specific reviews via hash fragments (e.g., `#/establishments/slug#review_id`).
+- **Responsive Design**: Optimized for both desktop and mobile devices.
+- **Layout Stability**: Implemented `scrollbar-gutter` and stable image placeholders to prevent layout shifting.
+
+## Development Tools
+
+- **Formatting**: `npm run format` (Prettier)
+- **Linting**: `npm run lint` (ESLint)
+- **Git Hooks**: Pre-commit hooks via **Husky** and **lint-staged**.
+
+---
+
+## Resources & Credits
 
 - [React](https://react.dev/)
 - [Vite](https://vite.dev/)
+- [React Router](https://reactrouter.com/)
+- [Lucide React](https://lucide.dev/)
 - [Express](https://expressjs.com/)
-- [MongoDB](https://www.mongodb.com/)
 - [Mongoose](https://mongoosejs.com/)
-- [slugify](https://www.npmjs.com/package/slugify)
-- [Lucide](https://lucide.dev/)
 - [Simple Icons](https://simpleicons.org/)
-- [Pravatar](https://pravatar.cc/)
-- [Unsplash](https://unsplash.com/)
+- [Pravatar](https://pravatar.cc/) (Avatars)
+- [Unsplash](https://unsplash.com/) (Photography)
