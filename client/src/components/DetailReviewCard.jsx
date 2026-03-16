@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Star, Edit, Trash2, ThumbsUp, ThumbsDown } from 'lucide-react';
 import { useAuth } from '../auth/useAuth';
+import { formatDate } from '../utils/date';
 import StarRating from './StarRating';
 import './DetailReviewCard.css';
 
@@ -93,11 +94,7 @@ export default function DetailReviewCard({ review, onDelete, onUpdate }) {
     if (!responseBody.trim()) return;
     onUpdate(review._id, {
       ownerResponse: {
-        date: new Date().toLocaleDateString('en-US', {
-          month: 'short',
-          day: 'numeric',
-          year: 'numeric',
-        }),
+        date: new Date().toISOString(),
         body: responseBody,
       },
     });
@@ -122,11 +119,7 @@ export default function DetailReviewCard({ review, onDelete, onUpdate }) {
     const newComment = {
       _id: Date.now().toString(), // Using string to match MongoDB behavior
       author: user.username,
-      date: new Date().toLocaleDateString('en-US', {
-        month: 'short',
-        day: 'numeric',
-        year: 'numeric',
-      }),
+      date: new Date().toISOString(),
       body: commentText,
     };
 
@@ -223,7 +216,7 @@ export default function DetailReviewCard({ review, onDelete, onUpdate }) {
                 <span className="edited-badge">(edited)</span>
               )}
             </h4>
-            <p className="review-date">{review.date}</p>
+            <p className="review-date">{formatDate(review.date)}</p>
           </div>
         </div>
         <div
@@ -282,7 +275,8 @@ export default function DetailReviewCard({ review, onDelete, onUpdate }) {
         <div className="owner-response">
           <h5>
             Response from Owner{' '}
-            {review.ownerResponse?.date && `- ${review.ownerResponse.date}`}
+            {review.ownerResponse?.date &&
+              `- ${formatDate(review.ownerResponse.date)}`}
           </h5>
 
           {isEditingResponse ?
@@ -349,7 +343,7 @@ export default function DetailReviewCard({ review, onDelete, onUpdate }) {
                 <div className="comment-header">
                   <span className="comment-author">{comment.author}</span>
                   <span className="comment-date">
-                    {comment.date}
+                    {formatDate(comment.date)}
                     {comment.isEdited && (
                       <span className="edited-badge">(edited)</span>
                     )}

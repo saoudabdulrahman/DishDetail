@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useParams, useNavigate } from 'react-router';
 import { Star, MapPin, Clock, Phone, Globe, ArrowLeft } from 'lucide-react';
 import { api } from '../api';
@@ -13,6 +13,31 @@ export default function EstablishmentPage() {
   const [visibleCount, setVisibleCount] = useState(2);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+
+  const sortedReviews = useMemo(() => {
+    return [...reviews].sort(
+      (a, b) => b.rating - a.rating || new Date(b.date) - new Date(a.date),
+    );
+  }, [reviews]);
+
+  useEffect(() => {
+    if (sortedReviews.length > 0 && window.location.hash) {
+      const id = window.location.hash.substring(1);
+      const index = sortedReviews.findIndex((r) => r._id === id);
+      if (index >= visibleCount) {
+        setVisibleCount(index + 1);
+      }
+
+      // Small delay to ensure the content is rendered before scrolling
+      const timer = setTimeout(() => {
+        const element = document.getElementById(id);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      }, 100);
+      return () => clearTimeout(timer);
+    }
+  }, [sortedReviews, visibleCount]);
 
   useEffect(() => {
     let cancelled = false;
@@ -58,9 +83,6 @@ export default function EstablishmentPage() {
     }
   };
 
-  const sortedReviews = [...reviews].sort(
-    (a, b) => b.rating - a.rating || new Date(b.date) - new Date(a.date),
-  );
   const displayedReviews = sortedReviews.slice(0, visibleCount);
 
   const avgRating =

@@ -1,5 +1,6 @@
 import { Link } from 'react-router';
 import StarRating from './StarRating';
+import { formatDate } from '../utils/date';
 import './ReviewCard.css';
 
 export default function ReviewCard({ review, restaurant }) {
@@ -26,7 +27,7 @@ export default function ReviewCard({ review, restaurant }) {
             <StarRating rating={review.rating} />
           </div>
           <p className="review-meta">
-            Reviewed by {review.reviewer} · {review.date}
+            Reviewed by {review.reviewer} · {formatDate(review.date)}
           </p>
           <p className="review-body">
             {review.body.length > 150 ?

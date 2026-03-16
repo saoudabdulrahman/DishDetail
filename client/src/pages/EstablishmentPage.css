@@ -204,6 +204,7 @@
   justify-content: center;
   gap: 1.5rem;
   padding: 4rem 2rem;
+  min-height: 60vh;
 }
 
 .error-container p {

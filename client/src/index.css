@@ -1,5 +1,6 @@
 :root {
   color-scheme: light dark;
+  scrollbar-gutter: stable;
 
   --bg-dark: light-dark(oklch(0.92 0.02 280), oklch(0.16 0.02 280));
   --bg: light-dark(oklch(0.96 0.02 280), oklch(0.2 0.02 280));
