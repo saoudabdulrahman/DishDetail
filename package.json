@@ -10,7 +10,10 @@
   "scripts": {
     "dev": "npm-run-all --parallel dev:client dev:server",
     "dev:client": "npm run dev --workspace=client",
-    "dev:server": "npm run start --workspace=server",
+    "dev:server": "npm run dev --workspace=server",
+    "build": "npm-run-all build:client build:server",
+    "build:client": "npm run build --workspace=client",
+    "build:server": "npm run build --workspace=server",
     "seed": "npm run seed --workspace=server",
     "format": "prettier --write .",
     "lint": "npm run lint --workspaces --if-present",
@@ -22,11 +25,11 @@
     "prettier": "3.8.1"
   },
   "lint-staged": {
-    "client/**/*.{js,jsx}": [
+    "client/**/*.{ts,tsx,js,jsx}": [
       "eslint --config client/eslint.config.js --fix",
       "prettier --write"
     ],
-    "server/**/*.{js,cjs,mjs}": [
+    "server/**/*.{ts,js,cjs,mjs}": [
       "eslint --config server/eslint.config.js --fix",
       "prettier --write"
     ],
