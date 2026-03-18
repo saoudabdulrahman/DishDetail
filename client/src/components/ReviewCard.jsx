@@ -1,9 +1,12 @@
+import { useState } from 'react';
 import { Link } from 'react-router';
 import StarRating from './StarRating';
 import { formatDate } from '../utils/date';
 import './ReviewCard.css';
 
 export default function ReviewCard({ review, restaurant }) {
+  const [imgLoaded, setImgLoaded] = useState(false);
+
   return (
     <Link
       to={`/establishments/${restaurant.slug}#${review._id}`}
@@ -11,11 +14,12 @@ export default function ReviewCard({ review, restaurant }) {
     >
       <article className="review-item">
         {review.reviewImage && (
-          <div className="restaurant-image-container">
+          <div className="restaurant-image-container shimmer">
             <img
               src={review.reviewImage}
               alt={`Food or ambiance from ${restaurant.restaurantName}`}
-              className="restaurant-img"
+              className={`restaurant-img ${imgLoaded ? 'loaded' : ''}`}
+              onLoad={() => setImgLoaded(true)}
             />
           </div>
         )}
@@ -31,9 +35,9 @@ export default function ReviewCard({ review, restaurant }) {
             {formatDate(review.date)}
           </p>
           <p className="review-body">
-            {review.body.length > 150 ?
-              review.body.substring(0, 150).split(' ').slice(0, -1).join(' ') +
-              '...'
+            {review.body.length > 80 ?
+              review.body.substring(0, 80).split(' ').slice(0, -1).join(' ') +
+              ' ...'
             : review.body}
           </p>
         </div>

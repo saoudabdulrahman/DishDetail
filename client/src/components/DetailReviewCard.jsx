@@ -8,6 +8,7 @@ import './DetailReviewCard.css';
 export default function DetailReviewCard({ review, onDelete, onUpdate }) {
   const { user } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
+  const [imgLoaded, setImgLoaded] = useState(false);
   const [editTitle, setEditTitle] = useState(review.title || '');
   const [editBody, setEditBody] = useState(review.body);
   const [editRating, setEditRating] = useState(review.rating);
@@ -257,11 +258,12 @@ export default function DetailReviewCard({ review, onDelete, onUpdate }) {
       {review.title && <h3 className="detail-review-title">{review.title}</h3>}
       <p className="detail-review-body">{review.body}</p>
       {review.reviewImage && (
-        <div className="detail-review-image-container">
+        <div className="detail-review-image-container shimmer">
           <img
             src={review.reviewImage}
             alt="Review photo"
-            className="detail-review-image"
+            className={`detail-review-image ${imgLoaded ? 'loaded' : ''}`}
+            onLoad={() => setImgLoaded(true)}
           />
         </div>
       )}

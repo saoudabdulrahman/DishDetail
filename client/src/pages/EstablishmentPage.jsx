@@ -11,6 +11,7 @@ export default function EstablishmentPage() {
   const [restaurant, setRestaurant] = useState(null);
   const [reviews, setReviews] = useState([]);
   const [visibleCount, setVisibleCount] = useState(2);
+  const [imgLoaded, setImgLoaded] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
@@ -123,11 +124,12 @@ export default function EstablishmentPage() {
         <ArrowLeft size={18} /> Back to Establishments
       </button>
 
-      <div className="detail-banner">
+      <div className="detail-banner shimmer">
         <img
           src={restaurant.restaurantImage}
           alt={restaurant.restaurantName}
-          className="detail-banner-img"
+          className={`detail-banner-img ${imgLoaded ? 'loaded' : ''}`}
+          onLoad={() => setImgLoaded(true)}
         />
       </div>
 
