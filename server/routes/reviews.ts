@@ -8,7 +8,7 @@ const router = Router();
 router.get('/', async (req, res) => {
   const q = (req.query.q || '').toString().trim();
 
-  const filter = {};
+  const filter: Record<string, any> = {};
   if (req.query.establishmentId) {
     filter.establishment = req.query.establishmentId;
   }
@@ -43,7 +43,7 @@ router.put('/:id', async (req, res) => {
       'ownerResponse',
       'reviewImage',
     ];
-    const updates = {};
+    const updates: Record<string, any> = {};
     for (const k of allowed) {
       if (k in (req.body || {})) updates[k] = req.body[k];
     }
@@ -54,7 +54,7 @@ router.put('/:id', async (req, res) => {
     if (!review) return res.status(404).json({ error: 'Review not found.' });
 
     if (updates.rating !== undefined) {
-      await syncEstablishmentRating(review.establishment);
+      await syncEstablishmentRating(review.establishment.toString());
     }
 
     return res.json({ review });
@@ -68,7 +68,7 @@ router.delete('/:id', async (req, res) => {
     const r = await Review.findByIdAndDelete(req.params.id);
     if (!r) return res.status(404).json({ error: 'Review not found.' });
 
-    await syncEstablishmentRating(r.establishment);
+    await syncEstablishmentRating(r.establishment.toString());
 
     return res.json({ ok: true });
   } catch {

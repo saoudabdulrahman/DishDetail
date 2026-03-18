@@ -1,6 +1,9 @@
 import mongoose from 'mongoose';
+import type { Establishment } from '@dishdetail/shared';
 
-const EstablishmentSchema = new mongoose.Schema(
+type EstablishmentDocument = Omit<Establishment, '_id'> & { _id: mongoose.Types.ObjectId };
+
+const EstablishmentSchema = new mongoose.Schema<EstablishmentDocument>(
   {
     // legacyId is kept for mapping establishments back to our legacy dataset.
     // It's indexed to support efficient syncing operations.
@@ -19,4 +22,4 @@ const EstablishmentSchema = new mongoose.Schema(
   { timestamps: true },
 );
 
-export default mongoose.model('Establishment', EstablishmentSchema);
+export default mongoose.model<EstablishmentDocument>('Establishment', EstablishmentSchema);

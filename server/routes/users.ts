@@ -16,7 +16,7 @@ router.get('/:id', async (req, res) => {
 
 router.put('/:id', async (req, res) => {
   try {
-    const updates = {};
+    const updates: Record<string, any> = {};
     if (typeof req.body?.avatar === 'string') updates.avatar = req.body.avatar;
     if (typeof req.body?.bio === 'string') updates.bio = req.body.bio;
 

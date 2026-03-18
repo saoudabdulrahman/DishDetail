@@ -4,11 +4,14 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "seed": "node seed/seed.js",
-    "start": "node server.js",
+    "seed": "tsx seed/seed.ts",
+    "start": "node dist/server.js",
+    "dev": "tsx watch server.ts",
+    "build": "tsc",
     "lint": "eslint ."
   },
   "dependencies": {
+    "@dishdetail/shared": "*",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
@@ -17,8 +20,13 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.39.2",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.6",
+    "@types/node": "^25.5.0",
     "eslint": "^9.39.2",
     "eslint-config-prettier": "^10.1.8",
-    "globals": "^16.5.0"
+    "globals": "^16.5.0",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3"
   }
 }

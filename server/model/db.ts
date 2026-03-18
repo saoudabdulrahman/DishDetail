@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-export async function connectDb(uri) {
+export async function connectDb(uri?: string) {
   const mongoUri =
     uri || process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/dishdetail';
 

@@ -1,6 +1,10 @@
 import mongoose from 'mongoose';
+import type { User } from '@dishdetail/shared';
 
-const UserSchema = new mongoose.Schema(
+// Omit id fields that mongoose handles internally
+type UserDocument = Omit<User, 'id'> & { _id: mongoose.Types.ObjectId };
+
+const UserSchema = new mongoose.Schema<UserDocument>(
   {
     username: { type: String, required: true, unique: true, trim: true },
     email: { type: String, required: true, trim: true },
@@ -17,4 +21,4 @@ const UserSchema = new mongoose.Schema(
   { timestamps: true },
 );
 
-export default mongoose.model('User', UserSchema);
+export default mongoose.model<UserDocument>('User', UserSchema);

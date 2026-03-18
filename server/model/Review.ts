@@ -1,6 +1,12 @@
 import mongoose from 'mongoose';
+import type { Review, Comment, OwnerResponse } from '@dishdetail/shared';
 
-const CommentSchema = new mongoose.Schema(
+type ReviewDocument = Omit<Review, '_id' | 'establishment'> & { 
+  _id: mongoose.Types.ObjectId;
+  establishment: mongoose.Types.ObjectId;
+};
+
+const CommentSchema = new mongoose.Schema<Comment>(
   {
     author: { type: String, required: true },
     date: { type: String, required: true },
@@ -10,7 +16,7 @@ const CommentSchema = new mongoose.Schema(
   { _id: true },
 );
 
-const OwnerResponseSchema = new mongoose.Schema(
+const OwnerResponseSchema = new mongoose.Schema<OwnerResponse>(
   {
     date: { type: String, required: true },
     body: { type: String, required: true },
@@ -18,7 +24,7 @@ const OwnerResponseSchema = new mongoose.Schema(
   { _id: false },
 );
 
-const ReviewSchema = new mongoose.Schema(
+const ReviewSchema = new mongoose.Schema<ReviewDocument>(
   {
     // The legacyId field is used to map reviews imported from our previous system.
     // It's indexed to allow for efficient lookups during periodic data syncs.
@@ -32,16 +38,16 @@ const ReviewSchema = new mongoose.Schema(
     rating: { type: Number, required: true, min: 1, max: 5 },
     reviewer: { type: String, required: true },
     reviewerAvatar: { type: String, default: '' },
-    date: { type: Date, default: Date.now },
+    date: { type: String, default: () => new Date().toISOString() },
     body: { type: String, required: true },
     reviewImage: { type: String, default: null },
     helpfulCount: { type: Number, default: 0 },
     unhelpfulCount: { type: Number, default: 0 },
     isEdited: { type: Boolean, default: false },
     comments: { type: [CommentSchema], default: [] },
-    ownerResponse: { type: OwnerResponseSchema, default: null },
+    ownerResponse: { type: OwnerResponseSchema, default: null as any },
   },
   { timestamps: true },
 );
 
-export default mongoose.model('Review', ReviewSchema);
+export default mongoose.model<ReviewDocument>('Review', ReviewSchema);

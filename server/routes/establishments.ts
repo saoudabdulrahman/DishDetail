@@ -10,7 +10,7 @@ router.get('/', async (req, res) => {
     const q = (req.query.q || '').toString().trim();
     const minRating = Number(req.query.minRating || 0);
 
-    const filter = {};
+    const filter: Record<string, any> = {};
     if (q) {
       filter.$or = [
         { restaurantName: { $regex: q, $options: 'i' } },
@@ -70,7 +70,7 @@ router.post('/:slug/reviews', async (req, res) => {
       reviewImage: reviewImage || null,
     });
 
-    await syncEstablishmentRating(est._id);
+    await syncEstablishmentRating(est._id.toString());
 
     return res.status(201).json({ review });
   } catch {
