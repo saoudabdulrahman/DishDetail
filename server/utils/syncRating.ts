@@ -7,7 +7,7 @@ import Establishment from '../model/Establishment.js';
  *
  * Call this after any review create, update (if rating changed), or delete.
  */
-export async function syncEstablishmentRating(establishmentId) {
+export async function syncEstablishmentRating(establishmentId: string) {
   const reviews = await Review.find({ establishment: establishmentId });
   const avg =
     reviews.length > 0 ?

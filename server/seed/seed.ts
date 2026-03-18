@@ -1,14 +1,17 @@
 import dotenv from 'dotenv';
-import slugify from 'slugify';
+// @ts-ignore
+import slugifyImport from 'slugify';
 import { connectDb } from '../model/db.js';
 import Establishment from '../model/Establishment.js';
 import Review from '../model/Review.js';
 import User from '../model/User.js';
+// @ts-ignore - Ignore JS import without declaration
 import { restaurantsData, reviewsData } from '../../client/src/data.js';
 
+const slugify: any = slugifyImport;
 dotenv.config();
 
-function ensureString(v, fallback = '') {
+function ensureString(v: any, fallback = '') {
   return typeof v === 'string' ? v : fallback;
 }
 
@@ -24,7 +27,7 @@ async function main() {
 
   // Seed establishments
   const establishments = await Establishment.insertMany(
-    restaurantsData.map((r) => ({
+    restaurantsData.map((r: any) => ({
       legacyId: r.id,
       restaurantName: r.restaurantName,
       slug: slugify(r.restaurantName, { lower: true, strict: true }),
@@ -43,10 +46,11 @@ async function main() {
 
   // Seed users from reviewers (simple, no hashing per Phase 2)
   const uniqueReviewers = Array.from(
-    new Set(reviewsData.map((r) => r.reviewer).filter(Boolean)),
-  );
+    new Set(reviewsData.map((r: any) => r.reviewer).filter(Boolean)),
+  ) as string[];
+  
   await User.insertMany(
-    uniqueReviewers.map((username) => ({
+    uniqueReviewers.map((username: string) => ({
       username,
       email: `${username.toLowerCase().replace(/\s+/g, '')}@example.com`,
       password: 'password123',
@@ -70,7 +74,7 @@ async function main() {
 
   // Seed reviews
   await Review.insertMany(
-    reviewsData.map((r) => ({
+    reviewsData.map((r: any) => ({
       legacyId: r.id,
       establishment: idMap.get(r.restaurantId),
       title: ensureString(r.title, 'Untitled Review'),
@@ -84,7 +88,7 @@ async function main() {
       unhelpfulCount: r.unhelpfulCount || 0,
       isEdited: r.isEdited || false,
       comments:
-        r.comments?.map((c) => ({
+        r.comments?.map((c: any) => ({
           author: ensureString(c.author),
           date: ensureString(c.date),
           body: ensureString(c.body),

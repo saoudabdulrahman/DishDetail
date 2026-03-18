@@ -1,8 +1,10 @@
+import type { PublicUser } from '@dishdetail/shared';
+
 /**
  * Converts a Mongoose User document into a safe, public-facing object
  * by stripping sensitive fields like the password hash.
  */
-export function publicUser(u) {
+export function publicUser(u: any): PublicUser {
   return {
     id: u._id.toString(),
     username: u.username,
@@ -10,6 +12,6 @@ export function publicUser(u) {
     avatar: u.avatar,
     bio: u.bio,
     role: u.role,
-    ownedEstablishment: u.ownedEstablishment || null,
+    ownedEstablishment: u.ownedEstablishment ? u.ownedEstablishment.toString() : null,
   };
 }
