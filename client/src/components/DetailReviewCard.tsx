@@ -4,8 +4,17 @@ import { useAuth } from '../auth/useAuth';
 import { formatDate } from '../utils/date';
 import StarRating from './StarRating';
 import './DetailReviewCard.css';
+import type { Review, Comment } from '@dishdetail/shared';
 
-export default function DetailReviewCard({ review, onDelete, onUpdate }) {
+export default function DetailReviewCard({
+  review,
+  onDelete,
+  onUpdate,
+}: {
+  review: Review;
+  onDelete: (id: string) => void;
+  onUpdate: (id: string, updates: Partial<Review>) => void;
+}) {
   const { user } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
   const [imgLoaded, setImgLoaded] = useState(false);
@@ -15,14 +24,16 @@ export default function DetailReviewCard({ review, onDelete, onUpdate }) {
   const [hoverRating, setHoverRating] = useState(0);
 
   const [commentText, setCommentText] = useState('');
-  const [editingCommentId, setEditingCommentId] = useState(null);
+  const [editingCommentId, setEditingCommentId] = useState<string | null>(null);
   const [editCommentText, setEditCommentText] = useState('');
 
   const [helpfulCount, setHelpfulCount] = useState(review.helpfulCount || 0);
   const [unhelpfulCount, setUnhelpfulCount] = useState(
     review.unhelpfulCount || 0,
   );
-  const [userVote, setUserVote] = useState(null);
+  const [userVote, setUserVote] = useState<'helpful' | 'unhelpful' | null>(
+    null,
+  );
 
   const [isEditingResponse, setIsEditingResponse] = useState(false);
   const [responseBody, setResponseBody] = useState('');
@@ -54,7 +65,7 @@ export default function DetailReviewCard({ review, onDelete, onUpdate }) {
     setEditRating(review.rating);
   };
 
-  const handleVote = (type) => {
+  const handleVote = (type: 'helpful' | 'unhelpful') => {
     if (!user) {
       alert('Please log in to vote.');
       return;
@@ -116,15 +127,16 @@ export default function DetailReviewCard({ review, onDelete, onUpdate }) {
     setIsEditingResponse(true);
   };
 
-  const handleAddComment = (e) => {
+  const handleAddComment = (e: React.FormEvent) => {
     e.preventDefault();
     if (!commentText.trim()) return;
 
     const newComment = {
       _id: Date.now().toString(), // Using string to match MongoDB behavior
-      author: user.username,
+      author: user?.username || 'Unknown',
       date: new Date().toISOString(),
       body: commentText,
+      isEdited: false,
     };
 
     const updatedComments = [...(review.comments || []), newComment];
@@ -132,7 +144,7 @@ export default function DetailReviewCard({ review, onDelete, onUpdate }) {
     setCommentText('');
   };
 
-  const handleDeleteComment = (commentId) => {
+  const handleDeleteComment = (commentId: string) => {
     if (window.confirm('Delete this comment?')) {
       const updatedComments = review.comments.filter(
         (c) => c._id !== commentId,
@@ -141,12 +153,12 @@ export default function DetailReviewCard({ review, onDelete, onUpdate }) {
     }
   };
 
-  const startEditComment = (comment) => {
+  const startEditComment = (comment: Comment) => {
     setEditingCommentId(comment._id);
     setEditCommentText(comment.body);
   };
 
-  const saveEditComment = (commentId) => {
+  const saveEditComment = (commentId: string) => {
     const updatedComments = review.comments.map((c) =>
       c._id === commentId ? { ...c, body: editCommentText, isEdited: true } : c,
     );
@@ -216,7 +228,7 @@ export default function DetailReviewCard({ review, onDelete, onUpdate }) {
       <div className="detail-review-header">
         <div className="reviewer-info">
           <img
-            src={review.reviewerAvatar}
+            src={review.reviewerAvatar || undefined}
             alt={review.reviewer}
             className="reviewer-avatar"
           />
@@ -317,7 +329,7 @@ export default function DetailReviewCard({ review, onDelete, onUpdate }) {
               </div>
             </div>
           : <>
-              <p>{review.ownerResponse.body}</p>
+              <p>{review.ownerResponse?.body}</p>
               {isEstablishmentOwner && (
                 <div className="owner-actions">
                   <button

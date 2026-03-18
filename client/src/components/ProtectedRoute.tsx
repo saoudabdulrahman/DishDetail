@@ -2,7 +2,9 @@ import { useEffect } from 'react';
 import { Outlet } from 'react-router';
 import { useAuth } from '../auth/useAuth';
 
-const ProtectedRoute = ({ children }) => {
+import type { ReactNode } from 'react';
+
+const ProtectedRoute = ({ children }: { children?: ReactNode }) => {
   const { user, setAuthModal } = useAuth();
 
   useEffect(() => {

@@ -1,6 +1,8 @@
+import type { PublicUser } from '@dishdetail/shared';
+
 const AUTH_KEY = 'dishdetail_auth';
 
-export function saveAuth(user, rememberMe) {
+export function saveAuth(user: PublicUser, rememberMe: boolean): void {
   const THREE_WEEKS_MS = 1000 * 60 * 60 * 24 * 21;
   const expiresAt = rememberMe ? Date.now() + THREE_WEEKS_MS : null;
   const payload = { user, expiresAt };
@@ -14,27 +16,31 @@ export function saveAuth(user, rememberMe) {
   }
 }
 
-export function loadAuth() {
-  const raw =
-    localStorage.getItem(AUTH_KEY) || sessionStorage.getItem(AUTH_KEY);
-  if (!raw) return null;
+interface StoredAuth {
+  user: PublicUser;
+  expiresAt: number | null;
+}
 
+export function loadAuth(): PublicUser | null {
   try {
-    const parsed = JSON.parse(raw);
+    const stored =
+      localStorage.getItem(AUTH_KEY) || sessionStorage.getItem(AUTH_KEY);
+    if (!stored) return null;
+
+    const parsed = JSON.parse(stored) as StoredAuth;
 
     if (parsed.expiresAt && Date.now() > parsed.expiresAt) {
       clearAuth();
       return null;
     }
 
-    return parsed.user ?? null;
+    return parsed.user || null;
   } catch {
-    clearAuth();
     return null;
   }
 }
 
-export function clearAuth() {
+export function clearAuth(): void {
   localStorage.removeItem(AUTH_KEY);
   sessionStorage.removeItem(AUTH_KEY);
 }

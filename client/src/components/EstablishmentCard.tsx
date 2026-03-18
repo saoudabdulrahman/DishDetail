@@ -2,8 +2,13 @@ import { useState } from 'react';
 import { Link } from 'react-router';
 import StarRating from './StarRating';
 import './EstablishmentCard.css';
+import type { Establishment } from '@dishdetail/shared';
 
-export default function EstablishmentCard({ restaurant }) {
+export default function EstablishmentCard({
+  restaurant,
+}: {
+  restaurant: Establishment;
+}) {
   const [imgLoaded, setImgLoaded] = useState(false);
 
   return (
@@ -11,9 +16,9 @@ export default function EstablishmentCard({ restaurant }) {
       <article className="establishment-item">
         <div className="restaurant-image-container shimmer">
           <img
-            src={restaurant.restaurantImage}
-            alt={`Food or ambiance from ${restaurant.restaurantName}`}
-            className={`restaurant-img ${imgLoaded ? 'loaded' : ''}`}
+            src={restaurant.restaurantImage || undefined}
+            alt={restaurant.restaurantName}
+            className={imgLoaded ? 'loaded' : ''}
             onLoad={() => setImgLoaded(true)}
           />
         </div>

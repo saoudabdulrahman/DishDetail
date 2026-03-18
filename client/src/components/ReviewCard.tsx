@@ -3,8 +3,15 @@ import { Link } from 'react-router';
 import StarRating from './StarRating';
 import { formatDate } from '../utils/date';
 import './ReviewCard.css';
+import type { Review, Establishment } from '@dishdetail/shared';
 
-export default function ReviewCard({ review, restaurant }) {
+export default function ReviewCard({
+  review,
+  restaurant,
+}: {
+  review: Review;
+  restaurant: Establishment;
+}) {
   const [imgLoaded, setImgLoaded] = useState(false);
 
   return (

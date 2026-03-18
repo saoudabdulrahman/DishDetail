@@ -1,4 +1,6 @@
 import { useMemo, useState } from 'react';
+import type { ReactNode } from 'react';
+import type { PublicUser } from '@dishdetail/shared';
 import { clearAuth, loadAuth, saveAuth } from './storage';
 import { updateUser as updateStorageUser } from './userStorage';
 import { AuthContext } from './context';
@@ -9,16 +11,16 @@ import { AuthContext } from './context';
  * ensuring that the user session persists across page reloads while providing
  * a unified interface for login, logout, and profile updates.
  */
-export default function AuthProvider({ children }) {
-  const [user, setUser] = useState(() => loadAuth());
-  const [authModal, setAuthModal] = useState(null); // 'login' | 'signup' | null
+export default function AuthProvider({ children }: { children: ReactNode }) {
+  const [user, setUser] = useState<PublicUser | null>(() => loadAuth());
+  const [authModal, setAuthModal] = useState<'login' | 'signup' | null>(null);
 
   const value = useMemo(() => {
     return {
       user,
       authModal,
       setAuthModal,
-      login: (userData, rememberMe) => {
+      login: (userData: PublicUser, rememberMe: boolean) => {
         saveAuth(userData, rememberMe);
         setUser(userData);
       },
@@ -26,7 +28,7 @@ export default function AuthProvider({ children }) {
         clearAuth();
         setUser(null);
       },
-      updateProfile: async (updates) => {
+      updateProfile: async (updates: Partial<PublicUser>) => {
         if (!user?.id) return;
         try {
           const updated = await updateStorageUser(user.id, updates);

@@ -1,11 +1,18 @@
 import { useEffect, useState } from 'react';
+import type { FormEvent, MouseEvent } from 'react';
 import { createPortal } from 'react-dom';
 import { useAuth } from '../auth/useAuth';
 import { validateUser, saveUser } from '../auth/userStorage';
 import { Check, X, Eye, EyeOff } from 'lucide-react';
 import './AuthModal.css';
 
-function LoginForm({ onSwitch, onSuccess }) {
+function LoginForm({
+  onSwitch,
+  onSuccess,
+}: {
+  onSwitch: () => void;
+  onSuccess: () => void;
+}) {
   const { login } = useAuth();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -19,7 +26,7 @@ function LoginForm({ onSwitch, onSuccess }) {
     window.setTimeout(() => setShakeError(false), 450);
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setError('');
 
@@ -34,8 +41,10 @@ function LoginForm({ onSwitch, onSuccess }) {
       const validUser = await validateUser(u, password);
       login(validUser, rememberMe);
       onSuccess();
-    } catch (err) {
-      setError(err.message || 'Invalid username or password.');
+    } catch (err: unknown) {
+      setError(
+        err instanceof Error ? err.message : 'Invalid username or password.',
+      );
       triggerShake();
     }
   };
@@ -49,7 +58,12 @@ function LoginForm({ onSwitch, onSuccess }) {
         <div className={`auth-error ${shakeError ? 'shake' : ''}`}>{error}</div>
       )}
 
-      <form onSubmit={handleSubmit} className="auth-form">
+      <form
+        onSubmit={(e) => {
+          void handleSubmit(e);
+        }}
+        className="auth-form"
+      >
         <label>
           Username
           <input
@@ -112,7 +126,13 @@ function LoginForm({ onSwitch, onSuccess }) {
   );
 }
 
-function SignupForm({ onSwitch, onSuccess }) {
+function SignupForm({
+  onSwitch,
+  onSuccess,
+}: {
+  onSwitch: () => void;
+  onSuccess: () => void;
+}) {
   const { login } = useAuth();
   const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
@@ -128,7 +148,7 @@ function SignupForm({ onSwitch, onSuccess }) {
     window.setTimeout(() => setShakeError(false), 450);
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setError('');
 
@@ -164,8 +184,8 @@ function SignupForm({ onSwitch, onSuccess }) {
       const created = await saveUser(newUser);
       login(created, true);
       onSuccess();
-    } catch (err) {
-      setError(err.message || 'Signup failed.');
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Signup failed.');
       triggerShake();
     }
   };
@@ -179,7 +199,12 @@ function SignupForm({ onSwitch, onSuccess }) {
         <div className={`auth-error ${shakeError ? 'shake' : ''}`}>{error}</div>
       )}
 
-      <form onSubmit={handleSubmit} className="auth-form">
+      <form
+        onSubmit={(e) => {
+          void handleSubmit(e);
+        }}
+        className="auth-form"
+      >
         <label>
           Email
           <input
@@ -268,7 +293,9 @@ function SignupForm({ onSwitch, onSuccess }) {
 export default function AuthModal() {
   const { authModal, setAuthModal } = useAuth();
 
-  const [activeModal, setActiveModal] = useState(null);
+  const [activeModal, setActiveModal] = useState<'login' | 'signup' | null>(
+    null,
+  );
   const [mouseDownOnOverlay, setMouseDownOnOverlay] = useState(false);
 
   if (authModal && authModal !== activeModal) {
@@ -278,7 +305,7 @@ export default function AuthModal() {
   const isClosing = !authModal && !!activeModal;
 
   useEffect(() => {
-    const handleKeyDown = (e) => {
+    const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') setAuthModal(null);
     };
     if (authModal) {
@@ -294,26 +321,29 @@ export default function AuthModal() {
     setMouseDownOnOverlay(false);
   };
 
-  const handleOverlayMouseDown = (e) => {
-    if (e.target.classList.contains('auth-modal-overlay')) {
+  const handleOverlayMouseDown = (e: MouseEvent) => {
+    if ((e.target as HTMLElement).classList.contains('auth-modal-overlay')) {
       setMouseDownOnOverlay(true);
     } else {
       setMouseDownOnOverlay(false);
     }
   };
 
-  const handleOverlayClick = (e) => {
+  const handleOverlayClick = (e: MouseEvent) => {
     if (
       mouseDownOnOverlay &&
-      e.target.classList.contains('auth-modal-overlay')
+      (e.target as HTMLElement).classList.contains('auth-modal-overlay')
     ) {
       closeModal();
     }
     setMouseDownOnOverlay(false);
   };
 
-  const handleAnimationEnd = (e) => {
-    if (isClosing && e.target.classList.contains('auth-modal-overlay')) {
+  const handleAnimationEnd = (e: React.AnimationEvent) => {
+    if (
+      isClosing &&
+      (e.target as HTMLElement).classList.contains('auth-modal-overlay')
+    ) {
       setActiveModal(null);
     }
   };
