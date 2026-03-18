@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import Establishment from '../model/Establishment.js';
 import Review from '../model/Review.js';
+import { syncEstablishmentRating } from '../utils/syncRating.js';
 
 const router = Router();
 
@@ -57,12 +58,6 @@ router.post('/:slug/reviews', async (req, res) => {
       return res.status(400).json({ error: 'Missing required fields.' });
     }
 
-    const date = new Date().toLocaleDateString('en-US', {
-      month: 'short',
-      day: 'numeric',
-      year: 'numeric',
-    });
-
     const review = await Review.create({
       establishment: est._id,
       rating: Number(rating),
@@ -70,21 +65,11 @@ router.post('/:slug/reviews', async (req, res) => {
       reviewerAvatar:
         reviewerAvatar ||
         `https://i.pravatar.cc/150?u=${encodeURIComponent(reviewer)}`,
-      date,
       body,
       reviewImage: reviewImage || null,
     });
 
-    // We're manually recalculating and updating the establishment's average rating here.
-    // Denormalizing the rating onto the Establishment model allows for faster sorting
-    // and filtering on the main list page without having to aggregate reviews on every read.
-    const reviews = await Review.find({ establishment: est._id });
-    const avgRating =
-      reviews.length > 0 ?
-        reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length
-      : 0;
-    est.rating = avgRating;
-    await est.save();
+    await syncEstablishmentRating(est._id);
 
     return res.status(201).json({ review });
   } catch {

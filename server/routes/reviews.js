@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import Review from '../model/Review.js';
 import Establishment from '../model/Establishment.js';
+import { syncEstablishmentRating } from '../utils/syncRating.js';
 
 const router = Router();
 
@@ -51,19 +52,7 @@ router.put('/:id', async (req, res) => {
     if (!review) return res.status(404).json({ error: 'Review not found.' });
 
     if (updates.rating !== undefined) {
-      const est = await Establishment.findById(review.establishment);
-      if (est) {
-        // Re-syncing the establishment rating after an update.
-        // NOTE: This logic is duplicated across create, update, and delete routes.
-        // In a larger app, we'd probably move this to a Mongoose middleware or a shared service.
-        const reviews = await Review.find({ establishment: est._id });
-        const avgRating =
-          reviews.length > 0 ?
-            reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length
-          : 0;
-        est.rating = avgRating;
-        await est.save();
-      }
+      await syncEstablishmentRating(review.establishment);
     }
 
     return res.json({ review });
@@ -77,16 +66,7 @@ router.delete('/:id', async (req, res) => {
     const r = await Review.findByIdAndDelete(req.params.id);
     if (!r) return res.status(404).json({ error: 'Review not found.' });
 
-    const est = await Establishment.findById(r.establishment);
-    if (est) {
-      const reviews = await Review.find({ establishment: est._id });
-      const avgRating =
-        reviews.length > 0 ?
-          reviews.reduce((sum, rev) => sum + rev.rating, 0) / reviews.length
-        : 0;
-      est.rating = avgRating;
-      await est.save();
-    }
+    await syncEstablishmentRating(r.establishment);
 
     return res.json({ ok: true });
   } catch {

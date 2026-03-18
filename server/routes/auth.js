@@ -1,19 +1,8 @@
 import { Router } from 'express';
 import User from '../model/User.js';
+import { publicUser } from '../utils/publicUser.js';
 
 const router = Router();
-
-function publicUser(u) {
-  return {
-    id: u._id.toString(),
-    username: u.username,
-    email: u.email,
-    avatar: u.avatar,
-    bio: u.bio,
-    role: u.role,
-    ownedEstablishment: u.ownedEstablishment || null,
-  };
-}
 
 router.post('/signup', async (req, res) => {
   try {
