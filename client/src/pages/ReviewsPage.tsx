@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import type { Establishment, Review } from '@dishdetail/shared';
 import { useSearchParams } from 'react-router';
 import ReviewCard from '../components/ReviewCard';
 import { api } from '../api';
@@ -7,8 +8,8 @@ import './ReviewsPage.css';
 export default function ReviewsPage() {
   const [searchParams] = useSearchParams();
   const query = (searchParams.get('q') || '').toLowerCase();
-  const [restaurants, setRestaurants] = useState([]);
-  const [reviews, setReviews] = useState([]);
+  const [restaurants, setRestaurants] = useState<Establishment[]>([]);
+  const [reviews, setReviews] = useState<Review[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
@@ -27,14 +28,15 @@ export default function ReviewsPage() {
           setRestaurants(estRes.establishments);
           setReviews(revRes.reviews);
         }
-      } catch (e) {
-        if (!cancelled) setError(e.message || 'Failed to load reviews.');
+      } catch (e: unknown) {
+        if (!cancelled)
+          setError(e instanceof Error ? e.message : 'Failed to load reviews.');
       } finally {
         if (!cancelled) setLoading(false);
       }
     };
 
-    fetchReviews();
+    void fetchReviews();
 
     return () => {
       cancelled = true;
@@ -48,7 +50,9 @@ export default function ReviewsPage() {
   const filteredReviews = useMemo(() => {
     return reviews
       .map((review) => {
-        const restaurant = restaurantMap.get(review.establishment);
+        const restaurant = restaurantMap.get(
+          review.establishment,
+        ) as Establishment;
         return { review, restaurant };
       })
       .filter(({ restaurant }) => !!restaurant);

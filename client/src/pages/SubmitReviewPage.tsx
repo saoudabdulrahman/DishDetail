@@ -1,4 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
+import type { FormEvent } from 'react';
+import type { Establishment, Review } from '@dishdetail/shared';
 import { useLocation, useNavigate } from 'react-router';
 import { Star, Search } from 'lucide-react';
 import ReviewCard from '../components/ReviewCard';
@@ -8,15 +10,15 @@ import './SubmitReviewPage.css';
 
 function SubmitReviewPage() {
   const navigate = useNavigate();
-  const { state } = useLocation();
+  const location = useLocation();
+  const state = location.state as { restaurant?: Establishment } | null;
   const { user } = useAuth();
 
-  const [selectedRestaurant, setSelectedRestaurant] = useState(
-    state?.restaurant || null,
-  );
+  const [selectedRestaurant, setSelectedRestaurant] =
+    useState<Establishment | null>(state?.restaurant || null);
   const [query, setQuery] = useState('');
-  const [restaurants, setRestaurants] = useState([]);
-  const [featured, setFeatured] = useState([]);
+  const [restaurants, setRestaurants] = useState<Establishment[]>([]);
+  const [featured, setFeatured] = useState<Review[]>([]);
 
   const [rating, setRating] = useState(0);
   const [hover, setHover] = useState(0);
@@ -26,7 +28,7 @@ function SubmitReviewPage() {
 
   useEffect(() => {
     let cancelled = false;
-    Promise.all([api().getEstablishments(), api().getReviews()])
+    void Promise.all([api().getEstablishments(), api().getReviews()])
       .then(([estRes, revRes]) => {
         if (cancelled) return;
         setRestaurants(estRes.establishments);
@@ -49,13 +51,13 @@ function SubmitReviewPage() {
     );
   }, [restaurants, query]);
 
-  const handleSelect = (restaurant) => {
+  const handleSelect = (restaurant: Establishment) => {
     setSelectedRestaurant(restaurant);
     setQuery(restaurant.restaurantName);
     setError('');
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setError('');
 
@@ -88,9 +90,9 @@ function SubmitReviewPage() {
         body: reviewText,
         reviewImage: null,
       });
-      navigate(`/establishments/${selectedRestaurant.slug}#${review._id}`);
-    } catch (err) {
-      setError(err.message || 'Failed to submit review.');
+      void navigate(`/establishments/${selectedRestaurant.slug}#${review._id}`);
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Failed to submit review.');
     }
   };
 
@@ -105,7 +107,12 @@ function SubmitReviewPage() {
 
         {error && <div className="error-message">{error}</div>}
 
-        <form onSubmit={handleSubmit} className="review-container">
+        <form
+          onSubmit={(e) => {
+            void handleSubmit(e);
+          }}
+          className="review-container"
+        >
           <div className="search-wrapper">
             <div className="search-bar">
               <Search id="search-icon" size={24} />
@@ -178,9 +185,11 @@ function SubmitReviewPage() {
             <ReviewCard
               key={review._id}
               review={review}
-              restaurant={restaurants.find(
-                (r) => r._id === review.establishment,
-              )}
+              restaurant={
+                restaurants.find(
+                  (r) => r._id === review.establishment,
+                ) as Establishment
+              }
             />
           ))}
         </section>

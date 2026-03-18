@@ -1,4 +1,6 @@
 import { useEffect, useState } from 'react';
+import type { ChangeEvent } from 'react';
+import type { Establishment } from '@dishdetail/shared';
 import { useSearchParams } from 'react-router';
 import EstablishmentCard from '../components/EstablishmentCard';
 import { api } from '../api';
@@ -9,7 +11,7 @@ export default function EstablishmentsPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const minRating = Number(searchParams.get('minRating') || 0);
   const query = (searchParams.get('q') || '').toLowerCase();
-  const [establishments, setEstablishments] = useState([]);
+  const [establishments, setEstablishments] = useState<Establishment[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
@@ -23,21 +25,24 @@ export default function EstablishmentsPage() {
         const { establishments: fetchedEstablishments } =
           await api().getEstablishments({ q: query, minRating });
         if (!cancelled) setEstablishments(fetchedEstablishments);
-      } catch (e) {
-        if (!cancelled) setError(e.message || 'Failed to load establishments.');
+      } catch (e: unknown) {
+        if (!cancelled)
+          setError(
+            e instanceof Error ? e.message : 'Failed to load establishments.',
+          );
       } finally {
         if (!cancelled) setLoading(false);
       }
     };
 
-    fetchEstablishments();
+    void fetchEstablishments();
 
     return () => {
       cancelled = true;
     };
   }, [query, minRating]);
 
-  const handleRatingChange = (e) => {
+  const handleRatingChange = (e: ChangeEvent<HTMLSelectElement>) => {
     const rating = e.target.value;
     setSearchParams(
       (prev) => {

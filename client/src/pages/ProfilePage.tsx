@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import type { Establishment, Review } from '@dishdetail/shared';
 import { useAuth } from '../auth/useAuth';
 import { api } from '../api';
 import ReviewCard from '../components/ReviewCard';
@@ -10,12 +11,12 @@ export default function ProfilePage() {
   const [isEditing, setIsEditing] = useState(false);
   const [avatarUrl, setAvatarUrl] = useState(user?.avatar || '');
   const [bio, setBio] = useState(user?.bio || '');
-  const [restaurants, setRestaurants] = useState([]);
-  const [reviews, setReviews] = useState([]);
+  const [restaurants, setRestaurants] = useState<Establishment[]>([]);
+  const [reviews, setReviews] = useState<Review[]>([]);
 
   useEffect(() => {
     let cancelled = false;
-    Promise.all([api().getEstablishments(), api().getReviews()])
+    void Promise.all([api().getEstablishments(), api().getReviews()])
       .then(([estRes, revRes]) => {
         if (cancelled) return;
         setRestaurants(estRes.establishments);
@@ -28,8 +29,9 @@ export default function ProfilePage() {
   }, []);
 
   const userReviews = useMemo(() => {
+    if (!user) return [];
     return reviews.filter((r) => r.reviewer === user.username);
-  }, [reviews, user.username]);
+  }, [reviews, user]);
 
   const handleSave = async () => {
     await updateProfile({ avatar: avatarUrl, bio });
@@ -37,10 +39,12 @@ export default function ProfilePage() {
   };
 
   const handleCancel = () => {
-    setAvatarUrl(user.avatar || '');
-    setBio(user.bio || '');
+    setAvatarUrl(user?.avatar || '');
+    setBio(user?.bio || '');
     setIsEditing(false);
   };
+
+  if (!user) return null;
 
   return (
     <main className="profile-page">
@@ -68,7 +72,12 @@ export default function ProfilePage() {
                 />
               </label>
               <div className="edit-actions">
-                <button onClick={handleSave} className="save-button">
+                <button
+                  onClick={() => {
+                    void handleSave();
+                  }}
+                  className="save-button"
+                >
                   Save
                 </button>
                 <button onClick={handleCancel} className="cancel-button">
@@ -78,7 +87,7 @@ export default function ProfilePage() {
             </div>
           : <>
               <img
-                src={user.avatar}
+                src={user.avatar || undefined}
                 alt={user.username}
                 className="profile-avatar"
               />
@@ -104,7 +113,7 @@ export default function ProfilePage() {
             {userReviews.map((review) => {
               const restaurant = restaurants.find(
                 (r) => r._id === review.establishment,
-              );
+              ) as Establishment;
               return (
                 <ReviewCard
                   key={review._id}

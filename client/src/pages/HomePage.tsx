@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import type { Establishment, Review } from '@dishdetail/shared';
 import { Link } from 'react-router';
 import { ChefHat, Search, Star, UtensilsCrossed } from 'lucide-react';
 import ReviewCard from '../components/ReviewCard';
@@ -6,8 +7,8 @@ import { api } from '../api';
 import './HomePage.css';
 
 export default function HomePage() {
-  const [restaurants, setRestaurants] = useState([]);
-  const [reviews, setReviews] = useState([]);
+  const [restaurants, setRestaurants] = useState<Establishment[]>([]);
+  const [reviews, setReviews] = useState<Review[]>([]);
 
   useEffect(() => {
     let cancelled = false;
@@ -34,7 +35,7 @@ export default function HomePage() {
       .slice(0, 4)
       .map((review) => ({
         review,
-        restaurant: restaurantById.get(review.establishment),
+        restaurant: restaurantById.get(review.establishment) as Establishment,
       }))
       .filter(({ restaurant }) => restaurant);
   }, [reviews, restaurantById]);

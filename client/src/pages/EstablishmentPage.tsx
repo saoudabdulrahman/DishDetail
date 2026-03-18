@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import type { Establishment, Review } from '@dishdetail/shared';
 import { useParams, useNavigate } from 'react-router';
 import { Star, MapPin, Clock, Phone, Globe, ArrowLeft } from 'lucide-react';
 import { api } from '../api';
@@ -6,10 +7,10 @@ import DetailReviewCard from '../components/DetailReviewCard';
 import './EstablishmentPage.css';
 
 export default function EstablishmentPage() {
-  const { slug } = useParams();
+  const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
-  const [restaurant, setRestaurant] = useState(null);
-  const [reviews, setReviews] = useState([]);
+  const [restaurant, setRestaurant] = useState<Establishment | null>(null);
+  const [reviews, setReviews] = useState<Review[]>([]);
   const [visibleCount, setVisibleCount] = useState(2);
   const [imgLoaded, setImgLoaded] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -17,7 +18,9 @@ export default function EstablishmentPage() {
 
   const sortedReviews = useMemo(() => {
     return [...reviews].sort(
-      (a, b) => b.rating - a.rating || new Date(b.date) - new Date(a.date),
+      (a, b) =>
+        b.rating - a.rating ||
+        new Date(b.date).getTime() - new Date(a.date).getTime(),
     );
   }, [reviews]);
 
@@ -47,40 +50,44 @@ export default function EstablishmentPage() {
       setLoading(true);
       setError('');
       try {
-        const { establishment, reviews } = await api().getEstablishment(slug);
+        const { establishment, reviews } = await api().getEstablishment(slug!);
         if (!cancelled) {
           setRestaurant(establishment);
           setReviews(reviews);
         }
-      } catch (e) {
-        if (!cancelled) setError(e.message || 'Failed to load.');
+      } catch (e: unknown) {
+        if (!cancelled)
+          setError(e instanceof Error ? e.message : 'Failed to load.');
       } finally {
         if (!cancelled) setLoading(false);
       }
     };
 
-    fetchEstablishment();
+    void fetchEstablishment();
 
     return () => {
       cancelled = true;
     };
   }, [slug]);
 
-  const handleUpdateReview = async (reviewId, updates) => {
+  const handleUpdateReview = async (
+    reviewId: string,
+    updates: Partial<Review>,
+  ) => {
     try {
       const { review } = await api().updateReview(reviewId, updates);
       setReviews((prev) => prev.map((r) => (r._id === reviewId ? review : r)));
-    } catch (e) {
-      alert(e.message || 'Failed to update review.');
+    } catch (e: unknown) {
+      alert(e instanceof Error ? e.message : 'Failed to update review.');
     }
   };
 
-  const handleDeleteReview = async (reviewId) => {
+  const handleDeleteReview = async (reviewId: string) => {
     try {
       await api().deleteReview(reviewId);
       setReviews((prev) => prev.filter((r) => r._id !== reviewId));
-    } catch (e) {
-      alert(e.message || 'Failed to delete review.');
+    } catch (e: unknown) {
+      alert(e instanceof Error ? e.message : 'Failed to delete review.');
     }
   };
 
@@ -106,7 +113,9 @@ export default function EstablishmentPage() {
       <main className="error-container">
         <p>{error || 'Restaurant not found'}</p>
         <button
-          onClick={() => navigate('/establishments')}
+          onClick={() => {
+            void navigate('/establishments');
+          }}
           className="back-button"
         >
           <ArrowLeft size={18} /> Go Back
@@ -118,7 +127,9 @@ export default function EstablishmentPage() {
   return (
     <main className="establishment-detail">
       <button
-        onClick={() => navigate('/establishments')}
+        onClick={() => {
+          void navigate('/establishments');
+        }}
         className="back-button"
       >
         <ArrowLeft size={18} /> Back to Establishments
@@ -126,7 +137,7 @@ export default function EstablishmentPage() {
 
       <div className="detail-banner shimmer">
         <img
-          src={restaurant.restaurantImage}
+          src={restaurant.restaurantImage || undefined}
           alt={restaurant.restaurantName}
           className={`detail-banner-img ${imgLoaded ? 'loaded' : ''}`}
           onLoad={() => setImgLoaded(true)}
@@ -192,8 +203,12 @@ export default function EstablishmentPage() {
               <DetailReviewCard
                 key={review._id}
                 review={review}
-                onUpdate={handleUpdateReview}
-                onDelete={handleDeleteReview}
+                onUpdate={(id, updates) => {
+                  void handleUpdateReview(id, updates);
+                }}
+                onDelete={(id) => {
+                  void handleDeleteReview(id);
+                }}
               />
             ))}
             {visibleCount < reviews.length && (
