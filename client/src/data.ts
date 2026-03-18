@@ -173,6 +173,7 @@ export const reviewsData = [
     reviewImage: null,
   },
 ];
+
 export const restaurantsData = [
   {
     id: 1,
