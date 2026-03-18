@@ -48,7 +48,7 @@ async function main() {
   const uniqueReviewers = Array.from(
     new Set(reviewsData.map((r: any) => r.reviewer).filter(Boolean)),
   ) as string[];
-  
+
   await User.insertMany(
     uniqueReviewers.map((username: string) => ({
       username,

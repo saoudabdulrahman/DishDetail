@@ -1,7 +1,9 @@
 import mongoose from 'mongoose';
 import type { Establishment } from '@dishdetail/shared';
 
-type EstablishmentDocument = Omit<Establishment, '_id'> & { _id: mongoose.Types.ObjectId };
+type EstablishmentDocument = Omit<Establishment, '_id'> & {
+  _id: mongoose.Types.ObjectId;
+};
 
 const EstablishmentSchema = new mongoose.Schema<EstablishmentDocument>(
   {
@@ -22,4 +24,7 @@ const EstablishmentSchema = new mongoose.Schema<EstablishmentDocument>(
   { timestamps: true },
 );
 
-export default mongoose.model<EstablishmentDocument>('Establishment', EstablishmentSchema);
+export default mongoose.model<EstablishmentDocument>(
+  'Establishment',
+  EstablishmentSchema,
+);

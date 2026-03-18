@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import type { Review, Comment, OwnerResponse } from '@dishdetail/shared';
 
-type ReviewDocument = Omit<Review, '_id' | 'establishment'> & { 
+type ReviewDocument = Omit<Review, '_id' | 'establishment'> & {
   _id: mongoose.Types.ObjectId;
   establishment: mongoose.Types.ObjectId;
 };

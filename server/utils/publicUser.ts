@@ -12,6 +12,7 @@ export function publicUser(u: any): PublicUser {
     avatar: u.avatar,
     bio: u.bio,
     role: u.role,
-    ownedEstablishment: u.ownedEstablishment ? u.ownedEstablishment.toString() : null,
+    ownedEstablishment:
+      u.ownedEstablishment ? u.ownedEstablishment.toString() : null,
   };
 }
