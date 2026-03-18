@@ -4,7 +4,8 @@
   "version": "1.0.0",
   "workspaces": [
     "client",
-    "server"
+    "server",
+    "shared"
   ],
   "scripts": {
     "dev": "npm-run-all --parallel dev:client dev:server",
