@@ -31,8 +31,8 @@ function SubmitReviewPage() {
     void Promise.all([api().getEstablishments(), api().getReviews()])
       .then(([estRes, revRes]) => {
         if (cancelled) return;
-        setRestaurants(estRes.establishments);
-        const top = [...revRes.reviews]
+        setRestaurants(estRes?.establishments || []);
+        const top = [...(revRes?.reviews || [])]
           .sort((a, b) => b.rating - a.rating)
           .slice(0, 4);
         setFeatured(top);

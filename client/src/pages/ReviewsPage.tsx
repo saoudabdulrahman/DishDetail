@@ -25,8 +25,8 @@ export default function ReviewsPage() {
           api().getReviews({ q: query }),
         ]);
         if (!cancelled) {
-          setRestaurants(estRes.establishments);
-          setReviews(revRes.reviews);
+          setRestaurants(estRes?.establishments || []);
+          setReviews(revRes?.reviews || []);
         }
       } catch (e: unknown) {
         if (!cancelled)

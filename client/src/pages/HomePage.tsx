@@ -15,8 +15,8 @@ export default function HomePage() {
     Promise.all([api().getEstablishments(), api().getReviews()])
       .then(([estRes, revRes]) => {
         if (cancelled) return;
-        setRestaurants(estRes.establishments);
-        setReviews(revRes.reviews);
+        setRestaurants(estRes?.establishments || []);
+        setReviews(revRes?.reviews || []);
       })
       .catch(() => {});
     return () => {

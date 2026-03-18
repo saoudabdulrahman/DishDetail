@@ -22,9 +22,8 @@ export default function EstablishmentsPage() {
       setLoading(true);
       setError('');
       try {
-        const { establishments: fetchedEstablishments } =
-          await api().getEstablishments({ q: query, minRating });
-        if (!cancelled) setEstablishments(fetchedEstablishments);
+        const res = await api().getEstablishments({ q: query, minRating });
+        if (!cancelled) setEstablishments(res?.establishments || []);
       } catch (e: unknown) {
         if (!cancelled)
           setError(

@@ -50,10 +50,10 @@ export default function EstablishmentPage() {
       setLoading(true);
       setError('');
       try {
-        const { establishment, reviews } = await api().getEstablishment(slug!);
+        const res = await api().getEstablishment(slug!);
         if (!cancelled) {
-          setRestaurant(establishment);
-          setReviews(reviews);
+          setRestaurant(res?.establishment || null);
+          setReviews(res?.reviews || []);
         }
       } catch (e: unknown) {
         if (!cancelled)
