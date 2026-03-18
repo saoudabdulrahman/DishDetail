@@ -20,6 +20,7 @@ function SubmitReviewPage() {
 
   const [rating, setRating] = useState(0);
   const [hover, setHover] = useState(0);
+  const [reviewTitle, setReviewTitle] = useState('');
   const [reviewText, setReviewText] = useState('');
   const [error, setError] = useState('');
 
@@ -68,6 +69,11 @@ function SubmitReviewPage() {
       return;
     }
 
+    if (!reviewTitle.trim()) {
+      setError('Please enter a review title.');
+      return;
+    }
+
     if (!reviewText.trim()) {
       setError('Please write a review.');
       return;
@@ -75,6 +81,7 @@ function SubmitReviewPage() {
 
     try {
       const { review } = await api().createReview(selectedRestaurant.slug, {
+        title: reviewTitle,
         rating,
         reviewer: user?.username || 'Anonymous',
         reviewerAvatar: user?.avatar,
@@ -144,6 +151,14 @@ function SubmitReviewPage() {
                 ))}
               </div>
 
+              <input
+                type="text"
+                placeholder="Review title..."
+                id="review-title"
+                className="review-title-input"
+                value={reviewTitle}
+                onChange={(e) => setReviewTitle(e.target.value)}
+              />
               <textarea
                 placeholder="Write your review here..."
                 id="review-box"

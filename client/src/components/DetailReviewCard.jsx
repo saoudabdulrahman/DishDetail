@@ -8,6 +8,7 @@ import './DetailReviewCard.css';
 export default function DetailReviewCard({ review, onDelete, onUpdate }) {
   const { user } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
+  const [editTitle, setEditTitle] = useState(review.title || '');
   const [editBody, setEditBody] = useState(review.body);
   const [editRating, setEditRating] = useState(review.rating);
   const [hoverRating, setHoverRating] = useState(0);
@@ -31,6 +32,7 @@ export default function DetailReviewCard({ review, onDelete, onUpdate }) {
 
   const handleSave = () => {
     onUpdate(review._id, {
+      title: editTitle,
       body: editBody,
       rating: editRating,
       isEdited: true,
@@ -46,6 +48,7 @@ export default function DetailReviewCard({ review, onDelete, onUpdate }) {
 
   const handleCancel = () => {
     setIsEditing(false);
+    setEditTitle(review.title || '');
     setEditBody(review.body);
     setEditRating(review.rating);
   };
@@ -181,6 +184,13 @@ export default function DetailReviewCard({ review, onDelete, onUpdate }) {
               />
             ))}
           </div>
+          <input
+            type="text"
+            className="edit-review-title"
+            placeholder="Review title"
+            value={editTitle}
+            onChange={(e) => setEditTitle(e.target.value)}
+          />
           <textarea
             className="edit-review-textarea"
             value={editBody}
@@ -244,6 +254,7 @@ export default function DetailReviewCard({ review, onDelete, onUpdate }) {
           )}
         </div>
       </div>
+      {review.title && <h3 className="detail-review-title">{review.title}</h3>}
       <p className="detail-review-body">{review.body}</p>
       {review.reviewImage && (
         <div className="detail-review-image-container">

@@ -23,7 +23,7 @@ export default function ReviewCard({ review, restaurant }) {
           className={`review-item-content ${!review.reviewImage ? 'no-image' : ''}`}
         >
           <div className="review-item-header">
-            <h3>{restaurant.restaurantName}</h3>
+            <h3>{review.title || 'Untitled Review'}</h3>
             <StarRating rating={review.rating} />
           </div>
           <p className="review-meta">

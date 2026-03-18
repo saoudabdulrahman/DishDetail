@@ -2,6 +2,7 @@ export const reviewsData = [
   {
     id: 1,
     restaurantId: 1,
+    title: 'Sinigang That Takes You Home',
     rating: 5,
     reviewer: 'Marco R.',
     reviewerAvatar: 'https://i.pravatar.cc/150?u=marco',
@@ -25,6 +26,7 @@ export const reviewsData = [
   {
     id: 2,
     restaurantId: 2,
+    title: 'Rich Broth and Perfect Gyoza',
     rating: 4,
     reviewer: 'Camille S.',
     reviewerAvatar: 'https://i.pravatar.cc/150?u=camille',
@@ -44,6 +46,7 @@ export const reviewsData = [
   {
     id: 3,
     restaurantId: 3,
+    title: 'Best Unlimited KBBQ in BGC',
     rating: 5,
     reviewer: 'Jolo P.',
     reviewerAvatar: 'https://i.pravatar.cc/150?u=jolo',
@@ -69,6 +72,7 @@ export const reviewsData = [
   {
     id: 4,
     restaurantId: 4,
+    title: 'Kare-Kare Like Nanay Used to Make',
     rating: 4,
     reviewer: 'Diana L.',
     reviewerAvatar: 'https://i.pravatar.cc/150?u=diana',
@@ -88,6 +92,7 @@ export const reviewsData = [
   {
     id: 5,
     restaurantId: 5,
+    title: 'Great Views, Pricey Portions',
     rating: 3,
     reviewer: 'Elaine V.',
     reviewerAvatar: 'https://i.pravatar.cc/150?u=elaine',
@@ -99,6 +104,7 @@ export const reviewsData = [
   {
     id: 6,
     restaurantId: 6,
+    title: 'Smash Burgers Done Right',
     rating: 4,
     reviewer: 'Francis G.',
     reviewerAvatar: 'https://i.pravatar.cc/150?u=francis',
@@ -110,6 +116,7 @@ export const reviewsData = [
   {
     id: 7,
     restaurantId: 7,
+    title: 'A Culinary Masterpiece',
     rating: 5,
     reviewer: 'Grace T.',
     reviewerAvatar: 'https://i.pravatar.cc/150?u=grace',
@@ -121,6 +128,7 @@ export const reviewsData = [
   {
     id: 8,
     restaurantId: 8,
+    title: 'XLB Worth the Wait',
     rating: 4,
     reviewer: 'Henry C.',
     reviewerAvatar: 'https://i.pravatar.cc/150?u=henry',
@@ -132,6 +140,7 @@ export const reviewsData = [
   {
     id: 9,
     restaurantId: 9,
+    title: 'Student Budget Champion',
     rating: 4,
     reviewer: 'Ivy M.',
     reviewerAvatar: 'https://i.pravatar.cc/150?u=ivy',
@@ -143,6 +152,7 @@ export const reviewsData = [
   {
     id: 10,
     restaurantId: 10,
+    title: 'Epic Boodle Fight by the Bay',
     rating: 5,
     reviewer: 'Jake D.',
     reviewerAvatar: 'https://i.pravatar.cc/150?u=jake',
@@ -154,6 +164,7 @@ export const reviewsData = [
   {
     id: 11,
     restaurantId: 1,
+    title: 'Decent Food, Slow Service',
     rating: 3,
     reviewer: 'New User',
     reviewerAvatar: 'https://i.pravatar.cc/150?u=newuser',

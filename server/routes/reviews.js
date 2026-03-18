@@ -18,6 +18,7 @@ router.get('/', async (req, res) => {
       restaurantName: { $regex: q, $options: 'i' },
     }).select('_id');
     filter.$or = [
+      { title: { $regex: q, $options: 'i' } },
       { body: { $regex: q, $options: 'i' } },
       { reviewer: { $regex: q, $options: 'i' } },
       { establishment: { $in: estMatches.map((e) => e._id) } },
@@ -32,6 +33,7 @@ router.get('/', async (req, res) => {
 router.put('/:id', async (req, res) => {
   try {
     const allowed = [
+      'title',
       'body',
       'rating',
       'isEdited',

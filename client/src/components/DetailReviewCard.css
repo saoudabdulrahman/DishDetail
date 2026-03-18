@@ -50,10 +50,43 @@
   margin-left: 0.5rem;
 }
 
+.detail-review-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text);
+  margin: 0 0 0.25rem 0;
+}
+
 .detail-review-body {
   color: var(--text-muted);
   line-height: 1.6;
   white-space: pre-wrap;
+}
+
+.edit-review-title {
+  background-color: var(--bg-light);
+  width: 100%;
+  padding: 0.75rem;
+  border: none;
+  border-radius: 1rem;
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 600;
+  box-shadow: var(--shadow-m);
+  transition:
+    filter 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.edit-review-title:hover {
+  filter: brightness(1.1);
+}
+
+.edit-review-title:focus {
+  outline: none;
+  box-shadow:
+    var(--shadow-m),
+    0 0 0 2px var(--primary);
 }
 
 .detail-review-image-container {

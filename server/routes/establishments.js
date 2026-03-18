@@ -52,14 +52,15 @@ router.post('/:slug/reviews', async (req, res) => {
     const est = await Establishment.findOne({ slug: req.params.slug });
     if (!est) return res.status(404).json({ error: 'Not found.' });
 
-    const { rating, reviewer, reviewerAvatar, body, reviewImage } =
+    const { title, rating, reviewer, reviewerAvatar, body, reviewImage } =
       req.body || {};
-    if (!rating || !reviewer || !body) {
+    if (!title || !rating || !reviewer || !body) {
       return res.status(400).json({ error: 'Missing required fields.' });
     }
 
     const review = await Review.create({
       establishment: est._id,
+      title,
       rating: Number(rating),
       reviewer,
       reviewerAvatar:

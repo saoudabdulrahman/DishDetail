@@ -73,6 +73,7 @@ async function main() {
     reviewsData.map((r) => ({
       legacyId: r.id,
       establishment: idMap.get(r.restaurantId),
+      title: ensureString(r.title, 'Untitled Review'),
       rating: r.rating,
       reviewer: ensureString(r.reviewer),
       reviewerAvatar: ensureString(r.reviewerAvatar),
