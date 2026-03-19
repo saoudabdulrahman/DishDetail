@@ -1,0 +1,13 @@
+# Handle line endings automatically
+* text=auto
+
+# Ensure JS, JSX, and CSS files always use LF (Linux/Mac style)
+*.js text eol=lf
+*.jsx text eol=lf
+*.css text eol=lf
+*.json text eol=lf
+
+# Denote binary files (don't try to fix line endings in images)
+*.png binary
+*.jpg binary
+*.jpeg binary

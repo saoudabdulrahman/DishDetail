@@ -1,16 +1,26 @@
 # DishDetail
 
-Restaurant review web app (React + Node.js + MongoDB).
+DishDetail is a full-stack restaurant review application built with **React**, **Node.js**, **Express**, and **MongoDB**. It allows users to discover local restaurants, read community reviews, and share their own dining experiences.
+
+## Project Structure
+
+This project uses **npm Workspaces** to manage both the frontend and backend in a single repository:
+
+- `client/`: React frontend (Vite, React Router 7, Lucide Icons)
+- `server/`: Express backend (Node.js, Mongoose, JWT-style auth simulation)
+- `server/seed/`: Database seeding scripts and sample data
 
 ## Prerequisites
 
 - [Node.js](https://nodejs.org/) (v18 or later)
-- npm (comes with Node.js)
-- MongoDB (local install or MongoDB Atlas)
+- [npm](https://www.npmjs.com/) (v9 or later)
+- [MongoDB](https://www.mongodb.com/try/download/community) (local instance or MongoDB Atlas)
 
 ## Initial Setup
 
-### 1) Install dependencies
+### 1) Install Dependencies
+
+From the root directory, run the following to install dependencies for all workspaces:
 
 ```sh
 npm install
@@ -18,18 +28,16 @@ npm install
 
 ### 2) Configure Environment Variables
 
-Create a `.env` file in the root of the project and add your database configuration:
+Create a `.env` file in the **server/** directory (or the root if running locally) with your configuration:
 
 ```env
 MONGODB_URI=mongodb://127.0.0.1:27017/dishdetail
 PORT=3000
 ```
 
-_(If you are using MongoDB Atlas, replace the URI with your Atlas connection string)._
-
 ### 3) Seed the Database
 
-Populate the database with sample establishments, users, and reviews:
+Populate the database with sample establishments and reviews:
 
 ```sh
 npm run seed
@@ -39,57 +47,62 @@ npm run seed
 
 ## Running the Application
 
-There are two ways to run the application depending on your needs: **Development Mode** (recommended for coding) and **Production Mode**.
+### Development Mode
 
-### Option A: Development Mode (Hot-Reloading)
+Run both the frontend and backend simultaneously using the root development script:
 
-This mode runs the Vite frontend development server and the Node.js backend server simultaneously. It supports hot-reloading for frontend changes.
+```sh
+npm run dev
+```
 
-1. **Start the backend server** (in one terminal terminal):
+- **Frontend**: [http://localhost:5173](http://localhost:5173)
+- **Backend API**: [http://localhost:3000](http://localhost:3000)
 
-   ```sh
-   npm start
-   ```
+### Individual Workspaces
 
-   _The backend will run on `http://localhost:3000`._
+You can also run components separately:
 
-2. **Start the Vite frontend dev server** (in a second terminal):
+**Backend Server:**
 
-   ```sh
-   npm run dev
-   ```
+```sh
+npm run dev:server
+```
 
-   _Vite will automatically open the app or provide a local URL (usually `http://localhost:5173`). API requests are automatically proxied to the backend._
+**Frontend Client:**
 
-### Option B: Production Mode
-
-This mode builds the optimized React frontend and serves it directly through the Node.js Express backend.
-
-1. **Build the React app**:
-
-   ```sh
-   npm run build
-   ```
-
-2. **Start the Node server**:
-
-   ```sh
-   npm start
-   ```
-
-3. Open your browser and navigate to: **`http://localhost:3000`**
+```sh
+npm run dev:client
+```
 
 ---
 
-## Resources Used
+## Key Features
+
+- **Authentication**: User signup and login with persistent sessions.
+- **Restaurant Discovery**: Search by name or filter by minimum rating.
+- **Rich Reviews**: Star ratings, body text, and image support.
+- **Social Interaction**: Vote reviews as "Helpful" or "Unhelpful" and leave comments.
+- **Owner Responses**: Establishment owners can respond to customer feedback.
+- **Deep Linking**: Direct navigation to specific reviews via hash fragments (e.g., `#/establishments/slug#review_id`).
+- **Responsive Design**: Optimized for both desktop and mobile devices.
+- **Layout Stability**: Implemented `scrollbar-gutter` and stable image placeholders to prevent layout shifting.
+
+## Development Tools
+
+- **Formatting**: `npm run format` (Prettier)
+- **Linting**: `npm run lint` (ESLint)
+- **Git Hooks**: Pre-commit hooks via **Husky** and **lint-staged**.
+
+---
+
+## Resources & Credits
 
 - [React](https://react.dev/)
 - [Vite](https://vite.dev/)
+- [React Router](https://reactrouter.com/)
+- [Lucide React](https://lucide.dev/)
 - [Express](https://expressjs.com/)
-- [MongoDB](https://www.mongodb.com/)
 - [Mongoose](https://mongoosejs.com/)
-- [Google Fonts](https://fonts.google.com/)
-- [Lucide](https://lucide.dev/)
 - [Simple Icons](https://simpleicons.org/)
-- [Pravatar](https://pravatar.cc/)
-- [Unsplash](https://unsplash.com/)
+- [Pravatar](https://pravatar.cc/) (Avatars)
+- [Unsplash](https://unsplash.com/) (Photography)
