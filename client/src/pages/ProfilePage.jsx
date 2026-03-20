@@ -36,13 +36,19 @@ export default function ProfilePage() {
   }, [reviews, user.username]);
 
   const handleSave = async () => {
+    const promise = updateProfile({ avatar: avatarUrl, bio });
+
+    toast.promise(promise, {
+      loading: 'Updating profile...',
+      success: 'Profile updated successfully!',
+      error: 'Failed to update profile. Please try again.',
+    });
+
     try {
-      await updateProfile({ avatar: avatarUrl, bio });
+      await promise;
       setIsEditing(false);
-      toast.success('Profile updated successfully!');
     } catch (error) {
       console.error(error);
-      toast.error('Failed to update profile. Please try again.');
     }
   };
 

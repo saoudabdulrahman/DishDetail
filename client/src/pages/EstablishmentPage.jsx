@@ -68,24 +68,36 @@ export default function EstablishmentPage() {
   }, [slug]);
 
   const handleUpdateReview = async (reviewId, updates) => {
+    const promise = api().updateReview(reviewId, updates);
+
+    toast.promise(promise, {
+      loading: 'Updating review...',
+      success: 'Review updated.',
+      error: 'Failed to update review.',
+    });
+
     try {
-      const { review } = await api().updateReview(reviewId, updates);
+      const { review } = await promise;
       setReviews((prev) => prev.map((r) => (r._id === reviewId ? review : r)));
-      toast.success('Review updated.');
     } catch (error) {
       console.error(error);
-      toast.error('Failed to update review.');
     }
   };
 
   const handleDeleteReview = async (reviewId) => {
+    const promise = api().deleteReview(reviewId);
+
+    toast.promise(promise, {
+      loading: 'Deleting review...',
+      success: 'Review deleted.',
+      error: 'Failed to delete review.',
+    });
+
     try {
-      await api().deleteReview(reviewId);
+      await promise;
       setReviews((prev) => prev.filter((r) => r._id !== reviewId));
-      toast.success('Review deleted.');
     } catch (error) {
       console.error(error);
-      toast.error('Failed to delete review.');
     }
   };
 

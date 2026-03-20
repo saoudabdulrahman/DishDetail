@@ -89,7 +89,6 @@ export default function DetailReviewCard({ review, onDelete, onUpdate }) {
     setUnhelpfulCount(newUnhelpful);
     setUserVote(newVote);
 
-    toast.success('Vote updated.');
     onUpdate(review._id, {
       helpfulCount: newHelpful,
       unhelpfulCount: newUnhelpful,

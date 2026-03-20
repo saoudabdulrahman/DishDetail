@@ -61,51 +61,50 @@ function SubmitReviewPage() {
     e.preventDefault();
     setError('');
 
-    if (isSubmitting) {
-      toast.error('Your review is being submitted. Please wait.');
-      return;
-    } else {
-      setIsSubmitting(true);
-    }
+    if (isSubmitting) return;
 
     if (!selectedRestaurant) {
       setError('Please select a restaurant to review.');
-      setIsSubmitting(false);
       return;
     }
 
     if (rating === 0) {
       setError('Please select a star rating.');
-      setIsSubmitting(false);
       return;
     }
 
     if (!reviewTitle.trim()) {
       setError('Please enter a review title.');
-      setIsSubmitting(false);
       return;
     }
 
     if (!reviewText.trim()) {
       setError('Please write a review.');
-      setIsSubmitting(false);
       return;
     }
 
+    setIsSubmitting(true);
+
+    const promise = api().createReview(selectedRestaurant.slug, {
+      title: reviewTitle,
+      rating,
+      reviewer: user?.username || 'Anonymous',
+      reviewerAvatar: user?.avatar,
+      body: reviewText,
+      reviewImage: null,
+    });
+
+    toast.promise(promise, {
+      loading: 'Submitting your review...',
+      success: 'Review submitted successfully!',
+      error: 'Failed to submit review.',
+    });
+
     try {
-      const { review } = await api().createReview(selectedRestaurant.slug, {
-        title: reviewTitle,
-        rating,
-        reviewer: user?.username || 'Anonymous',
-        reviewerAvatar: user?.avatar,
-        body: reviewText,
-        reviewImage: null,
-      });
+      const { review } = await promise;
       navigate(`/establishments/${selectedRestaurant.slug}#${review._id}`);
-      toast.success('Review submitted successfully!');
     } catch (error) {
       console.error(error);
-      toast.error('Failed to submit review.');
     } finally {
       setIsSubmitting(false);
     }
