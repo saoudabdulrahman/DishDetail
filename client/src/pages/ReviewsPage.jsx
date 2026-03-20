@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router';
+import { toast } from 'sonner';
 import ReviewCard from '../components/ReviewCard';
 import { api } from '../api';
 import './ReviewsPage.css';
@@ -31,6 +32,7 @@ export default function ReviewsPage() {
         if (!cancelled) {
           console.error(error);
           setError('Failed to load reviews.');
+          toast.error('Failed to load reviews.');
         }
       } finally {
         if (!cancelled) setLoading(false);

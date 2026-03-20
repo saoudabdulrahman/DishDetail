@@ -38,7 +38,7 @@ function SubmitReviewPage() {
         setFeatured(top);
       })
       .catch(() => {
-        // ignore; page still usable
+        toast.error('Failed to load restaurant list.');
       });
     return () => {
       cancelled = true;

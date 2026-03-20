@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router';
 import { ChefHat, Search, Star, UtensilsCrossed } from 'lucide-react';
+import { toast } from 'sonner';
 import ReviewCard from '../components/ReviewCard';
 import { api } from '../api';
 import './HomePage.css';
@@ -17,7 +18,10 @@ export default function HomePage() {
         setRestaurants(estRes.establishments);
         setReviews(revRes.reviews);
       })
-      .catch(() => {});
+      .catch((error) => {
+        console.error(error);
+        toast.error('Failed to load homepage data.');
+      });
     return () => {
       cancelled = true;
     };
