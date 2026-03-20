@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import { Star, Search } from 'lucide-react';
+import { toast } from 'sonner';
 import ReviewCard from '../components/ReviewCard';
 import { api } from '../api';
 import { useAuth } from '../auth/useAuth';
@@ -23,6 +24,7 @@ function SubmitReviewPage() {
   const [reviewTitle, setReviewTitle] = useState('');
   const [reviewText, setReviewText] = useState('');
   const [error, setError] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -59,23 +61,34 @@ function SubmitReviewPage() {
     e.preventDefault();
     setError('');
 
+    if (isSubmitting) {
+      toast.error('Your review is being submitted. Please wait.');
+      return;
+    } else {
+      setIsSubmitting(true);
+    }
+
     if (!selectedRestaurant) {
       setError('Please select a restaurant to review.');
+      setIsSubmitting(false);
       return;
     }
 
     if (rating === 0) {
       setError('Please select a star rating.');
+      setIsSubmitting(false);
       return;
     }
 
     if (!reviewTitle.trim()) {
       setError('Please enter a review title.');
+      setIsSubmitting(false);
       return;
     }
 
     if (!reviewText.trim()) {
       setError('Please write a review.');
+      setIsSubmitting(false);
       return;
     }
 
@@ -89,8 +102,12 @@ function SubmitReviewPage() {
         reviewImage: null,
       });
       navigate(`/establishments/${selectedRestaurant.slug}#${review._id}`);
+      toast.success('Review submitted successfully!');
     } catch (err) {
-      setError(err.message || 'Failed to submit review.');
+      console.error(err);
+      toast.error('Failed to submit review.');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 

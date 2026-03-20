@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useParams, useNavigate } from 'react-router';
 import { Star, MapPin, Clock, Phone, Globe, ArrowLeft } from 'lucide-react';
+import { toast } from 'sonner';
 import { api } from '../api';
 import DetailReviewCard from '../components/DetailReviewCard';
 import './EstablishmentPage.css';
@@ -70,8 +71,10 @@ export default function EstablishmentPage() {
     try {
       const { review } = await api().updateReview(reviewId, updates);
       setReviews((prev) => prev.map((r) => (r._id === reviewId ? review : r)));
+      toast.success('Review updated.');
     } catch (e) {
-      alert(e.message || 'Failed to update review.');
+      console.error(e.message);
+      toast.error('Failed to update review.');
     }
   };
 
@@ -79,8 +82,10 @@ export default function EstablishmentPage() {
     try {
       await api().deleteReview(reviewId);
       setReviews((prev) => prev.filter((r) => r._id !== reviewId));
+      toast.success('Review deleted.');
     } catch (e) {
-      alert(e.message || 'Failed to delete review.');
+      console.error(e.message);
+      toast.error('Failed to delete review.');
     }
   };
 
