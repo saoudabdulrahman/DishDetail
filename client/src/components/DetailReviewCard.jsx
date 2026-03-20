@@ -89,6 +89,7 @@ export default function DetailReviewCard({ review, onDelete, onUpdate }) {
     setUnhelpfulCount(newUnhelpful);
     setUserVote(newVote);
 
+    toast.success('Vote updated.');
     onUpdate(review._id, {
       helpfulCount: newHelpful,
       unhelpfulCount: newUnhelpful,
@@ -103,6 +104,7 @@ export default function DetailReviewCard({ review, onDelete, onUpdate }) {
         body: responseBody,
       },
     });
+    toast.success('Response saved.');
     setIsEditingResponse(false);
   };
 
@@ -131,6 +133,7 @@ export default function DetailReviewCard({ review, onDelete, onUpdate }) {
 
     const updatedComments = [...(review.comments || []), newComment];
     onUpdate(review._id, { comments: updatedComments });
+    toast.success('Comment added.');
     setCommentText('');
   };
 

@@ -24,9 +24,9 @@ export default function EstablishmentsPage() {
         const { establishments: fetchedEstablishments } =
           await api().getEstablishments({ q: query, minRating });
         if (!cancelled) setEstablishments(fetchedEstablishments);
-      } catch (e) {
+      } catch (error) {
         if (!cancelled) {
-          console.error(e);
+          console.error(error);
           setError('Failed to load establishments.');
           toast.error('Failed to load establishments.');
         }

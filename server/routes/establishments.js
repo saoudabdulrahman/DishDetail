@@ -27,8 +27,8 @@ router.get('/', async (req, res) => {
       .lean();
 
     return res.json({ establishments });
-  } catch (e) {
-    console.error(e);
+  } catch (error) {
+    console.error(error);
     return res.status(500).json({ error: 'Failed to fetch establishments.' });
   }
 });
@@ -40,8 +40,8 @@ router.get('/:slug', async (req, res) => {
 
     const reviews = await Review.find({ establishment: est._id }).lean();
     return res.json({ establishment: est, reviews });
-  } catch (e) {
-    console.error(e);
+  } catch (error) {
+    console.error(error);
     return res.status(400).json({ error: 'Could not fetch establishment.' });
   }
 });
@@ -73,7 +73,8 @@ router.post('/:slug/reviews', async (req, res) => {
     await syncEstablishmentRating(est._id);
 
     return res.status(201).json({ review });
-  } catch {
+  } catch (error) {
+    console.error(error);
     return res.status(400).json({ error: 'Failed to create review.' });
   }
 });

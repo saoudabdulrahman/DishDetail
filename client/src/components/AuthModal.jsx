@@ -36,8 +36,9 @@ function LoginForm({ onSwitch, onSuccess }) {
       login(validUser, rememberMe);
       onSuccess();
       toast.success('Logged in successfully.');
-    } catch (err) {
-      setError(err.message || 'Invalid username or password.');
+    } catch (error) {
+      console.error(error);
+      setError('Invalid username or password.');
       triggerShake();
     }
   };
@@ -167,8 +168,9 @@ function SignupForm({ onSwitch, onSuccess }) {
       login(created, true);
       onSuccess();
       toast.success('Account created successfully.');
-    } catch (err) {
-      setError(err.message || 'Signup failed.');
+    } catch (error) {
+      console.error(error);
+      setError('Signup failed.');
       triggerShake();
     }
   };

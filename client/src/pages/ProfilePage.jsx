@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import { toast } from 'sonner';
 import { useAuth } from '../auth/useAuth';
 import { api } from '../api';
 import ReviewCard from '../components/ReviewCard';
@@ -21,7 +22,10 @@ export default function ProfilePage() {
         setRestaurants(estRes.establishments);
         setReviews(revRes.reviews);
       })
-      .catch(() => {});
+      .catch((error) => {
+        console.error(error);
+        toast.error('Failed to load data. Please try again.');
+      });
     return () => {
       cancelled = true;
     };
@@ -32,8 +36,14 @@ export default function ProfilePage() {
   }, [reviews, user.username]);
 
   const handleSave = async () => {
-    await updateProfile({ avatar: avatarUrl, bio });
-    setIsEditing(false);
+    try {
+      await updateProfile({ avatar: avatarUrl, bio });
+      setIsEditing(false);
+      toast.success('Profile updated successfully!');
+    } catch (error) {
+      console.error(error);
+      toast.error('Failed to update profile. Please try again.');
+    }
   };
 
   const handleCancel = () => {

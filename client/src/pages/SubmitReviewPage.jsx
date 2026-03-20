@@ -103,8 +103,8 @@ function SubmitReviewPage() {
       });
       navigate(`/establishments/${selectedRestaurant.slug}#${review._id}`);
       toast.success('Review submitted successfully!');
-    } catch (err) {
-      console.error(err);
+    } catch (error) {
+      console.error(error);
       toast.error('Failed to submit review.');
     } finally {
       setIsSubmitting(false);

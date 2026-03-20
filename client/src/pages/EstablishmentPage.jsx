@@ -53,8 +53,8 @@ export default function EstablishmentPage() {
           setRestaurant(establishment);
           setReviews(reviews);
         }
-      } catch (e) {
-        if (!cancelled) setError(e.message || 'Failed to load.');
+      } catch (error) {
+        if (!cancelled) setError(error || 'Failed to load.');
       } finally {
         if (!cancelled) setLoading(false);
       }
@@ -72,8 +72,8 @@ export default function EstablishmentPage() {
       const { review } = await api().updateReview(reviewId, updates);
       setReviews((prev) => prev.map((r) => (r._id === reviewId ? review : r)));
       toast.success('Review updated.');
-    } catch (e) {
-      console.error(e.message);
+    } catch (error) {
+      console.error(error);
       toast.error('Failed to update review.');
     }
   };
@@ -83,8 +83,8 @@ export default function EstablishmentPage() {
       await api().deleteReview(reviewId);
       setReviews((prev) => prev.filter((r) => r._id !== reviewId));
       toast.success('Review deleted.');
-    } catch (e) {
-      console.error(e.message);
+    } catch (error) {
+      console.error(error);
       toast.error('Failed to delete review.');
     }
   };

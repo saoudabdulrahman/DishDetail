@@ -27,8 +27,11 @@ export default function ReviewsPage() {
           setRestaurants(estRes.establishments);
           setReviews(revRes.reviews);
         }
-      } catch (e) {
-        if (!cancelled) setError(e.message || 'Failed to load reviews.');
+      } catch (error) {
+        if (!cancelled) {
+          console.error(error);
+          setError('Failed to load reviews.');
+        }
       } finally {
         if (!cancelled) setLoading(false);
       }
