@@ -1,9 +1,8 @@
 import { useState, useRef, useEffect } from 'react';
 import { Link, NavLink, useNavigate, useSearchParams } from 'react-router';
 import { toast } from 'sonner';
-import { ChevronDown, Dot, LogOut, Menu, Search, User } from 'lucide-react';
+import { Bell, LogOut, Menu, Search, CircleUser } from 'lucide-react';
 import { useAuth } from '../auth/useAuth';
-import './Header.css';
 
 export default function Header() {
   const { user, logout, setAuthModal } = useAuth();
@@ -39,130 +38,160 @@ export default function Header() {
   const closeMenu = () => setIsMenuOpen(false);
 
   return (
-    <header>
-      <div className="left-header-actions">
-        <div className="logo">
-          <h2>
-            <Link to="/" onClick={closeMenu}>
-              Dish Detail
-            </Link>
-          </h2>
-        </div>
+    <header className="bg-background/80 fixed top-0 z-50 flex w-full shadow-[0_20px_40px_rgba(20,10,25,0.4)] backdrop-blur-md transition-colors duration-300">
+      <div className="mx-auto flex w-full max-w-360 items-center justify-between px-8 py-4">
+        <Link
+          to="/"
+          onClick={closeMenu}
+          className="text-on-background font-headline hover:text-on-background text-2xl font-bold tracking-tighter italic no-underline"
+        >
+          DishDetail
+        </Link>
 
-        <nav className={`main-nav ${isMenuOpen ? 'open' : ''}`}>
-          <NavLink to="/establishments" onClick={closeMenu}>
-            {({ isActive }) => (
-              <>
-                Establishments
-                {isActive && <Dot size={32} className="nav-active-dot" />}
-              </>
-            )}
+        <nav
+          className={`hidden items-center space-x-8 md:flex ${isMenuOpen ? 'open' : ''}`}
+        >
+          <NavLink
+            to="/"
+            onClick={closeMenu}
+            className={({ isActive }) =>
+              `font-headline flex items-center gap-1 text-lg font-bold tracking-tight no-underline transition-colors duration-200 ${
+                isActive ?
+                  'text-primary border-secondary border-b-2 pb-1'
+                : 'text-on-surface-variant hover:text-on-background'
+              }`
+            }
+          >
+            Explore
           </NavLink>
-          <NavLink to="/reviews" onClick={closeMenu}>
-            {({ isActive }) => (
-              <>
-                Reviews
-                {isActive && <Dot size={32} className="nav-active-dot" />}
-              </>
-            )}
+          <NavLink
+            to="/establishments"
+            onClick={closeMenu}
+            className={({ isActive }) =>
+              `font-headline flex items-center gap-1 text-lg font-bold tracking-tight no-underline transition-colors duration-200 ${
+                isActive ?
+                  'text-primary border-secondary border-b-2 pb-1'
+                : 'text-on-surface-variant hover:text-on-background'
+              }`
+            }
+          >
+            Establishments
+          </NavLink>
+          <NavLink
+            to="/reviews"
+            onClick={closeMenu}
+            className={({ isActive }) =>
+              `font-headline flex items-center gap-1 text-lg font-bold tracking-tight no-underline transition-colors duration-200 ${
+                isActive ?
+                  'text-primary border-secondary border-b-2 pb-1'
+                : 'text-on-surface-variant hover:text-on-background'
+              }`
+            }
+          >
+            Reviews
           </NavLink>
         </nav>
-      </div>
 
-      <div className="search-container">
-        <input
-          id="search-input"
-          type="text"
-          placeholder="Search for restaurants..."
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          onKeyDown={handleKeyDown}
-          aria-label="Search restaurants"
-        />
-        <button id="search-button" onClick={handleSearch} aria-label="Search">
-          <Search size={18} />
-        </button>
-      </div>
-
-      <button
-        id="hamburger-button"
-        onClick={() => setIsMenuOpen(!isMenuOpen)}
-        aria-label="Toggle navigation menu"
-        aria-expanded={isMenuOpen}
-      >
-        <Menu />
-      </button>
-
-      <div className={`header-actions ${isMenuOpen ? 'open' : ''}`}>
-        {user ?
-          <>
-            <Link
-              to="/submit-review"
-              id="submit-review-button"
-              className="button-link"
-              onClick={closeMenu}
+        <div className="flex items-center space-x-6">
+          <div className="group relative hidden sm:block">
+            <input
+              id="search-input"
+              type="text"
+              placeholder="Search for restaurants..."
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              onKeyDown={handleKeyDown}
+              aria-label="Search restaurants"
+              className="bg-background focus:ring-secondary text-on-background font-ui w-64 rounded-full border-none py-2 pr-12 pl-6 text-sm transition-all duration-300 focus:ring-1 focus:outline-none"
+            />
+            <button
+              onClick={handleSearch}
+              aria-label="Search"
+              className="text-secondary/60 hover:text-secondary absolute top-1/2 right-3 -translate-y-1/2 cursor-pointer border-none bg-transparent transition-colors duration-200"
             >
-              Submit Review
-            </Link>
-            <div className="user-dropdown" ref={dropdownRef}>
-              <button
-                className="user-info-toggle"
-                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                aria-expanded={isDropdownOpen}
-              >
-                <User size={18} />
-                <span className="username">{user.username}</span>
-                <ChevronDown
-                  size={18}
-                  className={`chevron ${isDropdownOpen ? 'open' : ''}`}
-                />
-              </button>
-              <div className={`dropdown-menu ${isDropdownOpen ? 'open' : ''}`}>
-                <NavLink
-                  to="/profile"
-                  id="profile-button"
-                  onClick={() => {
-                    setIsDropdownOpen(false);
-                    closeMenu();
-                  }}
+              <Search size={18} />
+            </button>
+          </div>
+
+          {/* Hamburger - mobile only */}
+          <button
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            aria-label="Toggle navigation menu"
+            aria-expanded={isMenuOpen}
+            className="text-on-surface-variant hover:text-on-background cursor-pointer border-none bg-transparent transition-colors duration-200 md:hidden"
+          >
+            <Menu />
+          </button>
+
+          {/* Actions */}
+          <div
+            className={`flex items-center space-x-4 ${isMenuOpen ? 'open' : ''}`}
+          >
+            {user ?
+              <>
+                <Link
+                  to="/submit-review"
+                  onClick={closeMenu}
+                  className="text-on-surface-variant hover:text-on-background font-ui flex cursor-pointer items-center gap-2 border-none bg-transparent text-sm transition-colors duration-200"
                 >
-                  <User size={16} /> Profile
-                </NavLink>
+                  <Bell size={20} />
+                </Link>
+
+                {/* User dropdown */}
+                <div className="relative" ref={dropdownRef}>
+                  <button
+                    onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                    aria-expanded={isDropdownOpen}
+                    className="text-on-surface-variant hover:text-on-background font-ui flex cursor-pointer items-center gap-2 border-none bg-transparent text-sm transition-colors duration-200"
+                  >
+                    <CircleUser />
+                  </button>
+
+                  {/* Dropdown menu */}
+                  {isDropdownOpen && (
+                    <div className="bg-surface-container shadow-m absolute top-full right-0 z-50 mt-2 w-48 overflow-hidden rounded-lg">
+                      <NavLink
+                        to="/profile"
+                        onClick={() => {
+                          setIsDropdownOpen(false);
+                          closeMenu();
+                        }}
+                        className="text-on-surface hover:bg-surface-container-high font-ui flex items-center gap-2 px-4 py-3 text-sm no-underline transition-colors duration-200"
+                      >
+                        <CircleUser size={16} /> Profile
+                      </NavLink>
+                      <button
+                        onClick={() => {
+                          logout();
+                          setIsDropdownOpen(false);
+                          closeMenu();
+                          toast.success('Logged out successfully.');
+                        }}
+                        className="text-on-surface hover:bg-surface-container-high font-ui flex w-full cursor-pointer items-center gap-2 border-none bg-transparent px-4 py-3 text-sm transition-colors duration-200"
+                      >
+                        <LogOut size={16} /> Log Out
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </>
+            : <>
                 <button
-                  id="logout-button"
-                  onClick={() => {
-                    logout();
-                    setIsDropdownOpen(false);
-                    closeMenu();
-                    toast.success('Logged out successfully.');
-                  }}
+                  onClick={() => setAuthModal('login')}
+                  className="font-ui text-on-surface-variant hover:text-on-background cursor-pointer border-none bg-transparent px-4 py-2 text-sm font-semibold whitespace-nowrap transition-colors duration-200"
                 >
-                  <LogOut size={16} /> Log Out
+                  Log In
                 </button>
-              </div>
-            </div>
-          </>
-        : <>
-            <button
-              id="login-button"
-              className="button-link"
-              onClick={() => {
-                setAuthModal('login');
-              }}
-            >
-              Log In
-            </button>
-            <button
-              id="signup-button"
-              className="button-link"
-              onClick={() => {
-                setAuthModal('signup');
-              }}
-            >
-              Sign Up
-            </button>
-          </>
-        }
+                <button
+                  onClick={() => setAuthModal('signup')}
+                  className="font-ui bg-primary text-on-primary cursor-pointer rounded-full border-none px-4 py-2 text-sm font-semibold whitespace-nowrap transition-all duration-200 hover:brightness-110"
+                >
+                  Sign Up
+                </button>
+              </>
+            }
+          </div>
+        </div>
       </div>
     </header>
   );
