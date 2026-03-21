@@ -1,47 +1,208 @@
 import { useState } from 'react';
 import { Link } from 'react-router';
+import {
+  ArrowRight,
+  Star,
+  ThumbsUp,
+  ThumbsDown,
+  MessageCircle,
+} from 'lucide-react';
 import StarRating from './StarRating';
 import { formatDate } from '../utils/date';
-import './ReviewCard.css';
 
-export default function ReviewCard({ review, restaurant }) {
+// variant: 'feature' (large left card) | 'stack' (horizontal right cards) | 'feed' (main review feed)
+export default function ReviewCard({ review, restaurant, variant = 'stack' }) {
   const [imgLoaded, setImgLoaded] = useState(false);
 
+  if (variant === 'feature') {
+    return (
+      <Link
+        to={`/establishments/${restaurant.slug}#${review._id}`}
+        className="group relative col-span-12 block h-125 overflow-hidden rounded-lg lg:col-span-7"
+      >
+        {review.reviewImage ?
+          <img
+            src={review.reviewImage}
+            alt={`Food or ambiance from ${restaurant.restaurantName}`}
+            className={`h-full w-full object-cover transition-transform duration-700 group-hover:scale-110 ${imgLoaded ? 'opacity-100' : 'opacity-0'}`}
+            onLoad={() => setImgLoaded(true)}
+          />
+        : <div className="bg-surface-container-high h-full w-full" />}
+
+        <div className="from-surface-container-lowest absolute inset-0 bg-linear-to-t to-transparent opacity-90" />
+
+        <div className="absolute bottom-0 left-0 p-10">
+          <div className="mb-4 flex items-center space-x-2">
+            <span className="bg-primary text-on-primary rounded-full px-3 py-1 text-[10px] font-bold tracking-widest uppercase">
+              {restaurant.cuisineType ?? 'Featured'}
+            </span>
+            <span className="text-primary flex items-center text-sm font-bold">
+              <Star size={12} fill="currentColor" className="text-sm" />
+              {Number(review.rating).toFixed(1)}
+            </span>
+          </div>
+
+          <h3 className="font-headline text-on-surface mb-4 text-5xl font-black tracking-tight">
+            {restaurant.restaurantName}
+          </h3>
+
+          <p className="font-body text-on-surface-variant mb-2 max-w-md">
+            {review.title || 'Untitled Review'}
+          </p>
+          <p className="font-body text-on-surface-variant mb-6 max-w-md text-sm opacity-75">
+            {review.reviewer} · {formatDate(review.date)}
+          </p>
+
+          <div className="text-primary flex items-center space-x-2 font-bold">
+            <span>Read Review</span>
+            <ArrowRight className="transition-transform group-hover:translate-x-2" />
+          </div>
+        </div>
+      </Link>
+    );
+  }
+
+  if (variant === 'feed') {
+    return (
+      <article className="bg-surface-container-high group overflow-hidden rounded-lg">
+        <div className="flex flex-col md:flex-row">
+          {review.reviewImage && (
+            <div className="h-64 shrink-0 overflow-hidden md:h-auto md:w-1/3">
+              <img
+                src={review.reviewImage}
+                alt={`Food or ambiance from ${restaurant.restaurantName}`}
+                className={`h-full w-full object-cover transition-transform duration-500 group-hover:scale-105 ${imgLoaded ? 'opacity-100' : 'opacity-0'}`}
+                onLoad={() => setImgLoaded(true)}
+              />
+            </div>
+          )}
+
+          <div className="flex flex-col justify-between p-8 md:w-2/3">
+            <div>
+              <div className="mb-4 flex items-start justify-between">
+                <div>
+                  <h3 className="font-headline text-on-surface text-2xl font-bold">
+                    {restaurant.restaurantName}
+                  </h3>
+                  <p className="text-primary text-sm font-bold tracking-tighter uppercase">
+                    {restaurant.cuisine}
+                  </p>
+                </div>
+                <div className="bg-surface-container-lowest text-primary flex items-center space-x-1 rounded-full px-3 py-1 font-bold">
+                  <Star size={14} fill="currentColor" />
+                  <span>{Number(review.rating).toFixed(1)}</span>
+                </div>
+              </div>
+
+              <p className="font-body text-on-surface-variant mb-6 leading-relaxed">
+                &quot;{review.body?.slice(0, 200)}&quot;
+                {review.body?.length > 200 ? '…' : ''}
+              </p>
+            </div>
+
+            <div className="border-outline-variant/10 flex items-center justify-between border-t pt-6">
+              <Link
+                to={`/establishments/${restaurant.slug}#${review._id}`}
+                className="flex items-center space-x-3"
+              >
+                {review.reviewerAvatar ?
+                  <img
+                    src={review.reviewerAvatar}
+                    alt={review.reviewer}
+                    className="h-10 w-10 rounded-full object-cover"
+                  />
+                : <div className="bg-surface-bright text-primary flex h-10 w-10 items-center justify-center rounded-full font-bold">
+                    {review.reviewer?.slice(0, 2).toUpperCase()}
+                  </div>
+                }
+                <div>
+                  <p className="text-sm font-bold">{review.reviewer}</p>
+                  <p className="text-on-surface-variant text-[10px] tracking-widest uppercase">
+                    {formatDate(review.date)}
+                  </p>
+                </div>
+              </Link>
+
+              <div className="flex items-center space-x-6">
+                <Link
+                  to={`/establishments/${restaurant.slug}#${review._id}`}
+                  className="group/btn flex items-center space-x-2 transition-transform active:scale-90"
+                >
+                  <ThumbsUp
+                    className="text-on-surface-variant group-hover/btn:text-primary transition-colors"
+                    size={20}
+                  />
+                  <span className="text-on-surface-variant group-hover/btn:text-on-surface text-xs font-bold">
+                    {review.helpfulCount ?? 0}
+                  </span>
+                </Link>
+                <Link
+                  to={`/establishments/${restaurant.slug}#${review._id}`}
+                  className="group/btn flex items-center space-x-2 transition-transform active:scale-90"
+                >
+                  <ThumbsDown
+                    className="text-on-surface-variant group-hover/btn:text-primary transition-colors"
+                    size={20}
+                  />
+                </Link>
+                <Link
+                  to={`/establishments/${restaurant.slug}#${review._id}`}
+                  className="group/btn flex items-center space-x-2 transition-transform active:scale-90"
+                >
+                  <MessageCircle
+                    className="text-on-surface-variant group-hover/btn:text-primary transition-colors"
+                    size={20}
+                  />
+                  <span className="text-on-surface-variant group-hover/btn:text-on-surface text-xs font-bold">
+                    {review.comments?.length ?? 0}
+                  </span>
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+    );
+  }
+
+  // variant === 'stack'
   return (
     <Link
       to={`/establishments/${restaurant.slug}#${review._id}`}
-      className="card-link"
+      className="bg-surface-container-high group flex flex-1 overflow-hidden rounded-lg"
     >
-      <article className="review-item">
-        {review.reviewImage && (
-          <div className="restaurant-image-container shimmer">
-            <img
-              src={review.reviewImage}
-              alt={`Food or ambiance from ${restaurant.restaurantName}`}
-              className={`restaurant-img ${imgLoaded ? 'loaded' : ''}`}
-              onLoad={() => setImgLoaded(true)}
-            />
-          </div>
-        )}
-        <div
-          className={`review-item-content ${!review.reviewImage ? 'no-image' : ''}`}
-        >
-          <div className="review-item-header">
-            <h3>{review.title || 'Untitled Review'}</h3>
-            <StarRating rating={review.rating} />
-          </div>
-          <p className="review-meta">
-            {restaurant.restaurantName} · {review.reviewer} ·{' '}
-            {formatDate(review.date)}
-          </p>
-          <p className="review-body">
-            {review.body.length > 80 ?
-              review.body.substring(0, 80).split(' ').slice(0, -1).join(' ') +
-              ' ...'
-            : review.body}
-          </p>
+      {review.reviewImage && (
+        <div className="relative w-2/5 shrink-0">
+          <img
+            src={review.reviewImage}
+            alt={`Food or ambiance from ${restaurant.restaurantName}`}
+            className={`h-full w-full object-cover transition-transform duration-500 group-hover:scale-105 ${imgLoaded ? 'opacity-100' : 'opacity-0'}`}
+            onLoad={() => setImgLoaded(true)}
+          />
         </div>
-      </article>
+      )}
+
+      <div className="flex flex-1 flex-col justify-center p-6">
+        <span className="text-primary font-label mb-1 text-[10px] font-bold tracking-widest uppercase">
+          {restaurant.cuisineType ?? restaurant.restaurantName}
+        </span>
+
+        <h4 className="font-headline mb-2 text-2xl font-bold">
+          {review.title || 'Untitled Review'}
+        </h4>
+
+        <div className="text-primary mb-1">
+          <StarRating rating={review.rating} />
+        </div>
+
+        <p className="text-on-surface-variant mb-4 text-xs">
+          {review.reviewer} · {formatDate(review.date)}
+        </p>
+
+        <span className="text-on-surface-variant hover:text-primary text-xs font-bold uppercase transition-colors">
+          Read Review →
+        </span>
+      </div>
     </Link>
   );
 }

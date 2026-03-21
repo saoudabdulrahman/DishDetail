@@ -8,6 +8,7 @@ import './ReviewsPage.css';
 export default function ReviewsPage() {
   const [searchParams] = useSearchParams();
   const query = (searchParams.get('q') || '').toLowerCase();
+  const cuisineFilter = searchParams.get('cuisine') || '';
   const [restaurants, setRestaurants] = useState([]);
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -56,12 +57,17 @@ export default function ReviewsPage() {
         const restaurant = restaurantMap.get(review.establishment);
         return { review, restaurant };
       })
-      .filter(({ restaurant }) => !!restaurant);
-  }, [reviews, restaurantMap]);
+      .filter(({ restaurant }) => !!restaurant)
+      .filter(({ restaurant }) =>
+        cuisineFilter ? restaurant.cuisine === cuisineFilter : true,
+      );
+  }, [reviews, restaurantMap, cuisineFilter]);
 
   return (
     <main>
-      <h2 className="review-header">Latest Reviews</h2>
+      <h2 className="review-header">
+        {cuisineFilter ? `${cuisineFilter} Reviews` : 'Latest Reviews'}
+      </h2>
       <section className="card-grid">
         {loading ?
           <p>Loading…</p>
