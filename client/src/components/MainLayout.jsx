@@ -1,13 +1,12 @@
 import { Outlet } from 'react-router';
 import Header from './Header';
 import Footer from './Footer';
-import './MainLayout.css';
 
 const MainLayout = () => {
   return (
-    <div className="main-layout">
+    <div className="grid min-h-dvh grid-cols-[minmax(0,1fr)] grid-rows-[auto_1fr_auto]">
       <Header />
-      <div className="main-content">
+      <div>
         <Outlet />
       </div>
       <Footer />
