@@ -88,7 +88,7 @@ export default function Header() {
               onChange={(e) => setQuery(e.target.value)}
               onKeyDown={handleKeyDown}
               aria-label="Search restaurants"
-              className="bg-background focus:ring-secondary text-on-background font-ui w-64 rounded-full border-none py-2 pr-12 pl-6 text-sm transition-all duration-300 focus:ring-1 focus:outline-none"
+              className="bg-background focus:ring-secondary text-on-background font-ui w-64 rounded-xl border-none py-2 pr-12 pl-6 text-sm transition-all duration-300 focus:ring-1 focus:outline-none"
             />
             <button
               onClick={handleSearch}
@@ -104,7 +104,7 @@ export default function Header() {
             {user ?
               <>
                 <Link
-                  to="/submit-review"
+                  to="/"
                   className="text-on-surface-variant hover:text-on-background font-ui flex cursor-pointer items-center gap-2 border-none bg-transparent text-sm transition-colors duration-200"
                 >
                   <Bell size={20} />
@@ -121,7 +121,7 @@ export default function Header() {
                   </button>
 
                   {isDropdownOpen && (
-                    <div className="bg-surface-container shadow-m absolute top-full right-0 z-50 mt-2 w-48 overflow-hidden rounded-lg">
+                    <div className="bg-surface-container absolute top-full right-0 z-50 mt-2 w-48 overflow-hidden rounded-sm">
                       <NavLink
                         to="/profile"
                         onClick={() => setIsDropdownOpen(false)}
@@ -152,7 +152,7 @@ export default function Header() {
                 </button>
                 <button
                   onClick={() => setAuthModal('signup')}
-                  className="font-ui bg-primary text-on-primary cursor-pointer rounded-full border-none px-4 py-2 text-sm font-semibold whitespace-nowrap transition-all duration-200 hover:brightness-110"
+                  className="font-ui bg-primary text-on-primary cursor-pointer rounded-xl border-none px-4 py-2 text-sm font-semibold whitespace-nowrap transition-all duration-200 hover:brightness-110"
                 >
                   Sign Up
                 </button>
@@ -191,7 +191,7 @@ export default function Header() {
                 }
               }}
               aria-label="Search restaurants"
-              className="bg-surface-container text-on-background font-ui focus:ring-secondary w-full rounded-full border-none py-2 pr-12 pl-6 text-sm transition-colors duration-200 outline-none"
+              className="bg-surface-container text-on-background font-ui focus:ring-secondary w-full rounded-xl border-none py-2 pr-12 pl-6 text-sm transition-colors duration-200 outline-none"
             />
             <button
               onClick={() => {
@@ -208,7 +208,6 @@ export default function Header() {
           {/* Mobile nav links */}
           <nav className="mb-4 flex flex-col space-y-1">
             {[
-              { to: '/', label: 'Explore' },
               { to: '/establishments', label: 'Establishments' },
               { to: '/reviews', label: 'Reviews' },
             ].map(({ to, label }) => (
@@ -217,7 +216,7 @@ export default function Header() {
                 to={to}
                 onClick={closeMenu}
                 className={({ isActive }) =>
-                  `font-headline rounded-lg px-3 py-2 text-base font-bold tracking-tight no-underline transition-colors duration-200 ${
+                  `font-headline rounded-sm px-3 py-2 text-base font-bold tracking-tight no-underline transition-colors duration-200 ${
                     isActive ?
                       'text-primary bg-primary/10'
                     : 'text-on-surface-variant hover:text-on-background hover:bg-surface-container'
@@ -236,14 +235,14 @@ export default function Header() {
                 <Link
                   to="/submit-review"
                   onClick={closeMenu}
-                  className="text-on-surface-variant hover:text-on-background hover:bg-surface-container font-ui flex items-center gap-2 rounded-lg px-3 py-2 text-sm no-underline transition-colors duration-200"
+                  className="text-on-surface-variant hover:text-on-background hover:bg-surface-container font-ui flex items-center gap-2 rounded-sm px-3 py-2 text-sm no-underline transition-colors duration-200"
                 >
                   <Bell size={16} /> Notifications
                 </Link>
                 <NavLink
                   to="/profile"
                   onClick={closeMenu}
-                  className="text-on-surface-variant hover:text-on-background hover:bg-surface-container font-ui flex items-center gap-2 rounded-lg px-3 py-2 text-sm no-underline transition-colors duration-200"
+                  className="text-on-surface-variant hover:text-on-background hover:bg-surface-container font-ui flex items-center gap-2 rounded-sm px-3 py-2 text-sm no-underline transition-colors duration-200"
                 >
                   <CircleUser size={16} /> Profile
                 </NavLink>
@@ -253,7 +252,7 @@ export default function Header() {
                     closeMenu();
                     toast.success('Logged out successfully.');
                   }}
-                  className="text-on-surface-variant hover:text-on-background hover:bg-surface-container font-ui flex w-full cursor-pointer items-center gap-2 rounded-lg border-none bg-transparent px-3 py-2 text-sm transition-colors duration-200"
+                  className="text-on-surface-variant hover:text-on-background hover:bg-surface-container font-ui flex w-full cursor-pointer items-center gap-2 rounded-sm border-none bg-transparent px-3 py-2 text-sm transition-colors duration-200"
                 >
                   <LogOut size={16} /> Log Out
                 </button>
@@ -264,7 +263,7 @@ export default function Header() {
                     setAuthModal('login');
                     closeMenu();
                   }}
-                  className="font-ui text-on-surface-variant hover:text-on-background w-full cursor-pointer rounded-lg border border-white/20 bg-transparent px-4 py-2 text-sm font-semibold transition-colors duration-200"
+                  className="font-ui text-on-surface-variant hover:text-on-background w-full cursor-pointer rounded-sm border border-white/20 bg-transparent px-4 py-2 text-sm font-semibold transition-colors duration-200"
                 >
                   Log In
                 </button>
@@ -273,7 +272,7 @@ export default function Header() {
                     setAuthModal('signup');
                     closeMenu();
                   }}
-                  className="font-ui bg-primary text-on-primary w-full cursor-pointer rounded-full border-none px-4 py-2 text-sm font-semibold transition-all duration-200 hover:brightness-110"
+                  className="font-ui bg-primary text-on-primary w-full cursor-pointer rounded-xl border-none px-4 py-2 text-sm font-semibold transition-all duration-200 hover:brightness-110"
                 >
                   Sign Up
                 </button>
