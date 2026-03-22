@@ -62,23 +62,6 @@
   --font-label: 'Noto Serif', serif;
   --font-display: 'Noto Serif', serif;
   --font-ui: 'Manrope', sans-serif;
-
-  /* Border radius */
-  --radius: 0.125rem;
-  --radius-lg: 0.25rem;
-  --radius-xl: 0.5rem;
-  --radius-full: 0.75rem;
-
-  /* Shadows */
-  --shadow-s:
-    inset 0 1px 2px oklch(1 0 0 / 18.82%), 0 1px 2px oklch(0 0 0 / 18.82%),
-    0 2px 4px oklch(0 0 0 / 8.24%);
-  --shadow-m:
-    inset 0 1px 2px oklch(1 0 0 / 31.37%), 0 2px 4px oklch(0 0 0 / 18.82%),
-    0 4px 8px oklch(0 0 0 / 8.24%);
-  --shadow-l:
-    inset 0 1px 2px oklch(1 0 0 / 43.92%), 0 4px 6px oklch(0 0 0 / 18.82%),
-    0 6px 10px oklch(0 0 0 / 8.24%);
 }
 
 @utility glass-nav {
@@ -93,6 +76,24 @@
   display: grid;
   grid-template-columns: repeat(12, 1fr);
   gap: 1.4rem;
+}
+
+@utility card-grid {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 1.5rem;
+}
+
+@media (min-width: 640px) {
+  .card-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .card-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
 }
 
 :root {
@@ -113,5 +114,65 @@
     animation-iteration-count: 1 !important;
     transition-duration: 0.01s !important;
     scroll-behavior: auto !important;
+  }
+}
+
+/* ─── AuthModal animations ───────────────────────────────────────────────── */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+}
+
+@keyframes shakeX {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  20% {
+    transform: translateX(-6px);
+  }
+  40% {
+    transform: translateX(6px);
+  }
+  60% {
+    transform: translateX(-4px);
+  }
+  80% {
+    transform: translateX(4px);
   }
 }
