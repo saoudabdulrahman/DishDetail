@@ -49,7 +49,7 @@ export default function Footer() {
         </div>
 
         <div className="font-body text-on-surface-variant text-xs tracking-[0.2em] uppercase opacity-80">
-          © 2026 DishDetail. A Nocturnal Atelier Experience.
+          © 2026 DishDetail
         </div>
       </div>
     </footer>
