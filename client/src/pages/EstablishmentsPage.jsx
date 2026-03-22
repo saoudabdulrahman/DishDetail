@@ -2,8 +2,6 @@ import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router';
 import EstablishmentCard from '../components/EstablishmentCard';
 import { api } from '../api';
-import './EstablishmentsPage.css';
-import { ChevronDown } from 'lucide-react';
 import { toast } from 'sonner';
 
 export default function EstablishmentsPage() {
@@ -58,39 +56,67 @@ export default function EstablishmentsPage() {
   };
 
   return (
-    <main>
-      <h2 className="establishments-header">Establishments</h2>
+    <main className="mx-auto max-w-7xl px-6 pt-24 pb-20 md:px-24">
+      {/* Page header */}
+      <section className="mb-12 text-center md:text-left">
+        <span className="text-primary font-label text-xs font-bold tracking-[0.2em] uppercase">
+          Curated Venues
+        </span>
+        <h1 className="font-headline text-on-surface mt-2 text-5xl font-black tracking-tighter md:text-7xl">
+          Establishments
+        </h1>
+      </section>
 
-      <div className="filter-bar">
-        <label htmlFor="rating-filter">Filter by Rating: </label>
-        <div className="rating-filter-container">
+      {/* Filter bar */}
+      <div className="mb-10 flex justify-center md:justify-start">
+        <div className="bg-surface-container-low flex items-center space-x-4 rounded-xl px-4 py-2">
+          <span className="text-on-surface-variant text-xs font-bold uppercase">
+            Filter by Rating:
+          </span>
           <select
             id="rating-filter"
-            className="rating-filter"
             value={minRating}
             onChange={handleRatingChange}
             aria-label="Filter establishments by minimum rating"
+            className="text-primary cursor-pointer border-none bg-transparent text-xs font-bold uppercase focus:ring-0"
           >
-            <option value={0}>All Ratings</option>
-            <option value={5}>5 Stars</option>
-            <option value={4}>4+ Stars</option>
-            <option value={3}>3+ Stars</option>
+            <option value={0} className="bg-surface-container-high">
+              All Ratings
+            </option>
+            <option value={5} className="bg-surface-container-high">
+              5 Stars
+            </option>
+            <option value={4} className="bg-surface-container-high">
+              4+ Stars
+            </option>
+            <option value={3} className="bg-surface-container-high">
+              3+ Stars
+            </option>
           </select>
-
-          <ChevronDown className="select-icon" size={18} aria-hidden="true" />
         </div>
       </div>
 
-      <section className="card-grid">
+      {/* Cards */}
+      <section className="space-y-4">
         {loading ?
-          <p>Loading…</p>
+          Array.from({ length: 6 }).map((_, i) => (
+            <div
+              key={i}
+              className="bg-surface-container-high h-36 animate-pulse rounded-sm"
+            />
+          ))
         : error ?
-          <p>{error}</p>
+          <p className="font-ui text-error col-span-full text-center text-sm">
+            {error}
+          </p>
         : establishments.length > 0 ?
           establishments.map((restaurant) => (
             <EstablishmentCard key={restaurant._id} restaurant={restaurant} />
           ))
-        : <p>No establishments found.</p>}
+        : <p className="font-ui text-on-surface-variant col-span-full text-center text-sm">
+            No establishments found.
+          </p>
+        }
       </section>
     </main>
   );
