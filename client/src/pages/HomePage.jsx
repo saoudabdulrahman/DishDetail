@@ -116,15 +116,15 @@ export default function HomePage() {
         <div className="inline-flex flex-wrap gap-4">
           <Link
             to="/submit-review"
-            className="gold-gradient text-on-primary rounded-full px-8 py-4 font-bold shadow-lg transition-transform hover:scale-105 active:scale-95"
+            className="gold-gradient text-on-primary rounded-xl px-8 py-4 font-bold shadow-lg transition-transform hover:scale-105 active:scale-95"
           >
             Write a Review
           </Link>
           <Link
             to="/reviews"
-            className="bg-surface-container-high border-outline-variant/15 text-primary hover:bg-surface-container-highest rounded-full border px-8 py-4 font-bold transition-colors active:scale-95"
+            className="bg-surface-container-high border-outline-variant/15 text-primary hover:bg-surface-container-highest rounded-xl border px-8 py-4 font-bold transition-colors active:scale-95"
           >
-            Browse Michelin Guides
+            Browse Reviews
           </Link>
         </div>
       </section>
@@ -143,14 +143,14 @@ export default function HomePage() {
             <button
               onClick={handlePrev}
               disabled={totalPages <= 1}
-              className="border-outline-variant/20 hover:bg-surface-container flex h-12 w-12 cursor-pointer items-center justify-center rounded-full border transition-colors active:scale-90 disabled:opacity-30"
+              className="border-outline-variant/20 hover:bg-surface-container flex h-12 w-12 cursor-pointer items-center justify-center rounded-xl border transition-colors active:scale-90 disabled:opacity-30"
             >
               <ChevronLeft />
             </button>
             <button
               onClick={handleNext}
               disabled={totalPages <= 1}
-              className="border-outline-variant/20 hover:bg-surface-container flex h-12 w-12 cursor-pointer items-center justify-center rounded-full border transition-colors active:scale-90 disabled:opacity-30"
+              className="border-outline-variant/20 hover:bg-surface-container flex h-12 w-12 cursor-pointer items-center justify-center rounded-xl border transition-colors active:scale-90 disabled:opacity-30"
             >
               <ChevronRight />
             </button>
@@ -176,10 +176,10 @@ export default function HomePage() {
             </div>
           </div>
         : <div className="editorial-grid">
-            <div className="bg-surface-container-high col-span-12 h-125 animate-pulse rounded-lg lg:col-span-7" />
+            <div className="bg-surface-container-high col-span-12 h-125 animate-pulse rounded-sm lg:col-span-7" />
             <div className="col-span-12 flex flex-col space-y-6 lg:col-span-5">
-              <div className="bg-surface-container-high h-56 animate-pulse rounded-lg" />
-              <div className="bg-surface-container-high h-56 animate-pulse rounded-lg" />
+              <div className="bg-surface-container-high h-56 animate-pulse rounded-sm" />
+              <div className="bg-surface-container-high h-56 animate-pulse rounded-sm" />
             </div>
           </div>
         }
@@ -192,7 +192,7 @@ export default function HomePage() {
             <h2 className="font-headline text-4xl font-bold">
               Latest Critiques
             </h2>
-            <div className="bg-surface-container-low flex items-center space-x-4 rounded-full px-4 py-2">
+            <div className="bg-surface-container-low flex items-center space-x-4 rounded-xl px-4 py-2">
               <span className="text-on-surface-variant text-xs font-bold uppercase">
                 Sort By:
               </span>
@@ -226,7 +226,7 @@ export default function HomePage() {
           <div className="mt-16 text-center">
             <Link
               to="/reviews"
-              className="bg-surface-container-high hover:bg-surface-container-highest text-primary border-outline-variant/20 rounded-full border px-12 py-4 font-bold transition-all active:scale-95"
+              className="bg-surface-container-high hover:bg-surface-container-highest text-primary border-outline-variant/20 rounded-xl border px-12 py-4 font-bold transition-all active:scale-95"
             >
               Load More Editorial
             </Link>
@@ -237,7 +237,7 @@ export default function HomePage() {
         <aside className="lg:w-80">
           <div className="sticky top-28 space-y-12">
             {/* Popular Tastes */}
-            <div className="bg-surface-container-low rounded-lg p-8">
+            <div className="bg-surface-container-low rounded-sm p-8">
               <h4 className="font-headline mb-6 text-xl font-bold">
                 Popular Tastes
               </h4>
@@ -246,7 +246,7 @@ export default function HomePage() {
                   <Link
                     key={cuisine}
                     to={`/reviews?cuisine=${encodeURIComponent(cuisine)}`}
-                    className="bg-surface-container-highest text-on-surface-variant hover:bg-primary hover:text-on-primary cursor-pointer rounded-full px-4 py-2 text-xs font-bold transition-all duration-200"
+                    className="bg-surface-container-highest text-on-surface-variant hover:bg-primary hover:text-on-primary cursor-pointer rounded-xl px-4 py-2 text-xs font-bold transition-all duration-200"
                   >
                     {cuisine}
                   </Link>
@@ -255,7 +255,7 @@ export default function HomePage() {
             </div>
 
             {/* Newsletter */}
-            <div className="bg-surface-bright/60 border-outline-variant/10 relative overflow-hidden rounded-lg border p-8 backdrop-blur-lg">
+            <div className="bg-surface-bright/60 border-outline-variant/10 relative overflow-hidden rounded-sm border p-8 backdrop-blur-lg">
               <div className="relative z-10">
                 <h4 className="font-headline mb-2 text-xl font-bold">
                   The Weekly Menu
@@ -269,11 +269,11 @@ export default function HomePage() {
                   onChange={(e) => setEmail(e.target.value)}
                   onKeyDown={(e) => e.key === 'Enter' && handleSubscribe()}
                   placeholder="Email address"
-                  className="bg-surface-container-lowest focus:ring-primary mb-4 w-full rounded-full border-none px-5 py-3 text-sm transition-all outline-none focus:ring-1"
+                  className="bg-surface-container-lowest focus:ring-primary mb-4 w-full rounded-xl border-none px-5 py-3 text-sm transition-all outline-none focus:ring-1"
                 />
                 <button
                   onClick={handleSubscribe}
-                  className="gold-gradient text-on-primary w-full cursor-pointer rounded-full py-3 text-sm font-bold transition-transform active:scale-95"
+                  className="gold-gradient text-on-primary w-full cursor-pointer rounded-xl py-3 text-sm font-bold transition-transform active:scale-95"
                 >
                   Subscribe
                 </button>
@@ -292,7 +292,7 @@ export default function HomePage() {
                     className="flex items-center justify-between"
                   >
                     <div className="flex items-center space-x-3">
-                      <div className="bg-surface-container-highest text-primary flex h-10 w-10 items-center justify-center rounded-full text-xs font-bold">
+                      <div className="bg-surface-container-highest text-primary flex h-10 w-10 items-center justify-center rounded-xl text-xs font-bold">
                         {critic.name.slice(0, 2).toUpperCase()}
                       </div>
                       <div>
