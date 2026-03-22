@@ -4,8 +4,121 @@ import { toast } from 'sonner';
 import { useAuth } from '../auth/useAuth';
 import { formatDate } from '../utils/date';
 import StarRating from './StarRating';
-import './DetailReviewCard.css';
 
+/* ─── Shared input styles ────────────────────────────────────────────────── */
+const inputCls =
+  'font-ui bg-surface-container-high text-on-surface placeholder:text-on-surface-variant/40 w-full rounded-xl border-none px-5 py-2.5 text-sm outline-none transition-all duration-200 focus:ring-1 focus:ring-primary';
+
+const textareaCls =
+  'font-ui bg-surface-container-high text-on-surface placeholder:text-on-surface-variant/40 w-full rounded-2xl border-none px-5 py-3 text-sm outline-none transition-all duration-200 focus:ring-1 focus:ring-primary resize-none field-sizing-content';
+
+const iconBtnCls =
+  'flex cursor-pointer items-center justify-center rounded-xl border-none bg-transparent p-2 text-on-surface-variant transition-colors duration-200 hover:bg-surface-container-highest hover:text-primary';
+
+/* ─── Vote button ────────────────────────────────────────────────────────── */
+function VoteButton({ active, onClick, icon: Icon, label, count }) {
+  return (
+    <button
+      onClick={onClick}
+      className={`font-ui flex cursor-pointer items-center gap-2 rounded-xl border-2 px-4 py-1.5 text-sm transition-all duration-200 ${
+        active ?
+          'border-primary text-primary bg-surface-container-high'
+        : 'border-outline-variant text-on-surface-variant hover:border-primary/50 hover:bg-surface-container-high'
+      }`}
+    >
+      <Icon size={14} />
+      {label} ({count})
+    </button>
+  );
+}
+
+/* ─── Save / Cancel action row ───────────────────────────────────────────── */
+function EditActions({ onSave, onCancel, saveLabel = 'Save' }) {
+  return (
+    <div className="flex justify-end gap-2">
+      <button
+        onClick={onCancel}
+        className="font-ui bg-surface-container-highest text-on-surface-variant hover:bg-error/20 hover:text-error cursor-pointer rounded-xl border-none px-5 py-2 text-sm font-semibold transition-all duration-200"
+      >
+        Cancel
+      </button>
+      <button
+        onClick={onSave}
+        className="font-ui bg-primary text-on-primary cursor-pointer rounded-xl border-none px-5 py-2 text-sm font-semibold transition-all duration-200 hover:brightness-110"
+      >
+        {saveLabel}
+      </button>
+    </div>
+  );
+}
+
+/* ─── Comment item ───────────────────────────────────────────────────────── */
+function CommentItem({
+  comment,
+  user,
+  onEdit,
+  onDelete,
+  editingId,
+  editText,
+  setEditText,
+  onSaveEdit,
+  onCancelEdit,
+}) {
+  const isEditing = editingId === comment._id;
+  const isAuthor = user?.username === comment.author;
+
+  return (
+    <div className="bg-surface-container rounded-lg p-4">
+      <div className="mb-1 flex items-center justify-between gap-2">
+        <span className="font-ui text-on-surface text-sm font-semibold">
+          {comment.author}
+        </span>
+        <span className="font-ui text-on-surface-variant text-[10px] tracking-widest uppercase">
+          {formatDate(comment.date)}
+          {comment.isEdited && <span className="ml-1 italic">(edited)</span>}
+        </span>
+      </div>
+
+      {isEditing ?
+        <div className="mt-2 flex flex-col gap-2">
+          <textarea
+            className={textareaCls}
+            value={editText}
+            onChange={(e) => setEditText(e.target.value)}
+            rows={3}
+          />
+          <EditActions
+            onSave={() => onSaveEdit(comment._id)}
+            onCancel={onCancelEdit}
+          />
+        </div>
+      : <>
+          <p className="font-body text-on-surface-variant mt-1 text-sm leading-relaxed whitespace-pre-wrap">
+            {comment.body}
+          </p>
+          {isAuthor && (
+            <div className="mt-2 flex justify-end gap-3">
+              <button
+                onClick={() => onEdit(comment)}
+                className="font-ui text-on-surface-variant hover:text-primary cursor-pointer border-none bg-transparent text-xs transition-colors hover:underline"
+              >
+                Edit
+              </button>
+              <button
+                onClick={() => onDelete(comment._id)}
+                className="font-ui text-on-surface-variant hover:text-error cursor-pointer border-none bg-transparent text-xs transition-colors hover:underline"
+              >
+                Delete
+              </button>
+            </div>
+          )}
+        </>
+      }
+    </div>
+  );
+}
+
+/* ─── Main component ─────────────────────────────────────────────────────── */
 export default function DetailReviewCard({ review, onDelete, onUpdate }) {
   const { user } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
@@ -43,9 +156,8 @@ export default function DetailReviewCard({ review, onDelete, onUpdate }) {
   };
 
   const handleDelete = () => {
-    if (window.confirm('Are you sure you want to delete this review?')) {
+    if (window.confirm('Are you sure you want to delete this review?'))
       onDelete(review._id);
-    }
   };
 
   const handleCancel = () => {
@@ -60,11 +172,9 @@ export default function DetailReviewCard({ review, onDelete, onUpdate }) {
       toast.error('You must be logged in to vote on reviews.');
       return;
     }
-
-    let newHelpful = helpfulCount;
-    let newUnhelpful = unhelpfulCount;
-    let newVote = userVote;
-
+    let newHelpful = helpfulCount,
+      newUnhelpful = unhelpfulCount,
+      newVote = userVote;
     if (type === 'helpful') {
       if (userVote === 'helpful') {
         newHelpful--;
@@ -84,11 +194,9 @@ export default function DetailReviewCard({ review, onDelete, onUpdate }) {
         newVote = 'unhelpful';
       }
     }
-
     setHelpfulCount(newHelpful);
     setUnhelpfulCount(newUnhelpful);
     setUserVote(newVote);
-
     onUpdate(review._id, {
       helpfulCount: newHelpful,
       unhelpfulCount: newUnhelpful,
@@ -98,10 +206,7 @@ export default function DetailReviewCard({ review, onDelete, onUpdate }) {
   const handleSaveResponse = () => {
     if (!responseBody.trim()) return;
     onUpdate(review._id, {
-      ownerResponse: {
-        date: new Date().toISOString(),
-        body: responseBody,
-      },
+      ownerResponse: { date: new Date().toISOString(), body: responseBody },
     });
     toast.success('Response saved.');
     setIsEditingResponse(false);
@@ -122,219 +227,217 @@ export default function DetailReviewCard({ review, onDelete, onUpdate }) {
   const handleAddComment = (e) => {
     e.preventDefault();
     if (!commentText.trim()) return;
-
     const newComment = {
-      _id: Date.now().toString(), // Using string to match MongoDB behavior
+      _id: Date.now().toString(),
       author: user.username,
       date: new Date().toISOString(),
       body: commentText,
     };
-
-    const updatedComments = [...(review.comments || []), newComment];
-    onUpdate(review._id, { comments: updatedComments });
+    onUpdate(review._id, {
+      comments: [...(review.comments || []), newComment],
+    });
     toast.success('Comment added.');
     setCommentText('');
   };
 
   const handleDeleteComment = (commentId) => {
     if (window.confirm('Delete this comment?')) {
-      const updatedComments = review.comments.filter(
-        (c) => c._id !== commentId,
-      );
-      onUpdate(review._id, { comments: updatedComments });
+      onUpdate(review._id, {
+        comments: review.comments.filter((c) => c._id !== commentId),
+      });
       toast.success('Comment deleted.');
     }
   };
 
-  const startEditComment = (comment) => {
-    setEditingCommentId(comment._id);
-    setEditCommentText(comment.body);
-  };
-
   const saveEditComment = (commentId) => {
-    const updatedComments = review.comments.map((c) =>
-      c._id === commentId ? { ...c, body: editCommentText, isEdited: true } : c,
-    );
-    onUpdate(review._id, { comments: updatedComments });
+    onUpdate(review._id, {
+      comments: review.comments.map((c) =>
+        c._id === commentId ?
+          { ...c, body: editCommentText, isEdited: true }
+        : c,
+      ),
+    });
     setEditingCommentId(null);
     setEditCommentText('');
     toast.success('Comment updated.');
   };
 
+  /* ── Edit mode ─────────────────────────────────────────────────────────── */
   if (isEditing) {
     return (
-      <article className="detail-review-card editing">
-        <div className="edit-review-form">
-          <div
-            className="star-rating"
-            onMouseLeave={() => setHoverRating(0)}
-            style={{ display: 'flex', gap: '4px' }}
-          >
+      <article className="bg-surface-container rounded-2xl p-6">
+        <div className="flex flex-col gap-4">
+          {/* Star picker */}
+          <div className="flex gap-1" onMouseLeave={() => setHoverRating(0)}>
             {[1, 2, 3, 4, 5].map((star) => (
               <Star
                 key={star}
                 size={24}
-                className={
-                  star <= (hoverRating || editRating) ?
-                    'star-filled'
-                  : 'star-empty'
-                }
+                className="cursor-pointer transition-transform hover:scale-110"
                 fill={
-                  star <= (hoverRating || editRating) ?
-                    'var(--primary)'
-                  : 'none'
+                  star <= (hoverRating || editRating) ? 'currentColor' : 'none'
                 }
-                color="var(--primary)"
+                color="var(--color-primary)"
                 onClick={() => setEditRating(star)}
                 onMouseEnter={() => setHoverRating(star)}
-                style={{ cursor: 'pointer' }}
               />
             ))}
           </div>
           <input
             type="text"
-            className="edit-review-title"
+            className={inputCls}
             placeholder="Review title"
             value={editTitle}
             onChange={(e) => setEditTitle(e.target.value)}
           />
           <textarea
-            className="edit-review-textarea"
+            className={textareaCls}
             value={editBody}
             onChange={(e) => setEditBody(e.target.value)}
             rows={4}
           />
-          <div className="edit-actions">
-            <button className="review-save-button" onClick={handleSave}>
-              Save
-            </button>
-            <button className="review-cancel-button" onClick={handleCancel}>
-              Cancel
-            </button>
-          </div>
+          <EditActions onSave={handleSave} onCancel={handleCancel} />
         </div>
       </article>
     );
   }
 
+  /* ── View mode ─────────────────────────────────────────────────────────── */
   return (
-    <article className="detail-review-card" id={review._id}>
-      <div className="detail-review-header">
-        <div className="reviewer-info">
-          <img
-            src={review.reviewerAvatar}
-            alt={review.reviewer}
-            className="reviewer-avatar"
-          />
+    <article id={review._id} className="bg-surface-container rounded-2xl p-6">
+      {/* Header row */}
+      <div className="mb-4 flex items-center justify-between gap-4">
+        <div className="flex items-center gap-3">
+          {review.reviewerAvatar ?
+            <img
+              src={review.reviewerAvatar}
+              alt={review.reviewer}
+              className="h-10 w-10 rounded-xl object-cover"
+            />
+          : <div className="bg-surface-bright text-primary flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-sm font-bold">
+              {review.reviewer?.slice(0, 2).toUpperCase()}
+            </div>
+          }
           <div>
-            <h4 className="reviewer-name">
+            <p className="font-ui text-on-surface text-sm font-semibold">
               {review.reviewer}
               {review.isEdited && (
-                <span className="edited-badge">(edited)</span>
+                <span className="text-on-surface-variant ml-1.5 text-xs font-normal italic">
+                  (edited)
+                </span>
               )}
-            </h4>
-            <p className="review-date">{formatDate(review.date)}</p>
+            </p>
+            <p className="font-ui text-on-surface-variant text-[10px] tracking-widest uppercase">
+              {formatDate(review.date)}
+            </p>
           </div>
         </div>
-        <div
-          className="review-actions-container"
-          style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}
-        >
+
+        <div className="flex items-center gap-3">
           <StarRating rating={review.rating} />
           {isOwner && (
-            <div className="review-actions">
+            <div className="border-outline-variant/30 flex gap-1 border-l pl-3">
               <button
-                className="icon-button"
+                className={iconBtnCls}
                 onClick={() => setIsEditing(true)}
                 aria-label="Edit review"
               >
-                <Edit size={16} />
+                <Edit size={15} />
               </button>
               <button
-                className="icon-button delete"
+                className={`${iconBtnCls} hover:text-error`}
                 onClick={handleDelete}
                 aria-label="Delete review"
               >
-                <Trash2 size={16} />
+                <Trash2 size={15} />
               </button>
             </div>
           )}
         </div>
       </div>
-      {review.title && <h3 className="detail-review-title">{review.title}</h3>}
-      <p className="detail-review-body">{review.body}</p>
+
+      {/* Review content */}
+      {review.title && (
+        <h4 className="font-headline text-on-surface mb-1 text-lg font-bold">
+          {review.title}
+        </h4>
+      )}
+      <p className="font-body text-on-surface-variant leading-relaxed whitespace-pre-wrap">
+        {review.body}
+      </p>
+
+      {/* Review image */}
       {review.reviewImage && (
-        <div className="detail-review-image-container shimmer">
+        <div className="mt-4 overflow-hidden rounded-lg">
           <img
             src={review.reviewImage}
             alt="Review photo"
-            className={`detail-review-image ${imgLoaded ? 'loaded' : ''}`}
+            className={`max-h-52 w-auto object-cover transition-opacity duration-300 ${imgLoaded ? 'opacity-100' : 'opacity-0'}`}
             onLoad={() => setImgLoaded(true)}
           />
         </div>
       )}
 
-      <div className="helpfulness-actions">
-        <button
-          className={`vote-button ${userVote === 'helpful' ? 'active' : ''}`}
+      {/* Helpfulness votes */}
+      <div className="mt-5 flex gap-3">
+        <VoteButton
+          active={userVote === 'helpful'}
           onClick={() => handleVote('helpful')}
-        >
-          <ThumbsUp size={14} /> Helpful ({helpfulCount})
-        </button>
-        <button
-          className={`vote-button ${userVote === 'unhelpful' ? 'active' : ''}`}
+          icon={ThumbsUp}
+          label="Helpful"
+          count={helpfulCount}
+        />
+        <VoteButton
+          active={userVote === 'unhelpful'}
           onClick={() => handleVote('unhelpful')}
-        >
-          <ThumbsDown size={14} /> Unhelpful ({unhelpfulCount})
-        </button>
+          icon={ThumbsDown}
+          label="Unhelpful"
+          count={unhelpfulCount}
+        />
       </div>
 
+      {/* Owner response */}
       {(review.ownerResponse ||
         (isEstablishmentOwner && isEditingResponse)) && (
-        <div className="owner-response">
-          <h5>
-            Response from Owner{' '}
-            {review.ownerResponse?.date &&
-              `- ${formatDate(review.ownerResponse.date)}`}
-          </h5>
+        <div className="border-primary/40 bg-surface-container-high mt-6 rounded-lg border-l-4 p-4">
+          <p className="text-primary font-ui mb-2 text-xs font-bold tracking-widest uppercase">
+            Response from Owner
+            {review.ownerResponse?.date && (
+              <span className="text-on-surface-variant ml-2 font-normal tracking-normal normal-case">
+                · {formatDate(review.ownerResponse.date)}
+              </span>
+            )}
+          </p>
 
           {isEditingResponse ?
-            <div className="edit-comment-box">
+            <div className="flex flex-col gap-3">
               <textarea
-                className="comment-edit-input"
+                className={textareaCls}
                 value={responseBody}
                 onChange={(e) => setResponseBody(e.target.value)}
                 placeholder="Write your response..."
                 rows={3}
               />
-              <div className="comment-actions">
-                <button
-                  className="comment-save-button"
-                  onClick={handleSaveResponse}
-                >
-                  Save
-                </button>
-                <button
-                  className="comment-cancel-button"
-                  onClick={() => setIsEditingResponse(false)}
-                >
-                  Cancel
-                </button>
-              </div>
+              <EditActions
+                onSave={handleSaveResponse}
+                onCancel={() => setIsEditingResponse(false)}
+              />
             </div>
           : <>
-              <p>{review.ownerResponse.body}</p>
+              <p className="font-body text-on-surface-variant text-sm leading-relaxed">
+                {review.ownerResponse.body}
+              </p>
               {isEstablishmentOwner && (
-                <div className="owner-actions">
+                <div className="mt-2 flex justify-end gap-3">
                   <button
-                    className="comment-action-button"
                     onClick={startEditResponse}
+                    className="font-ui text-on-surface-variant hover:text-primary cursor-pointer border-none bg-transparent text-xs transition-colors hover:underline"
                   >
                     Edit
                   </button>
                   <button
-                    className="comment-action-button delete"
                     onClick={handleDeleteResponse}
+                    className="font-ui text-on-surface-variant hover:text-error cursor-pointer border-none bg-transparent text-xs transition-colors hover:underline"
                   >
                     Delete
                   </button>
@@ -346,94 +449,61 @@ export default function DetailReviewCard({ review, onDelete, onUpdate }) {
       )}
 
       {isEstablishmentOwner && !review.ownerResponse && !isEditingResponse && (
-        <button className="respond-button" onClick={startEditResponse}>
+        <button
+          onClick={startEditResponse}
+          className="font-ui bg-surface-container-high text-primary mt-4 cursor-pointer rounded-xl border-none px-5 py-2 text-sm font-semibold transition-all duration-200 hover:brightness-110"
+        >
           Respond to Review
         </button>
       )}
 
-      <div className="comments-section">
+      {/* Comments */}
+      <div className="border-outline-variant/15 mt-6 border-t pt-5">
         {review.comments && review.comments.length > 0 && (
-          <div className="comments-list">
-            <h4 className="comments-header">
+          <div className="mb-4">
+            <p className="font-ui text-on-surface mb-3 text-sm font-semibold">
               Comments ({review.comments.length})
-            </h4>
-            {review.comments.map((comment) => (
-              <div key={comment._id} className="comment-item">
-                <div className="comment-header">
-                  <span className="comment-author">{comment.author}</span>
-                  <span className="comment-date">
-                    {formatDate(comment.date)}
-                    {comment.isEdited && (
-                      <span className="edited-badge">(edited)</span>
-                    )}
-                  </span>
-                </div>
-
-                {editingCommentId === comment._id ?
-                  <div className="edit-comment-box">
-                    <textarea
-                      className="comment-edit-input"
-                      value={editCommentText}
-                      onChange={(e) => setEditCommentText(e.target.value)}
-                    />
-                    <div className="comment-actions">
-                      <button
-                        className="comment-save-button"
-                        onClick={() => saveEditComment(comment._id)}
-                      >
-                        Save
-                      </button>
-                      <button
-                        className="comment-cancel-button"
-                        onClick={() => setEditingCommentId(null)}
-                      >
-                        Cancel
-                      </button>
-                    </div>
-                  </div>
-                : <>
-                    <p className="comment-body">{comment.body}</p>
-                    {user && user.username === comment.author && (
-                      <div className="comment-actions">
-                        <button
-                          className="comment-action-button"
-                          onClick={() => startEditComment(comment)}
-                        >
-                          Edit
-                        </button>
-                        <button
-                          className="comment-action-button delete"
-                          onClick={() => handleDeleteComment(comment._id)}
-                        >
-                          Delete
-                        </button>
-                      </div>
-                    )}
-                  </>
-                }
-              </div>
-            ))}
+            </p>
+            <div className="flex flex-col gap-3">
+              {review.comments.map((comment) => (
+                <CommentItem
+                  key={comment._id}
+                  comment={comment}
+                  user={user}
+                  onEdit={(c) => {
+                    setEditingCommentId(c._id);
+                    setEditCommentText(c.body);
+                  }}
+                  onDelete={handleDeleteComment}
+                  editingId={editingCommentId}
+                  editText={editCommentText}
+                  setEditText={setEditCommentText}
+                  onSaveEdit={saveEditComment}
+                  onCancelEdit={() => setEditingCommentId(null)}
+                />
+              ))}
+            </div>
           </div>
         )}
 
         {user ?
-          <form onSubmit={handleAddComment} className="add-comment-form">
+          <form onSubmit={handleAddComment} className="flex gap-2">
             <input
               type="text"
-              className="comment-input"
-              placeholder="Add a comment..."
+              className={inputCls}
+              placeholder="Add a comment…"
               value={commentText}
               onChange={(e) => setCommentText(e.target.value)}
             />
             <button
               type="submit"
-              className="submit-comment-button"
               disabled={!commentText.trim()}
+              className="font-ui bg-primary text-on-primary cursor-pointer rounded-xl border-none px-5 py-2.5 text-sm font-semibold transition-all duration-200 hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-50"
             >
               Post
             </button>
           </form>
-        : <p style={{ fontSize: '0.9rem', color: '#999', marginTop: '1rem' }}>
+        : <p className="font-ui text-on-surface-variant text-sm">
             Log in to leave a comment.
           </p>
         }
