@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { Link, NavLink, useNavigate, useSearchParams } from 'react-router';
 import { toast } from 'sonner';
-import { Bell, LogOut, Menu, Search, CircleUser } from 'lucide-react';
+import { Bell, LogOut, Menu, Search, CircleUser, X } from 'lucide-react';
 import { useAuth } from '../auth/useAuth';
 
 export default function Header() {
@@ -38,7 +38,8 @@ export default function Header() {
   const closeMenu = () => setIsMenuOpen(false);
 
   return (
-    <header className="bg-background/80 fixed top-0 z-50 flex w-full shadow-[0_20px_40px_rgba(20,10,25,0.4)] backdrop-blur-md transition-colors duration-300">
+    <header className="bg-background/80 fixed top-0 z-50 flex w-full flex-col shadow-[0_20px_40px_rgba(20,10,25,0.4)] backdrop-blur-md transition-colors duration-300">
+      {/* Main header row */}
       <div className="mx-auto flex w-full max-w-360 items-center justify-between px-8 py-4">
         <Link
           to="/"
@@ -48,25 +49,10 @@ export default function Header() {
           DishDetail
         </Link>
 
-        <nav
-          className={`hidden items-center space-x-8 md:flex ${isMenuOpen ? 'open' : ''}`}
-        >
-          <NavLink
-            to="/"
-            onClick={closeMenu}
-            className={({ isActive }) =>
-              `font-headline flex items-center gap-1 text-lg font-bold tracking-tight no-underline transition-colors duration-200 ${
-                isActive ?
-                  'text-primary border-secondary border-b-2 pb-1'
-                : 'text-on-surface-variant hover:text-on-background'
-              }`
-            }
-          >
-            Explore
-          </NavLink>
+        {/* Desktop nav */}
+        <nav className="hidden items-center space-x-8 md:flex">
           <NavLink
             to="/establishments"
-            onClick={closeMenu}
             className={({ isActive }) =>
               `font-headline flex items-center gap-1 text-lg font-bold tracking-tight no-underline transition-colors duration-200 ${
                 isActive ?
@@ -79,7 +65,6 @@ export default function Header() {
           </NavLink>
           <NavLink
             to="/reviews"
-            onClick={closeMenu}
             className={({ isActive }) =>
               `font-headline flex items-center gap-1 text-lg font-bold tracking-tight no-underline transition-colors duration-200 ${
                 isActive ?
@@ -93,6 +78,7 @@ export default function Header() {
         </nav>
 
         <div className="flex items-center space-x-6">
+          {/* Desktop search */}
           <div className="group relative hidden sm:block">
             <input
               id="search-input"
@@ -113,25 +99,12 @@ export default function Header() {
             </button>
           </div>
 
-          {/* Hamburger - mobile only */}
-          <button
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-            aria-label="Toggle navigation menu"
-            aria-expanded={isMenuOpen}
-            className="text-on-surface-variant hover:text-on-background cursor-pointer border-none bg-transparent transition-colors duration-200 md:hidden"
-          >
-            <Menu />
-          </button>
-
-          {/* Actions */}
-          <div
-            className={`flex items-center space-x-4 ${isMenuOpen ? 'open' : ''}`}
-          >
+          {/* Desktop actions */}
+          <div className="hidden items-center space-x-4 md:flex">
             {user ?
               <>
                 <Link
                   to="/submit-review"
-                  onClick={closeMenu}
                   className="text-on-surface-variant hover:text-on-background font-ui flex cursor-pointer items-center gap-2 border-none bg-transparent text-sm transition-colors duration-200"
                 >
                   <Bell size={20} />
@@ -147,15 +120,11 @@ export default function Header() {
                     <CircleUser />
                   </button>
 
-                  {/* Dropdown menu */}
                   {isDropdownOpen && (
                     <div className="bg-surface-container shadow-m absolute top-full right-0 z-50 mt-2 w-48 overflow-hidden rounded-lg">
                       <NavLink
                         to="/profile"
-                        onClick={() => {
-                          setIsDropdownOpen(false);
-                          closeMenu();
-                        }}
+                        onClick={() => setIsDropdownOpen(false)}
                         className="text-on-surface hover:bg-surface-container-high font-ui flex items-center gap-2 px-4 py-3 text-sm no-underline transition-colors duration-200"
                       >
                         <CircleUser size={16} /> Profile
@@ -164,7 +133,6 @@ export default function Header() {
                         onClick={() => {
                           logout();
                           setIsDropdownOpen(false);
-                          closeMenu();
                           toast.success('Logged out successfully.');
                         }}
                         className="text-on-surface hover:bg-surface-container-high font-ui flex w-full cursor-pointer items-center gap-2 border-none bg-transparent px-4 py-3 text-sm transition-colors duration-200"
@@ -191,8 +159,129 @@ export default function Header() {
               </>
             }
           </div>
+
+          {/* Hamburger - mobile only */}
+          <button
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            aria-label="Toggle navigation menu"
+            aria-expanded={isMenuOpen}
+            className="text-on-surface-variant hover:text-on-background cursor-pointer border-none bg-transparent transition-colors duration-200 md:hidden"
+          >
+            {isMenuOpen ?
+              <X />
+            : <Menu />}
+          </button>
         </div>
       </div>
+
+      {/* Mobile dropdown panel */}
+      {isMenuOpen && (
+        <div className="bg-background border-t border-white/10 px-8 pb-6 md:hidden">
+          {/* Mobile search */}
+          <div className="relative mt-4 mb-4">
+            <input
+              type="text"
+              placeholder="Search for restaurants..."
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  handleSearch();
+                  closeMenu();
+                }
+              }}
+              aria-label="Search restaurants"
+              className="bg-surface-container text-on-background font-ui focus:ring-secondary w-full rounded-full border-none py-2 pr-12 pl-6 text-sm transition-colors duration-200 outline-none"
+            />
+            <button
+              onClick={() => {
+                handleSearch();
+                closeMenu();
+              }}
+              aria-label="Search"
+              className="text-secondary/60 hover:text-secondary absolute top-1/2 right-3 -translate-y-1/2 cursor-pointer border-none bg-transparent transition-colors duration-200"
+            >
+              <Search size={18} />
+            </button>
+          </div>
+
+          {/* Mobile nav links */}
+          <nav className="mb-4 flex flex-col space-y-1">
+            {[
+              { to: '/', label: 'Explore' },
+              { to: '/establishments', label: 'Establishments' },
+              { to: '/reviews', label: 'Reviews' },
+            ].map(({ to, label }) => (
+              <NavLink
+                key={to}
+                to={to}
+                onClick={closeMenu}
+                className={({ isActive }) =>
+                  `font-headline rounded-lg px-3 py-2 text-base font-bold tracking-tight no-underline transition-colors duration-200 ${
+                    isActive ?
+                      'text-primary bg-primary/10'
+                    : 'text-on-surface-variant hover:text-on-background hover:bg-surface-container'
+                  }`
+                }
+              >
+                {label}
+              </NavLink>
+            ))}
+          </nav>
+
+          {/* Mobile auth / user actions */}
+          <div className="border-t border-white/10 pt-4">
+            {user ?
+              <div className="flex flex-col space-y-1">
+                <Link
+                  to="/submit-review"
+                  onClick={closeMenu}
+                  className="text-on-surface-variant hover:text-on-background hover:bg-surface-container font-ui flex items-center gap-2 rounded-lg px-3 py-2 text-sm no-underline transition-colors duration-200"
+                >
+                  <Bell size={16} /> Notifications
+                </Link>
+                <NavLink
+                  to="/profile"
+                  onClick={closeMenu}
+                  className="text-on-surface-variant hover:text-on-background hover:bg-surface-container font-ui flex items-center gap-2 rounded-lg px-3 py-2 text-sm no-underline transition-colors duration-200"
+                >
+                  <CircleUser size={16} /> Profile
+                </NavLink>
+                <button
+                  onClick={() => {
+                    logout();
+                    closeMenu();
+                    toast.success('Logged out successfully.');
+                  }}
+                  className="text-on-surface-variant hover:text-on-background hover:bg-surface-container font-ui flex w-full cursor-pointer items-center gap-2 rounded-lg border-none bg-transparent px-3 py-2 text-sm transition-colors duration-200"
+                >
+                  <LogOut size={16} /> Log Out
+                </button>
+              </div>
+            : <div className="flex flex-col space-y-2">
+                <button
+                  onClick={() => {
+                    setAuthModal('login');
+                    closeMenu();
+                  }}
+                  className="font-ui text-on-surface-variant hover:text-on-background w-full cursor-pointer rounded-lg border border-white/20 bg-transparent px-4 py-2 text-sm font-semibold transition-colors duration-200"
+                >
+                  Log In
+                </button>
+                <button
+                  onClick={() => {
+                    setAuthModal('signup');
+                    closeMenu();
+                  }}
+                  className="font-ui bg-primary text-on-primary w-full cursor-pointer rounded-full border-none px-4 py-2 text-sm font-semibold transition-all duration-200 hover:brightness-110"
+                >
+                  Sign Up
+                </button>
+              </div>
+            }
+          </div>
+        </div>
+      )}
     </header>
   );
 }
