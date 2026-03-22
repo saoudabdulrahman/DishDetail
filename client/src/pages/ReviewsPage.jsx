@@ -3,7 +3,6 @@ import { useSearchParams } from 'react-router';
 import { toast } from 'sonner';
 import ReviewCard from '../components/ReviewCard';
 import { api } from '../api';
-import './ReviewsPage.css';
 
 export default function ReviewsPage() {
   const [searchParams] = useSearchParams();
@@ -64,24 +63,37 @@ export default function ReviewsPage() {
   }, [reviews, restaurantMap, cuisineFilter]);
 
   return (
-    <main>
-      <h2 className="review-header">
-        {cuisineFilter ? `${cuisineFilter} Reviews` : 'Latest Reviews'}
-      </h2>
-      <section className="card-grid">
+    <main className="mx-auto max-w-7xl px-6 pt-24 pb-20 md:px-24">
+      {/* Page header */}
+      <div className="mb-10 text-center">
+        <span className="text-secondary font-label text-xs font-bold tracking-[0.2em] uppercase">
+          {cuisineFilter ? cuisineFilter : 'All Critics'}
+        </span>
+        <h1 className="font-headline text-on-surface mt-2 text-5xl font-black tracking-tighter md:text-6xl">
+          {cuisineFilter ? `${cuisineFilter} Reviews` : 'Latest Reviews'}
+        </h1>
+      </div>
+
+      <section className="space-y-12">
         {loading ?
-          <p>Loading…</p>
+          <p className="font-ui text-on-surface-variant text-center text-sm">
+            Loading…
+          </p>
         : error ?
-          <p>{error}</p>
+          <p className="font-ui text-error text-center text-sm">{error}</p>
         : filteredReviews.length > 0 ?
           filteredReviews.map(({ review, restaurant }) => (
             <ReviewCard
               key={review._id}
               review={review}
               restaurant={restaurant}
+              variant="feed"
             />
           ))
-        : <p>No reviews found.</p>}
+        : <p className="font-ui text-on-surface-variant text-center text-sm">
+            No reviews found.
+          </p>
+        }
       </section>
     </main>
   );
