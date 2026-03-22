@@ -18,7 +18,7 @@ export default function ReviewCard({ review, restaurant, variant = 'stack' }) {
     return (
       <Link
         to={`/establishments/${restaurant.slug}#${review._id}`}
-        className="group relative col-span-12 block h-125 overflow-hidden rounded-lg lg:col-span-7"
+        className="group relative col-span-12 block h-125 overflow-hidden rounded-sm lg:col-span-7"
       >
         {review.reviewImage ?
           <img
@@ -33,7 +33,7 @@ export default function ReviewCard({ review, restaurant, variant = 'stack' }) {
 
         <div className="absolute bottom-0 left-0 p-10">
           <div className="mb-4 flex items-center space-x-2">
-            <span className="bg-primary text-on-primary rounded-full px-3 py-1 text-[10px] font-bold tracking-widest uppercase">
+            <span className="bg-primary text-on-primary rounded-xl px-3 py-1 text-[10px] font-bold tracking-widest uppercase">
               {restaurant.cuisineType ?? 'Featured'}
             </span>
             <span className="text-primary flex items-center text-sm font-bold">
@@ -63,23 +63,30 @@ export default function ReviewCard({ review, restaurant, variant = 'stack' }) {
   }
 
   if (variant === 'feed') {
+    const href = `/establishments/${restaurant.slug}#${review._id}`;
+
     return (
-      <article className="bg-surface-container-high group overflow-hidden rounded-lg">
+      <Link
+        to={href}
+        className="bg-surface-container-high group block overflow-hidden rounded-sm"
+      >
         <div className="flex flex-col md:flex-row">
           {review.reviewImage && (
-            <div className="h-64 shrink-0 overflow-hidden md:h-auto md:w-1/3">
+            <div className="relative h-56 shrink-0 overflow-hidden md:h-auto md:min-h-72 md:w-64">
               <img
                 src={review.reviewImage}
                 alt={`Food or ambiance from ${restaurant.restaurantName}`}
-                className={`h-full w-full object-cover transition-transform duration-500 group-hover:scale-105 ${imgLoaded ? 'opacity-100' : 'opacity-0'}`}
+                className={`absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105 ${imgLoaded ? 'opacity-100' : 'opacity-0'}`}
                 onLoad={() => setImgLoaded(true)}
               />
             </div>
           )}
 
-          <div className="flex flex-col justify-between p-8 md:w-2/3">
+          <div
+            className={`flex flex-col justify-between p-8 ${review.reviewImage ? 'md:flex-1' : 'w-full'}`}
+          >
             <div>
-              <div className="mb-4 flex items-start justify-between">
+              <div className="mb-4 flex items-start justify-between gap-4">
                 <div>
                   <h3 className="font-headline text-on-surface text-2xl font-bold">
                     {restaurant.restaurantName}
@@ -88,30 +95,30 @@ export default function ReviewCard({ review, restaurant, variant = 'stack' }) {
                     {restaurant.cuisine}
                   </p>
                 </div>
-                <div className="bg-surface-container-lowest text-primary flex items-center space-x-1 rounded-full px-3 py-1 font-bold">
+                <div className="bg-surface-container-lowest text-primary flex shrink-0 items-center space-x-1 rounded-xl px-3 py-1 font-bold">
                   <Star size={14} fill="currentColor" />
                   <span>{Number(review.rating).toFixed(1)}</span>
                 </div>
               </div>
 
-              <p className="font-body text-on-surface-variant mb-6 leading-relaxed">
-                &quot;{review.body?.slice(0, 200)}&quot;
-                {review.body?.length > 200 ? '…' : ''}
-              </p>
+              {review.body && (
+                <p className="font-body text-on-surface-variant mb-6 leading-relaxed">
+                  &quot;{review.body.slice(0, 200)}&quot;
+                  {review.body.length > 200 ? '…' : ''}
+                </p>
+              )}
             </div>
 
             <div className="border-outline-variant/10 flex items-center justify-between border-t pt-6">
-              <Link
-                to={`/establishments/${restaurant.slug}#${review._id}`}
-                className="flex items-center space-x-3"
-              >
+              {/* Reviewer info — navigates via the parent Link, no extra wrapper needed */}
+              <div className="flex items-center space-x-3">
                 {review.reviewerAvatar ?
                   <img
                     src={review.reviewerAvatar}
                     alt={review.reviewer}
-                    className="h-10 w-10 rounded-full object-cover"
+                    className="h-10 w-10 rounded-xl object-cover"
                   />
-                : <div className="bg-surface-bright text-primary flex h-10 w-10 items-center justify-center rounded-full font-bold">
+                : <div className="bg-surface-bright text-primary flex h-10 w-10 items-center justify-center rounded-xl font-bold">
                     {review.reviewer?.slice(0, 2).toUpperCase()}
                   </div>
                 }
@@ -121,11 +128,15 @@ export default function ReviewCard({ review, restaurant, variant = 'stack' }) {
                     {formatDate(review.date)}
                   </p>
                 </div>
-              </Link>
+              </div>
 
-              <div className="flex items-center space-x-6">
+              {/* Action buttons — stop propagation so they don't double-navigate */}
+              <div
+                className="flex items-center space-x-6"
+                onClick={(e) => e.preventDefault()}
+              >
                 <Link
-                  to={`/establishments/${restaurant.slug}#${review._id}`}
+                  to={href}
                   className="group/btn flex items-center space-x-2 transition-transform active:scale-90"
                 >
                   <ThumbsUp
@@ -137,7 +148,7 @@ export default function ReviewCard({ review, restaurant, variant = 'stack' }) {
                   </span>
                 </Link>
                 <Link
-                  to={`/establishments/${restaurant.slug}#${review._id}`}
+                  to={href}
                   className="group/btn flex items-center space-x-2 transition-transform active:scale-90"
                 >
                   <ThumbsDown
@@ -146,7 +157,7 @@ export default function ReviewCard({ review, restaurant, variant = 'stack' }) {
                   />
                 </Link>
                 <Link
-                  to={`/establishments/${restaurant.slug}#${review._id}`}
+                  to={href}
                   className="group/btn flex items-center space-x-2 transition-transform active:scale-90"
                 >
                   <MessageCircle
@@ -161,7 +172,7 @@ export default function ReviewCard({ review, restaurant, variant = 'stack' }) {
             </div>
           </div>
         </div>
-      </article>
+      </Link>
     );
   }
 
@@ -169,7 +180,7 @@ export default function ReviewCard({ review, restaurant, variant = 'stack' }) {
   return (
     <Link
       to={`/establishments/${restaurant.slug}#${review._id}`}
-      className="bg-surface-container-high group flex flex-1 overflow-hidden rounded-lg"
+      className="bg-surface-container-high group flex flex-1 overflow-hidden rounded-sm"
     >
       {review.reviewImage && (
         <div className="relative w-2/5 shrink-0">
