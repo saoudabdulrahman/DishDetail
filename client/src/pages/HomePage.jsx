@@ -1,18 +1,14 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Link } from 'react-router';
-import {
-  ChefHat,
-  ChevronLeft,
-  ChevronRight,
-  Search,
-  Star,
-  UtensilsCrossed,
-} from 'lucide-react';
+import { Link, useNavigate } from 'react-router';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { toast } from 'sonner';
 import ReviewCard from '../components/ReviewCard';
 import { api } from '../api';
+import { useAuth } from '../auth/useAuth';
 
 export default function HomePage() {
+  const { user, setAuthModal } = useAuth();
+  const navigate = useNavigate();
   const [restaurants, setRestaurants] = useState([]);
   const [reviews, setReviews] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
@@ -114,25 +110,26 @@ export default function HomePage() {
           don&apos;t just review food; we archive excellence.
         </p>
         <div className="inline-flex flex-wrap gap-4">
-          <Link
-            to="/submit-review"
-            className="gold-gradient text-on-primary rounded-xl px-8 py-4 font-bold shadow-lg transition-transform hover:scale-105 active:scale-95"
+          <button
+            onClick={() =>
+              !user ? setAuthModal('login') : navigate('/submit-review')
+            }
+            className="gold-gradient text-on-primary font-ui cursor-pointer rounded-xl border-none px-8 py-4 font-bold shadow-lg transition-transform hover:scale-105 active:scale-95"
           >
             Write a Review
-          </Link>
+          </button>
           <Link
-            to="/reviews"
-            className="bg-surface-container-high border-outline-variant/15 text-primary hover:bg-surface-container-highest rounded-xl border px-8 py-4 font-bold transition-colors active:scale-95"
+            to="/establishments"
+            className="bg-surface-container-high border-outline-variant/15 text-primary hover:bg-surface-container-highest font-ui rounded-xl border px-8 py-4 font-bold transition-colors active:scale-95"
           >
-            Browse Reviews
+            Browse Establishments
           </Link>
         </div>
       </section>
-
       <section className="mb-32">
         <div className="mb-8 flex items-end justify-between">
           <div>
-            <span className="text-primary font-label text-xs font-bold tracking-[0.2em] uppercase">
+            <span className="text-secondary font-label text-xs font-bold tracking-[0.2em] uppercase">
               The Spotlight
             </span>
             <h2 className="font-headline mt-2 text-4xl font-bold">
@@ -143,14 +140,14 @@ export default function HomePage() {
             <button
               onClick={handlePrev}
               disabled={totalPages <= 1}
-              className="border-outline-variant/20 hover:bg-surface-container flex h-12 w-12 cursor-pointer items-center justify-center rounded-xl border transition-colors active:scale-90 disabled:opacity-30"
+              className="border-outline-variant/20 hover:bg-surface-container font-ui flex h-12 w-12 cursor-pointer items-center justify-center rounded-xl border transition-colors active:scale-90 disabled:opacity-30"
             >
               <ChevronLeft />
             </button>
             <button
               onClick={handleNext}
               disabled={totalPages <= 1}
-              className="border-outline-variant/20 hover:bg-surface-container flex h-12 w-12 cursor-pointer items-center justify-center rounded-xl border transition-colors active:scale-90 disabled:opacity-30"
+              className="border-outline-variant/20 hover:bg-surface-container font-ui flex h-12 w-12 cursor-pointer items-center justify-center rounded-xl border transition-colors active:scale-90 disabled:opacity-30"
             >
               <ChevronRight />
             </button>
@@ -184,7 +181,6 @@ export default function HomePage() {
           </div>
         }
       </section>
-
       <div className="flex flex-col gap-16 lg:flex-row">
         {/* Feed */}
         <div className="flex-1">
@@ -193,13 +189,13 @@ export default function HomePage() {
               Latest Critiques
             </h2>
             <div className="bg-surface-container-low flex items-center space-x-4 rounded-xl px-4 py-2">
-              <span className="text-on-surface-variant text-xs font-bold uppercase">
+              <span className="text-on-surface-variant font-ui text-xs font-bold uppercase">
                 Sort By:
               </span>
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value)}
-                className="text-primary cursor-pointer border-none bg-transparent text-xs font-bold uppercase focus:ring-0"
+                className="text-primary font-ui cursor-pointer border-none bg-transparent text-xs font-bold uppercase focus:ring-0"
               >
                 <option value="recent" className="bg-surface-container-high">
                   Most Recent
@@ -226,7 +222,7 @@ export default function HomePage() {
           <div className="mt-16 text-center">
             <Link
               to="/reviews"
-              className="bg-surface-container-high hover:bg-surface-container-highest text-primary border-outline-variant/20 rounded-xl border px-12 py-4 font-bold transition-all active:scale-95"
+              className="bg-surface-container-high hover:bg-surface-container-highest text-primary border-outline-variant/20 font-ui rounded-xl border px-12 py-4 font-bold transition-all active:scale-95"
             >
               Load More Editorial
             </Link>
@@ -246,7 +242,7 @@ export default function HomePage() {
                   <Link
                     key={cuisine}
                     to={`/reviews?cuisine=${encodeURIComponent(cuisine)}`}
-                    className="bg-surface-container-highest text-on-surface-variant hover:bg-primary hover:text-on-primary cursor-pointer rounded-xl px-4 py-2 text-xs font-bold transition-all duration-200"
+                    className="bg-surface-container-highest text-on-surface-variant hover:bg-primary hover:text-on-primary font-ui cursor-pointer rounded-xl px-4 py-2 text-xs font-bold transition-all duration-200"
                   >
                     {cuisine}
                   </Link>
@@ -260,7 +256,7 @@ export default function HomePage() {
                 <h4 className="font-headline mb-2 text-xl font-bold">
                   The Weekly Menu
                 </h4>
-                <p className="text-on-surface-variant mb-6 text-sm">
+                <p className="text-on-surface-variant font-ui mb-6 text-sm">
                   Curated tables and hidden gems delivered to your inbox.
                 </p>
                 <input
@@ -269,11 +265,11 @@ export default function HomePage() {
                   onChange={(e) => setEmail(e.target.value)}
                   onKeyDown={(e) => e.key === 'Enter' && handleSubscribe()}
                   placeholder="Email address"
-                  className="bg-surface-container-lowest focus:ring-primary mb-4 w-full rounded-xl border-none px-5 py-3 text-sm transition-all outline-none focus:ring-1"
+                  className="bg-surface-container-lowest focus:ring-primary font-ui mb-4 w-full rounded-xl border-none px-5 py-3 text-sm transition-all outline-none focus:ring-1"
                 />
                 <button
                   onClick={handleSubscribe}
-                  className="gold-gradient text-on-primary w-full cursor-pointer rounded-xl py-3 text-sm font-bold transition-transform active:scale-95"
+                  className="gold-gradient text-on-primary font-ui w-full cursor-pointer rounded-xl py-3 text-sm font-bold transition-transform active:scale-95"
                 >
                   Subscribe
                 </button>
@@ -296,8 +292,10 @@ export default function HomePage() {
                         {critic.name.slice(0, 2).toUpperCase()}
                       </div>
                       <div>
-                        <p className="text-sm font-bold">{critic.name}</p>
-                        <p className="text-on-surface-variant text-[10px] tracking-widest uppercase">
+                        <p className="font-ui text-sm font-bold">
+                          {critic.name}
+                        </p>
+                        <p className="text-on-surface-variant font-ui text-[10px] tracking-widest uppercase">
                           {critic.count}{' '}
                           {critic.count === 1 ? 'review' : 'reviews'}
                         </p>

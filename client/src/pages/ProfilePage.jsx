@@ -102,7 +102,7 @@ export default function ProfilePage() {
             <div className="flex gap-3">
               <button
                 onClick={handleSave}
-                className="gold-gradient text-on-secondary cursor-pointer rounded-xl border-none px-6 py-2.5 text-sm font-bold shadow-lg transition-all duration-200 hover:brightness-110 active:scale-95"
+                className="gold-gradient text-on-secondary font-ui cursor-pointer rounded-xl border-none px-6 py-2.5 text-sm font-bold shadow-lg transition-all duration-200 hover:brightness-110 active:scale-95"
               >
                 Save Changes
               </button>
@@ -129,11 +129,15 @@ export default function ProfilePage() {
 
             <div className="flex-1 text-center sm:text-left">
               <span className="text-secondary font-label text-xs font-bold tracking-[0.2em] uppercase">
-                Critic Profile
+                {user.role === 'owner' ? 'Owner Profile' : 'Critic Profile'}
               </span>
-              <h1 className="font-headline text-on-surface mt-1 mb-3 text-4xl font-black tracking-tight">
+              <h1 className="font-headline text-on-surface mt-1 mb-2 text-4xl font-black tracking-tight">
                 {user.username}
               </h1>
+              <p className="font-ui text-on-surface-variant mb-4 text-sm font-semibold">
+                {userReviews.length}{' '}
+                {userReviews.length === 1 ? 'Review' : 'Reviews'} Published
+              </p>
               <p className="font-body text-on-surface-variant mb-6 max-w-xl leading-relaxed whitespace-pre-wrap">
                 {user.bio || 'No bio yet.'}
               </p>
@@ -147,7 +151,6 @@ export default function ProfilePage() {
           </div>
         }
       </div>
-
       {/* ── User reviews ────────────────────────────────────────────────── */}
       <section>
         <div className="border-outline-variant/15 mb-8 flex items-center justify-between border-b pb-4">

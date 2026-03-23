@@ -43,7 +43,7 @@ function PasswordInput({ value, onChange, placeholder, autoComplete }) {
         type="button"
         onClick={() => setShow((s) => !s)}
         aria-label={show ? 'Hide password' : 'Show password'}
-        className="text-on-surface-variant hover:text-on-surface absolute right-3.5 cursor-pointer border-none bg-transparent p-0.5 transition-colors duration-200"
+        className="text-on-surface-variant hover:text-on-surface font-ui absolute right-3.5 cursor-pointer border-none bg-transparent p-0.5 transition-colors duration-200"
       >
         {show ?
           <EyeOff size={16} />
@@ -56,7 +56,7 @@ function PasswordInput({ value, onChange, placeholder, autoComplete }) {
 /* ─── Animated checkbox ──────────────────────────────────────────────────── */
 function CheckboxRow({ checked, onChange, label }) {
   return (
-    <label className="font-ui text-on-surface-variant flex cursor-pointer items-center gap-2.5 px-1 text-sm select-none">
+    <label className="text-on-surface-variant flex cursor-pointer items-center gap-2.5 px-1 text-sm select-none">
       <input
         type="checkbox"
         checked={checked}
@@ -72,7 +72,7 @@ function CheckboxRow({ checked, onChange, label }) {
           }`}
         />
       </span>
-      <span className="font-normal">{label}</span>
+      <span className="font-ui font-normal">{label}</span>
     </label>
   );
 }
@@ -134,9 +134,7 @@ function LoginForm({ onSwitch, onSuccess }) {
       <p className="font-ui text-on-surface-variant mb-5 text-sm">
         Sign in to your Dish Detail account.
       </p>
-
       {error && <ErrorBanner message={error} shake={shake} />}
-
       <form onSubmit={handleSubmit} className="mt-4 flex flex-col gap-4">
         <Field label="Username">
           <TextInput
@@ -164,18 +162,17 @@ function LoginForm({ onSwitch, onSuccess }) {
 
         <button
           type="submit"
-          className="gold-gradient text-on-secondary mt-2 cursor-pointer rounded-xl border-none py-3 text-sm font-bold transition-all duration-200 hover:brightness-110 active:scale-95"
+          className="gold-gradient text-on-secondary font-ui mt-2 cursor-pointer rounded-xl border-none py-3 text-sm font-bold transition-all duration-200 hover:brightness-110 active:scale-95"
         >
           Log In
         </button>
       </form>
-
       <p className="font-ui text-on-surface-variant mt-6 text-center text-sm">
         Don&apos;t have an account?{' '}
         <button
           type="button"
           onClick={onSwitch}
-          className="text-primary cursor-pointer border-none bg-transparent p-0 font-semibold transition-colors hover:underline"
+          className="text-primary font-ui cursor-pointer border-none bg-transparent p-0 font-semibold transition-colors hover:underline"
         >
           Sign up
         </button>
@@ -247,9 +244,7 @@ function SignupForm({ onSwitch, onSuccess }) {
       <p className="font-ui text-on-surface-variant mb-5 text-sm">
         Create your Dish Detail account.
       </p>
-
       {error && <ErrorBanner message={error} shake={shake} />}
-
       <form onSubmit={handleSubmit} className="mt-4 flex flex-col gap-4">
         <Field label="Email">
           <TextInput
@@ -290,18 +285,17 @@ function SignupForm({ onSwitch, onSuccess }) {
 
         <button
           type="submit"
-          className="gold-gradient text-on-secondary mt-2 cursor-pointer rounded-xl border-none py-3 text-sm font-bold transition-all duration-200 hover:brightness-110 active:scale-95"
+          className="gold-gradient text-on-secondary font-ui mt-2 cursor-pointer rounded-xl border-none py-3 text-sm font-bold transition-all duration-200 hover:brightness-110 active:scale-95"
         >
           Create Account
         </button>
       </form>
-
       <p className="font-ui text-on-surface-variant mt-6 text-center text-sm">
         Already have an account?{' '}
         <button
           type="button"
           onClick={onSwitch}
-          className="text-primary cursor-pointer border-none bg-transparent p-0 font-semibold transition-colors hover:underline"
+          className="text-primary font-ui cursor-pointer border-none bg-transparent p-0 font-semibold transition-colors hover:underline"
         >
           Log in
         </button>

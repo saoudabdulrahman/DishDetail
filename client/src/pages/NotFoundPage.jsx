@@ -22,7 +22,7 @@ export default function NotFoundPage() {
         </p>
         <Link
           to="/"
-          className="gold-gradient text-on-secondary rounded-xl px-8 py-3 font-bold shadow-lg transition-all duration-200 hover:scale-105 hover:brightness-110 active:scale-95"
+          className="gold-gradient text-on-secondary font-ui rounded-xl px-8 py-3 font-bold shadow-lg transition-all duration-200 hover:scale-105 hover:brightness-110 active:scale-95"
         >
           Return to Home
         </Link>

@@ -141,7 +141,7 @@ export default function SubmitReviewPage() {
                 />
                 <input
                   type="text"
-                  placeholder="Search for a restaurant…"
+                  placeholder="Search for a restaurant to review…"
                   value={query}
                   onChange={(e) => {
                     setQuery(e.target.value);
@@ -210,7 +210,7 @@ export default function SubmitReviewPage() {
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="gold-gradient text-on-secondary cursor-pointer rounded-xl border-none px-8 py-3 text-sm font-bold shadow-lg transition-all duration-200 hover:-translate-y-0.5 hover:brightness-110 active:scale-95 disabled:cursor-not-allowed disabled:opacity-60"
+                    className="gold-gradient text-on-secondary font-ui cursor-pointer rounded-xl border-none px-8 py-3 text-sm font-bold shadow-lg transition-all duration-200 hover:-translate-y-0.5 hover:brightness-110 active:scale-95 disabled:cursor-not-allowed disabled:opacity-60"
                   >
                     {isSubmitting ? 'Submitting…' : 'Submit Review'}
                   </button>

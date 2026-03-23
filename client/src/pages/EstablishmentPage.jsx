@@ -135,7 +135,6 @@ export default function EstablishmentPage() {
       >
         <ArrowLeft size={16} /> Back to Establishments
       </button>
-
       {/* Hero banner */}
       <div className="mb-8 h-80 overflow-hidden rounded-2xl md:h-96">
         <img
@@ -145,7 +144,6 @@ export default function EstablishmentPage() {
           onLoad={() => setImgLoaded(true)}
         />
       </div>
-
       {/* Header */}
       <div className="mb-8">
         <div className="mb-3 flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-start">
@@ -159,14 +157,13 @@ export default function EstablishmentPage() {
           </div>
           <div className="bg-primary text-on-primary flex shrink-0 items-center gap-2 rounded-xl px-5 py-2.5 font-bold">
             <Star size={16} fill="currentColor" aria-hidden="true" />
-            <span className="text-lg">{avgRating}</span>
+            <span className="font-ui text-lg">{avgRating}</span>
           </div>
         </div>
         <p className="font-body text-on-surface-variant max-w-2xl leading-relaxed">
           {restaurant.description}
         </p>
       </div>
-
       {/* Quick info grid */}
       <div className="bg-surface-container mb-10 grid grid-cols-1 gap-6 rounded-2xl p-6 sm:grid-cols-2 lg:grid-cols-4">
         {[
@@ -192,7 +189,6 @@ export default function EstablishmentPage() {
           </div>
         ))}
       </div>
-
       {/* Reviews section */}
       <section>
         <div className="mb-6 flex items-center justify-between">

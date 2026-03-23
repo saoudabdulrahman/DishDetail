@@ -75,14 +75,15 @@ function CommentItem({
         </span>
         <span className="font-ui text-on-surface-variant text-[10px] tracking-widest uppercase">
           {formatDate(comment.date)}
-          {comment.isEdited && <span className="ml-1 italic">(edited)</span>}
+          {comment.isEdited && (
+            <span className="font-ui ml-1 italic">(edited)</span>
+          )}
         </span>
       </div>
-
       {isEditing ?
         <div className="mt-2 flex flex-col gap-2">
           <textarea
-            className={textareaCls}
+            className={`font-ui ${textareaCls}`}
             value={editText}
             onChange={(e) => setEditText(e.target.value)}
             rows={3}
@@ -142,8 +143,7 @@ export default function DetailReviewCard({ review, onDelete, onUpdate }) {
   const [responseBody, setResponseBody] = useState('');
 
   const isOwner = user && user.username === review.reviewer;
-  const isEstablishmentOwner =
-    user && (user.username === 'owner' || user.role === 'owner');
+  const isEstablishmentOwner = user && user.role === 'owner';
 
   const handleSave = () => {
     onUpdate(review._id, {
@@ -285,13 +285,13 @@ export default function DetailReviewCard({ review, onDelete, onUpdate }) {
           </div>
           <input
             type="text"
-            className={inputCls}
+            className={`font-ui ${inputCls}`}
             placeholder="Review title"
             value={editTitle}
             onChange={(e) => setEditTitle(e.target.value)}
           />
           <textarea
-            className={textareaCls}
+            className={`font-ui ${textareaCls}`}
             value={editBody}
             onChange={(e) => setEditBody(e.target.value)}
             rows={4}
@@ -322,7 +322,7 @@ export default function DetailReviewCard({ review, onDelete, onUpdate }) {
             <p className="font-ui text-on-surface text-sm font-semibold">
               {review.reviewer}
               {review.isEdited && (
-                <span className="text-on-surface-variant ml-1.5 text-xs font-normal italic">
+                <span className="text-on-surface-variant font-ui ml-1.5 text-xs font-normal italic">
                   (edited)
                 </span>
               )}
@@ -355,7 +355,6 @@ export default function DetailReviewCard({ review, onDelete, onUpdate }) {
           )}
         </div>
       </div>
-
       {/* Review content */}
       {review.title && (
         <h4 className="font-headline text-on-surface mb-1 text-lg font-bold">
@@ -365,7 +364,6 @@ export default function DetailReviewCard({ review, onDelete, onUpdate }) {
       <p className="font-body text-on-surface-variant leading-relaxed whitespace-pre-wrap">
         {review.body}
       </p>
-
       {/* Review image */}
       {review.reviewImage && (
         <div className="mt-4 overflow-hidden rounded-lg">
@@ -377,7 +375,6 @@ export default function DetailReviewCard({ review, onDelete, onUpdate }) {
           />
         </div>
       )}
-
       {/* Helpfulness votes */}
       <div className="mt-5 flex gap-3">
         <VoteButton
@@ -395,7 +392,6 @@ export default function DetailReviewCard({ review, onDelete, onUpdate }) {
           count={unhelpfulCount}
         />
       </div>
-
       {/* Owner response */}
       {(review.ownerResponse ||
         (isEstablishmentOwner && isEditingResponse)) && (
@@ -403,7 +399,7 @@ export default function DetailReviewCard({ review, onDelete, onUpdate }) {
           <p className="text-primary font-ui mb-2 text-xs font-bold tracking-widest uppercase">
             Response from Owner
             {review.ownerResponse?.date && (
-              <span className="text-on-surface-variant ml-2 font-normal tracking-normal normal-case">
+              <span className="text-on-surface-variant font-ui ml-2 font-normal tracking-normal normal-case">
                 · {formatDate(review.ownerResponse.date)}
               </span>
             )}
@@ -412,7 +408,7 @@ export default function DetailReviewCard({ review, onDelete, onUpdate }) {
           {isEditingResponse ?
             <div className="flex flex-col gap-3">
               <textarea
-                className={textareaCls}
+                className={`font-ui ${textareaCls}`}
                 value={responseBody}
                 onChange={(e) => setResponseBody(e.target.value)}
                 placeholder="Write your response..."
@@ -447,7 +443,6 @@ export default function DetailReviewCard({ review, onDelete, onUpdate }) {
           }
         </div>
       )}
-
       {isEstablishmentOwner && !review.ownerResponse && !isEditingResponse && (
         <button
           onClick={startEditResponse}
@@ -456,9 +451,11 @@ export default function DetailReviewCard({ review, onDelete, onUpdate }) {
           Respond to Review
         </button>
       )}
-
       {/* Comments */}
-      <div className="border-outline-variant/15 mt-6 border-t pt-5">
+      <div
+        id={`comments-${review._id}`}
+        className="border-outline-variant/15 mt-6 border-t pt-5"
+      >
         {review.comments && review.comments.length > 0 && (
           <div className="mb-4">
             <p className="font-ui text-on-surface mb-3 text-sm font-semibold">
@@ -490,7 +487,7 @@ export default function DetailReviewCard({ review, onDelete, onUpdate }) {
           <form onSubmit={handleAddComment} className="flex gap-2">
             <input
               type="text"
-              className={inputCls}
+              className={`font-ui ${inputCls}`}
               placeholder="Add a comment…"
               value={commentText}
               onChange={(e) => setCommentText(e.target.value)}
