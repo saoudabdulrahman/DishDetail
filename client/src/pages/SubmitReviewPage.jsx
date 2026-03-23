@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import { Star, Search } from 'lucide-react';
+import { toast } from 'sonner';
 import ReviewCard from '../components/ReviewCard';
 import { api } from '../api';
 import { useAuth } from '../auth/useAuth';
@@ -23,6 +24,7 @@ function SubmitReviewPage() {
   const [reviewTitle, setReviewTitle] = useState('');
   const [reviewText, setReviewText] = useState('');
   const [error, setError] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -36,7 +38,7 @@ function SubmitReviewPage() {
         setFeatured(top);
       })
       .catch(() => {
-        // ignore; page still usable
+        toast.error('Failed to load restaurant list.');
       });
     return () => {
       cancelled = true;
@@ -59,6 +61,8 @@ function SubmitReviewPage() {
     e.preventDefault();
     setError('');
 
+    if (isSubmitting) return;
+
     if (!selectedRestaurant) {
       setError('Please select a restaurant to review.');
       return;
@@ -79,18 +83,30 @@ function SubmitReviewPage() {
       return;
     }
 
+    setIsSubmitting(true);
+
+    const promise = api().createReview(selectedRestaurant.slug, {
+      title: reviewTitle,
+      rating,
+      reviewer: user?.username || 'Anonymous',
+      reviewerAvatar: user?.avatar,
+      body: reviewText,
+      reviewImage: null,
+    });
+
+    toast.promise(promise, {
+      loading: 'Submitting your review...',
+      success: 'Review submitted successfully!',
+      error: 'Failed to submit review.',
+    });
+
     try {
-      const { review } = await api().createReview(selectedRestaurant.slug, {
-        title: reviewTitle,
-        rating,
-        reviewer: user?.username || 'Anonymous',
-        reviewerAvatar: user?.avatar,
-        body: reviewText,
-        reviewImage: null,
-      });
+      const { review } = await promise;
       navigate(`/establishments/${selectedRestaurant.slug}#${review._id}`);
-    } catch (err) {
-      setError(err.message || 'Failed to submit review.');
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Star, Edit, Trash2, ThumbsUp, ThumbsDown } from 'lucide-react';
+import { toast } from 'sonner';
 import { useAuth } from '../auth/useAuth';
 import { formatDate } from '../utils/date';
 import StarRating from './StarRating';
@@ -56,7 +57,7 @@ export default function DetailReviewCard({ review, onDelete, onUpdate }) {
 
   const handleVote = (type) => {
     if (!user) {
-      alert('Please log in to vote.');
+      toast.error('You must be logged in to vote on reviews.');
       return;
     }
 
@@ -102,12 +103,14 @@ export default function DetailReviewCard({ review, onDelete, onUpdate }) {
         body: responseBody,
       },
     });
+    toast.success('Response saved.');
     setIsEditingResponse(false);
   };
 
   const handleDeleteResponse = () => {
     if (window.confirm('Delete your response?')) {
       onUpdate(review._id, { ownerResponse: null });
+      toast.success('Response deleted.');
     }
   };
 
@@ -129,6 +132,7 @@ export default function DetailReviewCard({ review, onDelete, onUpdate }) {
 
     const updatedComments = [...(review.comments || []), newComment];
     onUpdate(review._id, { comments: updatedComments });
+    toast.success('Comment added.');
     setCommentText('');
   };
 
@@ -138,6 +142,7 @@ export default function DetailReviewCard({ review, onDelete, onUpdate }) {
         (c) => c._id !== commentId,
       );
       onUpdate(review._id, { comments: updatedComments });
+      toast.success('Comment deleted.');
     }
   };
 
@@ -153,6 +158,7 @@ export default function DetailReviewCard({ review, onDelete, onUpdate }) {
     onUpdate(review._id, { comments: updatedComments });
     setEditingCommentId(null);
     setEditCommentText('');
+    toast.success('Comment updated.');
   };
 
   if (isEditing) {

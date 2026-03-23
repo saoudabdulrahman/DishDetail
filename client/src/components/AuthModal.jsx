@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
+import { Check, X, Eye, EyeOff } from 'lucide-react';
+import { toast } from 'sonner';
 import { useAuth } from '../auth/useAuth';
 import { validateUser, saveUser } from '../auth/userStorage';
-import { Check, X, Eye, EyeOff } from 'lucide-react';
 import './AuthModal.css';
 
 function LoginForm({ onSwitch, onSuccess }) {
@@ -34,8 +35,10 @@ function LoginForm({ onSwitch, onSuccess }) {
       const validUser = await validateUser(u, password);
       login(validUser, rememberMe);
       onSuccess();
-    } catch (err) {
-      setError(err.message || 'Invalid username or password.');
+      toast.success('Logged in successfully.');
+    } catch (error) {
+      console.error(error);
+      setError('Invalid username or password.');
       triggerShake();
     }
   };
@@ -164,8 +167,10 @@ function SignupForm({ onSwitch, onSuccess }) {
       const created = await saveUser(newUser);
       login(created, true);
       onSuccess();
-    } catch (err) {
-      setError(err.message || 'Signup failed.');
+      toast.success('Account created successfully.');
+    } catch (error) {
+      console.error(error);
+      setError('Signup failed.');
       triggerShake();
     }
   };

@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useParams, useNavigate } from 'react-router';
 import { Star, MapPin, Clock, Phone, Globe, ArrowLeft } from 'lucide-react';
+import { toast } from 'sonner';
 import { api } from '../api';
 import DetailReviewCard from '../components/DetailReviewCard';
 import './EstablishmentPage.css';
@@ -52,8 +53,8 @@ export default function EstablishmentPage() {
           setRestaurant(establishment);
           setReviews(reviews);
         }
-      } catch (e) {
-        if (!cancelled) setError(e.message || 'Failed to load.');
+      } catch (error) {
+        if (!cancelled) setError(error || 'Failed to load.');
       } finally {
         if (!cancelled) setLoading(false);
       }
@@ -67,20 +68,36 @@ export default function EstablishmentPage() {
   }, [slug]);
 
   const handleUpdateReview = async (reviewId, updates) => {
+    const promise = api().updateReview(reviewId, updates);
+
+    toast.promise(promise, {
+      loading: 'Updating review...',
+      success: 'Review updated.',
+      error: 'Failed to update review.',
+    });
+
     try {
-      const { review } = await api().updateReview(reviewId, updates);
+      const { review } = await promise;
       setReviews((prev) => prev.map((r) => (r._id === reviewId ? review : r)));
-    } catch (e) {
-      alert(e.message || 'Failed to update review.');
+    } catch (error) {
+      console.error(error);
     }
   };
 
   const handleDeleteReview = async (reviewId) => {
+    const promise = api().deleteReview(reviewId);
+
+    toast.promise(promise, {
+      loading: 'Deleting review...',
+      success: 'Review deleted.',
+      error: 'Failed to delete review.',
+    });
+
     try {
-      await api().deleteReview(reviewId);
+      await promise;
       setReviews((prev) => prev.filter((r) => r._id !== reviewId));
-    } catch (e) {
-      alert(e.message || 'Failed to delete review.');
+    } catch (error) {
+      console.error(error);
     }
   };
 
