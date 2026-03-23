@@ -10,6 +10,8 @@ export const reviewsData = [
     body: 'The sinigang here is next level — perfectly sour with fall-off-the-bone pork ribs. Paired it with garlic rice and I was in heaven. Super affordable and generous servings!',
     reviewImage:
       'https://images.unsplash.com/photo-1536489885071-87983c3e2859?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+    helpfulCount: 5,
+    unhelpfulCount: 1,
     comments: [
       {
         id: 101,
@@ -34,6 +36,8 @@ export const reviewsData = [
     body: 'Amazing ramen with rich, flavorful broth. The gyoza is also a must-order. Gets packed during weekends so come early or be ready to wait. Worth every peso.',
     reviewImage:
       'https://images.unsplash.com/photo-1569718212165-3a8278d5f624?q=80&w=880&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+    helpfulCount: 2,
+    unhelpfulCount: 0,
     comments: [
       {
         id: 102,
@@ -54,6 +58,8 @@ export const reviewsData = [
     body: 'Samgyupsal heaven! Unlimited meat with all the side dishes you could want. The staff was super friendly and attentive. Best KBBQ value in BGC for sure.',
     reviewImage:
       'https://images.unsplash.com/photo-1708388064672-6536507fdf6e?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+    helpfulCount: 8,
+    unhelpfulCount: 2,
     comments: [
       {
         id: 103,
@@ -80,6 +86,8 @@ export const reviewsData = [
     body: 'The kare-kare is outstanding — rich, nutty sauce with perfectly tender oxtail. Bagoong on the side is a must. A true taste of classic Filipino cooking.',
     reviewImage:
       'https://images.unsplash.com/photo-1688084403060-3594a4b8ff8d?q=80&w=1632&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+    helpfulCount: 3,
+    unhelpfulCount: 1,
     comments: [
       {
         id: 105,
@@ -100,6 +108,8 @@ export const reviewsData = [
     body: 'The sunset views from the rooftop are gorgeous and the cocktails are creative. Food was decent but a bit overpriced for the portion size. Great for photos and date nights.',
     reviewImage:
       'https://images.unsplash.com/photo-1605270012917-bf157c5a9541?q=80&w=1469&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+    helpfulCount: 0,
+    unhelpfulCount: 0,
   },
   {
     id: 6,
@@ -112,6 +122,8 @@ export const reviewsData = [
     body: 'The smash burgers are insane — crispy edges, juicy patty, melted cheese. Their ube milkshake is a game-changer too. Perfect quick bite near the bay.',
     reviewImage:
       'https://images.unsplash.com/photo-1551782450-a2132b4ba21d?q=80&w=1469&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+    helpfulCount: 4,
+    unhelpfulCount: 2,
   },
   {
     id: 7,
@@ -124,6 +136,8 @@ export const reviewsData = [
     body: "Incredible fine dining experience! The degustation menu was a culinary journey through modern Filipino flavors. The chef's plating is absolutely stunning.",
     reviewImage:
       'https://images.unsplash.com/photo-1599458252573-56ae36120de1?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+    helpfulCount: 6,
+    unhelpfulCount: 0,
   },
   {
     id: 8,
@@ -136,6 +150,8 @@ export const reviewsData = [
     body: 'The xiao long bao here is consistently perfect — thin wrapper, hot broth inside. Always a long line during mall hours but totally worth the wait.',
     reviewImage:
       'https://images.unsplash.com/photo-1694834589398-27b369c6f7a6?q=80&w=1040&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+    helpfulCount: 1,
+    unhelpfulCount: 0,
   },
   {
     id: 9,
@@ -148,6 +164,8 @@ export const reviewsData = [
     body: "Best inasal in Manila, hands down. The chicken is juicy, perfectly charred, and the unlimited rice is a student's dream. Great value for money.",
     reviewImage:
       'https://images.unsplash.com/photo-1592011432621-f7f576f44484?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+    helpfulCount: 7,
+    unhelpfulCount: 1,
   },
   {
     id: 10,
@@ -160,6 +178,8 @@ export const reviewsData = [
     body: 'The seafood boodle fight was an epic experience! Super fresh catch cooked multiple ways. The view of Manila Bay during golden hour made it even more special.',
     reviewImage:
       'https://images.unsplash.com/photo-1650435489945-96b2b19b943b?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+    helpfulCount: 3,
+    unhelpfulCount: 3,
   },
   {
     id: 11,
@@ -171,6 +191,8 @@ export const reviewsData = [
     date: 'Feb 15, 2026',
     body: 'Good food but service was a bit slow today. The place was packed!',
     reviewImage: null,
+    helpfulCount: 2,
+    unhelpfulCount: 1,
   },
 ];
 
@@ -237,7 +259,7 @@ export const restaurantsData = [
     cuisine: 'Modern Asian / Bar',
     rating: 3,
     restaurantImage:
-      'https://images.unsplash.com/photo-1621275471769-e6aa344546d5?q=80&w=1473&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+      'https://images.unsplash.com/photo-1621275471769-e6aa344546d5?q=80&w=1473&auto=crop&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
     description:
       'A trendy rooftop bar and restaurant with stunning Manila Bay sunset views. Known for creative cocktails and Asian fusion small plates.',
     address: 'Ocean Drive, Mall of Asia Complex, Pasay, Manila',

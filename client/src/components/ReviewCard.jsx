@@ -1,18 +1,77 @@
 import { useState } from 'react';
-import { Link } from 'react-router';
-import {
-  ArrowRight,
-  Star,
-  ThumbsUp,
-  ThumbsDown,
-  MessageCircle,
-} from 'lucide-react';
+import { Link, useNavigate } from 'react-router';
+import { ArrowRight, ThumbsUp, ThumbsDown, MessageCircle } from 'lucide-react';
+import { toast } from 'sonner';
+import { useAuth } from '../auth/useAuth';
+import { api } from '../api';
 import StarRating from './StarRating';
 import { formatDate } from '../utils/date';
 
 // variant: 'feature' (large left card) | 'stack' (horizontal right cards) | 'feed' (main review feed)
 export default function ReviewCard({ review, restaurant, variant = 'stack' }) {
   const [imgLoaded, setImgLoaded] = useState(false);
+  const navigate = useNavigate();
+  const { user } = useAuth();
+
+  const [helpfulCount, setHelpfulCount] = useState(review.helpfulCount || 0);
+  const [unhelpfulCount, setUnhelpfulCount] = useState(
+    review.unhelpfulCount || 0,
+  );
+  const [userVote, setUserVote] = useState(null);
+
+  const handleVote = async (e, type) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (!user) {
+      toast.error('You must be logged in to vote on reviews.');
+      return;
+    }
+
+    let newHelpful = helpfulCount;
+    let newUnhelpful = unhelpfulCount;
+    let newVote = userVote;
+
+    if (type === 'helpful') {
+      if (userVote === 'helpful') {
+        newHelpful--;
+        newVote = null;
+      } else {
+        if (userVote === 'unhelpful') newUnhelpful--;
+        newHelpful++;
+        newVote = 'helpful';
+      }
+    } else {
+      if (userVote === 'unhelpful') {
+        newUnhelpful--;
+        newVote = null;
+      } else {
+        if (userVote === 'helpful') newHelpful--;
+        newUnhelpful++;
+        newVote = 'unhelpful';
+      }
+    }
+
+    setHelpfulCount(newHelpful);
+    setUnhelpfulCount(newUnhelpful);
+    setUserVote(newVote);
+
+    try {
+      await api().updateReview(review._id, {
+        helpfulCount: newHelpful,
+        unhelpfulCount: newUnhelpful,
+      });
+    } catch (error) {
+      console.error(error);
+      toast.error('Failed to update vote.');
+    }
+  };
+
+  const handleCommentClick = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    navigate(`/establishments/${restaurant.slug}#comments-${review._id}`);
+  };
 
   if (variant === 'feature') {
     return (
@@ -131,39 +190,52 @@ export default function ReviewCard({ review, restaurant, variant = 'stack' }) {
                 className="flex items-center space-x-6"
                 onClick={(e) => e.preventDefault()}
               >
-                <Link
-                  to={href}
-                  className="group/btn flex items-center space-x-2 transition-transform active:scale-90"
+                <div
+                  className="group/btn flex cursor-pointer items-center space-x-2 transition-transform active:scale-90"
+                  onClick={(e) => handleVote(e, 'helpful')}
                 >
                   <ThumbsUp
-                    className="text-on-surface-variant group-hover/btn:text-primary transition-colors"
+                    className={`transition-colors ${userVote === 'helpful' ? 'text-primary' : 'text-on-surface-variant group-hover/btn:text-primary'}`}
                     size={20}
                   />
-                  <span className="text-on-surface-variant group-hover/btn:text-on-surface text-xs font-bold">
-                    {review.helpfulCount ?? 0}
-                  </span>
-                </Link>
-                <Link
-                  to={href}
-                  className="group/btn flex items-center space-x-2 transition-transform active:scale-90"
+                  {(helpfulCount || 0) > 0 && (
+                    <span
+                      className={`font-ui text-xs font-bold ${userVote === 'helpful' ? 'text-primary' : 'text-on-surface-variant group-hover/btn:text-on-surface'}`}
+                    >
+                      {helpfulCount}
+                    </span>
+                  )}
+                </div>
+                <div
+                  className="group/btn flex cursor-pointer items-center space-x-2 transition-transform active:scale-90"
+                  onClick={(e) => handleVote(e, 'unhelpful')}
                 >
                   <ThumbsDown
-                    className="text-on-surface-variant group-hover/btn:text-primary transition-colors"
+                    className={`transition-colors ${userVote === 'unhelpful' ? 'text-primary' : 'text-on-surface-variant group-hover/btn:text-primary'}`}
                     size={20}
                   />
-                </Link>
-                <Link
-                  to={href}
-                  className="group/btn flex items-center space-x-2 transition-transform active:scale-90"
+                  {(unhelpfulCount || 0) > 0 && (
+                    <span
+                      className={`font-ui text-xs font-bold ${userVote === 'unhelpful' ? 'text-primary' : 'text-on-surface-variant group-hover/btn:text-on-surface'}`}
+                    >
+                      {unhelpfulCount}
+                    </span>
+                  )}
+                </div>
+                <div
+                  className="group/btn flex cursor-pointer items-center space-x-2 transition-transform active:scale-90"
+                  onClick={handleCommentClick}
                 >
                   <MessageCircle
                     className="text-on-surface-variant group-hover/btn:text-primary transition-colors"
                     size={20}
                   />
-                  <span className="text-on-surface-variant group-hover/btn:text-on-surface text-xs font-bold">
-                    {review.comments?.length ?? 0}
-                  </span>
-                </Link>
+                  {(review.comments?.length || 0) > 0 && (
+                    <span className="text-on-surface-variant group-hover/btn:text-on-surface font-ui text-xs font-bold">
+                      {review.comments.length}
+                    </span>
+                  )}
+                </div>
               </div>
             </div>
           </div>
