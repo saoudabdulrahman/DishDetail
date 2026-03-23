@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { Link } from 'react-router';
-import { Star } from 'lucide-react';
 import StarRating from './StarRating';
 
 export default function EstablishmentCard({ restaurant }) {
@@ -9,8 +8,13 @@ export default function EstablishmentCard({ restaurant }) {
   return (
     <Link
       to={`/establishments/${restaurant.slug}`}
-      className="bg-surface-container-high group block overflow-hidden rounded-sm"
+      className="bg-surface-container-high group relative block overflow-hidden rounded-sm"
     >
+      {Number(restaurant.rating) >= 4.7 && (
+        <div className="bg-primary text-on-primary font-ui absolute top-4 left-4 z-10 rounded-full px-3 py-1 text-[10px] font-bold tracking-widest uppercase shadow-md">
+          Top Rated
+        </div>
+      )}
       <article className="flex flex-col sm:flex-row">
         {/* Image — fixed width column like feed ReviewCard */}
         {restaurant.restaurantImage && (
@@ -35,12 +39,14 @@ export default function EstablishmentCard({ restaurant }) {
                 <p className="text-primary font-ui mt-0.5 text-xs font-bold tracking-widest uppercase">
                   {restaurant.cuisine}
                 </p>
+                {restaurant.address && (
+                  <p className="text-on-surface-variant font-ui mt-1 text-xs">
+                    {restaurant.address}
+                  </p>
+                )}
               </div>
-              <div className="bg-surface-container-lowest text-primary flex shrink-0 items-center space-x-1 rounded-xl px-3 py-1 font-bold">
-                <Star size={13} fill="currentColor" />
-                <span className="text-sm">
-                  {Number(restaurant.rating ?? 0).toFixed(1)}
-                </span>
+              <div className="bg-surface-container-lowest text-primary flex shrink-0 items-center space-x-2 rounded-xl px-4 py-2">
+                <StarRating rating={Number(restaurant.rating ?? 0)} />
               </div>
             </div>
 

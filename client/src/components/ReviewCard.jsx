@@ -28,17 +28,14 @@ export default function ReviewCard({ review, restaurant, variant = 'stack' }) {
             onLoad={() => setImgLoaded(true)}
           />
         : <div className="bg-surface-container-high h-full w-full" />}
-
         <div className="from-surface-container-lowest absolute inset-0 bg-linear-to-t to-transparent opacity-90" />
-
         <div className="absolute bottom-0 left-0 p-10">
           <div className="mb-4 flex items-center space-x-2">
-            <span className="bg-primary text-on-primary rounded-xl px-3 py-1 text-[10px] font-bold tracking-widest uppercase">
-              {restaurant.cuisineType ?? 'Featured'}
+            <span className="bg-primary text-on-primary font-ui rounded-xl px-3 py-1 text-[10px] font-bold tracking-widest uppercase">
+              {restaurant.cuisine ?? 'Featured'}
             </span>
-            <span className="text-primary flex items-center text-sm font-bold">
-              <Star size={12} fill="currentColor" className="text-sm" />
-              {Number(review.rating).toFixed(1)}
+            <span className="text-primary font-ui flex items-center text-sm font-bold">
+              <StarRating rating={Number(review.rating)} />
             </span>
           </div>
 
@@ -53,8 +50,8 @@ export default function ReviewCard({ review, restaurant, variant = 'stack' }) {
             {review.reviewer} · {formatDate(review.date)}
           </p>
 
-          <div className="text-primary flex items-center space-x-2 font-bold">
-            <span>Read Review</span>
+          <div className="text-primary font-ui flex items-center space-x-2 font-bold">
+            <span className="font-ui">Read Review</span>
             <ArrowRight className="transition-transform group-hover:translate-x-2" />
           </div>
         </div>
@@ -68,7 +65,7 @@ export default function ReviewCard({ review, restaurant, variant = 'stack' }) {
     return (
       <Link
         to={href}
-        className="bg-surface-container-high group block overflow-hidden rounded-sm"
+        className="bg-surface-container-high group font-ui relative block overflow-hidden rounded-sm"
       >
         <div className="flex flex-col md:flex-row">
           {review.reviewImage && (
@@ -91,13 +88,12 @@ export default function ReviewCard({ review, restaurant, variant = 'stack' }) {
                   <h3 className="font-headline text-on-surface text-2xl font-bold">
                     {restaurant.restaurantName}
                   </h3>
-                  <p className="text-primary text-sm font-bold tracking-tighter uppercase">
+                  <p className="font-ui text-primary text-sm font-bold tracking-tighter uppercase">
                     {restaurant.cuisine}
                   </p>
                 </div>
-                <div className="bg-surface-container-lowest text-primary flex shrink-0 items-center space-x-1 rounded-xl px-3 py-1 font-bold">
-                  <Star size={14} fill="currentColor" />
-                  <span>{Number(review.rating).toFixed(1)}</span>
+                <div className="bg-surface-container-lowest text-primary flex shrink-0 items-center space-x-2 rounded-xl px-4 py-2 font-bold">
+                  <StarRating rating={Number(review.rating)} />
                 </div>
               </div>
 
@@ -123,8 +119,8 @@ export default function ReviewCard({ review, restaurant, variant = 'stack' }) {
                   </div>
                 }
                 <div>
-                  <p className="text-sm font-bold">{review.reviewer}</p>
-                  <p className="text-on-surface-variant text-[10px] tracking-widest uppercase">
+                  <p className="font-ui text-sm font-bold">{review.reviewer}</p>
+                  <p className="text-on-surface-variant font-ui text-[10px] tracking-widest uppercase">
                     {formatDate(review.date)}
                   </p>
                 </div>
@@ -180,7 +176,7 @@ export default function ReviewCard({ review, restaurant, variant = 'stack' }) {
   return (
     <Link
       to={`/establishments/${restaurant.slug}#${review._id}`}
-      className="bg-surface-container-high group flex flex-1 overflow-hidden rounded-sm"
+      className="bg-surface-container-high group font-ui flex flex-1 overflow-hidden rounded-sm"
     >
       {review.reviewImage && (
         <div className="relative w-2/5 shrink-0">
@@ -192,10 +188,9 @@ export default function ReviewCard({ review, restaurant, variant = 'stack' }) {
           />
         </div>
       )}
-
       <div className="flex flex-1 flex-col justify-center p-6">
         <span className="text-primary font-label mb-1 text-[10px] font-bold tracking-widest uppercase">
-          {restaurant.cuisineType ?? restaurant.restaurantName}
+          {restaurant.cuisine}
         </span>
 
         <h4 className="font-headline mb-2 text-2xl font-bold">
@@ -206,11 +201,11 @@ export default function ReviewCard({ review, restaurant, variant = 'stack' }) {
           <StarRating rating={review.rating} />
         </div>
 
-        <p className="text-on-surface-variant mb-4 text-xs">
+        <p className="text-on-surface-variant font-ui mb-4 text-xs">
           {review.reviewer} · {formatDate(review.date)}
         </p>
 
-        <span className="text-on-surface-variant hover:text-primary text-xs font-bold uppercase transition-colors">
+        <span className="text-on-surface-variant hover:text-primary font-ui text-xs font-bold uppercase transition-colors">
           Read Review →
         </span>
       </div>
