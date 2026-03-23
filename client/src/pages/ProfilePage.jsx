@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import { Link } from 'react-router';
 import { toast } from 'sonner';
 import { useAuth } from '../auth/useAuth';
 import { api } from '../api';
@@ -184,9 +185,15 @@ export default function ProfilePage() {
             })}
           </div>
         : <div className="bg-surface-container rounded-2xl p-12 text-center">
-            <p className="font-body text-on-surface-variant italic">
+            <p className="font-body text-on-surface-variant mb-6 italic">
               You haven&apos;t written any reviews yet.
             </p>
+            <Link
+              to="/submit-review"
+              className="font-ui bg-primary text-on-primary inline-block rounded-xl px-6 py-3 text-sm font-semibold transition-transform hover:brightness-110 active:scale-95"
+            >
+              Write your first review &rarr;
+            </Link>
           </div>
         }
       </section>

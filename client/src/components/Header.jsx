@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { Link, NavLink, useNavigate, useSearchParams } from 'react-router';
 import { toast } from 'sonner';
-import { Bell, LogOut, Menu, Search, CircleUser, X } from 'lucide-react';
+import { LogOut, Menu, Search, CircleUser, X } from 'lucide-react';
 import { useAuth } from '../auth/useAuth';
 
 export default function Header() {
@@ -103,13 +103,6 @@ export default function Header() {
           <div className="hidden items-center space-x-4 md:flex">
             {user ?
               <>
-                <Link
-                  to="/"
-                  className="text-on-surface-variant hover:text-on-background font-ui flex cursor-pointer items-center gap-2 border-none bg-transparent text-sm transition-colors duration-200"
-                >
-                  <Bell size={20} />
-                </Link>
-
                 {/* User dropdown */}
                 <div className="relative" ref={dropdownRef}>
                   <button
@@ -232,13 +225,6 @@ export default function Header() {
           <div className="border-t border-white/10 pt-4">
             {user ?
               <div className="flex flex-col space-y-1">
-                <Link
-                  to="/submit-review"
-                  onClick={closeMenu}
-                  className="text-on-surface-variant hover:text-on-background hover:bg-surface-container font-ui flex items-center gap-2 rounded-sm px-3 py-2 text-sm no-underline transition-colors duration-200"
-                >
-                  <Bell size={16} /> Notifications
-                </Link>
                 <NavLink
                   to="/profile"
                   onClick={closeMenu}
