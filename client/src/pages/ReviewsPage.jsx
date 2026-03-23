@@ -5,13 +5,28 @@ import ReviewCard from '../components/ReviewCard';
 import { api } from '../api';
 
 export default function ReviewsPage() {
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const query = (searchParams.get('q') || '').toLowerCase();
   const cuisineFilter = searchParams.get('cuisine') || '';
   const [restaurants, setRestaurants] = useState([]);
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+
+  const handleCuisineChange = (e) => {
+    const cuisine = e.target.value;
+    setSearchParams(
+      (prev) => {
+        if (!cuisine) {
+          prev.delete('cuisine');
+        } else {
+          prev.set('cuisine', cuisine);
+        }
+        return prev;
+      },
+      { replace: true },
+    );
+  };
 
   useEffect(() => {
     let cancelled = false;
@@ -50,6 +65,11 @@ export default function ReviewsPage() {
     return new Map(restaurants.map((r) => [r._id, r]));
   }, [restaurants]);
 
+  const cuisines = useMemo(
+    () => [...new Set(restaurants.map((r) => r.cuisine).filter(Boolean))],
+    [restaurants],
+  );
+
   const filteredReviews = useMemo(() => {
     return reviews
       .map((review) => {
@@ -65,22 +85,50 @@ export default function ReviewsPage() {
   return (
     <main className="mx-auto max-w-7xl px-6 pt-24 pb-20 md:px-24">
       {/* Page header */}
-      <div className="mb-10 text-center">
+      <section className="mb-12 text-center md:text-left">
         <span className="text-secondary font-label text-xs font-bold tracking-[0.2em] uppercase">
           {cuisineFilter ? cuisineFilter : 'All Critics'}
         </span>
-        <h1 className="font-headline text-on-surface mt-2 text-5xl font-black tracking-tighter md:text-6xl">
+        <h1 className="font-headline text-on-surface mt-2 text-5xl font-black tracking-tighter md:text-7xl">
           {cuisineFilter ? `${cuisineFilter} Reviews` : 'Latest Reviews'}
         </h1>
+      </section>
+      {/* Filter bar */}
+      <div className="mb-10 flex flex-wrap justify-center gap-4 md:justify-start">
+        <div className="bg-surface-container-low flex items-center space-x-4 rounded-xl px-4 py-2">
+          <span className="text-on-surface-variant font-ui text-xs font-bold uppercase">
+            Filter:
+          </span>
+          <select
+            value={cuisineFilter}
+            onChange={handleCuisineChange}
+            aria-label="Filter reviews by cuisine"
+            className="text-primary font-ui max-w-37.5 cursor-pointer truncate border-none bg-transparent text-xs font-bold uppercase focus:ring-0"
+          >
+            <option value="" className="bg-surface-container-high">
+              All Tastes
+            </option>
+            {cuisines.map((c) => (
+              <option key={c} value={c} className="bg-surface-container-high">
+                {c}
+              </option>
+            ))}
+          </select>
+        </div>
       </div>
-
-      <section className="space-y-12">
+      {/* Cards */}
+      <section className="space-y-4">
         {loading ?
-          <p className="font-ui text-on-surface-variant text-center text-sm">
-            Loading…
-          </p>
+          Array.from({ length: 6 }).map((_, i) => (
+            <div
+              key={i}
+              className="bg-surface-container-high h-36 animate-pulse rounded-sm"
+            />
+          ))
         : error ?
-          <p className="font-ui text-error text-center text-sm">{error}</p>
+          <p className="font-ui text-error col-span-full text-center text-sm">
+            {error}
+          </p>
         : filteredReviews.length > 0 ?
           filteredReviews.map(({ review, restaurant }) => (
             <ReviewCard
