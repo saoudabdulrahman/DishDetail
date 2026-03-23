@@ -1,8 +1,8 @@
 const AUTH_KEY = 'dishdetail_auth';
 
 export function saveAuth(user, rememberMe) {
-  const THREE_WEEKS_MS = 1000 * 60 * 60 * 24 * 21;
-  const expiresAt = rememberMe ? Date.now() + THREE_WEEKS_MS : null;
+  const THIRTY_DAYS_MS = 1000 * 60 * 60 * 24 * 30;
+  const expiresAt = rememberMe ? Date.now() + THIRTY_DAYS_MS : null;
   const payload = { user, expiresAt };
 
   if (rememberMe) {

@@ -37,7 +37,7 @@ function PasswordInput({ value, onChange, placeholder, autoComplete }) {
         onChange={onChange}
         placeholder={placeholder}
         autoComplete={autoComplete}
-        className="font-ui bg-surface-container-high text-on-surface placeholder:text-on-surface-variant/40 focus:ring-primary w-full rounded-xl border-none py-2.5 pr-11 pl-5 text-sm font-normal transition-all duration-200 outline-none focus:ring-1"
+        className="font-ui bg-surface-container-high text-on-surface placeholder:text-on-surface-variant/40 focus:ring-primary w-full rounded-xl border-none py-2.5 pr-11 pl-5 text-sm font-normal transition-all duration-200 outline-none focus:ring-1 [&::-ms-clear]:hidden [&::-ms-reveal]:hidden"
       />
       <button
         type="button"
@@ -157,7 +157,7 @@ function LoginForm({ onSwitch, onSuccess }) {
         <CheckboxRow
           checked={rememberMe}
           onChange={(e) => setRememberMe(e.target.checked)}
-          label="Remember me for 3 weeks"
+          label="Stay logged in for 30 days"
         />
 
         <button
@@ -359,7 +359,7 @@ export default function AuthModal() {
       <div
         onClick={(e) => e.stopPropagation()}
         onMouseDown={(e) => e.stopPropagation()}
-        className={`bg-surface-container-low relative w-full max-w-sm overflow-hidden rounded-sm p-8 ${
+        className={`bg-surface-container-low relative w-full max-w-sm overflow-hidden rounded-lg p-8 ${
           isClosing ?
             'animate-[slideDown_0.25s_ease-in_forwards]'
           : 'animate-[slideUp_0.25s_ease-out]'
