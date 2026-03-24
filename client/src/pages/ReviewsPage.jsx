@@ -66,7 +66,10 @@ export default function ReviewsPage() {
   }, [restaurants]);
 
   const cuisines = useMemo(
-    () => [...new Set(restaurants.map((r) => r.cuisine).filter(Boolean))],
+    () =>
+      [
+        ...new Set(restaurants.flatMap((r) => r.cuisine).filter(Boolean)),
+      ].sort(),
     [restaurants],
   );
 
@@ -78,7 +81,7 @@ export default function ReviewsPage() {
       })
       .filter(({ restaurant }) => !!restaurant)
       .filter(({ restaurant }) =>
-        cuisineFilter ? restaurant.cuisine === cuisineFilter : true,
+        cuisineFilter ? restaurant.cuisine.includes(cuisineFilter) : true,
       );
   }, [reviews, restaurantMap, cuisineFilter]);
 

@@ -200,7 +200,7 @@ export const restaurantsData = [
   {
     id: 1,
     restaurantName: 'Kubo ni Lola',
-    cuisine: 'Filipino',
+    cuisine: ['Filipino'],
     rating: 5,
     restaurantImage:
       'https://images.unsplash.com/photo-1485686531765-ba63b07845a7?q=80&w=1467&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
@@ -214,7 +214,7 @@ export const restaurantsData = [
   {
     id: 2,
     restaurantName: 'Takeshi Ramen House',
-    cuisine: 'Japanese',
+    cuisine: ['Japanese'],
     rating: 4,
     restaurantImage:
       'https://images.unsplash.com/photo-1568018508399-e53bc8babdde?q=80&w=1474&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
@@ -228,7 +228,7 @@ export const restaurantsData = [
   {
     id: 3,
     restaurantName: 'Hansang BBQ',
-    cuisine: 'Korean BBQ',
+    cuisine: ['Korean BBQ'],
     rating: 5,
     restaurantImage:
       'https://images.unsplash.com/photo-1647168585205-e56ebb24a669?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
@@ -242,7 +242,7 @@ export const restaurantsData = [
   {
     id: 4,
     restaurantName: 'Lutong Bahay ni Aling Nena',
-    cuisine: 'Filipino',
+    cuisine: ['Filipino'],
     rating: 4,
     restaurantImage:
       'https://plus.unsplash.com/premium_photo-1661373053290-bd41968a916a?q=80&w=855&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
@@ -256,7 +256,7 @@ export const restaurantsData = [
   {
     id: 5,
     restaurantName: 'Daloy Rooftop',
-    cuisine: 'Modern Asian / Bar',
+    cuisine: ['Modern Asian', 'Bar'],
     rating: 3,
     restaurantImage:
       'https://images.unsplash.com/photo-1621275471769-e6aa344546d5?q=80&w=1473&auto=crop&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
@@ -270,7 +270,7 @@ export const restaurantsData = [
   {
     id: 6,
     restaurantName: 'Patty Shack',
-    cuisine: 'Burgers / Fast Food',
+    cuisine: ['Burgers', 'Fast Food'],
     rating: 4,
     restaurantImage:
       'https://images.unsplash.com/photo-1564019709518-6182bdabe251?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
@@ -284,7 +284,7 @@ export const restaurantsData = [
   {
     id: 7,
     restaurantName: 'Mesa Moderna',
-    cuisine: 'Modern Filipino / Fine Dining',
+    cuisine: ['Modern Filipino', 'Fine Dining'],
     rating: 5,
     restaurantImage:
       'https://plus.unsplash.com/premium_photo-1661962305366-0c62646fd249?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
@@ -298,7 +298,7 @@ export const restaurantsData = [
   {
     id: 8,
     restaurantName: 'Golden Dumpling House',
-    cuisine: 'Chinese / Dim Sum',
+    cuisine: ['Chinese', 'Dim Sum'],
     rating: 4,
     restaurantImage:
       'https://images.unsplash.com/photo-1669410647983-ef742ccdfe6d?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
@@ -312,7 +312,7 @@ export const restaurantsData = [
   {
     id: 9,
     restaurantName: 'Ihaw-Ihaw Express',
-    cuisine: 'Filipino / Chicken Inasal',
+    cuisine: ['Filipino', 'Chicken Inasal'],
     rating: 4,
     restaurantImage:
       'https://images.unsplash.com/photo-1600555379765-f82335a7b1b0?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
@@ -326,7 +326,7 @@ export const restaurantsData = [
   {
     id: 10,
     restaurantName: 'Alon Seafood Grill',
-    cuisine: 'Seafood / Fine Dining',
+    cuisine: ['Seafood', 'Fine Dining'],
     rating: 5,
     restaurantImage:
       'https://images.unsplash.com/photo-1657485990998-4b6fca3ca696?q=80&w=1471&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',

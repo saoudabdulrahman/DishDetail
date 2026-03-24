@@ -72,13 +72,16 @@ export default function EstablishmentsPage() {
   };
 
   const cuisines = useMemo(
-    () => [...new Set(establishments.map((r) => r.cuisine).filter(Boolean))],
+    () =>
+      [
+        ...new Set(establishments.flatMap((r) => r.cuisine).filter(Boolean)),
+      ].sort(),
     [establishments],
   );
 
   const filteredEstablishments = useMemo(() => {
     return establishments.filter((r) =>
-      cuisineFilter ? r.cuisine === cuisineFilter : true,
+      cuisineFilter ? r.cuisine.includes(cuisineFilter) : true,
     );
   }, [establishments, cuisineFilter]);
 

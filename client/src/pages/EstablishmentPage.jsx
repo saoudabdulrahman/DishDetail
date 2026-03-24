@@ -155,9 +155,16 @@ export default function EstablishmentPage() {
             <h1 className="font-headline text-on-surface text-4xl font-black tracking-tight md:text-5xl">
               {restaurant.restaurantName}
             </h1>
-            <p className="text-primary font-ui mt-1 text-sm font-bold tracking-widest uppercase">
-              {restaurant.cuisine}
-            </p>
+            <div className="mt-1 flex flex-wrap gap-1">
+              {(restaurant.cuisine ?? []).map((c) => (
+                <span
+                  key={c}
+                  className="bg-surface-container-highest text-primary font-ui rounded px-2 py-0.5 text-[10px] font-bold tracking-widest uppercase"
+                >
+                  {c}
+                </span>
+              ))}
+            </div>
           </div>
           <div className="bg-primary text-on-primary flex shrink-0 items-center gap-2 rounded-xl px-5 py-2.5 font-bold">
             <Star size={16} fill="currentColor" aria-hidden="true" />

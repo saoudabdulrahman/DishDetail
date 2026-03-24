@@ -94,9 +94,16 @@ export default function ReviewCard({ review, restaurant, variant = 'stack' }) {
         <div className="from-surface-container-lowest absolute inset-0 bg-linear-to-t to-transparent opacity-90" />
         <div className="absolute bottom-0 left-0 p-10">
           <div className="mb-4 flex items-center space-x-2">
-            <span className="bg-primary text-on-primary font-ui rounded-xl px-3 py-1 text-[10px] font-bold tracking-widest uppercase">
-              {restaurant.cuisine ?? 'Featured'}
-            </span>
+            <div className="flex flex-wrap gap-1">
+              {(restaurant.cuisine ?? []).map((c) => (
+                <span
+                  key={c}
+                  className="bg-primary text-on-primary font-ui rounded-xl px-3 py-1 text-[10px] font-bold tracking-widest uppercase"
+                >
+                  {c}
+                </span>
+              ))}
+            </div>
             <span className="text-primary font-ui flex items-center text-sm font-bold">
               <StarRating rating={Number(review.rating)} />
             </span>
@@ -157,9 +164,16 @@ export default function ReviewCard({ review, restaurant, variant = 'stack' }) {
                   <h3 className="font-headline text-on-surface text-2xl font-bold">
                     {restaurant.restaurantName}
                   </h3>
-                  <p className="font-ui text-primary text-sm font-bold tracking-tighter uppercase">
-                    {restaurant.cuisine}
-                  </p>
+                  <div className="mt-0.5 flex flex-wrap gap-1">
+                    {(restaurant.cuisine ?? []).map((c) => (
+                      <span
+                        key={c}
+                        className="font-ui text-primary text-[10px] font-bold tracking-widest uppercase"
+                      >
+                        {c}
+                      </span>
+                    ))}
+                  </div>
                 </div>
                 <div className="bg-surface-container-lowest text-primary flex shrink-0 items-center space-x-2 rounded-xl px-4 py-2 font-bold">
                   <StarRating rating={Number(review.rating)} />
@@ -294,9 +308,16 @@ export default function ReviewCard({ review, restaurant, variant = 'stack' }) {
         </div>
       )}
       <div className="flex flex-1 flex-col justify-center p-6">
-        <span className="text-primary font-label mb-1 text-[10px] font-bold tracking-widest uppercase">
-          {restaurant.cuisine}
-        </span>
+        <div className="mb-1 flex flex-wrap gap-1">
+          {(restaurant.cuisine ?? []).map((c) => (
+            <span
+              key={c}
+              className="text-primary font-label text-[10px] font-bold tracking-widest uppercase"
+            >
+              {c}
+            </span>
+          ))}
+        </div>
 
         <h4 className="font-headline mb-2 text-2xl font-bold">
           {review.title || 'Untitled Review'}

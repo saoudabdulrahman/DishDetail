@@ -40,9 +40,16 @@ export default function EstablishmentCard({ restaurant }) {
                 <h3 className="font-headline text-on-surface text-xl leading-tight font-bold">
                   {restaurant.restaurantName}
                 </h3>
-                <p className="text-primary font-ui mt-0.5 text-xs font-bold tracking-widest uppercase">
-                  {restaurant.cuisine}
-                </p>
+                <div className="mt-1 flex flex-wrap gap-1">
+                  {(restaurant.cuisine ?? []).map((c) => (
+                    <span
+                      key={c}
+                      className="bg-surface-container-highest text-primary font-ui rounded px-2 py-0.5 text-[10px] font-bold tracking-widest uppercase"
+                    >
+                      {c}
+                    </span>
+                  ))}
+                </div>
                 {restaurant.address && (
                   <p className="text-on-surface-variant font-ui mt-1 text-xs">
                     {restaurant.address}

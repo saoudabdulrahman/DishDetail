@@ -64,7 +64,10 @@ export default function HomePage() {
     setCurrentPage((prev) => (prev - 1 + totalPages) % Math.max(1, totalPages));
 
   const cuisines = useMemo(
-    () => [...new Set(restaurants.map((r) => r.cuisine).filter(Boolean))],
+    () =>
+      [
+        ...new Set(restaurants.flatMap((r) => r.cuisine).filter(Boolean)),
+      ].sort(),
     [restaurants],
   );
 
@@ -224,7 +227,7 @@ export default function HomePage() {
               to="/reviews"
               className="bg-surface-container-high hover:bg-surface-container-highest text-primary border-outline-variant/20 font-ui rounded-xl border px-12 py-4 font-bold transition-all active:scale-95"
             >
-              Load More Editorial
+              Load More
             </Link>
           </div>
         </div>

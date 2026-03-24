@@ -14,7 +14,7 @@ router.get('/', async (req, res) => {
     if (q) {
       filter.$or = [
         { restaurantName: { $regex: q, $options: 'i' } },
-        { cuisine: { $regex: q, $options: 'i' } },
+        { cuisine: { $elemMatch: { $regex: q, $options: 'i' } } },
         { description: { $regex: q, $options: 'i' } },
       ];
     }
