@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router';
 import StarRating from './StarRating';
+import { cn } from '../utils/cn';
 
 export default function EstablishmentCard({ restaurant }) {
   const [imgLoaded, setImgLoaded] = useState(false);
@@ -22,7 +23,10 @@ export default function EstablishmentCard({ restaurant }) {
             <img
               src={restaurant.restaurantImage}
               alt={`Food or ambiance from ${restaurant.restaurantName}`}
-              className={`absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105 ${imgLoaded ? 'opacity-100' : 'opacity-0'}`}
+              className={cn(
+                'absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105',
+                imgLoaded ? 'opacity-100' : 'opacity-0',
+              )}
               onLoad={() => setImgLoaded(true)}
             />
           </div>

@@ -6,6 +6,7 @@ import { useAuth } from '../auth/useAuth';
 import { api } from '../api';
 import StarRating from './StarRating';
 import { formatDate } from '../utils/date';
+import { cn } from '../utils/cn';
 
 // variant: 'feature' (large left card) | 'stack' (horizontal right cards) | 'feed' (main review feed)
 export default function ReviewCard({ review, restaurant, variant = 'stack' }) {
@@ -83,7 +84,10 @@ export default function ReviewCard({ review, restaurant, variant = 'stack' }) {
           <img
             src={review.reviewImage}
             alt={`Food or ambiance from ${restaurant.restaurantName}`}
-            className={`h-full w-full object-cover transition-transform duration-700 group-hover:scale-110 ${imgLoaded ? 'opacity-100' : 'opacity-0'}`}
+            className={cn(
+              'h-full w-full object-cover transition-transform duration-700 group-hover:scale-110',
+              imgLoaded ? 'opacity-100' : 'opacity-0',
+            )}
             onLoad={() => setImgLoaded(true)}
           />
         : <div className="bg-surface-container-high h-full w-full" />}
@@ -132,14 +136,20 @@ export default function ReviewCard({ review, restaurant, variant = 'stack' }) {
               <img
                 src={review.reviewImage}
                 alt={`Food or ambiance from ${restaurant.restaurantName}`}
-                className={`absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105 ${imgLoaded ? 'opacity-100' : 'opacity-0'}`}
+                className={cn(
+                  'absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105',
+                  imgLoaded ? 'opacity-100' : 'opacity-0',
+                )}
                 onLoad={() => setImgLoaded(true)}
               />
             </div>
           )}
 
           <div
-            className={`flex flex-col justify-between p-8 ${review.reviewImage ? 'md:flex-1' : 'w-full'}`}
+            className={cn(
+              'flex flex-col justify-between p-8',
+              review.reviewImage ? 'md:flex-1' : 'w-full',
+            )}
           >
             <div>
               <div className="mb-4 flex items-start justify-between gap-4">
@@ -195,12 +205,22 @@ export default function ReviewCard({ review, restaurant, variant = 'stack' }) {
                   onClick={(e) => handleVote(e, 'helpful')}
                 >
                   <ThumbsUp
-                    className={`transition-colors ${userVote === 'helpful' ? 'text-primary' : 'text-on-surface-variant group-hover/btn:text-primary'}`}
+                    className={cn(
+                      'transition-colors',
+                      userVote === 'helpful' ? 'text-primary' : (
+                        'text-on-surface-variant group-hover/btn:text-primary'
+                      ),
+                    )}
                     size={20}
                   />
                   {(helpfulCount || 0) > 0 && (
                     <span
-                      className={`font-ui text-xs font-bold ${userVote === 'helpful' ? 'text-primary' : 'text-on-surface-variant group-hover/btn:text-on-surface'}`}
+                      className={cn(
+                        'font-ui text-xs font-bold',
+                        userVote === 'helpful' ? 'text-primary' : (
+                          'text-on-surface-variant group-hover/btn:text-on-surface'
+                        ),
+                      )}
                     >
                       {helpfulCount}
                     </span>
@@ -211,12 +231,22 @@ export default function ReviewCard({ review, restaurant, variant = 'stack' }) {
                   onClick={(e) => handleVote(e, 'unhelpful')}
                 >
                   <ThumbsDown
-                    className={`transition-colors ${userVote === 'unhelpful' ? 'text-primary' : 'text-on-surface-variant group-hover/btn:text-primary'}`}
+                    className={cn(
+                      'transition-colors',
+                      userVote === 'unhelpful' ? 'text-primary' : (
+                        'text-on-surface-variant group-hover/btn:text-primary'
+                      ),
+                    )}
                     size={20}
                   />
                   {(unhelpfulCount || 0) > 0 && (
                     <span
-                      className={`font-ui text-xs font-bold ${userVote === 'unhelpful' ? 'text-primary' : 'text-on-surface-variant group-hover/btn:text-on-surface'}`}
+                      className={cn(
+                        'font-ui text-xs font-bold',
+                        userVote === 'unhelpful' ? 'text-primary' : (
+                          'text-on-surface-variant group-hover/btn:text-on-surface'
+                        ),
+                      )}
                     >
                       {unhelpfulCount}
                     </span>
@@ -255,7 +285,10 @@ export default function ReviewCard({ review, restaurant, variant = 'stack' }) {
           <img
             src={review.reviewImage}
             alt={`Food or ambiance from ${restaurant.restaurantName}`}
-            className={`h-full w-full object-cover transition-transform duration-500 group-hover:scale-105 ${imgLoaded ? 'opacity-100' : 'opacity-0'}`}
+            className={cn(
+              'h-full w-full object-cover transition-transform duration-500 group-hover:scale-105',
+              imgLoaded ? 'opacity-100' : 'opacity-0',
+            )}
             onLoad={() => setImgLoaded(true)}
           />
         </div>

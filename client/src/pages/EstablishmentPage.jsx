@@ -4,6 +4,7 @@ import { Star, MapPin, Clock, Phone, Globe, ArrowLeft } from 'lucide-react';
 import { toast } from 'sonner';
 import { api } from '../api';
 import DetailReviewCard from '../components/DetailReviewCard';
+import { cn } from '../utils/cn';
 
 export default function EstablishmentPage() {
   const { slug } = useParams();
@@ -140,7 +141,10 @@ export default function EstablishmentPage() {
         <img
           src={restaurant.restaurantImage}
           alt={restaurant.restaurantName}
-          className={`h-full w-full object-cover transition-opacity duration-500 ${imgLoaded ? 'opacity-100' : 'opacity-0'}`}
+          className={cn(
+            'h-full w-full object-cover transition-opacity duration-500',
+            imgLoaded ? 'opacity-100' : 'opacity-0',
+          )}
           onLoad={() => setImgLoaded(true)}
         />
       </div>

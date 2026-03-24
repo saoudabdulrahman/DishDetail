@@ -4,6 +4,7 @@ import { Check, X, Eye, EyeOff } from 'lucide-react';
 import { toast } from 'sonner';
 import { useAuth } from '../auth/useAuth';
 import { validateUser, saveUser } from '../auth/userStorage';
+import { cn } from '../utils/cn';
 
 /* ─── Shared field wrapper ───────────────────────────────────────────────── */
 function Field({ label, children }) {
@@ -67,9 +68,10 @@ function CheckboxRow({ checked, onChange, label }) {
         <Check
           size={11}
           strokeWidth={3.5}
-          className={`text-on-primary transition-all duration-200 ${
-            checked ? 'scale-100 opacity-100' : 'scale-50 opacity-0'
-          }`}
+          className={cn(
+            'text-on-primary transition-all duration-200',
+            checked ? 'scale-100 opacity-100' : 'scale-50 opacity-0',
+          )}
         />
       </span>
       <span className="font-ui font-normal">{label}</span>
@@ -81,9 +83,10 @@ function CheckboxRow({ checked, onChange, label }) {
 function ErrorBanner({ message, shake }) {
   return (
     <div
-      className={`font-ui border-error text-error bg-error/10 rounded-xl border px-5 py-2 text-sm ${
-        shake ? 'animate-[shakeX_0.45s_ease-out]' : ''
-      }`}
+      className={cn(
+        'font-ui border-error text-error bg-error/10 rounded-xl border px-5 py-2 text-sm',
+        shake && 'animate-[shakeX_0.45s_ease-out]',
+      )}
     >
       {message}
     </div>
@@ -349,21 +352,23 @@ export default function AuthModal() {
         if (mouseDownOnOverlay && e.target === e.currentTarget) closeModal();
         setMouseDownOnOverlay(false);
       }}
-      className={`fixed inset-0 z-1000 flex items-center justify-center p-4 backdrop-blur-sm ${
+      className={cn(
+        'fixed inset-0 z-1000 flex items-center justify-center p-4 backdrop-blur-sm',
         isClosing ?
           'animate-[fadeOut_0.25s_ease-in_forwards]'
-        : 'animate-[fadeIn_0.25s_ease-out]'
-      }`}
+        : 'animate-[fadeIn_0.25s_ease-out]',
+      )}
       style={{ backgroundColor: 'oklch(0 0 0 / 0.55)' }}
     >
       <div
         onClick={(e) => e.stopPropagation()}
         onMouseDown={(e) => e.stopPropagation()}
-        className={`bg-surface-container-low relative w-full max-w-sm overflow-hidden rounded-lg p-8 ${
+        className={cn(
+          'bg-surface-container-low relative w-full max-w-sm overflow-hidden rounded-lg p-8',
           isClosing ?
             'animate-[slideDown_0.25s_ease-in_forwards]'
-          : 'animate-[slideUp_0.25s_ease-out]'
-        }`}
+          : 'animate-[slideUp_0.25s_ease-out]',
+        )}
       >
         {/* Gold top-edge accent — matches CTAs across the app */}
         <div className="gold-gradient absolute top-0 left-0 h-0.5 w-full" />

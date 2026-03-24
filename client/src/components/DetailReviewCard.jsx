@@ -3,6 +3,7 @@ import { Star, Edit, Trash2, ThumbsUp, ThumbsDown } from 'lucide-react';
 import { toast } from 'sonner';
 import { useAuth } from '../auth/useAuth';
 import { formatDate } from '../utils/date';
+import { cn } from '../utils/cn';
 import StarRating from './StarRating';
 
 /* ─── Shared input styles ────────────────────────────────────────────────── */
@@ -345,7 +346,7 @@ export default function DetailReviewCard({ review, onDelete, onUpdate }) {
                 <Edit size={15} />
               </button>
               <button
-                className={`${iconBtnCls} hover:text-error`}
+                className={cn(iconBtnCls, 'hover:text-error')}
                 onClick={handleDelete}
                 aria-label="Delete review"
               >

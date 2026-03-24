@@ -3,6 +3,7 @@ import { Link, NavLink, useNavigate, useSearchParams } from 'react-router';
 import { toast } from 'sonner';
 import { LogOut, Menu, Search, CircleUser, X } from 'lucide-react';
 import { useAuth } from '../auth/useAuth';
+import { cn } from '../utils/cn';
 
 export default function Header() {
   const { user, logout, setAuthModal } = useAuth();
@@ -54,11 +55,12 @@ export default function Header() {
           <NavLink
             to="/establishments"
             className={({ isActive }) =>
-              `font-headline flex items-center gap-1 text-lg font-bold tracking-tight no-underline transition-colors duration-200 ${
+              cn(
+                'font-headline flex items-center gap-1 text-lg font-bold tracking-tight no-underline transition-colors duration-200',
                 isActive ?
                   'text-primary border-secondary border-b-2 pb-1'
-                : 'text-on-surface-variant hover:text-on-background'
-              }`
+                : 'text-on-surface-variant hover:text-on-background',
+              )
             }
           >
             Establishments
@@ -66,11 +68,12 @@ export default function Header() {
           <NavLink
             to="/reviews"
             className={({ isActive }) =>
-              `font-headline flex items-center gap-1 text-lg font-bold tracking-tight no-underline transition-colors duration-200 ${
+              cn(
+                'font-headline flex items-center gap-1 text-lg font-bold tracking-tight no-underline transition-colors duration-200',
                 isActive ?
                   'text-primary border-secondary border-b-2 pb-1'
-                : 'text-on-surface-variant hover:text-on-background'
-              }`
+                : 'text-on-surface-variant hover:text-on-background',
+              )
             }
           >
             Reviews
@@ -209,11 +212,12 @@ export default function Header() {
                 to={to}
                 onClick={closeMenu}
                 className={({ isActive }) =>
-                  `font-headline rounded-sm px-3 py-2 text-base font-bold tracking-tight no-underline transition-colors duration-200 ${
+                  cn(
+                    'font-headline rounded-sm px-3 py-2 text-base font-bold tracking-tight no-underline transition-colors duration-200',
                     isActive ?
                       'text-primary bg-primary/10'
-                    : 'text-on-surface-variant hover:text-on-background hover:bg-surface-container'
-                  }`
+                    : 'text-on-surface-variant hover:text-on-background hover:bg-surface-container',
+                  )
                 }
               >
                 {label}
