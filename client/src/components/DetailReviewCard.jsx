@@ -16,23 +16,6 @@ const textareaCls =
 const iconBtnCls =
   'flex cursor-pointer items-center justify-center rounded-xl border-none bg-transparent p-2 text-on-surface-variant transition-colors duration-200 hover:bg-surface-container-highest hover:text-primary';
 
-/* ─── Vote button ────────────────────────────────────────────────────────── */
-function VoteButton({ active, onClick, icon: Icon, label, count }) {
-  return (
-    <button
-      onClick={onClick}
-      className={`font-ui flex cursor-pointer items-center gap-2 rounded-xl border-2 px-4 py-1.5 text-sm transition-all duration-200 ${
-        active ?
-          'border-primary text-primary bg-surface-container-high'
-        : 'border-outline-variant text-on-surface-variant hover:border-primary/50 hover:bg-surface-container-high'
-      }`}
-    >
-      <Icon size={14} />
-      {label} ({count})
-    </button>
-  );
-}
-
 /* ─── Save / Cancel action row ───────────────────────────────────────────── */
 function EditActions({ onSave, onCancel, saveLabel = 'Save' }) {
   return (
@@ -69,53 +52,62 @@ function CommentItem({
   const isAuthor = user?.username === comment.author;
 
   return (
-    <div className="bg-surface-container rounded-lg p-4">
-      <div className="mb-1 flex items-center justify-between gap-2">
-        <span className="font-ui text-on-surface text-sm font-semibold">
-          {comment.author}
-        </span>
-        <span className="font-ui text-on-surface-variant text-[10px] tracking-widest uppercase">
-          {formatDate(comment.date)}
-          {comment.isEdited && (
-            <span className="font-ui ml-1 italic">(edited)</span>
-          )}
-        </span>
+    <div className="flex gap-3">
+      {/* Avatar */}
+      <div className="bg-surface-container-highest text-primary flex h-9 w-9 shrink-0 items-center justify-center rounded-xl text-xs font-bold">
+        {comment.author?.slice(0, 2).toUpperCase()}
       </div>
-      {isEditing ?
-        <div className="mt-2 flex flex-col gap-2">
-          <textarea
-            className={`font-ui ${textareaCls}`}
-            value={editText}
-            onChange={(e) => setEditText(e.target.value)}
-            rows={3}
-          />
-          <EditActions
-            onSave={() => onSaveEdit(comment._id)}
-            onCancel={onCancelEdit}
-          />
-        </div>
-      : <>
-          <p className="font-body text-on-surface-variant mt-1 text-sm leading-relaxed whitespace-pre-wrap">
-            {comment.body}
-          </p>
-          {isAuthor && (
-            <div className="mt-2 flex justify-end gap-3">
-              <button
-                onClick={() => onEdit(comment)}
-                className="font-ui text-on-surface-variant hover:text-primary cursor-pointer border-none bg-transparent text-xs transition-colors hover:underline"
-              >
-                Edit
-              </button>
-              <button
-                onClick={() => onDelete(comment._id)}
-                className="font-ui text-on-surface-variant hover:text-error cursor-pointer border-none bg-transparent text-xs transition-colors hover:underline"
-              >
-                Delete
-              </button>
-            </div>
+      <div className="flex-1">
+        <div className="mb-1 flex items-center gap-2">
+          <span className="font-ui text-on-surface text-sm font-semibold">
+            {comment.author}
+          </span>
+          <span className="font-ui text-on-surface-variant text-[10px] tracking-widest uppercase">
+            {formatDate(comment.date)}
+          </span>
+          {comment.isEdited && (
+            <span className="font-ui text-on-surface-variant text-[10px] italic">
+              (edited)
+            </span>
           )}
-        </>
-      }
+        </div>
+
+        {isEditing ?
+          <div className="flex flex-col gap-2">
+            <textarea
+              className={textareaCls}
+              value={editText}
+              onChange={(e) => setEditText(e.target.value)}
+              rows={3}
+            />
+            <EditActions
+              onSave={() => onSaveEdit(comment._id)}
+              onCancel={onCancelEdit}
+            />
+          </div>
+        : <>
+            <p className="font-body text-on-surface-variant text-sm leading-relaxed whitespace-pre-wrap">
+              {comment.body}
+            </p>
+            {isAuthor && (
+              <div className="mt-2 flex gap-3">
+                <button
+                  onClick={() => onEdit(comment)}
+                  className="font-ui text-on-surface-variant hover:text-primary cursor-pointer border-none bg-transparent text-xs transition-colors hover:underline"
+                >
+                  Edit
+                </button>
+                <button
+                  onClick={() => onDelete(comment._id)}
+                  className="font-ui text-on-surface-variant hover:text-error cursor-pointer border-none bg-transparent text-xs transition-colors hover:underline"
+                >
+                  Delete
+                </button>
+              </div>
+            )}
+          </>
+        }
+      </div>
     </div>
   );
 }
@@ -225,42 +217,53 @@ export default function DetailReviewCard({ review, onDelete, onUpdate }) {
     setIsEditingResponse(true);
   };
 
-  const handleAddComment = (e) => {
+  const handleAddComment = async (e) => {
     e.preventDefault();
     if (!commentText.trim()) return;
     const newComment = {
-      _id: Date.now().toString(),
       author: user.username,
       date: new Date().toISOString(),
       body: commentText,
     };
-    onUpdate(review._id, {
-      comments: [...(review.comments || []), newComment],
-    });
-    toast.success('Comment added.');
-    setCommentText('');
-  };
-
-  const handleDeleteComment = (commentId) => {
-    if (window.confirm('Delete this comment?')) {
-      onUpdate(review._id, {
-        comments: review.comments.filter((c) => c._id !== commentId),
+    try {
+      await onUpdate(review._id, {
+        comments: [...(review.comments || []), newComment],
       });
-      toast.success('Comment deleted.');
+      toast.success('Comment added.');
+      setCommentText('');
+    } catch {
+      // onUpdate already shows a toast on failure — nothing extra needed
     }
   };
 
-  const saveEditComment = (commentId) => {
-    onUpdate(review._id, {
-      comments: review.comments.map((c) =>
-        c._id === commentId ?
-          { ...c, body: editCommentText, isEdited: true }
-        : c,
-      ),
-    });
-    setEditingCommentId(null);
-    setEditCommentText('');
-    toast.success('Comment updated.');
+  const handleDeleteComment = async (commentId) => {
+    if (window.confirm('Delete this comment?')) {
+      try {
+        await onUpdate(review._id, {
+          comments: review.comments.filter((c) => c._id !== commentId),
+        });
+        toast.success('Comment deleted.');
+      } catch {
+        // onUpdate already shows a toast on failure
+      }
+    }
+  };
+
+  const saveEditComment = async (commentId) => {
+    try {
+      await onUpdate(review._id, {
+        comments: review.comments.map((c) =>
+          c._id === commentId ?
+            { ...c, body: editCommentText, isEdited: true }
+          : c,
+        ),
+      });
+      setEditingCommentId(null);
+      setEditCommentText('');
+      toast.success('Comment updated.');
+    } catch {
+      // onUpdate already shows a toast on failure
+    }
   };
 
   /* ── Edit mode ─────────────────────────────────────────────────────────── */
@@ -268,7 +271,6 @@ export default function DetailReviewCard({ review, onDelete, onUpdate }) {
     return (
       <article className="bg-surface-container rounded-2xl p-6">
         <div className="flex flex-col gap-4">
-          {/* Star picker */}
           <div className="flex gap-1" onMouseLeave={() => setHoverRating(0)}>
             {[1, 2, 3, 4, 5].map((star) => (
               <Star
@@ -286,13 +288,13 @@ export default function DetailReviewCard({ review, onDelete, onUpdate }) {
           </div>
           <input
             type="text"
-            className={`font-ui ${inputCls}`}
+            className={inputCls}
             placeholder="Review title"
             value={editTitle}
             onChange={(e) => setEditTitle(e.target.value)}
           />
           <textarea
-            className={`font-ui ${textareaCls}`}
+            className={textareaCls}
             value={editBody}
             onChange={(e) => setEditBody(e.target.value)}
             rows={4}
@@ -306,7 +308,7 @@ export default function DetailReviewCard({ review, onDelete, onUpdate }) {
   /* ── View mode ─────────────────────────────────────────────────────────── */
   return (
     <article id={review._id} className="bg-surface-container rounded-2xl p-6">
-      {/* Header row */}
+      {/* ── Header ──────────────────────────────────────────────────────── */}
       <div className="mb-4 flex items-center justify-between gap-4">
         <div className="flex items-center gap-3">
           {review.reviewerAvatar ?
@@ -356,15 +358,21 @@ export default function DetailReviewCard({ review, onDelete, onUpdate }) {
           )}
         </div>
       </div>
-      {/* Review content */}
+
+      {/* ── Review body ─────────────────────────────────────────────────── */}
       {review.title && (
-        <h4 className="font-headline text-on-surface mb-1 text-lg font-bold">
+        <h4 className="font-headline text-on-surface mb-3 text-lg font-bold">
           {review.title}
         </h4>
       )}
-      <p className="font-body text-on-surface-variant leading-relaxed whitespace-pre-wrap">
-        {review.body}
-      </p>
+
+      {/* Blockquote-style body lifted from mock */}
+      <blockquote className="border-primary/50 bg-surface-container-low rounded-r-xl border-l-4 py-4 pr-4 pl-5">
+        <p className="font-body text-on-surface-variant leading-relaxed whitespace-pre-wrap">
+          {review.body}
+        </p>
+      </blockquote>
+
       {/* Review image */}
       {review.reviewImage && (
         <div className="mt-4 overflow-hidden rounded-lg">
@@ -376,24 +384,46 @@ export default function DetailReviewCard({ review, onDelete, onUpdate }) {
           />
         </div>
       )}
-      {/* Helpfulness votes */}
-      <div className="mt-5 flex gap-3">
-        <VoteButton
-          active={userVote === 'helpful'}
-          onClick={() => handleVote('helpful')}
-          icon={ThumbsUp}
-          label="Helpful"
-          count={helpfulCount}
-        />
-        <VoteButton
-          active={userVote === 'unhelpful'}
-          onClick={() => handleVote('unhelpful')}
-          icon={ThumbsDown}
-          label="Unhelpful"
-          count={unhelpfulCount}
-        />
+
+      {/* ── Helpfulness callout bar (lifted from mock) ───────────────────── */}
+      <div className="bg-surface-container-low mt-6 flex flex-col items-start justify-between gap-4 rounded-2xl p-5 sm:flex-row sm:items-center">
+        <div>
+          <h5 className="font-headline text-on-surface text-sm font-bold">
+            Was this review helpful?
+          </h5>
+          <p className="font-ui text-on-surface-variant mt-0.5 text-xs">
+            Help others discover the best dining experiences.
+          </p>
+        </div>
+        <div className="flex shrink-0 gap-3">
+          <button
+            onClick={() => handleVote('helpful')}
+            className={cn(
+              'font-ui flex cursor-pointer items-center gap-2 rounded-xl border px-5 py-2 text-sm font-semibold transition-all duration-200',
+              userVote === 'helpful' ?
+                'bg-primary text-on-primary border-primary'
+              : 'border-primary/20 text-primary hover:bg-primary hover:text-on-primary',
+            )}
+          >
+            <ThumbsUp size={14} />
+            Valuable{helpfulCount > 0 && ` (${helpfulCount})`}
+          </button>
+          <button
+            onClick={() => handleVote('unhelpful')}
+            className={cn(
+              'font-ui flex cursor-pointer items-center gap-2 rounded-xl border px-5 py-2 text-sm font-semibold transition-all duration-200',
+              userVote === 'unhelpful' ?
+                'bg-surface-container-highest text-on-surface border-outline-variant'
+              : 'border-outline-variant/20 text-on-surface-variant hover:bg-surface-container-highest hover:text-on-surface',
+            )}
+          >
+            <ThumbsDown size={14} />
+            Not for me{unhelpfulCount > 0 && ` (${unhelpfulCount})`}
+          </button>
+        </div>
       </div>
-      {/* Owner response */}
+
+      {/* ── Owner response ───────────────────────────────────────────────── */}
       {(review.ownerResponse ||
         (isEstablishmentOwner && isEditingResponse)) && (
         <div className="border-primary/40 bg-surface-container-high mt-6 rounded-lg border-l-4 p-4">
@@ -405,11 +435,10 @@ export default function DetailReviewCard({ review, onDelete, onUpdate }) {
               </span>
             )}
           </p>
-
           {isEditingResponse ?
             <div className="flex flex-col gap-3">
               <textarea
-                className={`font-ui ${textareaCls}`}
+                className={textareaCls}
                 value={responseBody}
                 onChange={(e) => setResponseBody(e.target.value)}
                 placeholder="Write your response..."
@@ -452,59 +481,78 @@ export default function DetailReviewCard({ review, onDelete, onUpdate }) {
           Respond to Review
         </button>
       )}
-      {/* Comments */}
+
+      {/* ── Comments ─────────────────────────────────────────────────────── */}
       <div
         id={`comments-${review._id}`}
-        className="border-outline-variant/15 mt-6 border-t pt-5"
+        className="border-outline-variant/15 mt-6 border-t pt-6"
       >
-        {review.comments && review.comments.length > 0 && (
-          <div className="mb-4">
-            <p className="font-ui text-on-surface mb-3 text-sm font-semibold">
-              Comments ({review.comments.length})
-            </p>
-            <div className="flex flex-col gap-3">
-              {review.comments.map((comment) => (
-                <CommentItem
-                  key={comment._id}
-                  comment={comment}
-                  user={user}
-                  onEdit={(c) => {
-                    setEditingCommentId(c._id);
-                    setEditCommentText(c.body);
-                  }}
-                  onDelete={handleDeleteComment}
-                  editingId={editingCommentId}
-                  editText={editCommentText}
-                  setEditText={setEditCommentText}
-                  onSaveEdit={saveEditComment}
-                  onCancelEdit={() => setEditingCommentId(null)}
-                />
-              ))}
-            </div>
-          </div>
-        )}
+        {/* Section header — "Community Dialogue" style from mock */}
+        <h5 className="font-headline text-on-surface mb-5 text-base font-bold">
+          Discussion
+          {review.comments?.length > 0 && (
+            <span className="text-primary font-ui ml-2 align-middle text-sm font-semibold">
+              ({review.comments.length})
+            </span>
+          )}
+        </h5>
 
+        {/* Comment input — avatar + textarea layout from mock */}
         {user ?
-          <form onSubmit={handleAddComment} className="flex gap-2">
-            <input
-              type="text"
-              className={`font-ui ${inputCls}`}
-              placeholder="Add a comment…"
-              value={commentText}
-              onChange={(e) => setCommentText(e.target.value)}
-            />
-            <button
-              type="submit"
-              disabled={!commentText.trim()}
-              className="font-ui bg-primary text-on-primary cursor-pointer rounded-xl border-none px-5 py-2.5 text-sm font-semibold transition-all duration-200 hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-50"
-            >
-              Post
-            </button>
+          <form onSubmit={handleAddComment} className="mb-6 flex gap-3">
+            <div className="bg-surface-container-highest text-primary flex h-9 w-9 shrink-0 items-center justify-center rounded-xl text-xs font-bold">
+              {user.username?.slice(0, 2).toUpperCase()}
+            </div>
+            <div className="flex flex-1 gap-2">
+              <input
+                type="text"
+                className={inputCls}
+                placeholder="Join the discussion…"
+                value={commentText}
+                onChange={(e) => setCommentText(e.target.value)}
+              />
+              <button
+                type="submit"
+                disabled={!commentText.trim()}
+                className="font-ui bg-primary text-on-primary cursor-pointer rounded-xl border-none px-5 py-2.5 text-sm font-semibold transition-all duration-200 hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                Post
+              </button>
+            </div>
           </form>
-        : <p className="font-ui text-on-surface-variant text-sm">
-            Log in to leave a comment.
+        : <p className="font-ui text-on-surface-variant mb-5 text-sm">
+            <button
+              onClick={() => {}}
+              className="text-primary font-ui cursor-pointer border-none bg-transparent p-0 font-semibold hover:underline"
+            >
+              Log in
+            </button>{' '}
+            to join the discussion.
           </p>
         }
+
+        {/* Comments list */}
+        {review.comments && review.comments.length > 0 && (
+          <div className="space-y-5">
+            {review.comments.map((comment) => (
+              <CommentItem
+                key={comment._id}
+                comment={comment}
+                user={user}
+                onEdit={(c) => {
+                  setEditingCommentId(c._id);
+                  setEditCommentText(c.body);
+                }}
+                onDelete={handleDeleteComment}
+                editingId={editingCommentId}
+                editText={editCommentText}
+                setEditText={setEditCommentText}
+                onSaveEdit={saveEditComment}
+                onCancelEdit={() => setEditingCommentId(null)}
+              />
+            ))}
+          </div>
+        )}
       </div>
     </article>
   );
