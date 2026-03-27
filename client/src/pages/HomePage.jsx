@@ -13,7 +13,6 @@ export default function HomePage() {
   const [reviews, setReviews] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
   const [sortBy, setSortBy] = useState('recent');
-  const [email, setEmail] = useState('');
 
   useEffect(() => {
     let cancelled = false;
@@ -63,13 +62,29 @@ export default function HomePage() {
   const handlePrev = () =>
     setCurrentPage((prev) => (prev - 1 + totalPages) % Math.max(1, totalPages));
 
-  const cuisines = useMemo(
-    () =>
-      [
-        ...new Set(restaurants.flatMap((r) => r.cuisine).filter(Boolean)),
-      ].sort(),
-    [restaurants],
-  );
+  const cuisines = useMemo(() => {
+    const counts = {};
+
+    reviews.forEach((review) => {
+      const restaurant = restaurantById.get(review.establishment);
+      if (!restaurant?.cuisine) return;
+
+      const values =
+        Array.isArray(restaurant.cuisine) ?
+          restaurant.cuisine
+        : [restaurant.cuisine];
+
+      values.forEach((value) => {
+        if (!value) return;
+        counts[value] = (counts[value] || 0) + 1;
+      });
+    });
+
+    return Object.entries(counts)
+      .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
+      .slice(0, 5)
+      .map(([cuisine]) => cuisine);
+  }, [reviews, restaurantById]);
 
   const topCritics = useMemo(() => {
     const counts = {};
@@ -94,12 +109,6 @@ export default function HomePage() {
     return result.slice(1, 3);
   }, [reviews, sortBy]);
 
-  const handleSubscribe = () => {
-    if (!email.trim()) return;
-    toast.success("You're subscribed! Welcome to The Weekly Menu.");
-    setEmail('');
-  };
-
   return (
     <main className="mx-auto max-w-7xl px-6 pt-24 pb-20 md:px-24">
       <section className="mb-20 text-center md:text-left">
@@ -110,7 +119,7 @@ export default function HomePage() {
         </h1>
         <p className="font-body text-on-surface-variant mb-10 max-w-xl text-lg leading-relaxed">
           Experience dining through the lens of critics and connoisseurs. We
-          don&apos;t just review food; we archive excellence.
+          don&apos;t just review food, we archive excellence.
         </p>
         <div className="inline-flex flex-wrap gap-4">
           <button
@@ -185,7 +194,7 @@ export default function HomePage() {
         }
       </section>
       <div className="flex flex-col gap-16 lg:flex-row">
-        {/* Feed */}
+        {/* Feed Section */}
         <div className="flex-1">
           <div className="mb-12 flex items-center justify-between">
             <h2 className="font-headline text-4xl font-bold">
@@ -250,32 +259,6 @@ export default function HomePage() {
                     {cuisine}
                   </Link>
                 ))}
-              </div>
-            </div>
-
-            {/* Newsletter */}
-            <div className="bg-surface-bright/60 border-outline-variant/10 relative overflow-hidden rounded-sm border p-8 backdrop-blur-lg">
-              <div className="relative z-10">
-                <h4 className="font-headline mb-2 text-xl font-bold">
-                  The Weekly Menu
-                </h4>
-                <p className="text-on-surface-variant font-ui mb-6 text-sm">
-                  Curated tables and hidden gems delivered to your inbox.
-                </p>
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  onKeyDown={(e) => e.key === 'Enter' && handleSubscribe()}
-                  placeholder="Email address"
-                  className="bg-surface-container-lowest focus:ring-primary font-ui mb-4 w-full rounded-xl border-none px-5 py-3 text-sm transition-all outline-none focus:ring-1"
-                />
-                <button
-                  onClick={handleSubscribe}
-                  className="gold-gradient text-on-primary font-ui w-full cursor-pointer rounded-xl py-3 text-sm font-bold transition-transform active:scale-95"
-                >
-                  Subscribe
-                </button>
               </div>
             </div>
 
