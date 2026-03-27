@@ -8,6 +8,7 @@ import { restaurantsData, reviewsData } from '../../client/src/data.js';
 
 dotenv.config();
 
+// Normalizes legacy data with safe defaults for missing or null values
 function ensureString(v, fallback = '') {
   return typeof v === 'string' ? v : fallback;
 }
@@ -39,29 +40,32 @@ async function main() {
     })),
   );
 
+  // Map legacy IDs to new MongoDB ObjectIds for review/establishment linking
   const idMap = new Map(establishments.map((e) => [e.legacyId, e._id]));
 
-  // Seed users from reviewers (simple, no hashing per Phase 2)
+  // Seed users from reviewers
+  // Extract unique reviewer names; filter(Boolean) removes empty/null values
   const uniqueReviewers = Array.from(
     new Set(reviewsData.map((r) => r.reviewer).filter(Boolean)),
   );
+
   await User.insertMany(
     uniqueReviewers.map((username) => ({
       username,
       email: `${username.toLowerCase().replace(/\s+/g, '')}@example.com`,
-      password: 'password123',
+      password: 'password123', // Demo data only; use hashed passwords in production
       avatar: `https://i.pravatar.cc/150?u=${encodeURIComponent(username)}`,
       bio: '',
       role: 'user',
     })),
   );
 
-  // Add a sample owner account
+  // Add a sample owner account linked to the first establishment
   const firstEst = establishments[0];
   await User.create({
     username: 'owner',
     email: 'owner@example.com',
-    password: 'owner12345',
+    password: 'owner12345', // Demo credentials for testing
     avatar: `https://i.pravatar.cc/150?u=owner`,
     bio: 'I manage this establishment.',
     role: 'owner',
@@ -69,6 +73,7 @@ async function main() {
   });
 
   // Seed reviews
+  // Transform legacy review data to new schema; map restaurantId via idMap
   await Review.insertMany(
     reviewsData.map((r) => ({
       legacyId: r.id,
