@@ -20,7 +20,7 @@ await connectDb(process.env.MONGODB_URI);
 // and JSON parsing with a 2mb limit to accommodate base64 review images.
 app.use(
   cors({
-    origin: true,
+    origin: process.env.CLIENT_ORIGIN || 'http://localhost:5173',
     credentials: false,
   }),
 );
