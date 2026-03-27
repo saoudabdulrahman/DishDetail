@@ -6,7 +6,7 @@ import { useAuth } from '../auth/useAuth';
 import { validateUser, saveUser } from '../auth/userStorage';
 import { cn } from '../utils/cn';
 
-/* ─── Shared field wrapper ───────────────────────────────────────────────── */
+// Shared field wrapper
 function Field({ label, children }) {
   return (
     <label className="font-ui text-on-surface-variant flex flex-col gap-1.5 text-sm font-semibold">
@@ -16,7 +16,7 @@ function Field({ label, children }) {
   );
 }
 
-/* ─── Text / email input ─────────────────────────────────────────────────── */
+// Text/email input
 function TextInput({ type = 'text', ...props }) {
   return (
     <input
@@ -27,7 +27,7 @@ function TextInput({ type = 'text', ...props }) {
   );
 }
 
-/* ─── Password input with reveal toggle ──────────────────────────────────── */
+// Password input with reveal toggle
 function PasswordInput({ value, onChange, placeholder, autoComplete }) {
   const [show, setShow] = useState(false);
   return (
@@ -54,7 +54,7 @@ function PasswordInput({ value, onChange, placeholder, autoComplete }) {
   );
 }
 
-/* ─── Animated checkbox ──────────────────────────────────────────────────── */
+// Animated checkbox row
 function CheckboxRow({ checked, onChange, label }) {
   return (
     <label className="text-on-surface-variant flex cursor-pointer items-center gap-2.5 px-1 text-sm select-none">
@@ -79,7 +79,7 @@ function CheckboxRow({ checked, onChange, label }) {
   );
 }
 
-/* ─── Error banner ───────────────────────────────────────────────────────── */
+// Error banner
 function ErrorBanner({ message, shake }) {
   return (
     <div
@@ -93,7 +93,7 @@ function ErrorBanner({ message, shake }) {
   );
 }
 
-/* ─── Login form ─────────────────────────────────────────────────────────── */
+// Login form
 function LoginForm({ onSwitch, onSuccess }) {
   const { login } = useAuth();
   const [username, setUsername] = useState('');
@@ -184,7 +184,7 @@ function LoginForm({ onSwitch, onSuccess }) {
   );
 }
 
-/* ─── Signup form ────────────────────────────────────────────────────────── */
+// Signup form
 function SignupForm({ onSwitch, onSuccess }) {
   const { login } = useAuth();
   const [email, setEmail] = useState('');
@@ -307,18 +307,17 @@ function SignupForm({ onSwitch, onSuccess }) {
   );
 }
 
-/* ─── Modal shell ────────────────────────────────────────────────────────── */
-const CLOSE_DURATION = 250; // ms — must match the CSS animation duration below
+// Modal shell
+const CLOSE_DURATION = 250; // Keep in sync with exit animation durations.
 
 export default function AuthModal() {
   const { authModal, setAuthModal } = useAuth();
-  // displayModal holds the last-seen modal type and only unmounts after the
-  // closing animation finishes, keeping content visible during exit.
+  // Keep content mounted until close animation completes.
   const [displayModal, setDisplayModal] = useState(authModal);
   const [isClosing, setIsClosing] = useState(false);
   const [mouseDownOnOverlay, setMouseDownOnOverlay] = useState(false);
 
-  // Sync a newly-opened modal into local state (render-time derivation, safe).
+  // Sync newly opened modal type into local display state.
   if (authModal && authModal !== displayModal) {
     setDisplayModal(authModal);
     setIsClosing(false);
@@ -340,6 +339,7 @@ export default function AuthModal() {
     };
     document.addEventListener('keydown', onKey);
     return () => document.removeEventListener('keydown', onKey);
+    // closeModal intentionally excluded to avoid re-binding listener each render.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [displayModal]);
 
@@ -370,10 +370,10 @@ export default function AuthModal() {
           : 'animate-[slideUp_0.25s_ease-out]',
         )}
       >
-        {/* Gold top-edge accent — matches CTAs across the app */}
+        {/* Top accent */}
         <div className="gold-gradient absolute top-0 left-0 h-0.5 w-full" />
 
-        {/* Close */}
+        {/* Close Button */}
         <button
           onClick={closeModal}
           aria-label="Close"

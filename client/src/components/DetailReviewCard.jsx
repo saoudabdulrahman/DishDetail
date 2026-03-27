@@ -6,7 +6,6 @@ import { formatDate } from '../utils/date';
 import { cn } from '../utils/cn';
 import StarRating from './StarRating';
 
-/* ─── Shared input styles ────────────────────────────────────────────────── */
 const inputCls =
   'font-ui bg-surface-container-high text-on-surface placeholder:text-on-surface-variant/40 w-full rounded-xl border-none px-5 py-2.5 text-sm outline-none transition-all duration-200 focus:ring-1 focus:ring-primary';
 
@@ -16,7 +15,6 @@ const textareaCls =
 const iconBtnCls =
   'flex cursor-pointer items-center justify-center rounded-xl border-none bg-transparent p-2 text-on-surface-variant transition-colors duration-200 hover:bg-surface-container-highest hover:text-primary';
 
-/* ─── Save / Cancel action row ───────────────────────────────────────────── */
 function EditActions({ onSave, onCancel, saveLabel = 'Save' }) {
   return (
     <div className="flex justify-end gap-2">
@@ -36,7 +34,6 @@ function EditActions({ onSave, onCancel, saveLabel = 'Save' }) {
   );
 }
 
-/* ─── Comment item ───────────────────────────────────────────────────────── */
 function CommentItem({
   comment,
   user,
@@ -53,7 +50,6 @@ function CommentItem({
 
   return (
     <div className="flex gap-3">
-      {/* Avatar */}
       <div className="bg-surface-container-highest text-primary flex h-9 w-9 shrink-0 items-center justify-center rounded-xl text-xs font-bold">
         {comment.author?.slice(0, 2).toUpperCase()}
       </div>
@@ -112,7 +108,6 @@ function CommentItem({
   );
 }
 
-/* ─── Main component ─────────────────────────────────────────────────────── */
 export default function DetailReviewCard({ review, onDelete, onUpdate }) {
   const { user } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
@@ -266,7 +261,7 @@ export default function DetailReviewCard({ review, onDelete, onUpdate }) {
     }
   };
 
-  /* ── Edit mode ─────────────────────────────────────────────────────────── */
+  // Edit Mode
   if (isEditing) {
     return (
       <article className="bg-surface-container rounded-2xl p-6">
@@ -305,10 +300,9 @@ export default function DetailReviewCard({ review, onDelete, onUpdate }) {
     );
   }
 
-  /* ── View mode ─────────────────────────────────────────────────────────── */
   return (
     <article id={review._id} className="bg-surface-container rounded-2xl p-6">
-      {/* ── Header ──────────────────────────────────────────────────────── */}
+      {/* Header */}
       <div className="mb-4 flex items-center justify-between gap-4">
         <div className="flex items-center gap-3">
           {review.reviewerAvatar ?
@@ -359,21 +353,20 @@ export default function DetailReviewCard({ review, onDelete, onUpdate }) {
         </div>
       </div>
 
-      {/* ── Review body ─────────────────────────────────────────────────── */}
+      {/* Review Body */}
       {review.title && (
         <h4 className="font-headline text-on-surface mb-3 text-lg font-bold">
           {review.title}
         </h4>
       )}
 
-      {/* Blockquote-style body lifted from mock */}
       <blockquote className="border-primary/50 bg-surface-container-low rounded-r-xl border-l-4 py-4 pr-4 pl-5">
         <p className="font-body text-on-surface-variant leading-relaxed whitespace-pre-wrap">
           {review.body}
         </p>
       </blockquote>
 
-      {/* Review image */}
+      {/* Review Image */}
       {review.reviewImage && (
         <div className="mt-4 overflow-hidden rounded-lg">
           <img
@@ -385,7 +378,7 @@ export default function DetailReviewCard({ review, onDelete, onUpdate }) {
         </div>
       )}
 
-      {/* ── Helpfulness callout bar (lifted from mock) ───────────────────── */}
+      {/* Helpfulness Bar */}
       <div className="bg-surface-container-low mt-6 flex flex-col items-start justify-between gap-4 rounded-2xl p-5 sm:flex-row sm:items-center">
         <div>
           <h5 className="font-headline text-on-surface text-sm font-bold">
@@ -423,7 +416,7 @@ export default function DetailReviewCard({ review, onDelete, onUpdate }) {
         </div>
       </div>
 
-      {/* ── Owner response ───────────────────────────────────────────────── */}
+      {/* Owner Response */}
       {(review.ownerResponse ||
         (isEstablishmentOwner && isEditingResponse)) && (
         <div className="border-primary/40 bg-surface-container-high mt-6 rounded-lg border-l-4 p-4">
@@ -482,12 +475,12 @@ export default function DetailReviewCard({ review, onDelete, onUpdate }) {
         </button>
       )}
 
-      {/* ── Comments ─────────────────────────────────────────────────────── */}
+      {/* Comments */}
       <div
         id={`comments-${review._id}`}
         className="border-outline-variant/15 mt-6 border-t pt-6"
       >
-        {/* Section header — "Community Dialogue" style from mock */}
+        {/* Section Header */}
         <h5 className="font-headline text-on-surface mb-5 text-base font-bold">
           Discussion
           {review.comments?.length > 0 && (
@@ -497,7 +490,7 @@ export default function DetailReviewCard({ review, onDelete, onUpdate }) {
           )}
         </h5>
 
-        {/* Comment input — avatar + textarea layout from mock */}
+        {/* Comment Input */}
         {user ?
           <form onSubmit={handleAddComment} className="mb-6 flex gap-3">
             <div className="bg-surface-container-highest text-primary flex h-9 w-9 shrink-0 items-center justify-center rounded-xl text-xs font-bold">
@@ -531,7 +524,7 @@ export default function DetailReviewCard({ review, onDelete, onUpdate }) {
           </p>
         }
 
-        {/* Comments list */}
+        {/* Comments List */}
         {review.comments && review.comments.length > 0 && (
           <div className="space-y-5">
             {review.comments.map((comment) => (

@@ -87,7 +87,7 @@ export default function EstablishmentsPage() {
 
   return (
     <main className="mx-auto max-w-7xl px-6 pt-24 pb-20 md:px-24">
-      {/* Page header */}
+      {/* Page Header */}
       <section className="mb-12 text-center md:text-left">
         <span className="text-secondary font-label text-xs font-bold tracking-[0.2em] uppercase">
           Curated Venues
@@ -96,7 +96,7 @@ export default function EstablishmentsPage() {
           Establishments
         </h1>
       </section>
-      {/* Filter bar */}
+      {/* Filter Bar */}
       <div className="mb-10 flex flex-wrap justify-center gap-4 md:justify-start">
         <div className="bg-surface-container-low flex items-center space-x-4 rounded-xl px-4 py-2">
           <span className="text-on-surface-variant font-ui text-xs font-bold uppercase">

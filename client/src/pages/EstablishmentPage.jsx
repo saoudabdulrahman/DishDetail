@@ -23,6 +23,7 @@ export default function EstablishmentPage() {
   }, [reviews]);
 
   useEffect(() => {
+    // Auto-expand visible reviews when URL hash points to a hidden review.
     if (sortedReviews.length > 0 && window.location.hash) {
       const id = window.location.hash.substring(1);
       const index = sortedReviews.findIndex((r) => r._id === id);
@@ -97,7 +98,7 @@ export default function EstablishmentPage() {
       )
     : (restaurant?.rating ?? 0);
 
-  /* ── Loading state ───────────────────────────────────────────────────── */
+  // Loading state
   if (loading) {
     return (
       <main className="mx-auto max-w-7xl px-6 pt-24 pb-20 md:px-24">
@@ -109,7 +110,7 @@ export default function EstablishmentPage() {
     );
   }
 
-  /* ── Error state ─────────────────────────────────────────────────────── */
+  // Error state
   if (error || !restaurant) {
     return (
       <main className="mx-auto flex min-h-[60vh] max-w-7xl flex-col items-center justify-center gap-6 px-6 pt-24 pb-20 md:px-24">
@@ -126,17 +127,17 @@ export default function EstablishmentPage() {
     );
   }
 
-  /* ── Main page ───────────────────────────────────────────────────────── */
+  // Main page
   return (
     <main className="mx-auto max-w-7xl px-6 pt-24 pb-20 md:px-24">
-      {/* Back button */}
+      {/* Back Button */}
       <button
         onClick={() => navigate('/establishments')}
         className="font-ui bg-surface-container text-on-surface-variant hover:text-on-surface mb-8 inline-flex cursor-pointer items-center gap-2 rounded-xl border-none px-5 py-2.5 text-sm font-semibold transition-all duration-200 hover:-translate-y-0.5"
       >
         <ArrowLeft size={16} /> Back to Establishments
       </button>
-      {/* Hero banner */}
+      {/* Hero Banner */}
       <div className="mb-8 h-80 overflow-hidden rounded-2xl md:h-96">
         <img
           src={restaurant.restaurantImage}
@@ -175,7 +176,7 @@ export default function EstablishmentPage() {
           {restaurant.description}
         </p>
       </div>
-      {/* Quick info grid */}
+      {/* Quick Info Grid */}
       <div className="bg-surface-container mb-10 grid grid-cols-1 gap-6 rounded-2xl p-6 sm:grid-cols-2 lg:grid-cols-4">
         {[
           { icon: MapPin, label: 'Address', value: restaurant.address },
@@ -200,7 +201,7 @@ export default function EstablishmentPage() {
           </div>
         ))}
       </div>
-      {/* Reviews section */}
+      {/* Reviews Section */}
       <section>
         <div className="mb-6 flex items-center justify-between">
           <h2 className="font-headline text-3xl font-bold">Reviews</h2>

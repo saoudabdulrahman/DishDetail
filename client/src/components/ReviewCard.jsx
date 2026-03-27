@@ -8,7 +8,6 @@ import StarRating from './StarRating';
 import { formatDate } from '../utils/date';
 import { cn } from '../utils/cn';
 
-// variant: 'feature' (large left card) | 'stack' (horizontal right cards) | 'feed' (main review feed)
 export default function ReviewCard({ review, restaurant, variant = 'stack' }) {
   const [imgLoaded, setImgLoaded] = useState(false);
   const navigate = useNavigate();
@@ -74,6 +73,7 @@ export default function ReviewCard({ review, restaurant, variant = 'stack' }) {
     navigate(`/establishments/${restaurant.slug}#comments-${review._id}`);
   };
 
+  // Feature card
   if (variant === 'feature') {
     return (
       <Link
@@ -129,6 +129,7 @@ export default function ReviewCard({ review, restaurant, variant = 'stack' }) {
     );
   }
 
+  // Feed card
   if (variant === 'feed') {
     const href = `/establishments/${restaurant.slug}#${review._id}`;
 
@@ -189,7 +190,6 @@ export default function ReviewCard({ review, restaurant, variant = 'stack' }) {
             </div>
 
             <div className="border-outline-variant/10 flex items-center justify-between border-t pt-6">
-              {/* Reviewer info — navigates via the parent Link, no extra wrapper needed */}
               <div className="flex items-center space-x-3">
                 {review.reviewerAvatar ?
                   <img
@@ -209,7 +209,7 @@ export default function ReviewCard({ review, restaurant, variant = 'stack' }) {
                 </div>
               </div>
 
-              {/* Action buttons — stop propagation so they don't double-navigate */}
+              {/* Prevent clicks on actions from triggering the parent link. */}
               <div
                 className="flex items-center space-x-6"
                 onClick={(e) => e.preventDefault()}
@@ -288,7 +288,7 @@ export default function ReviewCard({ review, restaurant, variant = 'stack' }) {
     );
   }
 
-  // variant === 'stack'
+  // Stack card
   return (
     <Link
       to={`/establishments/${restaurant.slug}#${review._id}`}

@@ -17,7 +17,7 @@ export default function EstablishmentCard({ restaurant }) {
         </div>
       )}
       <article className="flex flex-col sm:flex-row">
-        {/* Image — fixed width column like feed ReviewCard */}
+        {/* Image Column */}
         {restaurant.restaurantImage && (
           <div className="relative h-48 shrink-0 overflow-hidden sm:h-auto sm:min-h-56 sm:w-48">
             <img
@@ -32,7 +32,7 @@ export default function EstablishmentCard({ restaurant }) {
           </div>
         )}
 
-        {/* Content */}
+        {/* Content Column */}
         <div className="flex flex-1 flex-col justify-between p-6">
           <div>
             <div className="mb-3 flex items-start justify-between gap-4">

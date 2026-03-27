@@ -12,9 +12,11 @@ import ProtectedRoute from './components/ProtectedRoute';
 
 export const routes = createBrowserRouter([
   {
+    // App Shell
     element: <App />,
     children: [
       {
+        // Main Layout Routes
         element: <MainLayout />,
         children: [
           { index: true, element: <HomePage /> },
@@ -22,12 +24,14 @@ export const routes = createBrowserRouter([
           { path: '/establishments', element: <EstablishmentsPage /> },
           { path: '/establishments/:slug', element: <EstablishmentPage /> },
           {
+            // Protected Routes
             element: <ProtectedRoute />,
             children: [
               { path: '/profile', element: <ProfilePage /> },
               { path: '/submit-review', element: <SubmitReviewPage /> },
             ],
           },
+          // Catch-all Route
           { path: '*', element: <NotFoundPage /> },
         ],
       },

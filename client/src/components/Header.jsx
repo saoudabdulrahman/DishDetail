@@ -40,7 +40,7 @@ export default function Header() {
 
   return (
     <header className="bg-background/80 fixed top-0 z-50 flex w-full flex-col shadow-[0_20px_40px_rgba(20,10,25,0.4)] backdrop-blur-md transition-colors duration-300">
-      {/* Main header row */}
+      {/* Main Header Row */}
       <div className="mx-auto flex w-full max-w-360 items-center justify-between px-8 py-4">
         <Link
           to="/"
@@ -50,7 +50,7 @@ export default function Header() {
           DishDetail
         </Link>
 
-        {/* Desktop nav */}
+        {/* Desktop Nav */}
         <nav className="hidden items-center space-x-8 md:flex">
           <NavLink
             to="/establishments"
@@ -81,7 +81,7 @@ export default function Header() {
         </nav>
 
         <div className="flex items-center space-x-6">
-          {/* Desktop search */}
+          {/* Desktop Search */}
           <div className="group relative hidden sm:block">
             <input
               id="search-input"
@@ -102,11 +102,11 @@ export default function Header() {
             </button>
           </div>
 
-          {/* Desktop actions */}
+          {/* Desktop Auth Actions */}
           <div className="hidden items-center space-x-4 md:flex">
             {user ?
               <>
-                {/* User dropdown */}
+                {/* User Dropdown */}
                 <div className="relative" ref={dropdownRef}>
                   <button
                     onClick={() => setIsDropdownOpen(!isDropdownOpen)}
@@ -156,7 +156,7 @@ export default function Header() {
             }
           </div>
 
-          {/* Hamburger - mobile only */}
+          {/* Mobile Menu Toggle */}
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             aria-label="Toggle navigation menu"
@@ -170,10 +170,10 @@ export default function Header() {
         </div>
       </div>
 
-      {/* Mobile dropdown panel */}
+      {/* Mobile Dropdown Panel */}
       {isMenuOpen && (
         <div className="bg-background border-t border-white/10 px-8 pb-6 md:hidden">
-          {/* Mobile search */}
+          {/* Mobile Search */}
           <div className="relative mt-4 mb-4">
             <input
               type="text"
@@ -201,7 +201,7 @@ export default function Header() {
             </button>
           </div>
 
-          {/* Mobile nav links */}
+          {/* Mobile Nav Links */}
           <nav className="mb-4 flex flex-col space-y-1">
             {[
               { to: '/establishments', label: 'Establishments' },
@@ -225,7 +225,7 @@ export default function Header() {
             ))}
           </nav>
 
-          {/* Mobile auth / user actions */}
+          {/* Mobile Auth Actions */}
           <div className="border-t border-white/10 pt-4">
             {user ?
               <div className="flex flex-col space-y-1">

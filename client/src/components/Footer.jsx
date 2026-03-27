@@ -1,4 +1,3 @@
-import githubBlack from '../assets/GitHub_Invertocat_Black_Clearspace.svg';
 import githubWhite from '../assets/GitHub_Invertocat_White_Clearspace.svg';
 
 export default function Footer() {
@@ -35,16 +34,7 @@ export default function Footer() {
             rel="noopener noreferrer"
             className="transition-opacity hover:opacity-70"
           >
-            <img
-              src={githubBlack}
-              alt="GitHub"
-              className="h-8 w-8 dark:hidden"
-            />
-            <img
-              src={githubWhite}
-              alt="GitHub"
-              className="hidden h-8 w-8 dark:block"
-            />
+            <img src={githubWhite} alt="GitHub" className="h-8 w-8" />
           </a>
         </div>
 
