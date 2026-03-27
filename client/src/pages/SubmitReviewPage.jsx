@@ -1,8 +1,9 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
-import { Star, Search } from 'lucide-react';
+import { Search } from 'lucide-react';
 import { toast } from 'sonner';
 import ReviewCard from '../components/ReviewCard';
+import StarRating from '../components/StarRating';
 import { api } from '../api';
 import { useAuth } from '../auth/useAuth';
 
@@ -19,7 +20,6 @@ export default function SubmitReviewPage() {
   const [featured, setFeatured] = useState([]);
 
   const [rating, setRating] = useState(0);
-  const [hover, setHover] = useState(0);
   const [reviewTitle, setReviewTitle] = useState('');
   const [reviewText, setReviewText] = useState('');
   const [error, setError] = useState('');
@@ -110,7 +110,7 @@ export default function SubmitReviewPage() {
   return (
     <main className="mx-auto max-w-7xl px-6 pt-24 pb-20 md:px-24">
       <div className="flex flex-col gap-10 lg:flex-row lg:items-start">
-        {/* ── Form panel ─────────────────────────────────────────────────── */}
+        {/* Form Panel */}
         <div className="bg-surface-container flex-1 rounded-2xl p-8">
           {/* Header */}
           <div className="mb-8">
@@ -124,7 +124,7 @@ export default function SubmitReviewPage() {
             </h1>
           </div>
 
-          {/* Error banner */}
+          {/* Error Banner */}
           {error && (
             <div className="font-ui border-error text-error bg-error/10 mb-6 rounded-xl border px-5 py-2 text-sm">
               {error}
@@ -132,7 +132,7 @@ export default function SubmitReviewPage() {
           )}
 
           <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-            {/* Restaurant search */}
+            {/* Restaurant Search */}
             <div className="relative">
               <div className="relative flex items-center">
                 <Search
@@ -151,7 +151,7 @@ export default function SubmitReviewPage() {
                 />
               </div>
 
-              {/* Dropdown results */}
+              {/* Search Results */}
               {query &&
                 !selectedRestaurant &&
                 filteredRestaurants.length > 0 && (
@@ -169,25 +169,18 @@ export default function SubmitReviewPage() {
                 )}
             </div>
 
-            {/* Review fields — only shown once a restaurant is selected */}
+            {/* Review Fields */}
             {selectedRestaurant && (
               <div className="flex animate-[fadeIn_0.3s_ease] flex-col gap-5">
                 {/* Star rating */}
-                <div className="flex gap-2" onMouseLeave={() => setHover(0)}>
-                  {[1, 2, 3, 4, 5].map((star) => (
-                    <Star
-                      key={star}
-                      size={32}
-                      className="cursor-pointer transition-transform duration-150 hover:scale-110"
-                      fill={star <= (hover || rating) ? 'currentColor' : 'none'}
-                      color="var(--color-primary)"
-                      onClick={() => setRating(star)}
-                      onMouseEnter={() => setHover(star)}
-                    />
-                  ))}
-                </div>
+                <StarRating
+                  rating={rating}
+                  interactive
+                  onChange={setRating}
+                  starClassName="h-8 w-8"
+                />
 
-                {/* Title */}
+                {/* Review Title */}
                 <input
                   type="text"
                   placeholder="Review title…"
@@ -196,7 +189,7 @@ export default function SubmitReviewPage() {
                   className="font-ui bg-surface-container-high text-on-surface placeholder:text-on-surface-variant/40 focus:ring-primary w-full rounded-xl border-none px-5 py-3 text-sm font-semibold transition-all duration-200 outline-none focus:ring-1"
                 />
 
-                {/* Body */}
+                {/* Review Body */}
                 <textarea
                   placeholder="Write your review here…"
                   value={reviewText}
@@ -205,7 +198,7 @@ export default function SubmitReviewPage() {
                   className="font-ui bg-surface-container-high text-on-surface placeholder:text-on-surface-variant/40 focus:ring-primary field-sizing-content w-full resize-none rounded-2xl border-none px-5 py-3 text-sm wrap-anywhere transition-all duration-200 outline-none focus:ring-1"
                 />
 
-                {/* Submit */}
+                {/* Submit Button */}
                 <div>
                   <button
                     type="submit"
@@ -220,7 +213,7 @@ export default function SubmitReviewPage() {
           </form>
         </div>
 
-        {/* ── Sidebar ─────────────────────────────────────────────────────── */}
+        {/* Sidebar */}
         <aside className="lg:sticky lg:top-28 lg:w-96">
           <div className="mb-5">
             <span className="text-secondary font-label text-xs font-bold tracking-[0.2em] uppercase">
