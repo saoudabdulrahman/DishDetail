@@ -15,6 +15,7 @@ export function saveAuth(user, rememberMe) {
 }
 
 export function loadAuth() {
+  // Prefer remembered sessions first, then fall back to tab-scoped session auth.
   const raw =
     localStorage.getItem(AUTH_KEY) || sessionStorage.getItem(AUTH_KEY);
   if (!raw) return null;
@@ -29,6 +30,7 @@ export function loadAuth() {
 
     return parsed.user ?? null;
   } catch {
+    // Clear malformed payloads so subsequent reads recover cleanly.
     clearAuth();
     return null;
   }
