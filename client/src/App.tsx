@@ -1,4 +1,5 @@
 import { Outlet, ScrollRestoration } from 'react-router';
+import { Toaster } from 'sonner';
 import AuthModal from './components/AuthModal';
 import './App.css';
 
@@ -8,6 +9,7 @@ function App() {
       <Outlet />
       <ScrollRestoration />
       <AuthModal />
+      <Toaster theme="system" richColors />
     </div>
   );
 }

@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import type { Establishment, Review } from '@dishdetail/shared';
 import { useSearchParams } from 'react-router';
+import { toast } from 'sonner';
 import ReviewCard from '../components/ReviewCard';
 import { api } from '../api';
 import './ReviewsPage.css';
@@ -29,8 +30,12 @@ export default function ReviewsPage() {
           setReviews(revRes?.reviews || []);
         }
       } catch (e: unknown) {
-        if (!cancelled)
-          setError(e instanceof Error ? e.message : 'Failed to load reviews.');
+        if (!cancelled) {
+          const message =
+            e instanceof Error ? e.message : 'Failed to load reviews.';
+          setError(message);
+          toast.error(message);
+        }
       } finally {
         if (!cancelled) setLoading(false);
       }

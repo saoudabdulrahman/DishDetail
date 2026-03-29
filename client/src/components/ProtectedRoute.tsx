@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { Outlet } from 'react-router';
+import { toast } from 'sonner';
 import { useAuth } from '../auth/useAuth';
 
 import type { ReactNode } from 'react';
@@ -10,6 +11,7 @@ const ProtectedRoute = ({ children }: { children?: ReactNode }) => {
   useEffect(() => {
     if (!user) {
       setAuthModal('login');
+      toast.info('Please log in to access this page.');
     }
   }, [user, setAuthModal]);
 

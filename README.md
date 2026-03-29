@@ -107,6 +107,6 @@ npm run dev:client
 - [Lucide React](https://lucide.dev/)
 - [Express](https://expressjs.com/)
 - [Mongoose](https://mongoosejs.com/)
-- [Simple Icons](https://simpleicons.org/)
+- [Sonner](https://sonner.emilkowal.ski/)
 - [Pravatar](https://pravatar.cc/) (Avatars)
 - [Unsplash](https://unsplash.com/) (Photography)

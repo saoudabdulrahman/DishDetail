@@ -35,8 +35,9 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
           const isRemembered = !!localStorage.getItem('dishdetail_auth');
           saveAuth(updated, isRemembered);
           setUser(updated);
-        } catch (e) {
-          console.error('Failed to update user profile', e);
+        } catch (error) {
+          console.error(error);
+          throw error;
         }
       },
     };

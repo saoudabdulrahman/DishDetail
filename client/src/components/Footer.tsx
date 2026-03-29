@@ -1,4 +1,5 @@
-import { SiGithub } from '@icons-pack/react-simple-icons';
+import githubBlack from '../assets/GitHub_Invertocat_Black_Clearspace.svg';
+import githubWhite from '../assets/GitHub_Invertocat_White_Clearspace.svg';
 import './Footer.css';
 
 export default function Footer() {
@@ -19,7 +20,16 @@ export default function Footer() {
           rel="noopener noreferrer"
           className="footer-icon"
         >
-          <SiGithub />
+          <img
+            src={githubBlack}
+            alt="GitHub"
+            className="github-logo light-only"
+          />
+          <img
+            src={githubWhite}
+            alt="GitHub"
+            className="github-logo dark-only"
+          />
         </a>
       </div>
       <p>&copy; 2026 Dish Detail</p>

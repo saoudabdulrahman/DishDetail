@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import type { Establishment, Review } from '@dishdetail/shared';
 import { useParams, useNavigate } from 'react-router';
 import { Star, MapPin, Clock, Phone, Globe, ArrowLeft } from 'lucide-react';
+import { toast } from 'sonner';
 import { api } from '../api';
 import DetailReviewCard from '../components/DetailReviewCard';
 import './EstablishmentPage.css';
@@ -74,20 +75,34 @@ export default function EstablishmentPage() {
     reviewId: string,
     updates: Partial<Review>,
   ) => {
+    const promise = api().updateReview(reviewId, updates);
+
+    toast.promise(promise, {
+      loading: 'Updating review...',
+      success: 'Review updated.',
+      error: 'Failed to update review.',
+    });
     try {
-      const { review } = await api().updateReview(reviewId, updates);
+      const { review } = await promise;
       setReviews((prev) => prev.map((r) => (r._id === reviewId ? review : r)));
     } catch (e: unknown) {
-      alert(e instanceof Error ? e.message : 'Failed to update review.');
+      console.error(e);
     }
   };
 
   const handleDeleteReview = async (reviewId: string) => {
+    const promise = api().deleteReview(reviewId);
+
+    toast.promise(promise, {
+      loading: 'Deleting review...',
+      success: 'Review deleted.',
+      error: 'Failed to delete review.',
+    });
     try {
-      await api().deleteReview(reviewId);
+      await promise;
       setReviews((prev) => prev.filter((r) => r._id !== reviewId));
     } catch (e: unknown) {
-      alert(e instanceof Error ? e.message : 'Failed to delete review.');
+      console.error(e);
     }
   };
 

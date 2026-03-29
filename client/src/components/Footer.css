@@ -15,7 +15,7 @@ footer {
   justify-content: center;
   align-items: center;
   gap: 1.5rem;
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
 }
 
 .footer-links a {
@@ -31,14 +31,33 @@ footer {
 .footer-social {
   display: flex;
   justify-content: center;
-  margin-bottom: 1em;
+  margin-bottom: 0.5rem;
 }
 
 .footer-icon {
-  color: var(--text);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-/* Add this at the bottom of your Footer.css */
+.github-logo {
+  width: 32px;
+  height: 32px;
+}
+
+.dark-only {
+  display: none;
+}
+
+@media (prefers-color-scheme: dark) {
+  .light-only {
+    display: none;
+  }
+  .dark-only {
+    display: block;
+  }
+}
+
 @media (max-width: 768px) {
   .footer-links {
     flex-direction: column;

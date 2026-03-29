@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import type { KeyboardEvent } from 'react';
 import { Link, NavLink, useNavigate, useSearchParams } from 'react-router';
+import { toast } from 'sonner';
 import { ChevronDown, Dot, LogOut, Menu, Search, User } from 'lucide-react';
 import { useAuth } from '../auth/useAuth';
 import './Header.css';
@@ -138,6 +139,7 @@ export default function Header() {
                     logout();
                     setIsDropdownOpen(false);
                     closeMenu();
+                    toast.success('Logged out successfully.');
                   }}
                 >
                   <LogOut size={16} /> Log Out

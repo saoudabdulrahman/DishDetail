@@ -6,6 +6,7 @@ import EstablishmentCard from '../components/EstablishmentCard';
 import { api } from '../api';
 import './EstablishmentsPage.css';
 import { ChevronDown } from 'lucide-react';
+import { toast } from 'sonner';
 
 export default function EstablishmentsPage() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -22,13 +23,16 @@ export default function EstablishmentsPage() {
       setLoading(true);
       setError('');
       try {
-        const res = await api().getEstablishments({ q: query, minRating });
-        if (!cancelled) setEstablishments(res?.establishments || []);
+        const { establishments: fetchedEstablishments } =
+          await api().getEstablishments({ q: query, minRating });
+        if (!cancelled) setEstablishments(fetchedEstablishments || []);
       } catch (e: unknown) {
-        if (!cancelled)
-          setError(
-            e instanceof Error ? e.message : 'Failed to load establishments.',
-          );
+        if (!cancelled) {
+          const message =
+            e instanceof Error ? e.message : 'Failed to load establishments.';
+          setError(message);
+          toast.error(message);
+        }
       } finally {
         if (!cancelled) setLoading(false);
       }
