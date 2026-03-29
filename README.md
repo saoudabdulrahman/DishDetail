@@ -6,21 +6,20 @@ DishDetail is a full-stack restaurant review application built with **React**, *
 
 This project uses **npm Workspaces** to manage both the frontend and backend in a single repository:
 
-- `client/`: React frontend (Vite, React Router 7, Lucide Icons)
+- `client/`: React frontend (Vite, Tailwind CSS v4, React Router 7, Lucide Icons)
 - `server/`: Express backend (Node.js, Mongoose, JWT-style auth simulation)
 - `server/seed/`: Database seeding scripts and sample data
 
 ## Prerequisites
 
 - [Node.js](https://nodejs.org/) (v18 or later)
-- [npm](https://www.npmjs.com/) (v9 or later)
 - [MongoDB](https://www.mongodb.com/try/download/community) (local instance or MongoDB Atlas)
 
 ## Initial Setup
 
 ### 1) Install Dependencies
 
-From the root directory, run the following to install dependencies for all workspaces:
+From the root directory, run the following to install dependencies for all workspaces using npm:
 
 ```sh
 npm install
@@ -78,6 +77,7 @@ npm run dev:client
 
 ## Key Features
 
+- **Styling**: Modern, utility-first UI built with **Tailwind CSS v4**.
 - **Authentication**: User signup and login with persistent sessions.
 - **Restaurant Discovery**: Search by name or filter by minimum rating.
 - **Rich Reviews**: Star ratings, body text, and image support.
@@ -89,6 +89,7 @@ npm run dev:client
 
 ## Development Tools
 
+- **Package Manager**: **npm**.
 - **Formatting**: `npm run format` (Prettier)
 - **Linting**: `npm run lint` (ESLint)
 - **Git Hooks**: Pre-commit hooks via **Husky** and **lint-staged**.
@@ -99,6 +100,7 @@ npm run dev:client
 
 - [React](https://react.dev/)
 - [Vite](https://vite.dev/)
+- [Tailwind CSS](https://tailwindcss.com/)
 - [React Router](https://reactrouter.com/)
 - [Lucide React](https://lucide.dev/)
 - [Express](https://expressjs.com/)
