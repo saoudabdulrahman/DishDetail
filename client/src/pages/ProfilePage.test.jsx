@@ -1,13 +1,13 @@
 import { describe, expect, it, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
-import { MemoryRouter } from 'react-router';
+import { MemoryRouter, Route, Routes } from 'react-router';
 import ProfilePage from './ProfilePage';
 import { AuthContext } from '../auth/context';
 
 describe('ProfilePage', () => {
-  it('renders profile summary for authenticated user', () => {
+  it('renders profile summary for authenticated user', async () => {
     render(
-      <MemoryRouter>
+      <MemoryRouter initialEntries={['/profile/alice']}>
         <AuthContext.Provider
           value={{
             user: {
@@ -19,12 +19,14 @@ describe('ProfilePage', () => {
             updateProfile: vi.fn(),
           }}
         >
-          <ProfilePage />
+          <Routes>
+            <Route path="/profile/:username" element={<ProfilePage />} />
+          </Routes>
         </AuthContext.Provider>
       </MemoryRouter>,
     );
 
-    expect(screen.getByText('alice')).toBeInTheDocument();
-    expect(screen.getByText('Your Reviews')).toBeInTheDocument();
+    expect(await screen.findByText('alice')).toBeInTheDocument();
+    expect(await screen.findByText('Your Reviews')).toBeInTheDocument();
   });
 });

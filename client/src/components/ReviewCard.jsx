@@ -117,7 +117,16 @@ export default function ReviewCard({ review, restaurant, variant = 'stack' }) {
             {review.title || 'Untitled Review'}
           </p>
           <p className="font-body text-on-surface-variant mb-6 max-w-md text-sm opacity-75">
-            {review.reviewer} · {formatDate(review.date)}
+            <span
+              onClick={(e) => {
+                e.preventDefault();
+                navigate(`/profile/${review.reviewer}`);
+              }}
+              className="hover:text-primary cursor-pointer transition-colors"
+            >
+              {review.reviewer}
+            </span>{' '}
+            · {formatDate(review.date)}
           </p>
 
           <div className="text-primary font-ui flex items-center space-x-2 font-bold">
@@ -190,7 +199,13 @@ export default function ReviewCard({ review, restaurant, variant = 'stack' }) {
             </div>
 
             <div className="border-outline-variant/10 flex items-center justify-between border-t pt-6">
-              <div className="flex items-center space-x-3">
+              <div
+                className="hover:bg-surface-container-highest -ml-1 flex cursor-pointer items-center space-x-3 rounded-xl p-1 transition-colors"
+                onClick={(e) => {
+                  e.preventDefault();
+                  navigate(`/profile/${review.reviewer}`);
+                }}
+              >
                 {review.reviewerAvatar ?
                   <img
                     src={review.reviewerAvatar}
@@ -328,7 +343,16 @@ export default function ReviewCard({ review, restaurant, variant = 'stack' }) {
         </div>
 
         <p className="text-on-surface-variant font-ui mb-4 text-xs">
-          {review.reviewer} · {formatDate(review.date)}
+          <span
+            onClick={(e) => {
+              e.preventDefault();
+              navigate(`/profile/${review.reviewer}`);
+            }}
+            className="hover:text-primary cursor-pointer transition-colors"
+          >
+            {review.reviewer}
+          </span>{' '}
+          · {formatDate(review.date)}
         </p>
 
         <span className="text-on-surface-variant hover:text-primary font-ui text-xs font-bold uppercase transition-colors">

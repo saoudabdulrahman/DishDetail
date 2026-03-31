@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router';
 import { Star, Edit, Trash2, ThumbsUp, ThumbsDown } from 'lucide-react';
 import { toast } from 'sonner';
 import { useAuth } from '../auth/useAuth';
@@ -304,7 +305,10 @@ export default function DetailReviewCard({ review, onDelete, onUpdate }) {
     <article id={review._id} className="bg-surface-container rounded-2xl p-6">
       {/* Header */}
       <div className="mb-4 flex items-center justify-between gap-4">
-        <div className="flex items-center gap-3">
+        <Link
+          to={`/profile/${review.reviewer}`}
+          className="hover:bg-surface-container-highest -ml-1 flex items-center gap-3 rounded-xl p-1 pr-3 no-underline transition-colors"
+        >
           {review.reviewerAvatar ?
             <img
               src={review.reviewerAvatar}
@@ -328,7 +332,7 @@ export default function DetailReviewCard({ review, onDelete, onUpdate }) {
               {formatDate(review.date)}
             </p>
           </div>
-        </div>
+        </Link>
 
         <div className="flex items-center gap-3">
           <StarRating rating={review.rating} />

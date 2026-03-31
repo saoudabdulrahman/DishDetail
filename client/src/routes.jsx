@@ -6,6 +6,7 @@ import EstablishmentsPage from './pages/EstablishmentsPage';
 import EstablishmentPage from './pages/EstablishmentPage';
 import SubmitReviewPage from './pages/SubmitReviewPage';
 import ProfilePage from './pages/ProfilePage';
+import ProfileRedirect from './pages/ProfileRedirect';
 import NotFoundPage from './pages/NotFoundPage';
 import MainLayout from './components/MainLayout';
 import ProtectedRoute from './components/ProtectedRoute';
@@ -23,11 +24,12 @@ export const routes = createBrowserRouter([
           { path: '/reviews', element: <ReviewsPage /> },
           { path: '/establishments', element: <EstablishmentsPage /> },
           { path: '/establishments/:slug', element: <EstablishmentPage /> },
+          { path: '/profile/:username', element: <ProfilePage /> },
           {
             // Protected Routes
             element: <ProtectedRoute />,
             children: [
-              { path: '/profile', element: <ProfilePage /> },
+              { path: '/profile', element: <ProfileRedirect /> },
               { path: '/submit-review', element: <SubmitReviewPage /> },
             ],
           },
