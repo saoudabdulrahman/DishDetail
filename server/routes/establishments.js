@@ -12,16 +12,19 @@ router.get('/', async (req, res) => {
 
     const filter = {};
     if (q) {
+      // $elemMatch required for cuisine array to match individual elements
       filter.$or = [
         { restaurantName: { $regex: q, $options: 'i' } },
-        { cuisine: { $regex: q, $options: 'i' } },
+        { cuisine: { $elemMatch: { $regex: q, $options: 'i' } } },
         { description: { $regex: q, $options: 'i' } },
       ];
     }
+    // Apply rating filter only if minRating is valid and positive
     if (!Number.isNaN(minRating) && minRating > 0) {
       filter.rating = { $gte: minRating };
     }
 
+    // Sort by highest rating first, then alphabetical for ties
     const establishments = await Establishment.find(filter)
       .sort({ rating: -1, restaurantName: 1 })
       .lean();
@@ -63,6 +66,7 @@ router.post('/:slug/reviews', async (req, res) => {
       title,
       rating: Number(rating),
       reviewer,
+      // Generate avatar from username if not provided
       reviewerAvatar:
         reviewerAvatar ||
         `https://i.pravatar.cc/150?u=${encodeURIComponent(reviewer)}`,
@@ -70,6 +74,7 @@ router.post('/:slug/reviews', async (req, res) => {
       reviewImage: reviewImage || null,
     });
 
+    // Recalculate establishment's average rating to include new review
     await syncEstablishmentRating(est._id);
 
     return res.status(201).json({ review });

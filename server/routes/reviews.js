@@ -6,32 +6,39 @@ import { syncEstablishmentRating } from '../utils/syncRating.js';
 const router = Router();
 
 router.get('/', async (req, res) => {
-  const q = (req.query.q || '').toString().trim();
+  try {
+    const q = (req.query.q || '').toString().trim();
 
-  const filter = {};
-  if (req.query.establishmentId) {
-    filter.establishment = req.query.establishmentId;
+    const filter = {};
+    if (req.query.establishmentId) {
+      filter.establishment = req.query.establishmentId;
+    }
+
+    if (q) {
+      // Two-step search: find establishments by name, then reviews matching text or those establishments
+      const estMatches = await Establishment.find({
+        restaurantName: { $regex: q, $options: 'i' },
+      }).select('_id');
+      filter.$or = [
+        { title: { $regex: q, $options: 'i' } },
+        { body: { $regex: q, $options: 'i' } },
+        { reviewer: { $regex: q, $options: 'i' } },
+        { establishment: { $in: estMatches.map((e) => e._id) } },
+      ];
+    }
+
+    const reviews = await Review.find(filter).lean();
+
+    return res.json({ reviews });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: 'Failed to fetch reviews.' });
   }
-
-  if (q) {
-    const estMatches = await Establishment.find({
-      restaurantName: { $regex: q, $options: 'i' },
-    }).select('_id');
-    filter.$or = [
-      { title: { $regex: q, $options: 'i' } },
-      { body: { $regex: q, $options: 'i' } },
-      { reviewer: { $regex: q, $options: 'i' } },
-      { establishment: { $in: estMatches.map((e) => e._id) } },
-    ];
-  }
-
-  const reviews = await Review.find(filter).lean();
-
-  return res.json({ reviews });
 });
 
 router.put('/:id', async (req, res) => {
   try {
+    // Whitelist mutable review fields; exclude establishment, reviewer, date
     const allowed = [
       'title',
       'body',
@@ -53,12 +60,14 @@ router.put('/:id', async (req, res) => {
     });
     if (!review) return res.status(404).json({ error: 'Review not found.' });
 
+    // Only recalculate establishment rating if the review's rating changed
     if (updates.rating !== undefined) {
       await syncEstablishmentRating(review.establishment);
     }
 
     return res.json({ review });
-  } catch {
+  } catch (error) {
+    console.error(error);
     return res.status(400).json({ error: 'Failed to update review.' });
   }
 });
@@ -71,7 +80,8 @@ router.delete('/:id', async (req, res) => {
     await syncEstablishmentRating(r.establishment);
 
     return res.json({ ok: true });
-  } catch {
+  } catch (error) {
+    console.error(error);
     return res.status(400).json({ error: 'Failed to delete review.' });
   }
 });
@@ -84,6 +94,7 @@ router.post('/:id/vote', async (req, res) => {
     }
     const review = await Review.findById(req.params.id);
     if (!review) return res.status(404).json({ error: 'Review not found.' });
+    // No duplicate-vote prevention; same user can vote multiple times
     if (type === 'helpful') review.helpfulCount += 1;
     if (type === 'unhelpful') review.unhelpfulCount += 1;
     await review.save();
@@ -91,7 +102,8 @@ router.post('/:id/vote', async (req, res) => {
       helpfulCount: review.helpfulCount,
       unhelpfulCount: review.unhelpfulCount,
     });
-  } catch {
+  } catch (error) {
+    console.error(error);
     return res.status(400).json({ error: 'Failed to vote.' });
   }
 });

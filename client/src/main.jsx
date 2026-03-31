@@ -5,6 +5,7 @@ import { routes } from './routes';
 import AuthProvider from './auth/AuthProvider';
 import './index.css';
 
+// App Bootstrap
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <AuthProvider>

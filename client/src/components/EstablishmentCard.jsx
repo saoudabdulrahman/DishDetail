@@ -1,29 +1,72 @@
 import { useState } from 'react';
 import { Link } from 'react-router';
 import StarRating from './StarRating';
-import './EstablishmentCard.css';
+import { cn } from '../utils/cn';
 
 export default function EstablishmentCard({ restaurant }) {
   const [imgLoaded, setImgLoaded] = useState(false);
 
   return (
-    <Link to={`/establishments/${restaurant.slug}`} className="card-link">
-      <article className="establishment-item">
-        <div className="restaurant-image-container shimmer">
-          <img
-            src={restaurant.restaurantImage}
-            alt={`Food or ambiance from ${restaurant.restaurantName}`}
-            className={`restaurant-img ${imgLoaded ? 'loaded' : ''}`}
-            onLoad={() => setImgLoaded(true)}
-          />
+    <Link
+      to={`/establishments/${restaurant.slug}`}
+      className="bg-surface-container-high group relative block overflow-hidden rounded-sm"
+    >
+      {Number(restaurant.rating) >= 4.7 && (
+        <div className="bg-primary text-on-primary font-ui absolute top-4 left-4 z-10 rounded-full px-3 py-1 text-[10px] font-bold tracking-widest uppercase shadow-md">
+          Top Rated
         </div>
-        <div className="establishment-item-content">
-          <div className="establishment-item-header">
-            <h3>{restaurant.restaurantName}</h3>
-            <StarRating rating={restaurant.rating} />
+      )}
+      <article className="flex flex-col sm:flex-row">
+        {/* Image Column */}
+        {restaurant.restaurantImage && (
+          <div className="relative h-48 shrink-0 overflow-hidden sm:h-auto sm:min-h-56 sm:w-48">
+            <img
+              src={restaurant.restaurantImage}
+              alt={`Food or ambiance from ${restaurant.restaurantName}`}
+              className={cn(
+                'absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105',
+                imgLoaded ? 'opacity-100' : 'opacity-0',
+              )}
+              onLoad={() => setImgLoaded(true)}
+            />
           </div>
-          <p className="establishment-cuisine">{restaurant.cuisine}</p>
-          <p className="establishment-description">{restaurant.description}</p>
+        )}
+
+        {/* Content Column */}
+        <div className="flex flex-1 flex-col justify-between p-6">
+          <div>
+            <div className="mb-3 flex items-start justify-between gap-4">
+              <div>
+                <h3 className="font-headline text-on-surface text-xl leading-tight font-bold">
+                  {restaurant.restaurantName}
+                </h3>
+                <div className="mt-1 flex flex-wrap gap-1">
+                  {(restaurant.cuisine ?? []).map((c) => (
+                    <span
+                      key={c}
+                      className="bg-surface-container-highest text-primary font-ui rounded px-2 py-0.5 text-[10px] font-bold tracking-widest uppercase"
+                    >
+                      {c}
+                    </span>
+                  ))}
+                </div>
+                {restaurant.address && (
+                  <p className="text-on-surface-variant font-ui mt-1 text-xs">
+                    {restaurant.address}
+                  </p>
+                )}
+              </div>
+              <div className="bg-surface-container-lowest text-primary flex shrink-0 items-center space-x-2 rounded-xl px-4 py-2">
+                <StarRating rating={Number(restaurant.rating ?? 0)} />
+              </div>
+            </div>
+
+            {restaurant.description && (
+              <p className="font-body text-on-surface-variant line-clamp-2 text-sm leading-relaxed">
+                {restaurant.description}
+              </p>
+            )}
+          </div>
         </div>
       </article>
     </Link>

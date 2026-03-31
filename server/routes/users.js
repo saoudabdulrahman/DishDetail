@@ -9,13 +9,15 @@ router.get('/:id', async (req, res) => {
     const u = await User.findById(req.params.id);
     if (!u) return res.status(404).json({ error: 'User not found.' });
     return res.json({ user: publicUser(u) });
-  } catch {
+  } catch (error) {
+    console.error(error);
     return res.status(400).json({ error: 'Invalid user id.' });
   }
 });
 
 router.put('/:id', async (req, res) => {
   try {
+    // Whitelist mutable fields; prevent updates to email, username, password, role
     const updates = {};
     if (typeof req.body?.avatar === 'string') updates.avatar = req.body.avatar;
     if (typeof req.body?.bio === 'string') updates.bio = req.body.bio;
@@ -25,7 +27,8 @@ router.put('/:id', async (req, res) => {
     });
     if (!u) return res.status(404).json({ error: 'User not found.' });
     return res.json({ user: publicUser(u) });
-  } catch {
+  } catch (error) {
+    console.error(error);
     return res.status(400).json({ error: 'Invalid request.' });
   }
 });

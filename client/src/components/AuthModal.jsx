@@ -4,137 +4,204 @@ import { Check, X, Eye, EyeOff } from 'lucide-react';
 import { toast } from 'sonner';
 import { useAuth } from '../auth/useAuth';
 import { validateUser, saveUser } from '../auth/userStorage';
-import './AuthModal.css';
+import { cn } from '../utils/cn';
 
+// Shared field wrapper
+function Field({ label, children }) {
+  return (
+    <label className="font-ui text-on-surface-variant flex flex-col gap-1.5 text-sm font-semibold">
+      {label}
+      {children}
+    </label>
+  );
+}
+
+// Text/email input
+function TextInput({ type = 'text', ...props }) {
+  return (
+    <input
+      type={type}
+      {...props}
+      className="font-ui bg-surface-container-high text-on-surface placeholder:text-on-surface-variant/40 focus:ring-primary w-full rounded-xl border-none px-5 py-2.5 text-sm font-normal transition-all duration-200 outline-none focus:ring-1"
+    />
+  );
+}
+
+// Password input with reveal toggle
+function PasswordInput({ value, onChange, placeholder, autoComplete }) {
+  const [show, setShow] = useState(false);
+  return (
+    <div className="relative flex items-center">
+      <input
+        type={show ? 'text' : 'password'}
+        value={value}
+        onChange={onChange}
+        placeholder={placeholder}
+        autoComplete={autoComplete}
+        className="font-ui bg-surface-container-high text-on-surface placeholder:text-on-surface-variant/40 focus:ring-primary w-full rounded-xl border-none py-2.5 pr-11 pl-5 text-sm font-normal transition-all duration-200 outline-none focus:ring-1 [&::-ms-clear]:hidden [&::-ms-reveal]:hidden"
+      />
+      <button
+        type="button"
+        onClick={() => setShow((s) => !s)}
+        aria-label={show ? 'Hide password' : 'Show password'}
+        className="text-on-surface-variant hover:text-on-surface font-ui absolute right-3.5 cursor-pointer border-none bg-transparent p-0.5 transition-colors duration-200"
+      >
+        {show ?
+          <EyeOff size={16} />
+        : <Eye size={16} />}
+      </button>
+    </div>
+  );
+}
+
+// Animated checkbox row
+function CheckboxRow({ checked, onChange, label }) {
+  return (
+    <label className="text-on-surface-variant flex cursor-pointer items-center gap-2.5 px-1 text-sm select-none">
+      <input
+        type="checkbox"
+        checked={checked}
+        onChange={onChange}
+        className="peer sr-only"
+      />
+      <span className="border-outline-variant peer-checked:bg-primary peer-checked:border-primary relative flex h-4.5 w-4.5 shrink-0 items-center justify-center rounded-sm border-2 transition-all duration-200">
+        <Check
+          size={11}
+          strokeWidth={3.5}
+          className={cn(
+            'text-on-primary transition-all duration-200',
+            checked ? 'scale-100 opacity-100' : 'scale-50 opacity-0',
+          )}
+        />
+      </span>
+      <span className="font-ui font-normal">{label}</span>
+    </label>
+  );
+}
+
+// Error banner
+function ErrorBanner({ message, shake }) {
+  return (
+    <div
+      className={cn(
+        'font-ui border-error text-error bg-error/10 rounded-xl border px-5 py-2 text-sm',
+        shake && 'animate-[shakeX_0.45s_ease-out]',
+      )}
+    >
+      {message}
+    </div>
+  );
+}
+
+// Login form
 function LoginForm({ onSwitch, onSuccess }) {
   const { login } = useAuth();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
   const [error, setError] = useState('');
-  const [shakeError, setShakeError] = useState(false);
+  const [shake, setShake] = useState(false);
 
   const triggerShake = () => {
-    setShakeError(true);
-    window.setTimeout(() => setShakeError(false), 450);
+    setShake(true);
+    setTimeout(() => setShake(false), 450);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
-
-    const u = username.trim();
-    if (!u || !password) {
+    if (!username.trim() || !password) {
       setError('Please enter your username and password.');
       triggerShake();
       return;
     }
-
     try {
-      const validUser = await validateUser(u, password);
+      const validUser = await validateUser(username.trim(), password);
       login(validUser, rememberMe);
       onSuccess();
       toast.success('Logged in successfully.');
-    } catch (error) {
-      console.error(error);
+    } catch {
       setError('Invalid username or password.');
       triggerShake();
     }
   };
 
   return (
-    <div className="auth-card">
-      <h2>Log In</h2>
-      <p className="auth-subtext">Welcome back to Dish Detail.</p>
-
-      {error && (
-        <div className={`auth-error ${shakeError ? 'shake' : ''}`}>{error}</div>
-      )}
-
-      <form onSubmit={handleSubmit} className="auth-form">
-        <label>
-          Username
-          <input
-            type="text"
+    <div className="flex flex-col">
+      <span className="text-secondary font-label mb-1 text-xs font-bold tracking-[0.2em] uppercase">
+        Welcome Back
+      </span>
+      <h2 className="font-headline text-on-surface mb-1 text-3xl font-bold tracking-tight">
+        Log In
+      </h2>
+      <p className="font-ui text-on-surface-variant mb-5 text-sm">
+        Sign in to your Dish Detail account.
+      </p>
+      {error && <ErrorBanner message={error} shake={shake} />}
+      <form onSubmit={handleSubmit} className="mt-4 flex flex-col gap-4">
+        <Field label="Username">
+          <TextInput
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             autoComplete="username"
             placeholder="e.g., john_doe"
           />
-        </label>
+        </Field>
 
-        <label>
-          Password
-          <div className="password-input-wrapper">
-            <input
-              type={showPassword ? 'text' : 'password'}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              autoComplete="current-password"
-              placeholder="••••••••"
-            />
-            <button
-              type="button"
-              className="password-toggle"
-              onClick={() => setShowPassword(!showPassword)}
-              aria-label={showPassword ? 'Hide password' : 'Show password'}
-            >
-              {showPassword ?
-                <EyeOff size={18} />
-              : <Eye size={18} />}
-            </button>
-          </div>
-        </label>
-
-        <label className="remember-row">
-          <input
-            type="checkbox"
-            className="hidden-checkbox"
-            checked={rememberMe}
-            onChange={(e) => setRememberMe(e.target.checked)}
+        <Field label="Password">
+          <PasswordInput
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            autoComplete="current-password"
+            placeholder="••••••••"
           />
-          <div className="custom-checkbox">
-            <Check size={14} strokeWidth={3} className="check-icon" />
-          </div>
-          <span className="label-text">Remember me for 3 weeks</span>
-        </label>
+        </Field>
 
-        <button type="submit" className="auth-submit-button">
+        <CheckboxRow
+          checked={rememberMe}
+          onChange={(e) => setRememberMe(e.target.checked)}
+          label="Stay logged in for 30 days"
+        />
+
+        <button
+          type="submit"
+          className="gold-gradient text-on-secondary font-ui mt-2 cursor-pointer rounded-xl border-none py-3 text-sm font-bold transition-all duration-200 hover:brightness-110 active:scale-95"
+        >
           Log In
         </button>
       </form>
-
-      <div className="auth-alt">
-        Don&apos;t have an account yet?{' '}
-        <button type="button" onClick={onSwitch} className="auth-alt-button">
+      <p className="font-ui text-on-surface-variant mt-6 text-center text-sm">
+        Don&apos;t have an account?{' '}
+        <button
+          type="button"
+          onClick={onSwitch}
+          className="text-primary font-ui cursor-pointer border-none bg-transparent p-0 font-semibold transition-colors hover:underline"
+        >
           Sign up
         </button>
-      </div>
+      </p>
     </div>
   );
 }
 
+// Signup form
 function SignupForm({ onSwitch, onSuccess }) {
   const { login } = useAuth();
   const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [confirm, setConfirm] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirm, setShowConfirm] = useState(false);
   const [error, setError] = useState('');
-  const [shakeError, setShakeError] = useState(false);
+  const [shake, setShake] = useState(false);
 
   const triggerShake = () => {
-    setShakeError(true);
-    window.setTimeout(() => setShakeError(false), 450);
+    setShake(true);
+    setTimeout(() => setShake(false), 450);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
-
     const e1 = email.trim();
     const u1 = username.trim();
 
@@ -143,214 +210,185 @@ function SignupForm({ onSwitch, onSuccess }) {
       triggerShake();
       return;
     }
-
     if (!e1.includes('@')) {
       setError('Please enter a valid email.');
       triggerShake();
       return;
     }
-
     if (password.length < 8) {
       setError('Password must be at least 8 characters.');
       triggerShake();
       return;
     }
-
     if (password !== confirm) {
       setError('Passwords do not match.');
       triggerShake();
       return;
     }
-
     try {
-      const newUser = { email: e1, username: u1, password };
-      const created = await saveUser(newUser);
+      const created = await saveUser({ email: e1, username: u1, password });
       login(created, true);
       onSuccess();
       toast.success('Account created successfully.');
-    } catch (error) {
-      console.error(error);
-      setError('Signup failed.');
+    } catch {
+      setError('Signup failed. Try a different username.');
       triggerShake();
     }
   };
 
   return (
-    <div className="auth-card">
-      <h2>Sign Up</h2>
-      <p className="auth-subtext">Create your Dish Detail account.</p>
-
-      {error && (
-        <div className={`auth-error ${shakeError ? 'shake' : ''}`}>{error}</div>
-      )}
-
-      <form onSubmit={handleSubmit} className="auth-form">
-        <label>
-          Email
-          <input
+    <div className="flex flex-col">
+      <span className="text-secondary font-label mb-1 text-xs font-bold tracking-[0.2em] uppercase">
+        Join Us
+      </span>
+      <h2 className="font-headline text-on-surface mb-1 text-3xl font-bold tracking-tight">
+        Sign Up
+      </h2>
+      <p className="font-ui text-on-surface-variant mb-5 text-sm">
+        Create your Dish Detail account.
+      </p>
+      {error && <ErrorBanner message={error} shake={shake} />}
+      <form onSubmit={handleSubmit} className="mt-4 flex flex-col gap-4">
+        <Field label="Email">
+          <TextInput
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             autoComplete="email"
             placeholder="you@email.com"
           />
-        </label>
+        </Field>
 
-        <label>
-          Username
-          <input
-            type="text"
+        <Field label="Username">
+          <TextInput
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             autoComplete="username"
             placeholder="e.g., john_doe"
           />
-        </label>
+        </Field>
 
-        <label>
-          Password
-          <div className="password-input-wrapper">
-            <input
-              type={showPassword ? 'text' : 'password'}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              autoComplete="new-password"
-              placeholder="••••••••"
-            />
-            <button
-              type="button"
-              className="password-toggle"
-              onClick={() => setShowPassword(!showPassword)}
-              aria-label={showPassword ? 'Hide password' : 'Show password'}
-            >
-              {showPassword ?
-                <EyeOff size={18} />
-              : <Eye size={18} />}
-            </button>
-          </div>
-        </label>
+        <Field label="Password">
+          <PasswordInput
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            autoComplete="new-password"
+            placeholder="••••••••"
+          />
+        </Field>
 
-        <label>
-          Confirm Password
-          <div className="password-input-wrapper">
-            <input
-              type={showConfirm ? 'text' : 'password'}
-              value={confirm}
-              onChange={(e) => setConfirm(e.target.value)}
-              autoComplete="new-password"
-              placeholder="••••••••"
-            />
-            <button
-              type="button"
-              className="password-toggle"
-              onClick={() => setShowConfirm(!showConfirm)}
-              aria-label={
-                showConfirm ? 'Hide confirm password' : 'Show confirm password'
-              }
-            >
-              {showConfirm ?
-                <EyeOff size={18} />
-              : <Eye size={18} />}
-            </button>
-          </div>
-        </label>
+        <Field label="Confirm Password">
+          <PasswordInput
+            value={confirm}
+            onChange={(e) => setConfirm(e.target.value)}
+            autoComplete="new-password"
+            placeholder="••••••••"
+          />
+        </Field>
 
-        <button type="submit" className="auth-submit-button">
+        <button
+          type="submit"
+          className="gold-gradient text-on-secondary font-ui mt-2 cursor-pointer rounded-xl border-none py-3 text-sm font-bold transition-all duration-200 hover:brightness-110 active:scale-95"
+        >
           Create Account
         </button>
       </form>
-
-      <div className="auth-alt">
+      <p className="font-ui text-on-surface-variant mt-6 text-center text-sm">
         Already have an account?{' '}
-        <button type="button" onClick={onSwitch} className="auth-alt-button">
+        <button
+          type="button"
+          onClick={onSwitch}
+          className="text-primary font-ui cursor-pointer border-none bg-transparent p-0 font-semibold transition-colors hover:underline"
+        >
           Log in
         </button>
-      </div>
+      </p>
     </div>
   );
 }
 
+// Modal shell
+const CLOSE_DURATION = 250; // Keep in sync with exit animation durations.
+
 export default function AuthModal() {
   const { authModal, setAuthModal } = useAuth();
-
-  const [activeModal, setActiveModal] = useState(null);
+  // Keep content mounted until close animation completes.
+  const [displayModal, setDisplayModal] = useState(authModal);
+  const [isClosing, setIsClosing] = useState(false);
   const [mouseDownOnOverlay, setMouseDownOnOverlay] = useState(false);
 
-  if (authModal && authModal !== activeModal) {
-    setActiveModal(authModal);
+  // Sync newly opened modal type into local display state.
+  if (authModal && authModal !== displayModal) {
+    setDisplayModal(authModal);
+    setIsClosing(false);
   }
-
-  const isClosing = !authModal && !!activeModal;
-
-  useEffect(() => {
-    const handleKeyDown = (e) => {
-      if (e.key === 'Escape') setAuthModal(null);
-    };
-    if (authModal) {
-      document.addEventListener('keydown', handleKeyDown);
-    }
-    return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [authModal, setAuthModal]);
-
-  if (!activeModal) return null;
 
   const closeModal = () => {
     setAuthModal(null);
-    setMouseDownOnOverlay(false);
+    setIsClosing(true);
+    setTimeout(() => {
+      setIsClosing(false);
+      setDisplayModal(null);
+    }, CLOSE_DURATION);
   };
 
-  const handleOverlayMouseDown = (e) => {
-    if (e.target.classList.contains('auth-modal-overlay')) {
-      setMouseDownOnOverlay(true);
-    } else {
-      setMouseDownOnOverlay(false);
-    }
-  };
+  useEffect(() => {
+    if (!displayModal) return;
+    const onKey = (e) => {
+      if (e.key === 'Escape') closeModal();
+    };
+    document.addEventListener('keydown', onKey);
+    return () => document.removeEventListener('keydown', onKey);
+    // closeModal intentionally excluded to avoid re-binding listener each render.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [displayModal]);
 
-  const handleOverlayClick = (e) => {
-    if (
-      mouseDownOnOverlay &&
-      e.target.classList.contains('auth-modal-overlay')
-    ) {
-      closeModal();
-    }
-    setMouseDownOnOverlay(false);
-  };
-
-  const handleAnimationEnd = (e) => {
-    if (isClosing && e.target.classList.contains('auth-modal-overlay')) {
-      setActiveModal(null);
-    }
-  };
+  if (!displayModal) return null;
 
   return createPortal(
     <div
-      className={`auth-modal-overlay ${isClosing ? 'closing' : ''}`}
-      onMouseDown={handleOverlayMouseDown}
-      onClick={handleOverlayClick}
-      onAnimationEnd={handleAnimationEnd}
+      onMouseDown={(e) => setMouseDownOnOverlay(e.target === e.currentTarget)}
+      onClick={(e) => {
+        if (mouseDownOnOverlay && e.target === e.currentTarget) closeModal();
+        setMouseDownOnOverlay(false);
+      }}
+      className={cn(
+        'fixed inset-0 z-1000 flex items-center justify-center p-4 backdrop-blur-sm',
+        isClosing ?
+          'animate-[fadeOut_0.25s_ease-in_forwards]'
+        : 'animate-[fadeIn_0.25s_ease-out]',
+      )}
+      style={{ backgroundColor: 'oklch(0 0 0 / 0.55)' }}
     >
       <div
-        className={`auth-modal-content ${isClosing ? 'closing' : ''}`}
         onClick={(e) => e.stopPropagation()}
         onMouseDown={(e) => e.stopPropagation()}
+        className={cn(
+          'bg-surface-container-low relative w-full max-w-sm overflow-hidden rounded-lg p-8',
+          isClosing ?
+            'animate-[slideDown_0.25s_ease-in_forwards]'
+          : 'animate-[slideUp_0.25s_ease-out]',
+        )}
       >
+        {/* Top accent */}
+        <div className="gold-gradient absolute top-0 left-0 h-0.5 w-full" />
+
+        {/* Close Button */}
         <button
-          className="auth-modal-close"
           onClick={closeModal}
           aria-label="Close"
+          className="text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high absolute top-4 right-4 cursor-pointer rounded-xl border-none bg-transparent p-1.5 transition-all duration-200"
         >
-          <X size={24} />
+          <X size={18} />
         </button>
 
-        {activeModal === 'login' && (
+        {displayModal === 'login' && (
           <LoginForm
             onSwitch={() => setAuthModal('signup')}
             onSuccess={closeModal}
           />
         )}
-
-        {activeModal === 'signup' && (
+        {displayModal === 'signup' && (
           <SignupForm
             onSwitch={() => setAuthModal('login')}
             onSuccess={closeModal}

@@ -15,27 +15,20 @@ const ProtectedRoute = ({ children }) => {
 
   if (!user) {
     return (
-      <div style={{ padding: '4rem 2rem', textAlign: 'center' }}>
-        <h2>Authentication Required</h2>
-        <p style={{ marginTop: '1rem', color: 'var(--text-muted)' }}>
+      <main className="mx-auto flex min-h-[60vh] max-w-7xl flex-col items-center justify-center px-6 py-16 text-center md:px-24">
+        <h2 className="font-headline text-on-surface text-4xl font-bold tracking-tight">
+          Authentication Required
+        </h2>
+        <p className="font-ui text-on-surface-variant mt-4 text-lg">
           Please log in to view this page.
         </p>
         <button
           onClick={() => setAuthModal('login')}
-          style={{
-            marginTop: '1.5rem',
-            padding: '0.5rem 1rem',
-            backgroundColor: 'var(--primary)',
-            color: 'var(--text-on-primary)',
-            border: 'none',
-            borderRadius: '2rem',
-            cursor: 'pointer',
-            fontWeight: '600',
-          }}
+          className="font-ui bg-primary text-on-primary mt-6 cursor-pointer rounded-xl border-none px-6 py-3 text-sm font-semibold transition-all duration-200 hover:brightness-110 active:scale-95"
         >
           Log In
         </button>
-      </div>
+      </main>
     );
   }
 
