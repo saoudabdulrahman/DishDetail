@@ -11,7 +11,11 @@ export async function syncEstablishmentRating(establishmentId) {
   const reviews = await Review.find({ establishment: establishmentId });
   const avg =
     reviews.length > 0 ?
-      reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length
+      Number(
+        (
+          reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length
+        ).toFixed(1),
+      )
     : 0;
   await Establishment.findByIdAndUpdate(establishmentId, { rating: avg });
 }

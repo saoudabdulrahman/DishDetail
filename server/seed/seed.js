@@ -4,6 +4,7 @@ import { connectDb } from '../model/db.js';
 import Establishment from '../model/Establishment.js';
 import Review from '../model/Review.js';
 import User from '../model/User.js';
+import { syncEstablishmentRating } from '../utils/syncRating.js';
 import { restaurantsData, reviewsData } from '../../client/src/data.js';
 
 dotenv.config();
@@ -104,6 +105,11 @@ async function main() {
         : null,
     })),
   );
+
+  // Sync ratings
+  for (const est of establishments) {
+    await syncEstablishmentRating(est._id);
+  }
 
   console.log('Seed complete.');
   process.exit(0);
