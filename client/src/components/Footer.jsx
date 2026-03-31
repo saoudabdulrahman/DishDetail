@@ -1,3 +1,4 @@
+import { Link } from 'react-router';
 import githubWhite from '../assets/GitHub_Invertocat_White_Clearspace.svg';
 import githubBlack from '../assets/GitHub_Invertocat_Black_Clearspace.svg';
 
@@ -11,7 +12,7 @@ export default function Footer() {
 
         <div className="flex flex-wrap justify-center gap-8">
           {[
-            { label: 'About', href: '#' },
+            { label: 'About', href: '/about' },
             { label: 'Privacy', href: '#' },
             { label: 'Terms', href: '#' },
             {
@@ -20,14 +21,14 @@ export default function Footer() {
               onClick: () => alert('Contact form here'),
             },
           ].map(({ label, href, onClick }) => (
-            <a
+            <Link
               key={label}
-              href={href}
+              to={href}
               onClick={onClick}
               className="font-body text-on-surface-variant hover:text-primary content-center text-xs tracking-[0.2em] uppercase transition-colors duration-300"
             >
               {label}
-            </a>
+            </Link>
           ))}
           <a
             href="https://github.com/saoudabdulrahman/DishDetail"

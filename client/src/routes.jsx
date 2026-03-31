@@ -48,6 +48,13 @@ export const routes = createBrowserRouter([
               })),
           },
           {
+            path: '/about',
+            lazy: () =>
+              import('./pages/AboutPage').then((m) => ({
+                Component: m.default,
+              })),
+          },
+          {
             // Protected Routes
             element: <ProtectedRoute />,
             children: [
