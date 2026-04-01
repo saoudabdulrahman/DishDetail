@@ -39,7 +39,7 @@ export default function Header() {
   const closeMenu = () => setIsMenuOpen(false);
 
   return (
-    <header className="bg-background/80 fixed top-0 z-50 flex w-full flex-col shadow-[0_20px_40px_rgba(20,10,25,0.4)] backdrop-blur-md transition-colors duration-300">
+    <header className="bg-background/80 fixed top-0 z-50 flex w-full flex-col shadow-lg backdrop-blur-md transition-colors duration-300">
       {/* Main Header Row */}
       <div className="mx-auto flex w-full max-w-360 items-center justify-between px-8 py-4">
         <Link
@@ -172,7 +172,7 @@ export default function Header() {
 
       {/* Mobile Dropdown Panel */}
       {isMenuOpen && (
-        <div className="bg-background border-t border-white/10 px-8 pb-6 md:hidden">
+        <div className="bg-background border-outline-variant border-t px-8 pb-6 md:hidden">
           {/* Mobile Search */}
           <div className="relative mt-4 mb-4">
             <input
@@ -226,7 +226,7 @@ export default function Header() {
           </nav>
 
           {/* Mobile Auth Actions */}
-          <div className="border-t border-white/10 pt-4">
+          <div className="border-outline-variant border-t pt-4">
             {user ?
               <div className="flex flex-col space-y-1">
                 <NavLink
@@ -253,7 +253,7 @@ export default function Header() {
                     setAuthModal('login');
                     closeMenu();
                   }}
-                  className="font-ui text-on-surface-variant hover:text-on-background w-full cursor-pointer rounded-sm border border-white/20 bg-transparent px-4 py-2 text-sm font-semibold transition-colors duration-200"
+                  className="font-ui text-on-surface-variant hover:text-on-background border-outline-variant w-full cursor-pointer rounded-sm border bg-transparent px-4 py-2 text-sm font-semibold transition-colors duration-200"
                 >
                   Log In
                 </button>
