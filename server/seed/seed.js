@@ -55,7 +55,7 @@ async function main() {
       username,
       email: `${username.toLowerCase().replace(/\s+/g, '')}@example.com`,
       password: 'password123', // Demo data only; use hashed passwords in production
-      avatar: `https://i.pravatar.cc/150?u=${encodeURIComponent(username)}`,
+      avatar: '',
       bio: '',
       role: 'user',
     })),
@@ -67,7 +67,7 @@ async function main() {
     username: 'owner',
     email: 'owner@example.com',
     password: 'owner12345', // Demo credentials for testing
-    avatar: `https://i.pravatar.cc/150?u=owner`,
+    avatar: '',
     bio: 'I manage this establishment.',
     role: 'owner',
     ownedEstablishment: firstEst?._id || null,
@@ -82,7 +82,7 @@ async function main() {
       title: ensureString(r.title, 'Untitled Review'),
       rating: r.rating,
       reviewer: ensureString(r.reviewer),
-      reviewerAvatar: ensureString(r.reviewerAvatar),
+      reviewerAvatar: '',
       date: ensureString(r.date),
       body: ensureString(r.body),
       reviewImage: r.reviewImage || null,

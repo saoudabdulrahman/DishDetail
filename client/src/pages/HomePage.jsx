@@ -90,17 +90,13 @@ export default function HomePage() {
 
   const topCritics = useMemo(() => {
     const counts = {};
-    const avatars = {};
     reviews.forEach((r) => {
       counts[r.reviewer] = (counts[r.reviewer] || 0) + 1;
-      if (r.reviewerAvatar && !avatars[r.reviewer]) {
-        avatars[r.reviewer] = r.reviewerAvatar;
-      }
     });
     return Object.entries(counts)
       .sort((a, b) => b[1] - a[1])
       .slice(0, 2)
-      .map(([name, count]) => ({ name, count, avatar: avatars[name] }));
+      .map(([name, count]) => ({ name, count }));
   }, [reviews]);
 
   const feedReviews = useMemo(() => {
@@ -283,16 +279,9 @@ export default function HomePage() {
                       to={`/profile/${critic.name}`}
                       className="hover:bg-surface-container-low -ml-1 flex items-center space-x-3 rounded-xl p-1 pr-3 no-underline transition-colors"
                     >
-                      {critic.avatar ?
-                        <img
-                          src={critic.avatar}
-                          alt={critic.name}
-                          className="h-10 w-10 shrink-0 rounded-xl object-cover"
-                        />
-                      : <div className="bg-surface-bright text-primary flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-xs font-bold">
-                          {critic.name.slice(0, 2).toUpperCase()}
-                        </div>
-                      }
+                      <div className="bg-surface-bright text-primary flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-xs font-bold">
+                        {critic.name.slice(0, 2).toUpperCase()}
+                      </div>
                       <div>
                         <p className="font-ui text-on-surface text-sm font-bold">
                           {critic.name}

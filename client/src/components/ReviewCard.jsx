@@ -206,16 +206,9 @@ export default function ReviewCard({ review, restaurant, variant = 'stack' }) {
                   navigate(`/profile/${review.reviewer}`);
                 }}
               >
-                {review.reviewerAvatar ?
-                  <img
-                    src={review.reviewerAvatar}
-                    alt={review.reviewer}
-                    className="h-10 w-10 rounded-xl object-cover"
-                  />
-                : <div className="bg-surface-bright text-primary flex h-10 w-10 shrink-0 items-center justify-center rounded-xl font-bold">
-                    {review.reviewer?.slice(0, 2).toUpperCase()}
-                  </div>
-                }
+                <div className="bg-surface-bright text-primary flex h-10 w-10 shrink-0 items-center justify-center rounded-xl font-bold">
+                  {review.reviewer?.slice(0, 2).toUpperCase()}
+                </div>
                 <div>
                   <p className="font-ui text-sm font-bold">{review.reviewer}</p>
                   <p className="text-on-surface-variant font-ui text-[10px] tracking-widest uppercase">

@@ -23,7 +23,6 @@ export default function ProfilePage() {
   const profileUser = isOwnProfile ? authUser : fetchedUser;
 
   const [isEditing, setIsEditing] = useState(false);
-  const [avatarUrl, setAvatarUrl] = useState(authUser?.avatar || '');
   const [bio, setBio] = useState(authUser?.bio || '');
   const [restaurants, setRestaurants] = useState([]);
   const [reviews, setReviews] = useState([]);
@@ -89,7 +88,7 @@ export default function ProfilePage() {
   );
 
   const handleSave = async () => {
-    const promise = updateProfile({ avatar: avatarUrl, bio });
+    const promise = updateProfile({ bio });
     toast.promise(promise, {
       loading: 'Updating profile...',
       success: 'Profile updated successfully!',
@@ -104,7 +103,6 @@ export default function ProfilePage() {
   };
 
   const handleCancel = () => {
-    setAvatarUrl(authUser?.avatar || '');
     setBio(authUser?.bio || '');
     setIsEditing(false);
   };
@@ -168,17 +166,6 @@ export default function ProfilePage() {
               </div>
 
               <label className="font-ui text-on-surface-variant flex flex-col gap-1.5 text-sm font-semibold">
-                Avatar URL
-                <input
-                  type="text"
-                  placeholder="https://example.com/avatar.jpg"
-                  value={avatarUrl}
-                  onChange={(e) => setAvatarUrl(e.target.value)}
-                  className="font-ui bg-surface-container-high text-on-surface placeholder:text-on-surface-variant/40 focus:ring-primary w-full rounded-xl border-none px-5 py-2.5 text-sm transition-all duration-200 outline-none focus:ring-1"
-                />
-              </label>
-
-              <label className="font-ui text-on-surface-variant flex flex-col gap-1.5 text-sm font-semibold">
                 Bio
                 <textarea
                   placeholder="Tell us about yourself…"
@@ -206,16 +193,9 @@ export default function ProfilePage() {
             </div>
             // Profile Summary
           : <div className="flex flex-col items-center gap-6 sm:flex-row sm:items-start">
-              {profileUser.avatar ?
-                <img
-                  src={profileUser.avatar}
-                  alt={profileUser.username}
-                  className="border-surface-container-highest h-24 w-24 shrink-0 rounded-xl border-4 object-cover sm:h-36 sm:w-36"
-                />
-              : <div className="bg-surface-container-highest text-primary flex h-24 w-24 shrink-0 items-center justify-center rounded-xl text-3xl font-black sm:h-36 sm:w-36">
-                  {profileUser.username?.slice(0, 2).toUpperCase()}
-                </div>
-              }
+              <div className="bg-surface-container-highest text-primary flex h-24 w-24 shrink-0 items-center justify-center rounded-xl text-3xl font-black sm:h-36 sm:w-36">
+                {profileUser.username?.slice(0, 2).toUpperCase()}
+              </div>
 
               <div className="flex-1 text-center sm:text-left">
                 <span className="text-secondary font-label text-xs font-bold tracking-[0.2em] uppercase">
@@ -236,7 +216,6 @@ export default function ProfilePage() {
                 {isOwnProfile && (
                   <button
                     onClick={() => {
-                      setAvatarUrl(authUser?.avatar || '');
                       setBio(authUser?.bio || '');
                       setIsEditing(true);
                     }}
@@ -277,7 +256,7 @@ export default function ProfilePage() {
               return (
                 <ReviewCard
                   key={review._id}
-                  review={{ ...review, reviewerAvatar: profileUser.avatar }}
+                  review={review}
                   restaurant={restaurant}
                   variant="feed"
                 />

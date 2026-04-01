@@ -94,7 +94,6 @@ export default function SubmitReviewPage() {
       title: reviewTitle,
       rating,
       reviewer: user?.username || 'Anonymous',
-      reviewerAvatar: user?.avatar,
       body: reviewText,
       reviewImage: null,
     });

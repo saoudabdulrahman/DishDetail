@@ -309,16 +309,9 @@ export default function DetailReviewCard({ review, onDelete, onUpdate }) {
           to={`/profile/${review.reviewer}`}
           className="hover:bg-surface-container-highest -ml-1 flex items-center gap-3 rounded-xl p-1 pr-3 no-underline transition-colors"
         >
-          {review.reviewerAvatar ?
-            <img
-              src={review.reviewerAvatar}
-              alt={review.reviewer}
-              className="h-10 w-10 rounded-xl object-cover"
-            />
-          : <div className="bg-surface-bright text-primary flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-sm font-bold">
-              {review.reviewer?.slice(0, 2).toUpperCase()}
-            </div>
-          }
+          <div className="bg-surface-bright text-primary flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-sm font-bold">
+            {review.reviewer?.slice(0, 2).toUpperCase()}
+          </div>
           <div>
             <p className="font-ui text-on-surface text-sm font-semibold">
               {review.reviewer}
