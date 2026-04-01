@@ -12,6 +12,7 @@
     "dev:server": "npm run start --workspace=server",
     "seed": "npm run seed --workspace=server",
     "format": "prettier --write .",
+    "format:check": "prettier --check .",
     "lint": "npm run lint --workspaces --if-present",
     "prepare": "husky"
   },
