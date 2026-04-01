@@ -35,3 +35,7 @@ server/.env
 *.njsproj
 *.sln
 *.sw?
+
+# Tool caches
+.eslintcache
+.prettiercache
