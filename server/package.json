@@ -6,7 +6,7 @@
   "scripts": {
     "seed": "node seed/seed.js",
     "start": "node server.js",
-    "lint": "eslint ."
+    "lint": "eslint . --cache --cache-location .eslintcache"
   },
   "dependencies": {
     "cors": "^2.8.5",
