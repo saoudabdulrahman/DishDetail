@@ -87,6 +87,12 @@ npm run dev:client
 - **Responsive Design**: Optimized for both desktop and mobile devices.
 - **Layout Stability**: Implemented `scrollbar-gutter` and stable image placeholders to prevent layout shifting.
 
+## Security
+
+- **HTTP Security Headers**: [`helmet`](https://helmetjs.github.io/) is applied globally to set secure HTTP response headers, including `Content-Security-Policy`, `X-Frame-Options`, and `X-Content-Type-Options`.
+- **Auth Rate Limiting**: [`express-rate-limit`](https://github.com/express-rate-limit/express-rate-limit) restricts `/api/auth` endpoints to 10 requests per IP per 15-minute window to prevent brute-force attacks.
+- **Graceful Shutdown**: The server listens for `SIGTERM` and `SIGINT` signals, drains in-flight requests, and cleanly closes the MongoDB connection before exiting.
+
 ## Development Tools
 
 - **Package Manager**: **npm**.
