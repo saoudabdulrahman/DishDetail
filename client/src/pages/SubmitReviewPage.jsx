@@ -6,8 +6,10 @@ import ReviewCard from '../components/ReviewCard';
 import StarRating from '../components/StarRating';
 import { api } from '../api';
 import { useAuth } from '../auth/useAuth';
+import { usePageTitle } from '../utils/usePageTitle.js';
 
 export default function SubmitReviewPage() {
+  usePageTitle('Submit a Review');
   const navigate = useNavigate();
   const { state } = useLocation();
   const { user } = useAuth();
