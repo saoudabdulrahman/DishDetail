@@ -27,12 +27,20 @@ npm install
 
 ### 2) Configure Environment Variables
 
-Create a `.env` file in the **server/** directory (or the root if running locally) with your configuration:
+**Server** — Create a `.env` file in the **server/** directory (or the root if running locally):
 
-```env
+​`env
 MONGODB_URI=mongodb://127.0.0.1:27017/dishdetail
 PORT=3000
-```
+​`
+
+**Client** — Copy `client/.env.example` to `client/.env`:
+
+​`sh
+cp client/.env.example client/.env
+​`
+
+The default value (`http://localhost:3000`) works for local development. Update it if your API runs on a different port or domain.
 
 ### 3) Seed the Database
 
