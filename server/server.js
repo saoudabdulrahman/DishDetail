@@ -1,6 +1,9 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import helmet from 'helmet';
+import rateLimit from 'express-rate-limit';
+import mongoose from 'mongoose';
 import { connectDb } from './model/db.js';
 import authRoutes from './routes/auth.js';
 import userRoutes from './routes/users.js';
@@ -18,6 +21,7 @@ await connectDb(process.env.MONGODB_URI);
 
 // Standard middleware stack: CORS for cross-origin client requests
 // and JSON parsing with a 2mb limit to accommodate base64 review images.
+app.use(helmet());
 app.use(
   cors({
     origin: process.env.CLIENT_ORIGIN || 'http://localhost:5173',
@@ -27,12 +31,32 @@ app.use(
 app.use(express.json({ limit: '2mb' }));
 
 // API routes
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  limit: 10,
+  message: {
+    error: 'Too many requests from this IP, please try again in 15 minutes.',
+  },
+});
+
 app.get('/api/health', (req, res) => res.json({ ok: true }));
-app.use('/api/auth', authRoutes);
+app.use('/api/auth', authLimiter, authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/establishments', establishmentRoutes);
 app.use('/api/reviews', reviewRoutes);
 
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
   console.log(`DishDetail API server running on http://localhost:${PORT}`);
 });
+
+const shutdown = () => {
+  console.log('Shutdown signal received: closing server');
+  server.close(async () => {
+    await mongoose.connection.close();
+    console.log('Database connection closed');
+    process.exit(0);
+  });
+};
+
+process.on('SIGTERM', shutdown);
+process.on('SIGINT', shutdown);
