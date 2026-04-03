@@ -1,7 +1,9 @@
 import { Link } from 'react-router';
 import { UtensilsCrossed } from 'lucide-react';
+import { usePageTitle } from '../utils/usePageTitle.js';
 
 export default function NotFoundPage() {
+  usePageTitle('Page Not Found');
   return (
     <main className="flex min-h-[60vh] items-center justify-center px-6 py-20 text-center">
       <div className="flex max-w-md flex-col items-center">

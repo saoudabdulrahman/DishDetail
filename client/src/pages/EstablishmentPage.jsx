@@ -5,11 +5,13 @@ import { toast } from 'sonner';
 import { api } from '../api';
 import DetailReviewCard from '../components/DetailReviewCard';
 import { cn } from '../utils/cn';
+import { usePageTitle } from '../utils/usePageTitle.js';
 
 export default function EstablishmentPage() {
   const { slug } = useParams();
   const navigate = useNavigate();
   const [restaurant, setRestaurant] = useState(null);
+  usePageTitle(restaurant?.restaurantName || 'Loading...');
   const [reviews, setReviews] = useState([]);
   const [visibleCount, setVisibleCount] = useState(2);
   const [imgLoaded, setImgLoaded] = useState(false);
