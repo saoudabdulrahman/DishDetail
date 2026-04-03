@@ -109,7 +109,7 @@ function CommentItem({
 }
 
 export default function DetailReviewCard({ review, onDelete, onUpdate }) {
-  const { user } = useAuth();
+  const { user, setAuthModal } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
   const [imgLoaded, setImgLoaded] = useState(false);
   const [editTitle, setEditTitle] = useState(review.title || '');
@@ -515,7 +515,7 @@ export default function DetailReviewCard({ review, onDelete, onUpdate }) {
           </form>
         : <p className="font-ui text-on-surface-variant mb-5 text-sm">
             <button
-              onClick={() => {}}
+              onClick={() => setAuthModal('login')}
               className="text-primary font-ui cursor-pointer border-none bg-transparent p-0 font-semibold hover:underline"
             >
               Log in

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import { Check, X, Eye, EyeOff } from 'lucide-react';
 import { toast } from 'sonner';
@@ -323,14 +323,14 @@ export default function AuthModal() {
     setIsClosing(false);
   }
 
-  const closeModal = () => {
+  const closeModal = useCallback(() => {
     setAuthModal(null);
     setIsClosing(true);
     setTimeout(() => {
       setIsClosing(false);
       setDisplayModal(null);
     }, CLOSE_DURATION);
-  };
+  }, [setAuthModal]);
 
   useEffect(() => {
     if (!displayModal) return;
@@ -339,9 +339,7 @@ export default function AuthModal() {
     };
     document.addEventListener('keydown', onKey);
     return () => document.removeEventListener('keydown', onKey);
-    // closeModal intentionally excluded to avoid re-binding listener each render.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [displayModal]);
+  }, [displayModal, closeModal]);
 
   if (!displayModal) return null;
 
