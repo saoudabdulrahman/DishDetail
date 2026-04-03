@@ -8,6 +8,7 @@
     "start": "node server.js",
     "dev": "node --watch server.js",
     "test": "vitest run",
+    "test:watch": "vitest",
     "lint": "eslint . --cache --cache-location .eslintcache"
   },
   "dependencies": {

@@ -183,8 +183,8 @@ export default function ReviewCard({ review, restaurant, variant = 'stack' }) {
 
               {review.body && (
                 <p className="font-body text-on-surface-variant mb-6 leading-relaxed">
-                  &quot;{review.body.slice(0, 200)}&quot;
-                  {review.body.length > 200 ? '…' : ''}
+                  &quot;{review.body.slice(0, 200)}
+                  {review.body.length > 200 ? '…' : ''}&quot;
                 </p>
               )}
             </div>

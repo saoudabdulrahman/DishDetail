@@ -14,6 +14,9 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "lint": "npm run lint --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present",
+    "test:watch:client": "npm run test:watch --workspace=client",
+    "test:watch:server": "npm run test:watch --workspace=server",
     "prepare": "husky"
   },
   "devDependencies": {
