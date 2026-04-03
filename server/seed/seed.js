@@ -1,5 +1,6 @@
 import dotenv from 'dotenv';
 import slugify from 'slugify';
+import bcrypt from 'bcryptjs';
 import { connectDb } from '../model/db.js';
 import Establishment from '../model/Establishment.js';
 import Review from '../model/Review.js';
@@ -8,6 +9,8 @@ import { syncEstablishmentRating } from '../utils/syncRating.js';
 import { restaurantsData, reviewsData } from '../../client/src/data.js';
 
 dotenv.config();
+
+const SALT_ROUNDS = 10;
 
 // Normalizes legacy data with safe defaults for missing or null values
 function ensureString(v, fallback = '') {
@@ -45,16 +48,17 @@ async function main() {
   const idMap = new Map(establishments.map((e) => [e.legacyId, e._id]));
 
   // Seed users from reviewers
-  // Extract unique reviewer names; filter(Boolean) removes empty/null values
   const uniqueReviewers = Array.from(
     new Set(reviewsData.map((r) => r.reviewer).filter(Boolean)),
   );
+
+  const hashedDefaultPassword = await bcrypt.hash('password123', SALT_ROUNDS);
 
   await User.insertMany(
     uniqueReviewers.map((username) => ({
       username,
       email: `${username.toLowerCase().replace(/\s+/g, '')}@example.com`,
-      password: 'password123', // Demo data only; use hashed passwords in production
+      password: hashedDefaultPassword,
       avatar: `https://i.pravatar.cc/150?u=${encodeURIComponent(username)}`,
       bio: '',
       role: 'user',
@@ -63,10 +67,12 @@ async function main() {
 
   // Add a sample owner account linked to the first establishment
   const firstEst = establishments[0];
+  const hashedOwnerPassword = await bcrypt.hash('owner12345', SALT_ROUNDS);
+
   await User.create({
     username: 'owner',
     email: 'owner@example.com',
-    password: 'owner12345', // Demo credentials for testing
+    password: hashedOwnerPassword,
     avatar: `https://i.pravatar.cc/150?u=owner`,
     bio: 'I manage this establishment.',
     role: 'owner',
@@ -74,7 +80,6 @@ async function main() {
   });
 
   // Seed reviews
-  // Transform legacy review data to new schema; map restaurantId via idMap
   await Review.insertMany(
     reviewsData.map((r) => ({
       legacyId: r.id,
@@ -97,12 +102,12 @@ async function main() {
           isEdited: c.isEdited || false,
         })) || [],
       ownerResponse:
-        r.ownerResponse ?
-          {
-            date: ensureString(r.ownerResponse.date),
-            body: ensureString(r.ownerResponse.body),
-          }
-        : null,
+        r.ownerResponse
+          ? {
+              date: ensureString(r.ownerResponse.date),
+              body: ensureString(r.ownerResponse.body),
+            }
+          : null,
     })),
   );
 
