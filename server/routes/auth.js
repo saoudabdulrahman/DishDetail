@@ -1,32 +1,44 @@
 import { Router } from 'express';
+import bcrypt from 'bcryptjs';
 import User from '../model/User.js';
 import { publicUser } from '../utils/publicUser.js';
 
 const router = Router();
+const SALT_ROUNDS = 10;
 
 router.post('/signup', async (req, res) => {
   try {
     const { email, username, password } = req.body || {};
+
     if (!email || !username || !password) {
       return res.status(400).json({ error: 'Missing required fields.' });
     }
 
+    const cleanEmail = email.trim().toLowerCase();
+    const cleanUsername = username.trim();
+
+    if (password.length < 8) {
+      return res
+        .status(400)
+        .json({ error: 'Password must be at least 8 characters long.' });
+    }
+
     const existing = await User.findOne({
-      $or: [{ username: username.trim() }, { email: email.trim() }],
+      $or: [{ username: cleanUsername }, { email: cleanEmail }],
     }).lean();
+
     if (existing) {
-      const field =
-        existing.username === username.trim() ? 'username' : 'email';
+      const field = existing.username === cleanUsername ? 'username' : 'email';
       return res.status(409).json({ error: `That ${field} is already taken.` });
     }
 
-    // SECURITY WARNING: Passwords stored in plaintext for development only.
-    // In production, hash passwords with bcrypt before storage.
+    const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
+
     const u = await User.create({
-      email: email.trim(),
-      username: username.trim(),
-      password,
-      avatar: `https://i.pravatar.cc/150?u=${encodeURIComponent(username)}`,
+      email: cleanEmail,
+      username: cleanUsername,
+      password: hashedPassword,
+      avatar: `https://i.pravatar.cc/150?u=${encodeURIComponent(cleanUsername)}`,
       bio: '',
     });
 
@@ -40,14 +52,24 @@ router.post('/signup', async (req, res) => {
 router.post('/login', async (req, res) => {
   try {
     const { username, password } = req.body || {};
+
     if (!username || !password) {
       return res.status(400).json({ error: 'Missing username or password.' });
     }
-    const u = await User.findOne({ username: username.trim() });
-    // Direct plaintext comparison; use bcrypt.compare() in production
-    if (!u || u.password !== password) {
+
+    const cleanUsername = username.trim();
+    const u = await User.findOne({ username: cleanUsername });
+
+    if (!u) {
       return res.status(401).json({ error: 'Invalid username or password.' });
     }
+
+    const isMatch = await bcrypt.compare(password, u.password);
+
+    if (!isMatch) {
+      return res.status(401).json({ error: 'Invalid username or password.' });
+    }
+
     return res.json({ user: publicUser(u) });
   } catch (error) {
     console.error(error);
