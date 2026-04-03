@@ -3,8 +3,10 @@ import { useSearchParams } from 'react-router';
 import EstablishmentCard from '../components/EstablishmentCard';
 import { api } from '../api';
 import { toast } from 'sonner';
+import { usePageTitle } from '../utils/usePageTitle.js';
 
 export default function EstablishmentsPage() {
+  usePageTitle('Establishments');
   const [searchParams, setSearchParams] = useSearchParams();
   const minRating = Number(searchParams.get('minRating') || 0);
   const query = (searchParams.get('q') || '').toLowerCase();

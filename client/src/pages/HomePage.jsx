@@ -5,8 +5,10 @@ import { toast } from 'sonner';
 import ReviewCard from '../components/ReviewCard';
 import { api } from '../api';
 import { useAuth } from '../auth/useAuth';
+import { usePageTitle } from '../utils/usePageTitle.js';
 
 export default function HomePage() {
+  usePageTitle('Home');
   const { user, setAuthModal } = useAuth();
   const navigate = useNavigate();
   const [restaurants, setRestaurants] = useState([]);
