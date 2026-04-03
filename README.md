@@ -106,6 +106,7 @@ npm run dev:client
 - **Package Manager**: **npm**.
 - **Formatting**: `npm run format` (Prettier)
 - **Linting**: `npm run lint` (ESLint)
+- **Testing**: `npm run test --workspace=server` (Vitest — server unit and integration tests)
 - **Git Hooks**: Pre-commit hooks via **Husky** and **lint-staged**.
 
 ---
