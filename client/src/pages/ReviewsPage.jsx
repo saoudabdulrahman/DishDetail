@@ -3,11 +3,13 @@ import { useSearchParams } from 'react-router';
 import { toast } from 'sonner';
 import ReviewCard from '../components/ReviewCard';
 import { api } from '../api';
+import { usePageTitle } from '../utils/usePageTitle.js';
 
 export default function ReviewsPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const query = (searchParams.get('q') || '').toLowerCase();
   const cuisineFilter = searchParams.get('cuisine') || '';
+  usePageTitle(cuisineFilter ? `${cuisineFilter} Reviews` : 'Latest Reviews');
   const [restaurants, setRestaurants] = useState([]);
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);

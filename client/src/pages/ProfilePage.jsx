@@ -4,9 +4,11 @@ import { toast } from 'sonner';
 import { useAuth } from '../auth/useAuth';
 import { api } from '../api';
 import ReviewCard from '../components/ReviewCard';
+import { usePageTitle } from '../utils/usePageTitle.js';
 
 export default function ProfilePage() {
   const { user, updateProfile } = useAuth();
+  usePageTitle(user?.username ? `${user.username}'s Profile` : 'Profile');
 
   const [isEditing, setIsEditing] = useState(false);
   const [avatarUrl, setAvatarUrl] = useState(user?.avatar || '');
