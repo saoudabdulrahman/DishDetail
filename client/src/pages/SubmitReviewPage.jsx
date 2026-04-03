@@ -2,6 +2,12 @@ import { useEffect, useMemo, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import { Search } from 'lucide-react';
 import { toast } from 'sonner';
+import {
+  Combobox,
+  ComboboxInput,
+  ComboboxOption,
+  ComboboxOptions,
+} from '@headlessui/react';
 import ReviewCard from '../components/ReviewCard';
 import StarRating from '../components/StarRating';
 import { api } from '../api';
@@ -136,39 +142,40 @@ export default function SubmitReviewPage() {
           <form onSubmit={handleSubmit} className="flex flex-col gap-5">
             {/* Restaurant Search */}
             <div className="relative">
-              <div className="relative flex items-center">
-                <Search
-                  size={16}
-                  className="text-on-surface-variant pointer-events-none absolute left-5 z-10"
-                />
-                <input
-                  type="text"
-                  placeholder="Search for a restaurant to review…"
-                  value={query}
-                  onChange={(e) => {
-                    setQuery(e.target.value);
-                    setSelectedRestaurant(null);
-                  }}
-                  className="font-ui bg-surface-container-high text-on-surface placeholder:text-on-surface-variant/40 focus:ring-primary w-full rounded-xl border-none py-3 pr-5 pl-11 text-sm transition-all duration-200 outline-none focus:ring-1"
-                />
-              </div>
+              <Combobox value={selectedRestaurant} onChange={handleSelect}>
+                <div className="relative flex items-center">
+                  <Search
+                    size={16}
+                    className="text-on-surface-variant pointer-events-none absolute left-5 z-10"
+                  />
+                  <ComboboxInput
+                    displayValue={(restaurant) =>
+                      restaurant?.restaurantName || ''
+                    }
+                    placeholder="Search for a restaurant to review…"
+                    onChange={(e) => {
+                      setQuery(e.target.value);
+                      if (selectedRestaurant) {
+                        setSelectedRestaurant(null);
+                      }
+                    }}
+                    className="font-ui bg-surface-container-high text-on-surface placeholder:text-on-surface-variant/40 focus:ring-primary w-full rounded-xl border-none py-3 pr-5 pl-11 text-sm transition-all duration-200 outline-none focus:ring-1"
+                  />
+                </div>
 
-              {/* Search Results */}
-              {query &&
-                !selectedRestaurant &&
-                filteredRestaurants.length > 0 && (
-                  <ul className="bg-surface-container-high absolute top-full z-20 mt-2 max-h-48 w-full overflow-y-auto rounded-2xl py-2">
-                    {filteredRestaurants.map((restaurant) => (
-                      <li
-                        key={restaurant._id}
-                        onClick={() => handleSelect(restaurant)}
-                        className="font-ui text-on-surface hover:bg-surface-container-highest cursor-pointer px-5 py-2.5 text-sm transition-colors duration-150"
-                      >
-                        {restaurant.restaurantName}
-                      </li>
-                    ))}
-                  </ul>
-                )}
+                {/* Search Results */}
+                <ComboboxOptions className="bg-surface-container-high absolute top-full z-20 mt-2 max-h-48 w-full overflow-y-auto rounded-2xl py-2 empty:hidden">
+                  {filteredRestaurants.map((restaurant) => (
+                    <ComboboxOption
+                      key={restaurant._id}
+                      value={restaurant}
+                      className="font-ui text-on-surface hover:bg-surface-container-highest data-focus:bg-surface-container-highest cursor-pointer px-5 py-2.5 text-sm transition-colors duration-150"
+                    >
+                      {restaurant.restaurantName}
+                    </ComboboxOption>
+                  ))}
+                </ComboboxOptions>
+              </Combobox>
             </div>
 
             {/* Review Fields */}
