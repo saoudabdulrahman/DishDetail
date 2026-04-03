@@ -3,7 +3,8 @@ import { createPortal } from 'react-dom';
 import { Check, X, Eye, EyeOff } from 'lucide-react';
 import { toast } from 'sonner';
 import { useAuth } from '../auth/useAuth';
-import { validateUser, saveUser } from '../auth/userStorage';
+//import { validateUser } from '../auth/userStorage';
+import { saveUser } from '../auth/userStorage';
 import { cn } from '../utils/cn';
 
 // Shared field wrapper
@@ -116,8 +117,26 @@ function LoginForm({ onSwitch, onSuccess }) {
       return;
     }
     try {
-      const validUser = await validateUser(username.trim(), password);
-      login(validUser, rememberMe);
+      const res = await fetch('http://localhost:3000/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify({
+          username: username.trim(),
+          password,
+          rememberMe,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.error || 'Login failed');
+      }
+
+      login(data.user);
       onSuccess();
       toast.success('Logged in successfully.');
     } catch {

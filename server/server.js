@@ -35,7 +35,7 @@ app.use(cookieParser());
 // API routes
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  limit: 10,
+  limit: 100,
   message: {
     error: 'Too many requests from this IP, please try again in 15 minutes.',
   },

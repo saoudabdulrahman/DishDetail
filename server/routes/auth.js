@@ -41,7 +41,7 @@ router.post('/signup', async (req, res) => {
 
 router.post('/login', async (req, res) => {
   try {
-    const { username, password } = req.body || {};
+    const { username, password, rememberMe = false } = req.body || {};
     if (!username || !password) {
       return res.status(400).json({ error: 'Missing username or password.' });
     }
@@ -52,14 +52,20 @@ router.post('/login', async (req, res) => {
       return res.status(401).json({ error: 'Invalid username or password.' });
     }
 
+    const expiresIn = rememberMe ? '30d' : '1d';
+    const maxAge =
+      rememberMe ?
+        1000 * 60 * 60 * 24 * 30 // 30 days
+      : 1000 * 60 * 60 * 24; // 1 day
+
     const token = jwt.sign({ id: u._id }, JWT_SECRET, {
-      expiresIn: '1d',
+      expiresIn,
     });
 
     res.cookie('token', token, {
       httpOnly: true,
       sameSite: 'lax',
-      maxAge: 1000 * 60 * 60 * 24 * 30, //30 days
+      maxAge,
     });
 
     return res.json({ user: publicUser(u) });
