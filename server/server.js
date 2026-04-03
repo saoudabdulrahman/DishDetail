@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
 import mongoose from 'mongoose';
+import cookieParser from 'cookie-parser';
 import { connectDb } from './model/db.js';
 import authRoutes from './routes/auth.js';
 import userRoutes from './routes/users.js';
@@ -25,10 +26,11 @@ app.use(helmet());
 app.use(
   cors({
     origin: process.env.CLIENT_ORIGIN || 'http://localhost:5173',
-    credentials: false,
+    credentials: true,
   }),
 );
 app.use(express.json({ limit: '2mb' }));
+app.use(cookieParser());
 
 // API routes
 const authLimiter = rateLimit({
