@@ -26,7 +26,6 @@ router.post('/signup', async (req, res) => {
       email: email.trim(),
       username: username.trim(),
       password,
-      avatar: '',
       bio: '',
     });
 

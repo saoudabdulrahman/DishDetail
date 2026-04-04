@@ -65,8 +65,6 @@ router.post('/:slug/reviews', async (req, res) => {
       title,
       rating: Number(rating),
       reviewer,
-      // Avatar is no longer passed; will default to empty string in model
-      reviewerAvatar: '',
       body,
       reviewImage: reviewImage || null,
     });

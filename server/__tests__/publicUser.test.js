@@ -8,7 +8,6 @@ describe('publicUser utility', () => {
       username: 'testuser',
       email: 'test@example.com',
       password: 'supersecretpassword123',
-      avatar: 'avatar.png',
       bio: 'hello',
       role: 'user',
       ownedEstablishment: null,

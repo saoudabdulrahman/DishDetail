@@ -121,5 +121,4 @@ npm run dev:client
 - [Express](https://expressjs.com/)
 - [Mongoose](https://mongoosejs.com/)
 - [Sonner](https://sonner.emilkowal.ski/)
-- [Pravatar](https://pravatar.cc/) (Avatars)
 - [Unsplash](https://unsplash.com/) (Photography)

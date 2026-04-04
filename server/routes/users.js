@@ -1,6 +1,5 @@
 import { Router } from 'express';
 import User from '../model/User.js';
-import Review from '../model/Review.js';
 import { publicUser } from '../utils/publicUser.js';
 
 const router = Router();
@@ -31,21 +30,12 @@ router.put('/:id', async (req, res) => {
   try {
     // Whitelist mutable fields; prevent updates to email, username, password, role
     const updates = {};
-    if (typeof req.body?.avatar === 'string') updates.avatar = req.body.avatar;
     if (typeof req.body?.bio === 'string') updates.bio = req.body.bio;
 
     const u = await User.findByIdAndUpdate(req.params.id, updates, {
       new: true,
     });
     if (!u) return res.status(404).json({ error: 'User not found.' });
-
-    // Sync avatar updates to the user's past reviews
-    if (updates.avatar !== undefined) {
-      await Review.updateMany(
-        { reviewer: u.username },
-        { reviewerAvatar: u.avatar },
-      );
-    }
 
     return res.json({ user: publicUser(u) });
   } catch (error) {
