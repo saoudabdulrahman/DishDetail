@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, NavLink, useNavigate, useSearchParams } from 'react-router';
 import { toast } from 'sonner';
-import { LogOut, Search, CircleUser, X } from 'lucide-react';
+import { LogOut, Menu as MenuIcon, Search, CircleUser, X } from 'lucide-react';
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
 import { useAuth } from '../auth/useAuth';
 import { cn } from '../utils/cn';
@@ -30,11 +30,11 @@ export default function Header() {
   return (
     <header className="bg-background/80 fixed top-0 z-50 flex w-full flex-col shadow-lg backdrop-blur-md transition-colors duration-300">
       {/* Main Header Row */}
-      <div className="mx-auto flex w-full max-w-360 items-center justify-between px-8 py-4">
+      <div className="px-fluid-container mx-auto flex w-full max-w-360 items-center justify-between py-4">
         <Link
           to="/"
           onClick={closeMenu}
-          className="text-on-background font-headline hover:text-on-background text-2xl font-bold tracking-tighter italic no-underline"
+          className="text-on-background font-headline hover:text-on-background text-fluid-2xl shrink-0 font-bold tracking-tighter italic no-underline"
         >
           DishDetail
         </Link>
@@ -69,7 +69,7 @@ export default function Header() {
           </NavLink>
         </nav>
 
-        <div className="flex items-center space-x-6">
+        <div className="flex shrink-0 items-center gap-4 sm:gap-6">
           {/* Desktop Search */}
           <div className="group relative hidden sm:block">
             <input
@@ -163,14 +163,14 @@ export default function Header() {
           >
             {isMenuOpen ?
               <X />
-            : <Menu />}
+            : <MenuIcon />}
           </button>
         </div>
       </div>
 
       {/* Mobile Dropdown Panel */}
       {isMenuOpen && (
-        <div className="bg-background border-outline-variant border-t px-8 pb-6 md:hidden">
+        <div className="bg-background border-outline-variant px-fluid-container border-t pb-6 md:hidden">
           {/* Mobile Search */}
           <div className="relative mt-4 mb-4">
             <input

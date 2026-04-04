@@ -334,7 +334,7 @@ export default function AuthModal() {
         <div className="flex min-h-full items-center justify-center p-4">
           <DialogPanel
             transition
-            className="bg-surface-container-low relative w-full max-w-sm overflow-hidden rounded-lg p-8 transition-all duration-250 ease-out data-closed:translate-y-4 data-closed:opacity-0 data-leave:duration-250 data-leave:ease-in"
+            className="bg-surface-container-low relative w-full max-w-sm overflow-hidden rounded-lg p-6 transition-all duration-250 ease-out data-closed:translate-y-4 data-closed:opacity-0 data-leave:duration-250 data-leave:ease-in sm:p-8"
           >
             {/* Top accent */}
             <div className="gold-gradient absolute top-0 left-0 h-0.5 w-full" />

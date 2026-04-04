@@ -65,9 +65,9 @@ export default function ProfilePage() {
   };
 
   return (
-    <main className="mx-auto max-w-7xl px-6 pt-24 pb-20 md:px-24">
+    <main className="px-fluid-container mx-auto max-w-7xl pt-24 pb-20">
       {/* Profile Header */}
-      <div className="bg-surface-container mb-12 rounded-2xl p-8">
+      <div className="bg-surface-container mb-12 rounded-2xl p-6 sm:p-8">
         {
           isEditing ?
             // Edit Form
@@ -76,7 +76,7 @@ export default function ProfilePage() {
                 <span className="text-secondary font-label text-xs font-bold tracking-[0.2em] uppercase">
                   Editing Profile
                 </span>
-                <h2 className="font-headline text-on-surface mt-1 text-3xl font-black tracking-tight">
+                <h2 className="font-headline text-on-surface text-fluid-3xl mt-1 font-black tracking-tight">
                   {user.username}
                 </h2>
               </div>
@@ -103,16 +103,16 @@ export default function ProfilePage() {
                 />
               </label>
 
-              <div className="flex gap-3">
+              <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
                 <button
                   onClick={handleSave}
-                  className="gold-gradient text-on-secondary font-ui cursor-pointer rounded-xl border-none px-6 py-2.5 text-sm font-bold shadow-lg transition-all duration-200 hover:brightness-110 active:scale-95"
+                  className="gold-gradient text-on-secondary font-ui w-full cursor-pointer rounded-xl border-none px-6 py-2.5 text-sm font-bold shadow-lg transition-all duration-200 hover:brightness-110 active:scale-95 sm:w-auto"
                 >
                   Save Changes
                 </button>
                 <button
                   onClick={handleCancel}
-                  className="font-ui bg-surface-container-high text-on-surface-variant hover:text-on-surface cursor-pointer rounded-xl border-none px-6 py-2.5 text-sm font-semibold transition-colors duration-200"
+                  className="font-ui bg-surface-container-high text-on-surface-variant hover:text-on-surface w-full cursor-pointer rounded-xl border-none px-6 py-2.5 text-sm font-semibold transition-colors duration-200 sm:w-auto"
                 >
                   Cancel
                 </button>
@@ -124,9 +124,9 @@ export default function ProfilePage() {
                 <img
                   src={user.avatar}
                   alt={user.username}
-                  className="border-surface-container-highest h-36 w-36 shrink-0 rounded-xl border-4 object-cover"
+                  className="border-surface-container-highest h-24 w-24 shrink-0 rounded-xl border-4 object-cover sm:h-36 sm:w-36"
                 />
-              : <div className="bg-surface-container-highest text-primary flex h-36 w-36 shrink-0 items-center justify-center rounded-xl text-3xl font-black">
+              : <div className="bg-surface-container-highest text-primary flex h-24 w-24 shrink-0 items-center justify-center rounded-xl text-3xl font-black sm:h-36 sm:w-36">
                   {user.username?.slice(0, 2).toUpperCase()}
                 </div>
               }
@@ -135,7 +135,7 @@ export default function ProfilePage() {
                 <span className="text-secondary font-label text-xs font-bold tracking-[0.2em] uppercase">
                   {user.role === 'owner' ? 'Owner Profile' : 'Critic Profile'}
                 </span>
-                <h1 className="font-headline text-on-surface mt-1 mb-2 text-4xl font-black tracking-tight">
+                <h1 className="font-headline text-on-surface text-fluid-4xl mt-1 mb-2 font-black tracking-tight">
                   {user.username}
                 </h1>
                 <p className="font-ui text-on-surface-variant mb-4 text-sm font-semibold">
@@ -147,7 +147,7 @@ export default function ProfilePage() {
                 </p>
                 <button
                   onClick={() => setIsEditing(true)}
-                  className="font-ui bg-surface-container-high text-on-surface hover:bg-surface-container-highest cursor-pointer rounded-xl border-none px-6 py-2.5 text-sm font-semibold transition-colors duration-200"
+                  className="font-ui bg-surface-container-high text-on-surface hover:bg-surface-container-highest w-full cursor-pointer rounded-xl border-none px-6 py-2.5 text-sm font-semibold transition-colors duration-200 sm:w-auto"
                 >
                   Edit Profile
                 </button>
@@ -158,12 +158,12 @@ export default function ProfilePage() {
       </div>
       {/* User Reviews */}
       <section>
-        <div className="border-outline-variant/15 mb-8 flex items-center justify-between border-b pb-4">
-          <div>
+        <div className="border-outline-variant/15 mb-8 flex flex-col items-center justify-between gap-4 border-b pb-4 sm:flex-row sm:items-end">
+          <div className="text-center sm:text-left">
             <span className="text-secondary font-label text-xs font-bold tracking-[0.2em] uppercase">
               Your Writing
             </span>
-            <h2 className="font-headline text-on-surface mt-1 text-3xl font-bold">
+            <h2 className="font-headline text-on-surface text-fluid-3xl mt-1 font-bold">
               Your Reviews
             </h2>
           </div>

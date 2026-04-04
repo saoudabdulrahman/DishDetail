@@ -388,7 +388,7 @@ export default function DetailReviewCard({ review, onDelete, onUpdate }) {
             Help others discover the best dining experiences.
           </p>
         </div>
-        <div className="flex shrink-0 gap-3">
+        <div className="flex shrink-0 flex-wrap gap-2 sm:gap-3">
           <button
             onClick={() => handleVote('helpful')}
             className={cn(
