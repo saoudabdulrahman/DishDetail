@@ -3,7 +3,7 @@ import githubBlack from '../assets/GitHub_Invertocat_Black_Clearspace.svg';
 
 export default function Footer() {
   return (
-    <footer className="border-outline-variant/15 bg-surface-container-lowest mt-20 w-full border-t px-8 py-12 pt-16">
+    <footer className="border-outline-variant/15 bg-surface-container-lowest px-fluid-container mt-20 w-full border-t py-12 pt-16">
       <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-8 md:flex-row">
         <div className="font-headline text-on-background text-2xl font-black italic">
           DishDetail

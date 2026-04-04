@@ -112,29 +112,29 @@ export default function HomePage() {
   }, [reviews, sortBy]);
 
   return (
-    <main className="mx-auto max-w-7xl px-6 pt-24 pb-20 md:px-24">
+    <main className="px-fluid-container mx-auto max-w-7xl pt-24 pb-20">
       <section className="mb-20 text-center md:text-left">
-        <h1 className="font-headline text-on-surface mb-6 text-6xl font-black tracking-tighter md:text-8xl">
+        <h1 className="font-headline text-on-surface text-fluid-8xl mb-6 font-black tracking-tighter">
           The Finest <span className="text-primary italic">Palate</span>
           <br />
           Curated.
         </h1>
-        <p className="font-body text-on-surface-variant mb-10 max-w-xl text-lg leading-relaxed">
+        <p className="font-body text-on-surface-variant text-fluid-body mb-10 max-w-xl leading-relaxed">
           Experience dining through the lens of critics and connoisseurs. We
           don&apos;t just review food, we archive excellence.
         </p>
-        <div className="inline-flex flex-wrap gap-4">
+        <div className="inline-flex w-full flex-col flex-wrap gap-4 sm:w-auto sm:flex-row">
           <button
             onClick={() =>
               !user ? setAuthModal('login') : navigate('/submit-review')
             }
-            className="gold-gradient text-on-primary font-ui cursor-pointer rounded-xl border-none px-8 py-4 font-bold shadow-lg transition-transform hover:scale-105 active:scale-95"
+            className="gold-gradient text-on-primary font-ui w-full cursor-pointer rounded-xl border-none px-8 py-4 font-bold shadow-lg transition-transform hover:scale-105 active:scale-95 sm:w-auto"
           >
             Write a Review
           </button>
           <Link
             to="/establishments"
-            className="bg-surface-container-high border-outline-variant/15 text-primary hover:bg-surface-container-highest font-ui rounded-xl border px-8 py-4 font-bold transition-colors active:scale-95"
+            className="bg-surface-container-high border-outline-variant/15 text-primary hover:bg-surface-container-highest font-ui w-full rounded-xl border px-8 py-4 font-bold transition-colors active:scale-95 sm:w-auto"
           >
             Browse Establishments
           </Link>
@@ -146,7 +146,7 @@ export default function HomePage() {
             <span className="text-secondary font-label text-xs font-bold tracking-[0.2em] uppercase">
               The Spotlight
             </span>
-            <h2 className="font-headline mt-2 text-4xl font-bold">
+            <h2 className="font-headline text-fluid-4xl mt-2 font-bold">
               Featured Restaurants
             </h2>
           </div>
@@ -198,11 +198,11 @@ export default function HomePage() {
       <div className="flex flex-col gap-16 lg:flex-row">
         {/* Feed Section */}
         <div className="flex-1">
-          <div className="mb-12 flex items-center justify-between">
-            <h2 className="font-headline text-4xl font-bold">
+          <div className="mb-12 flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
+            <h2 className="font-headline text-fluid-4xl font-bold">
               Latest Critiques
             </h2>
-            <div className="bg-surface-container-low flex items-center space-x-4 rounded-xl px-4 py-2">
+            <div className="bg-surface-container-low flex w-full items-center space-x-4 rounded-xl px-4 py-2 sm:w-auto">
               <span className="text-on-surface-variant font-ui text-xs font-bold uppercase">
                 Sort By:
               </span>

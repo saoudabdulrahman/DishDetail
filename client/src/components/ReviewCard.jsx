@@ -109,7 +109,7 @@ export default function ReviewCard({ review, restaurant, variant = 'stack' }) {
             </span>
           </div>
 
-          <h3 className="font-headline text-on-surface mb-4 text-5xl font-black tracking-tight">
+          <h3 className="font-headline text-on-surface text-fluid-5xl mb-4 font-black tracking-tight">
             {restaurant.restaurantName}
           </h3>
 
@@ -140,7 +140,7 @@ export default function ReviewCard({ review, restaurant, variant = 'stack' }) {
       >
         <div className="flex flex-col md:flex-row">
           {review.reviewImage && (
-            <div className="relative h-56 shrink-0 overflow-hidden md:h-auto md:min-h-72 md:w-64">
+            <div className="relative aspect-video shrink-0 overflow-hidden md:aspect-auto md:h-auto md:min-h-72 md:w-64">
               <img
                 src={review.reviewImage}
                 alt={`Food or ambiance from ${restaurant.restaurantName}`}
@@ -155,14 +155,14 @@ export default function ReviewCard({ review, restaurant, variant = 'stack' }) {
 
           <div
             className={cn(
-              'flex flex-col justify-between p-8',
+              'flex flex-col justify-between p-6 sm:p-8',
               review.reviewImage ? 'md:flex-1' : 'w-full',
             )}
           >
             <div>
               <div className="mb-4 flex items-start justify-between gap-4">
                 <div>
-                  <h3 className="font-headline text-on-surface text-2xl font-bold">
+                  <h3 className="font-headline text-on-surface text-fluid-2xl font-bold">
                     {restaurant.restaurantName}
                   </h3>
                   <div className="mt-0.5 flex flex-wrap gap-1">
@@ -197,7 +197,7 @@ export default function ReviewCard({ review, restaurant, variant = 'stack' }) {
                     alt={review.reviewer}
                     className="h-10 w-10 rounded-xl object-cover"
                   />
-                : <div className="bg-surface-bright text-primary flex h-10 w-10 items-center justify-center rounded-xl font-bold">
+                : <div className="bg-surface-bright text-primary flex h-10 w-10 shrink-0 items-center justify-center rounded-xl font-bold">
                     {review.reviewer?.slice(0, 2).toUpperCase()}
                   </div>
                 }
@@ -211,7 +211,7 @@ export default function ReviewCard({ review, restaurant, variant = 'stack' }) {
 
               {/* Prevent clicks on actions from triggering the parent link. */}
               <div
-                className="flex items-center space-x-6"
+                className="flex items-center gap-3 sm:gap-6"
                 onClick={(e) => e.preventDefault()}
               >
                 <div
@@ -319,7 +319,7 @@ export default function ReviewCard({ review, restaurant, variant = 'stack' }) {
           ))}
         </div>
 
-        <h4 className="font-headline mb-2 text-2xl font-bold">
+        <h4 className="font-headline text-fluid-2xl mb-2 font-bold">
           {review.title || 'Untitled Review'}
         </h4>
 

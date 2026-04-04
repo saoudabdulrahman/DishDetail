@@ -116,16 +116,16 @@ export default function SubmitReviewPage() {
   };
 
   return (
-    <main className="mx-auto max-w-7xl px-6 pt-24 pb-20 md:px-24">
+    <main className="px-fluid-container mx-auto max-w-7xl pt-24 pb-20">
       <div className="flex flex-col gap-10 lg:flex-row lg:items-start">
         {/* Form Panel */}
-        <div className="bg-surface-container flex-1 rounded-2xl p-8">
+        <div className="bg-surface-container flex-1 rounded-2xl p-6 sm:p-8">
           {/* Header */}
           <div className="mb-8">
             <span className="text-secondary font-label text-xs font-bold tracking-[0.2em] uppercase">
               Share Your Experience
             </span>
-            <h1 className="font-headline text-on-surface mt-1 text-3xl font-black tracking-tight">
+            <h1 className="font-headline text-on-surface text-fluid-3xl mt-1 font-black tracking-tight">
               {selectedRestaurant ?
                 `Review ${selectedRestaurant.restaurantName}`
               : 'Find a Restaurant'}
@@ -212,7 +212,7 @@ export default function SubmitReviewPage() {
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="gold-gradient text-on-secondary font-ui cursor-pointer rounded-xl border-none px-8 py-3 text-sm font-bold shadow-lg transition-all duration-200 hover:-translate-y-0.5 hover:brightness-110 active:scale-95 disabled:cursor-not-allowed disabled:opacity-60"
+                    className="gold-gradient text-on-secondary font-ui w-full cursor-pointer rounded-xl border-none px-8 py-3 text-sm font-bold shadow-lg transition-all duration-200 hover:-translate-y-0.5 hover:brightness-110 active:scale-95 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
                   >
                     {isSubmitting ? 'Submitting…' : 'Submit Review'}
                   </button>
@@ -228,7 +228,7 @@ export default function SubmitReviewPage() {
             <span className="text-secondary font-label text-xs font-bold tracking-[0.2em] uppercase">
               Top Rated
             </span>
-            <h2 className="font-headline text-on-surface mt-1 text-2xl font-bold">
+            <h2 className="font-headline text-on-surface text-fluid-2xl mt-1 font-bold">
               Hear What Others Are Saying
             </h2>
           </div>
