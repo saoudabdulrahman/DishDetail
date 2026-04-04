@@ -1,17 +1,16 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, NavLink, useNavigate, useSearchParams } from 'react-router';
 import { toast } from 'sonner';
-import { LogOut, Menu, Search, CircleUser, X } from 'lucide-react';
+import { LogOut, Search, CircleUser, X } from 'lucide-react';
+import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
 import { useAuth } from '../auth/useAuth';
 import { cn } from '../utils/cn';
 
 export default function Header() {
   const { user, logout, setAuthModal } = useAuth();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  const dropdownRef = useRef(null);
 
   const currentQuery = searchParams.get('q') || '';
   const [query, setQuery] = useState(currentQuery);
@@ -19,16 +18,6 @@ export default function Header() {
   useEffect(() => {
     setQuery(currentQuery);
   }, [currentQuery]);
-
-  useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
-        setIsDropdownOpen(false);
-      }
-    };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
 
   const handleSearch = () => {
     const params = query.trim() ? `?q=${encodeURIComponent(query.trim())}` : '';
@@ -107,37 +96,46 @@ export default function Header() {
             {user ?
               <>
                 {/* User Dropdown */}
-                <div className="relative" ref={dropdownRef}>
-                  <button
-                    onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                    aria-expanded={isDropdownOpen}
-                    className="text-on-surface-variant hover:text-on-background font-ui flex cursor-pointer items-center gap-2 border-none bg-transparent text-sm transition-colors duration-200"
-                  >
+                <Menu as="div" className="relative">
+                  <MenuButton className="text-on-surface-variant hover:text-on-background focus:ring-primary font-ui flex cursor-pointer items-center gap-2 rounded-full border-none bg-transparent p-1 text-sm transition-colors duration-200 outline-none focus:ring-2">
                     <CircleUser />
-                  </button>
+                  </MenuButton>
 
-                  {isDropdownOpen && (
-                    <div className="bg-surface-container absolute top-full right-0 z-50 mt-2 w-48 overflow-hidden rounded-sm">
-                      <NavLink
-                        to="/profile"
-                        onClick={() => setIsDropdownOpen(false)}
-                        className="text-on-surface hover:bg-surface-container-high font-ui flex items-center gap-2 px-4 py-3 text-sm no-underline transition-colors duration-200"
-                      >
-                        <CircleUser size={16} /> Profile
-                      </NavLink>
-                      <button
-                        onClick={() => {
-                          logout();
-                          setIsDropdownOpen(false);
-                          toast.success('Logged out successfully.');
-                        }}
-                        className="text-on-surface hover:bg-surface-container-high font-ui flex w-full cursor-pointer items-center gap-2 border-none bg-transparent px-4 py-3 text-sm transition-colors duration-200"
-                      >
-                        <LogOut size={16} /> Log Out
-                      </button>
-                    </div>
-                  )}
-                </div>
+                  <MenuItems
+                    transition
+                    className="bg-surface-container absolute top-full right-0 z-50 mt-2 w-48 overflow-hidden rounded-sm py-1 shadow-lg transition duration-200 ease-out focus:outline-none data-closed:scale-95 data-closed:opacity-0"
+                  >
+                    <MenuItem>
+                      {({ focus }) => (
+                        <NavLink
+                          to="/profile"
+                          className={cn(
+                            'text-on-surface font-ui flex items-center gap-2 px-4 py-3 text-sm no-underline transition-colors duration-200',
+                            focus && 'bg-surface-container-high',
+                          )}
+                        >
+                          <CircleUser size={16} /> Profile
+                        </NavLink>
+                      )}
+                    </MenuItem>
+                    <MenuItem>
+                      {({ focus }) => (
+                        <button
+                          onClick={() => {
+                            logout();
+                            toast.success('Logged out successfully.');
+                          }}
+                          className={cn(
+                            'text-on-surface font-ui flex w-full cursor-pointer items-center gap-2 border-none bg-transparent px-4 py-3 text-sm transition-colors duration-200',
+                            focus && 'bg-surface-container-high',
+                          )}
+                        >
+                          <LogOut size={16} /> Log Out
+                        </button>
+                      )}
+                    </MenuItem>
+                  </MenuItems>
+                </Menu>
               </>
             : <>
                 <button
