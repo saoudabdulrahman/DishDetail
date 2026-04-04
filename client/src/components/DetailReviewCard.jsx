@@ -267,19 +267,30 @@ export default function DetailReviewCard({ review, onDelete, onUpdate }) {
     return (
       <article className="bg-surface-container rounded-2xl p-6">
         <div className="flex flex-col gap-4">
-          <div className="flex gap-1" onMouseLeave={() => setHoverRating(0)}>
+          <div
+            role="presentation"
+            className="flex gap-1"
+            onMouseLeave={() => setHoverRating(0)}
+          >
             {[1, 2, 3, 4, 5].map((star) => (
-              <Star
+              <button
                 key={star}
-                size={24}
-                className="cursor-pointer transition-transform hover:scale-110"
-                fill={
-                  star <= (hoverRating || editRating) ? 'currentColor' : 'none'
-                }
-                color="var(--color-primary)"
+                type="button"
+                className="cursor-pointer border-none bg-transparent p-0 transition-transform hover:scale-110"
                 onClick={() => setEditRating(star)}
                 onMouseEnter={() => setHoverRating(star)}
-              />
+                aria-label={`${star} star${star > 1 ? 's' : ''}`}
+              >
+                <Star
+                  size={24}
+                  fill={
+                    star <= (hoverRating || editRating) ?
+                      'currentColor'
+                    : 'none'
+                  }
+                  color="var(--color-primary)"
+                />
+              </button>
             ))}
           </div>
           <input
@@ -368,7 +379,7 @@ export default function DetailReviewCard({ review, onDelete, onUpdate }) {
         <div className="mt-4 overflow-hidden rounded-lg">
           <img
             src={review.reviewImage}
-            alt="Review photo"
+            alt="Food or establishment atmosphere"
             className={`max-h-52 w-auto object-cover transition-opacity duration-300 ${imgLoaded ? 'opacity-100' : 'opacity-0'}`}
             onLoad={() => setImgLoaded(true)}
           />

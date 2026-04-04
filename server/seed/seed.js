@@ -108,7 +108,7 @@ async function main() {
     await syncEstablishmentRating(est._id);
   }
 
-  console.log('Seed complete.');
+  console.warn('Seed complete.');
   process.exit(0);
 }
 

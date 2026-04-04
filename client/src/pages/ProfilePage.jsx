@@ -10,17 +10,26 @@ export default function ProfilePage() {
   const { username } = useParams();
   const { user: authUser, updateProfile } = useAuth();
 
-  usePageTitle(
-    authUser?.username ? `${authUser.username}'s Profile` : 'Profile',
-  );
-
   const isOwnProfile = authUser?.username === username;
 
   const [fetchedUser, setFetchedUser] = useState(null);
   const [loading, setLoading] = useState(!isOwnProfile);
   const [notFound, setNotFound] = useState(false);
+  const [lastUsername, setLastUsername] = useState(username);
+
+  // Reset state during render if the username changes
+  if (username !== lastUsername) {
+    setLastUsername(username);
+    setFetchedUser(null);
+    setLoading(!isOwnProfile);
+    setNotFound(false);
+  }
 
   const profileUser = isOwnProfile ? authUser : fetchedUser;
+
+  usePageTitle(
+    profileUser?.username ? `${profileUser.username}'s Profile` : 'Profile',
+  );
 
   const [isEditing, setIsEditing] = useState(false);
   const [bio, setBio] = useState(authUser?.bio || '');
@@ -29,19 +38,9 @@ export default function ProfilePage() {
 
   // Fetch the profile user from API when viewing someone else's profile
   useEffect(() => {
-    if (isOwnProfile) {
-      // Reset any previously fetched foreign profile
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setFetchedUser(null);
-      setLoading(false);
-      setNotFound(false);
-      return;
-    }
+    if (isOwnProfile) return;
 
     let cancelled = false;
-    setLoading(true);
-    setFetchedUser(null);
-    setNotFound(false);
     api()
       .getUserByUsername(username)
       .then(({ user }) => {

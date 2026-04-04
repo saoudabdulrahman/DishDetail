@@ -35,7 +35,12 @@ function renderCard({
   return render(
     <MemoryRouter>
       <AuthContext.Provider
-        value={{ user, logout: vi.fn(), setAuthModal: vi.fn(), authModal: null }}
+        value={{
+          user,
+          logout: vi.fn(),
+          setAuthModal: vi.fn(),
+          authModal: null,
+        }}
       >
         <DetailReviewCard
           review={review}
