@@ -197,6 +197,11 @@
   line-height: 1;
 }
 
+@utility text-fluid-body {
+  font-size: clamp(0.9rem, 2.5vw, 1.125rem);
+  line-height: 1.7;
+}
+
 @utility text-fluid-5xl {
   font-size: clamp(2rem, 6vw, 3rem);
   line-height: 1;

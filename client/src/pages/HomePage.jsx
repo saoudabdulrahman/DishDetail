@@ -119,7 +119,7 @@ export default function HomePage() {
           <br />
           Curated.
         </h1>
-        <p className="font-body text-on-surface-variant mb-10 max-w-xl text-lg leading-relaxed">
+        <p className="font-body text-on-surface-variant text-fluid-body mb-10 max-w-xl leading-relaxed">
           Experience dining through the lens of critics and connoisseurs. We
           don&apos;t just review food, we archive excellence.
         </p>

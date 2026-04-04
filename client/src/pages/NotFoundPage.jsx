@@ -12,7 +12,7 @@ export default function NotFoundPage() {
           strokeWidth={1.5}
           className="text-primary mb-6 opacity-60"
         />
-        <h1 className="font-headline text-on-surface text-fluid-8xl mb-2 font-black tracking-tighter">
+        <h1 className="font-headline text-on-surface text-fluid-6xl mb-2 font-black tracking-tighter">
           404
         </h1>
         <h2 className="font-headline text-on-surface text-fluid-2xl mb-3 font-bold">
