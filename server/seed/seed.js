@@ -87,7 +87,6 @@ async function main() {
       title: ensureString(r.title, 'Untitled Review'),
       rating: r.rating,
       reviewer: ensureString(r.reviewer),
-      reviewerAvatar: ensureString(r.reviewerAvatar),
       date: ensureString(r.date),
       body: ensureString(r.body),
       reviewImage: r.reviewImage || null,
@@ -102,12 +101,12 @@ async function main() {
           isEdited: c.isEdited || false,
         })) || [],
       ownerResponse:
-        r.ownerResponse
-          ? {
-              date: ensureString(r.ownerResponse.date),
-              body: ensureString(r.ownerResponse.body),
-            }
-          : null,
+        r.ownerResponse ?
+          {
+            date: ensureString(r.ownerResponse.date),
+            body: ensureString(r.ownerResponse.body),
+          }
+        : null,
     })),
   );
 
@@ -116,7 +115,7 @@ async function main() {
     await syncEstablishmentRating(est._id);
   }
 
-  console.log('Seed complete.');
+  console.warn('Seed complete.');
   process.exit(0);
 }
 

@@ -5,7 +5,6 @@ export const reviewsData = [
     title: 'Sinigang That Takes You Home',
     rating: 5,
     reviewer: 'Marco R.',
-    reviewerAvatar: 'https://i.pravatar.cc/150?u=marco',
     date: 'Jan 15, 2026',
     body: 'The sinigang here is next level — perfectly sour with fall-off-the-bone pork ribs. Paired it with garlic rice and I was in heaven. Super affordable and generous servings!',
     reviewImage:
@@ -31,7 +30,6 @@ export const reviewsData = [
     title: 'Rich Broth and Perfect Gyoza',
     rating: 4,
     reviewer: 'Camille S.',
-    reviewerAvatar: 'https://i.pravatar.cc/150?u=camille',
     date: 'Jan 20, 2026',
     body: 'Amazing ramen with rich, flavorful broth. The gyoza is also a must-order. Gets packed during weekends so come early or be ready to wait. Worth every peso.',
     reviewImage:
@@ -53,7 +51,6 @@ export const reviewsData = [
     title: 'Best Unlimited KBBQ in BGC',
     rating: 5,
     reviewer: 'Jolo P.',
-    reviewerAvatar: 'https://i.pravatar.cc/150?u=jolo',
     date: 'Jan 22, 2026',
     body: 'Samgyupsal heaven! Unlimited meat with all the side dishes you could want. The staff was super friendly and attentive. Best KBBQ value in BGC for sure.',
     reviewImage:
@@ -81,7 +78,6 @@ export const reviewsData = [
     title: 'Kare-Kare Like Nanay Used to Make',
     rating: 4,
     reviewer: 'Diana L.',
-    reviewerAvatar: 'https://i.pravatar.cc/150?u=diana',
     date: 'Jan 25, 2026',
     body: 'The kare-kare is outstanding — rich, nutty sauce with perfectly tender oxtail. Bagoong on the side is a must. A true taste of classic Filipino cooking.',
     reviewImage:
@@ -103,7 +99,6 @@ export const reviewsData = [
     title: 'Great Views, Pricey Portions',
     rating: 3,
     reviewer: 'Elaine V.',
-    reviewerAvatar: 'https://i.pravatar.cc/150?u=elaine',
     date: 'Jan 28, 2026',
     body: 'The sunset views from the rooftop are gorgeous and the cocktails are creative. Food was decent but a bit overpriced for the portion size. Great for photos and date nights.',
     reviewImage:
@@ -117,7 +112,6 @@ export const reviewsData = [
     title: 'Smash Burgers Done Right',
     rating: 4,
     reviewer: 'Francis G.',
-    reviewerAvatar: 'https://i.pravatar.cc/150?u=francis',
     date: 'Feb 1, 2026',
     body: 'The smash burgers are insane — crispy edges, juicy patty, melted cheese. Their ube milkshake is a game-changer too. Perfect quick bite near the bay.',
     reviewImage:
@@ -131,7 +125,6 @@ export const reviewsData = [
     title: 'A Culinary Masterpiece',
     rating: 5,
     reviewer: 'Grace T.',
-    reviewerAvatar: 'https://i.pravatar.cc/150?u=grace',
     date: 'Feb 3, 2026',
     body: "Incredible fine dining experience! The degustation menu was a culinary journey through modern Filipino flavors. The chef's plating is absolutely stunning.",
     reviewImage:
@@ -145,7 +138,6 @@ export const reviewsData = [
     title: 'XLB Worth the Wait',
     rating: 4,
     reviewer: 'Henry C.',
-    reviewerAvatar: 'https://i.pravatar.cc/150?u=henry',
     date: 'Feb 5, 2026',
     body: 'The xiao long bao here is consistently perfect — thin wrapper, hot broth inside. Always a long line during mall hours but totally worth the wait.',
     reviewImage:
@@ -159,7 +151,6 @@ export const reviewsData = [
     title: 'Student Budget Champion',
     rating: 4,
     reviewer: 'Ivy M.',
-    reviewerAvatar: 'https://i.pravatar.cc/150?u=ivy',
     date: 'Feb 6, 2026',
     body: "Best inasal in Manila, hands down. The chicken is juicy, perfectly charred, and the unlimited rice is a student's dream. Great value for money.",
     reviewImage:
@@ -173,7 +164,6 @@ export const reviewsData = [
     title: 'Epic Boodle Fight by the Bay',
     rating: 5,
     reviewer: 'Jake D.',
-    reviewerAvatar: 'https://i.pravatar.cc/150?u=jake',
     date: 'Feb 7, 2026',
     body: 'The seafood boodle fight was an epic experience! Super fresh catch cooked multiple ways. The view of Manila Bay during golden hour made it even more special.',
     reviewImage:
@@ -187,7 +177,6 @@ export const reviewsData = [
     title: 'Decent Food, Slow Service',
     rating: 3,
     reviewer: 'New User',
-    reviewerAvatar: 'https://i.pravatar.cc/150?u=newuser',
     date: 'Feb 15, 2026',
     body: 'Good food but service was a bit slow today. The place was packed!',
     reviewImage: null,

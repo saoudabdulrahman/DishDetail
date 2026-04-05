@@ -27,12 +27,20 @@ npm install
 
 ### 2) Configure Environment Variables
 
-Create a `.env` file in the **server/** directory (or the root if running locally) with your configuration:
+**Server** — Create a `.env` file in the **server/** directory (or the root if running locally):
 
-```env
+​`env
 MONGODB_URI=mongodb://127.0.0.1:27017/dishdetail
 PORT=3000
-```
+​`
+
+**Client** — Copy `client/.env.example` to `client/.env`:
+
+​`sh
+cp client/.env.example client/.env
+​`
+
+The default value (`http://localhost:3000`) works for local development. Update it if your API runs on a different port or domain.
 
 ### 3) Seed the Database
 
@@ -87,11 +95,18 @@ npm run dev:client
 - **Responsive Design**: Optimized for both desktop and mobile devices.
 - **Layout Stability**: Implemented `scrollbar-gutter` and stable image placeholders to prevent layout shifting.
 
+## Security
+
+- **HTTP Security Headers**: [`helmet`](https://helmetjs.github.io/) is applied globally to set secure HTTP response headers, including `Content-Security-Policy`, `X-Frame-Options`, and `X-Content-Type-Options`.
+- **Auth Rate Limiting**: [`express-rate-limit`](https://github.com/express-rate-limit/express-rate-limit) restricts `/api/auth` endpoints to 10 requests per IP per 15-minute window to prevent brute-force attacks.
+- **Graceful Shutdown**: The server listens for `SIGTERM` and `SIGINT` signals, drains in-flight requests, and cleanly closes the MongoDB connection before exiting.
+
 ## Development Tools
 
 - **Package Manager**: **npm**.
 - **Formatting**: `npm run format` (Prettier)
 - **Linting**: `npm run lint` (ESLint)
+- **Testing**: `npm run test --workspace=server` (Vitest — server unit and integration tests)
 - **Git Hooks**: Pre-commit hooks via **Husky** and **lint-staged**.
 
 ---
@@ -106,5 +121,4 @@ npm run dev:client
 - [Express](https://expressjs.com/)
 - [Mongoose](https://mongoosejs.com/)
 - [Sonner](https://sonner.emilkowal.ski/)
-- [Pravatar](https://pravatar.cc/) (Avatars)
 - [Unsplash](https://unsplash.com/) (Photography)

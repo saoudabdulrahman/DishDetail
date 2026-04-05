@@ -10,7 +10,7 @@ const EstablishmentSchema = new mongoose.Schema(
     cuisine: { type: [String], required: true, default: [] },
     rating: { type: Number, default: 0 },
     restaurantImage: { type: String, default: '' },
-    description: { type: String, default: '' },
+    description: { type: String, default: '', maxlength: 1000 },
     address: { type: String, default: '' },
     hours: { type: String, default: '' },
     phone: { type: String, default: '' },

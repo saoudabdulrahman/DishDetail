@@ -1,19 +1,21 @@
 import { Link } from 'react-router';
 import { UtensilsCrossed } from 'lucide-react';
+import { usePageTitle } from '../utils/usePageTitle.js';
 
 export default function NotFoundPage() {
+  usePageTitle('Page Not Found');
   return (
-    <main className="flex min-h-[60vh] items-center justify-center px-6 py-20 text-center">
+    <main className="px-fluid-container flex min-h-[60vh] items-center justify-center py-20 text-center">
       <div className="flex max-w-md flex-col items-center">
         <UtensilsCrossed
           size={72}
           strokeWidth={1.5}
           className="text-primary mb-6 opacity-60"
         />
-        <h1 className="font-headline text-on-surface mb-2 text-8xl font-black tracking-tighter">
+        <h1 className="font-headline text-on-surface text-fluid-6xl mb-2 font-black tracking-tighter">
           404
         </h1>
-        <h2 className="font-headline text-on-surface mb-3 text-2xl font-bold">
+        <h2 className="font-headline text-on-surface text-fluid-2xl mb-3 font-bold">
           Looks like this page is off the menu!
         </h2>
         <p className="font-body text-on-surface-variant mb-8 leading-relaxed">

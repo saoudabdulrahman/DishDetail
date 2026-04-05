@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router';
 import { Star, Edit, Trash2, ThumbsUp, ThumbsDown } from 'lucide-react';
 import { toast } from 'sonner';
 import { useAuth } from '../auth/useAuth';
@@ -109,7 +110,7 @@ function CommentItem({
 }
 
 export default function DetailReviewCard({ review, onDelete, onUpdate }) {
-  const { user } = useAuth();
+  const { user, setAuthModal } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
   const [imgLoaded, setImgLoaded] = useState(false);
   const [editTitle, setEditTitle] = useState(review.title || '');
@@ -266,19 +267,30 @@ export default function DetailReviewCard({ review, onDelete, onUpdate }) {
     return (
       <article className="bg-surface-container rounded-2xl p-6">
         <div className="flex flex-col gap-4">
-          <div className="flex gap-1" onMouseLeave={() => setHoverRating(0)}>
+          <div
+            role="presentation"
+            className="flex gap-1"
+            onMouseLeave={() => setHoverRating(0)}
+          >
             {[1, 2, 3, 4, 5].map((star) => (
-              <Star
+              <button
                 key={star}
-                size={24}
-                className="cursor-pointer transition-transform hover:scale-110"
-                fill={
-                  star <= (hoverRating || editRating) ? 'currentColor' : 'none'
-                }
-                color="var(--color-primary)"
+                type="button"
+                className="cursor-pointer border-none bg-transparent p-0 transition-transform hover:scale-110"
                 onClick={() => setEditRating(star)}
                 onMouseEnter={() => setHoverRating(star)}
-              />
+                aria-label={`${star} star${star > 1 ? 's' : ''}`}
+              >
+                <Star
+                  size={24}
+                  fill={
+                    star <= (hoverRating || editRating) ?
+                      'currentColor'
+                    : 'none'
+                  }
+                  color="var(--color-primary)"
+                />
+              </button>
             ))}
           </div>
           <input
@@ -304,17 +316,13 @@ export default function DetailReviewCard({ review, onDelete, onUpdate }) {
     <article id={review._id} className="bg-surface-container rounded-2xl p-6">
       {/* Header */}
       <div className="mb-4 flex items-center justify-between gap-4">
-        <div className="flex items-center gap-3">
-          {review.reviewerAvatar ?
-            <img
-              src={review.reviewerAvatar}
-              alt={review.reviewer}
-              className="h-10 w-10 rounded-xl object-cover"
-            />
-          : <div className="bg-surface-bright text-primary flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-sm font-bold">
-              {review.reviewer?.slice(0, 2).toUpperCase()}
-            </div>
-          }
+        <Link
+          to={`/profile/${review.reviewer}`}
+          className="hover:bg-surface-container-highest -ml-1 flex items-center gap-3 rounded-xl p-1 pr-3 no-underline transition-colors"
+        >
+          <div className="bg-surface-bright text-primary flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-sm font-bold">
+            {review.reviewer?.slice(0, 2).toUpperCase()}
+          </div>
           <div>
             <p className="font-ui text-on-surface text-sm font-semibold">
               {review.reviewer}
@@ -328,7 +336,7 @@ export default function DetailReviewCard({ review, onDelete, onUpdate }) {
               {formatDate(review.date)}
             </p>
           </div>
-        </div>
+        </Link>
 
         <div className="flex items-center gap-3">
           <StarRating rating={review.rating} />
@@ -371,7 +379,7 @@ export default function DetailReviewCard({ review, onDelete, onUpdate }) {
         <div className="mt-4 overflow-hidden rounded-lg">
           <img
             src={review.reviewImage}
-            alt="Review photo"
+            alt="Food or establishment atmosphere"
             className={`max-h-52 w-auto object-cover transition-opacity duration-300 ${imgLoaded ? 'opacity-100' : 'opacity-0'}`}
             onLoad={() => setImgLoaded(true)}
           />
@@ -388,7 +396,7 @@ export default function DetailReviewCard({ review, onDelete, onUpdate }) {
             Help others discover the best dining experiences.
           </p>
         </div>
-        <div className="flex shrink-0 gap-3">
+        <div className="flex shrink-0 flex-wrap gap-2 sm:gap-3">
           <button
             onClick={() => handleVote('helpful')}
             className={cn(
@@ -515,7 +523,7 @@ export default function DetailReviewCard({ review, onDelete, onUpdate }) {
           </form>
         : <p className="font-ui text-on-surface-variant mb-5 text-sm">
             <button
-              onClick={() => {}}
+              onClick={() => setAuthModal('login')}
               className="text-primary font-ui cursor-pointer border-none bg-transparent p-0 font-semibold hover:underline"
             >
               Log in

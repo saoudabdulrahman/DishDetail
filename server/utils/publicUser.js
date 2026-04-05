@@ -7,7 +7,6 @@ export function publicUser(u) {
     id: u._id.toString(),
     username: u.username,
     email: u.email,
-    avatar: u.avatar,
     bio: u.bio,
     role: u.role,
     ownedEstablishment: u.ownedEstablishment || null,

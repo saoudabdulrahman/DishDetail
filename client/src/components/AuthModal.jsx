@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { createPortal } from 'react-dom';
+import { useState, useCallback } from 'react';
+import { Dialog, DialogBackdrop, DialogPanel } from '@headlessui/react';
 import { Check, X, Eye, EyeOff } from 'lucide-react';
 import { toast } from 'sonner';
 import { useAuth } from '../auth/useAuth';
@@ -308,94 +308,61 @@ function SignupForm({ onSwitch, onSuccess }) {
 }
 
 // Modal shell
-const CLOSE_DURATION = 250; // Keep in sync with exit animation durations.
-
 export default function AuthModal() {
   const { authModal, setAuthModal } = useAuth();
   // Keep content mounted until close animation completes.
   const [displayModal, setDisplayModal] = useState(authModal);
-  const [isClosing, setIsClosing] = useState(false);
-  const [mouseDownOnOverlay, setMouseDownOnOverlay] = useState(false);
 
   // Sync newly opened modal type into local display state.
   if (authModal && authModal !== displayModal) {
     setDisplayModal(authModal);
-    setIsClosing(false);
   }
 
-  const closeModal = () => {
+  const closeModal = useCallback(() => {
     setAuthModal(null);
-    setIsClosing(true);
-    setTimeout(() => {
-      setIsClosing(false);
-      setDisplayModal(null);
-    }, CLOSE_DURATION);
-  };
+  }, [setAuthModal]);
 
-  useEffect(() => {
-    if (!displayModal) return;
-    const onKey = (e) => {
-      if (e.key === 'Escape') closeModal();
-    };
-    document.addEventListener('keydown', onKey);
-    return () => document.removeEventListener('keydown', onKey);
-    // closeModal intentionally excluded to avoid re-binding listener each render.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [displayModal]);
+  return (
+    <Dialog open={!!authModal} onClose={closeModal} className="relative z-1000">
+      <DialogBackdrop
+        transition
+        className="fixed inset-0 backdrop-blur-sm transition-opacity duration-250 ease-out data-closed:opacity-0 data-leave:duration-250 data-leave:ease-in"
+        style={{ backgroundColor: 'oklch(0 0 0 / 0.55)' }}
+      />
 
-  if (!displayModal) return null;
+      <div className="fixed inset-0 w-screen overflow-y-auto">
+        <div className="flex min-h-full items-center justify-center p-4">
+          <DialogPanel
+            transition
+            className="bg-surface-container-low relative w-full max-w-sm overflow-hidden rounded-lg p-6 transition-all duration-250 ease-out data-closed:translate-y-4 data-closed:opacity-0 data-leave:duration-250 data-leave:ease-in sm:p-8"
+          >
+            {/* Top accent */}
+            <div className="gold-gradient absolute top-0 left-0 h-0.5 w-full" />
 
-  return createPortal(
-    <div
-      onMouseDown={(e) => setMouseDownOnOverlay(e.target === e.currentTarget)}
-      onClick={(e) => {
-        if (mouseDownOnOverlay && e.target === e.currentTarget) closeModal();
-        setMouseDownOnOverlay(false);
-      }}
-      className={cn(
-        'fixed inset-0 z-1000 flex items-center justify-center p-4 backdrop-blur-sm',
-        isClosing ?
-          'animate-[fadeOut_0.25s_ease-in_forwards]'
-        : 'animate-[fadeIn_0.25s_ease-out]',
-      )}
-      style={{ backgroundColor: 'oklch(0 0 0 / 0.55)' }}
-    >
-      <div
-        onClick={(e) => e.stopPropagation()}
-        onMouseDown={(e) => e.stopPropagation()}
-        className={cn(
-          'bg-surface-container-low relative w-full max-w-sm overflow-hidden rounded-lg p-8',
-          isClosing ?
-            'animate-[slideDown_0.25s_ease-in_forwards]'
-          : 'animate-[slideUp_0.25s_ease-out]',
-        )}
-      >
-        {/* Top accent */}
-        <div className="gold-gradient absolute top-0 left-0 h-0.5 w-full" />
+            {/* Close Button */}
+            <button
+              onClick={closeModal}
+              aria-label="Close"
+              className="text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high absolute top-4 right-4 cursor-pointer rounded-xl border-none bg-transparent p-1.5 transition-colors duration-200"
+            >
+              <X size={18} />
+            </button>
 
-        {/* Close Button */}
-        <button
-          onClick={closeModal}
-          aria-label="Close"
-          className="text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high absolute top-4 right-4 cursor-pointer rounded-xl border-none bg-transparent p-1.5 transition-all duration-200"
-        >
-          <X size={18} />
-        </button>
-
-        {displayModal === 'login' && (
-          <LoginForm
-            onSwitch={() => setAuthModal('signup')}
-            onSuccess={closeModal}
-          />
-        )}
-        {displayModal === 'signup' && (
-          <SignupForm
-            onSwitch={() => setAuthModal('login')}
-            onSuccess={closeModal}
-          />
-        )}
+            {displayModal === 'login' && (
+              <LoginForm
+                onSwitch={() => setAuthModal('signup')}
+                onSuccess={closeModal}
+              />
+            )}
+            {displayModal === 'signup' && (
+              <SignupForm
+                onSwitch={() => setAuthModal('login')}
+                onSuccess={closeModal}
+              />
+            )}
+          </DialogPanel>
+        </div>
       </div>
-    </div>,
-    document.body,
+    </Dialog>
   );
 }
