@@ -38,7 +38,6 @@ router.post('/signup', async (req, res) => {
       email: cleanEmail,
       username: cleanUsername,
       password: hashedPassword,
-      avatar: `https://i.pravatar.cc/150?u=${encodeURIComponent(cleanUsername)}`,
       bio: '',
     });
 

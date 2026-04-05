@@ -43,7 +43,7 @@ describe('Auth Routes', () => {
       const res = await request(app).post('/api/auth/signup').send({
         username: 'existinguser',
         email: 'new@example.com',
-        password: 'pwd',
+        password: 'password123',
       });
 
       expect(res.status).toBe(409);
@@ -57,7 +57,7 @@ describe('Auth Routes', () => {
 
       const res = await request(app)
         .post('/api/auth/login')
-        .send({ username: 'wronguser', password: 'pwd' });
+        .send({ username: 'wronguser', password: 'password123' });
 
       expect(res.status).toBe(401);
       expect(res.body.error).toBe('Invalid username or password.');
