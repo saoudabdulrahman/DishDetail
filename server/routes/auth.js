@@ -3,10 +3,25 @@ import bcrypt from 'bcryptjs';
 import User from '../model/User.js';
 import { publicUser } from '../utils/publicUser.js';
 import jwt from 'jsonwebtoken';
+import { verifyToken } from '../utils/auth.js';
 
 const router = Router();
 const SALT_ROUNDS = 10;
-const JWT_SECRET = process.env.JWT_SECRET;
+
+function signTokenForUser(user) {
+  const jwtSecret = process.env.JWT_SECRET;
+  if (!jwtSecret) {
+    throw new Error('JWT secret is not configured.');
+  }
+
+  return jwt.sign(
+    { id: user._id.toString(), username: user.username },
+    jwtSecret,
+    {
+      expiresIn: '30d',
+    },
+  );
+}
 
 router.post('/signup', async (req, res) => {
   try {
@@ -43,7 +58,8 @@ router.post('/signup', async (req, res) => {
       bio: '',
     });
 
-    return res.status(201).json({ user: publicUser(u) });
+    const token = signTokenForUser(u);
+    return res.status(201).json({ user: publicUser(u), token });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: 'Signup failed.' });
@@ -52,7 +68,7 @@ router.post('/signup', async (req, res) => {
 
 router.post('/login', async (req, res) => {
   try {
-    const { username, password, rememberMe = false } = req.body || {};
+    const { username, password } = req.body || {};
 
     if (!username || !password) {
       return res.status(400).json({ error: 'Missing username or password.' });
@@ -70,23 +86,8 @@ router.post('/login', async (req, res) => {
       return res.status(401).json({ error: 'Invalid username or password.' });
     }
 
-    const expiresIn = rememberMe ? '30d' : '1d';
-    const maxAge =
-      rememberMe ?
-        1000 * 60 * 60 * 24 * 30 // 30 days
-      : 1000 * 60 * 60 * 24; // 1 day
-
-    const token = jwt.sign({ id: u._id }, JWT_SECRET, {
-      expiresIn,
-    });
-
-    res.cookie('token', token, {
-      httpOnly: true,
-      sameSite: 'lax',
-      maxAge,
-    });
-
-    return res.json({ user: publicUser(u) });
+    const token = signTokenForUser(u);
+    return res.json({ user: publicUser(u), token });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: 'Login failed.' });
@@ -94,18 +95,14 @@ router.post('/login', async (req, res) => {
 });
 
 router.post('/logout', (req, res) => {
-  res.clearCookie('token');
+  // JWT is stateless; there is nothing to invalidate server-side.
+  // Logout is handled client-side by clearing the token from storage.
   res.json({ message: 'Logged out' });
 });
 
-router.get('/me', async (req, res) => {
+router.get('/me', verifyToken, async (req, res) => {
   try {
-    const token = req.cookies.token;
-    if (!token) return res.status(401).json({ user: null });
-
-    const decoded = jwt.verify(token, JWT_SECRET);
-
-    const user = await User.findById(decoded.id);
+    const user = await User.findById(req.user.id);
     if (!user) return res.status(401).json({ user: null });
 
     return res.json({ user: publicUser(user) });

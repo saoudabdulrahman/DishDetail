@@ -3,9 +3,9 @@ import { Dialog, DialogBackdrop, DialogPanel } from '@headlessui/react';
 import { Check, X, Eye, EyeOff } from 'lucide-react';
 import { toast } from 'sonner';
 import { useAuth } from '../auth/useAuth';
-//import { validateUser } from '../auth/userStorage';
 import { saveUser } from '../auth/userStorage';
 import { cn } from '../utils/cn';
+import { api } from '../api';
 
 // Shared field wrapper
 function Field({ label, children }) {
@@ -117,26 +117,11 @@ function LoginForm({ onSwitch, onSuccess }) {
       return;
     }
     try {
-      const res = await fetch('http://localhost:3000/api/auth/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        credentials: 'include',
-        body: JSON.stringify({
-          username: username.trim(),
-          password,
-          rememberMe,
-        }),
+      const { user, token } = await api().login({
+        username: username.trim(),
+        password,
       });
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        throw new Error(data.error || 'Login failed');
-      }
-
-      login(data.user);
+      login(user, token, rememberMe);
       onSuccess();
       toast.success('Logged in successfully.');
     } catch {
@@ -245,8 +230,12 @@ function SignupForm({ onSwitch, onSuccess }) {
       return;
     }
     try {
-      const created = await saveUser({ email: e1, username: u1, password });
-      login(created, true);
+      const { user, token } = await saveUser({
+        email: e1,
+        username: u1,
+        password,
+      });
+      login(user, token, true);
       onSuccess();
       toast.success('Account created successfully.');
     } catch {

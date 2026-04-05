@@ -20,6 +20,7 @@ const baseReview = {
   body: 'Great food',
   rating: 5,
   reviewer: 'alice',
+  reviewerId: 'u-alice',
   date: '2026-01-01T00:00:00.000Z',
   helpfulCount: 2,
   unhelpfulCount: 1,
@@ -69,7 +70,10 @@ describe('DetailReviewCard', () => {
   it('owner can enter edit mode and save changes', async () => {
     const user = userEvent.setup();
     const onUpdate = vi.fn();
-    renderCard({ user: { username: 'alice', role: 'critic' }, onUpdate });
+    renderCard({
+      user: { id: 'u-alice', username: 'alice', role: 'critic' },
+      onUpdate,
+    });
 
     await user.click(screen.getByLabelText('Edit review'));
 
@@ -88,7 +92,7 @@ describe('DetailReviewCard', () => {
 
   it('cancel in edit mode restores original values', async () => {
     const user = userEvent.setup();
-    renderCard({ user: { username: 'alice', role: 'critic' } });
+    renderCard({ user: { id: 'u-alice', username: 'alice', role: 'critic' } });
 
     await user.click(screen.getByLabelText('Edit review'));
     const titleInput = screen.getByPlaceholderText('Review title');

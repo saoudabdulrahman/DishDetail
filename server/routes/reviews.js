@@ -1,9 +1,22 @@
 import { Router } from 'express';
 import Review from '../model/Review.js';
 import Establishment from '../model/Establishment.js';
+import User from '../model/User.js';
 import { syncEstablishmentRating } from '../utils/syncRating.js';
+import { verifyToken } from '../utils/auth.js';
 
 const router = Router();
+
+function normalizeReview(review) {
+  return {
+    ...review,
+    reviewer: review.reviewer?.username || 'Unknown',
+    reviewerId:
+      typeof review.reviewer === 'object' ?
+        review.reviewer?._id
+      : review.reviewer,
+  };
+}
 
 router.get('/', async (req, res) => {
   try {
@@ -19,33 +32,39 @@ router.get('/', async (req, res) => {
       const estMatches = await Establishment.find({
         restaurantName: { $regex: q, $options: 'i' },
       }).select('_id');
+      const reviewerMatches = await User.find({
+        username: { $regex: q, $options: 'i' },
+      }).select('_id');
       filter.$or = [
         { title: { $regex: q, $options: 'i' } },
         { body: { $regex: q, $options: 'i' } },
-        { reviewer: { $regex: q, $options: 'i' } },
+        { reviewer: { $in: reviewerMatches.map((u) => u._id) } },
         { establishment: { $in: estMatches.map((e) => e._id) } },
       ];
     }
 
-    const reviews = await Review.find(filter).lean();
+    const reviews = await Review.find(filter)
+      .populate('reviewer', 'username')
+      .lean();
+    const normalizedReviews = reviews.map(normalizeReview);
 
-    return res.json({ reviews });
+    return res.json({ reviews: normalizedReviews });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: 'Failed to fetch reviews.' });
   }
 });
 
-router.put('/:id', async (req, res) => {
+router.put('/:id', verifyToken, async (req, res) => {
   try {
-    // Whitelist mutable review fields; exclude establishment, reviewer, date
+    // Whitelist mutable review fields; exclude establishment, reviewer, date.
+    // helpfulCount and unhelpfulCount are intentionally excluded — they are only
+    // mutated through POST /:id/vote to prevent self-manipulation.
     const allowed = [
       'title',
       'body',
       'rating',
       'isEdited',
-      'helpfulCount',
-      'unhelpfulCount',
       'comments',
       'ownerResponse',
       'reviewImage',
@@ -55,27 +74,41 @@ router.put('/:id', async (req, res) => {
       if (k in (req.body || {})) updates[k] = req.body[k];
     }
 
-    const review = await Review.findByIdAndUpdate(req.params.id, updates, {
-      new: true,
-    });
+    const review = await Review.findById(req.params.id);
     if (!review) return res.status(404).json({ error: 'Review not found.' });
+    if (String(review.reviewer) !== String(req.user.id)) {
+      return res
+        .status(403)
+        .json({ error: 'You can only edit your own reviews.' });
+    }
+
+    Object.assign(review, updates);
+    await review.save();
 
     // Only recalculate establishment rating if the review's rating changed
     if (updates.rating !== undefined) {
       await syncEstablishmentRating(review.establishment);
     }
 
-    return res.json({ review });
+    const populated = await review.populate('reviewer', 'username');
+    return res.json({ review: normalizeReview(populated.toObject()) });
   } catch (error) {
     console.error(error);
     return res.status(400).json({ error: 'Failed to update review.' });
   }
 });
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', verifyToken, async (req, res) => {
   try {
-    const r = await Review.findByIdAndDelete(req.params.id);
+    const r = await Review.findById(req.params.id);
     if (!r) return res.status(404).json({ error: 'Review not found.' });
+    if (String(r.reviewer) !== String(req.user.id)) {
+      return res
+        .status(403)
+        .json({ error: 'You can only delete your own reviews.' });
+    }
+
+    await Review.findByIdAndDelete(req.params.id);
 
     await syncEstablishmentRating(r.establishment);
 
@@ -86,21 +119,45 @@ router.delete('/:id', async (req, res) => {
   }
 });
 
-router.post('/:id/vote', async (req, res) => {
+router.post('/:id/vote', verifyToken, async (req, res) => {
   try {
     const { type } = req.body || {};
+    const voterId = req.user.id;
     if (type !== 'helpful' && type !== 'unhelpful') {
       return res.status(400).json({ error: 'Invalid vote type.' });
     }
-    const review = await Review.findById(req.params.id);
-    if (!review) return res.status(404).json({ error: 'Review not found.' });
-    // No duplicate-vote prevention; same user can vote multiple times
-    if (type === 'helpful') review.helpfulCount += 1;
-    if (type === 'unhelpful') review.unhelpfulCount += 1;
-    await review.save();
+
+    const countField = type === 'helpful' ? 'helpfulCount' : 'unhelpfulCount';
+    const voterField = type === 'helpful' ? 'helpfulVoters' : 'unhelpfulVoters';
+
+    // Atomically match only if the review exists and the user has not voted
+    // on either side yet. The $ne checks on both arrays prevent cross-type
+    // double voting and make the check-and-update a single round-trip.
+    const result = await Review.findOneAndUpdate(
+      {
+        _id: req.params.id,
+        helpfulVoters: { $ne: voterId },
+        unhelpfulVoters: { $ne: voterId },
+      },
+      {
+        $inc: { [countField]: 1 },
+        $addToSet: { [voterField]: voterId },
+      },
+      { new: true },
+    );
+
+    if (!result) {
+      // Distinguish between review-not-found and already-voted.
+      const exists = await Review.exists({ _id: req.params.id });
+      if (!exists) return res.status(404).json({ error: 'Review not found.' });
+      return res
+        .status(409)
+        .json({ error: 'You have already voted on this review.' });
+    }
+
     return res.json({
-      helpfulCount: review.helpfulCount,
-      unhelpfulCount: review.unhelpfulCount,
+      helpfulCount: result.helpfulCount,
+      unhelpfulCount: result.unhelpfulCount,
     });
   } catch (error) {
     console.error(error);

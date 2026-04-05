@@ -2,6 +2,7 @@ import { Router } from 'express';
 import Establishment from '../model/Establishment.js';
 import Review from '../model/Review.js';
 import { syncEstablishmentRating } from '../utils/syncRating.js';
+import { verifyToken } from '../utils/auth.js';
 
 const router = Router();
 
@@ -41,8 +42,18 @@ router.get('/:slug', async (req, res) => {
     const est = await Establishment.findOne({ slug: req.params.slug }).lean();
     if (!est) return res.status(404).json({ error: 'Not found.' });
 
-    const reviews = await Review.find({ establishment: est._id }).lean();
-    return res.json({ establishment: est, reviews });
+    const reviews = await Review.find({ establishment: est._id })
+      .populate('reviewer', 'username')
+      .lean();
+    const normalizedReviews = reviews.map((review) => ({
+      ...review,
+      reviewer: review.reviewer?.username || 'Unknown',
+      reviewerId:
+        typeof review.reviewer === 'object' ?
+          review.reviewer?._id
+        : review.reviewer,
+    }));
+    return res.json({ establishment: est, reviews: normalizedReviews });
   } catch (error) {
     console.error(error);
     return res.status(400).json({ error: 'Could not fetch establishment.' });
@@ -50,13 +61,13 @@ router.get('/:slug', async (req, res) => {
 });
 
 // Create a review under an establishment
-router.post('/:slug/reviews', async (req, res) => {
+router.post('/:slug/reviews', verifyToken, async (req, res) => {
   try {
     const est = await Establishment.findOne({ slug: req.params.slug });
     if (!est) return res.status(404).json({ error: 'Not found.' });
 
-    const { title, rating, reviewer, body, reviewImage } = req.body || {};
-    if (!title || !rating || !reviewer || !body) {
+    const { title, rating, body, reviewImage } = req.body || {};
+    if (!title || !rating || !body) {
       return res.status(400).json({ error: 'Missing required fields.' });
     }
 
@@ -64,7 +75,7 @@ router.post('/:slug/reviews', async (req, res) => {
       establishment: est._id,
       title,
       rating: Number(rating),
-      reviewer,
+      reviewer: req.user.id,
       body,
       reviewImage: reviewImage || null,
     });

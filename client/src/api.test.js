@@ -4,9 +4,19 @@ import { api } from './api';
 describe('api client', () => {
   afterEach(() => {
     vi.restoreAllMocks();
+    localStorage.clear();
+    sessionStorage.clear();
   });
 
   it('sends JSON headers and body for createReview', async () => {
+    localStorage.setItem(
+      'dishdetail_auth',
+      JSON.stringify({
+        user: { id: 'u1' },
+        token: 'jwt-token',
+        expiresAt: 9999999999999,
+      }),
+    );
     const fetchMock = vi.spyOn(globalThis, 'fetch').mockResolvedValue({
       ok: true,
       json: async () => ({ review: { _id: 'r1' } }),
@@ -22,12 +32,21 @@ describe('api client', () => {
         body: JSON.stringify({ title: 'Great' }),
         headers: expect.objectContaining({
           'Content-Type': 'application/json',
+          Authorization: 'Bearer jwt-token',
         }),
       }),
     );
   });
 
   it('sends PUT with correct URL and body for updateReview', async () => {
+    localStorage.setItem(
+      'dishdetail_auth',
+      JSON.stringify({
+        user: { id: 'u1' },
+        token: 'jwt-token',
+        expiresAt: 9999999999999,
+      }),
+    );
     const fetchMock = vi.spyOn(globalThis, 'fetch').mockResolvedValue({
       ok: true,
       json: async () => ({ review: { _id: 'r1', title: 'Updated' } }),
@@ -43,12 +62,21 @@ describe('api client', () => {
         body: JSON.stringify({ title: 'Updated', rating: 4 }),
         headers: expect.objectContaining({
           'Content-Type': 'application/json',
+          Authorization: 'Bearer jwt-token',
         }),
       }),
     );
   });
 
-  it('sends DELETE with correct URL for deleteReview', async () => {
+  it('sends DELETE with correct URL and auth header for deleteReview', async () => {
+    localStorage.setItem(
+      'dishdetail_auth',
+      JSON.stringify({
+        user: { id: 'u1' },
+        token: 'jwt-token',
+        expiresAt: 9999999999999,
+      }),
+    );
     const fetchMock = vi.spyOn(globalThis, 'fetch').mockResolvedValue({
       ok: true,
       json: async () => ({}),
@@ -59,7 +87,42 @@ describe('api client', () => {
 
     expect(fetchMock).toHaveBeenCalledWith(
       `${BASE}/api/reviews/r1`,
-      expect.objectContaining({ method: 'DELETE' }),
+      expect.objectContaining({
+        method: 'DELETE',
+        headers: expect.objectContaining({
+          Authorization: 'Bearer jwt-token',
+        }),
+      }),
+    );
+  });
+
+  it('sends POST with correct payload for voteReview', async () => {
+    localStorage.setItem(
+      'dishdetail_auth',
+      JSON.stringify({
+        user: { id: 'u1' },
+        token: 'jwt-token',
+        expiresAt: 9999999999999,
+      }),
+    );
+    const fetchMock = vi.spyOn(globalThis, 'fetch').mockResolvedValue({
+      ok: true,
+      json: async () => ({ helpfulCount: 1, unhelpfulCount: 0 }),
+    });
+
+    const BASE = import.meta.env.VITE_API_BASE_URL ?? '';
+    await api().voteReview('r1', 'helpful');
+
+    expect(fetchMock).toHaveBeenCalledWith(
+      `${BASE}/api/reviews/r1/vote`,
+      expect.objectContaining({
+        method: 'POST',
+        body: JSON.stringify({ type: 'helpful' }),
+        headers: expect.objectContaining({
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer jwt-token',
+        }),
+      }),
     );
   });
 

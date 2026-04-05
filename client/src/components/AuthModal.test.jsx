@@ -32,7 +32,11 @@ describe('AuthModal', () => {
 
     await waitFor(() => {
       // The mock MSW server returns { id: 'u1', username: 'tester' }
-      expect(login).toHaveBeenCalledWith({ id: 'u1', username: 'tester' });
+      expect(login).toHaveBeenCalledWith(
+        { id: 'u1', username: 'tester' },
+        'test-token',
+        false,
+      );
     });
   });
 

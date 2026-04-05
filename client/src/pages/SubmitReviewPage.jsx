@@ -11,14 +11,12 @@ import {
 import ReviewCard from '../components/ReviewCard';
 import StarRating from '../components/StarRating';
 import { api } from '../api';
-import { useAuth } from '../auth/useAuth';
 import { usePageTitle } from '../utils/usePageTitle.js';
 
 export default function SubmitReviewPage() {
   usePageTitle('Submit a Review');
   const navigate = useNavigate();
   const { state } = useLocation();
-  const { user } = useAuth();
 
   const [selectedRestaurant, setSelectedRestaurant] = useState(
     state?.restaurant || null,
@@ -93,7 +91,6 @@ export default function SubmitReviewPage() {
     const promise = api().createReview(selectedRestaurant.slug, {
       title: reviewTitle,
       rating,
-      reviewer: user?.username || 'Anonymous',
       body: reviewText,
       reviewImage: null,
     });
