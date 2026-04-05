@@ -30,7 +30,11 @@ const ReviewSchema = new mongoose.Schema(
     },
     title: { type: String, required: true, trim: true, maxlength: 200 },
     rating: { type: Number, required: true, min: 1, max: 5 },
-    reviewer: { type: String, required: true },
+    reviewer: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+      required: true,
+    },
     date: { type: Date, default: Date.now },
     body: { type: String, required: true, maxlength: 5000 },
     reviewImage: { type: String, default: null },

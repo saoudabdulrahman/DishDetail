@@ -1,10 +1,22 @@
 import { Router } from 'express';
 import Review from '../model/Review.js';
 import Establishment from '../model/Establishment.js';
+import User from '../model/User.js';
 import { syncEstablishmentRating } from '../utils/syncRating.js';
 import { verifyToken } from '../utils/auth.js';
 
 const router = Router();
+
+function normalizeReview(review) {
+  return {
+    ...review,
+    reviewer: review.reviewer?.username || 'Unknown',
+    reviewerId:
+      typeof review.reviewer === 'object' ?
+        review.reviewer?._id
+      : review.reviewer,
+  };
+}
 
 router.get('/', async (req, res) => {
   try {
@@ -20,17 +32,23 @@ router.get('/', async (req, res) => {
       const estMatches = await Establishment.find({
         restaurantName: { $regex: q, $options: 'i' },
       }).select('_id');
+      const reviewerMatches = await User.find({
+        username: { $regex: q, $options: 'i' },
+      }).select('_id');
       filter.$or = [
         { title: { $regex: q, $options: 'i' } },
         { body: { $regex: q, $options: 'i' } },
-        { reviewer: { $regex: q, $options: 'i' } },
+        { reviewer: { $in: reviewerMatches.map((u) => u._id) } },
         { establishment: { $in: estMatches.map((e) => e._id) } },
       ];
     }
 
-    const reviews = await Review.find(filter).lean();
+    const reviews = await Review.find(filter)
+      .populate('reviewer', 'username')
+      .lean();
+    const normalizedReviews = reviews.map(normalizeReview);
 
-    return res.json({ reviews });
+    return res.json({ reviews: normalizedReviews });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: 'Failed to fetch reviews.' });
@@ -58,9 +76,7 @@ router.put('/:id', verifyToken, async (req, res) => {
 
     const review = await Review.findById(req.params.id);
     if (!review) return res.status(404).json({ error: 'Review not found.' });
-    // TODO(Phase 2.1): migrate to ID-based ownership check once reviewer is an
-    // ObjectId ref. String comparison is fragile if usernames become mutable.
-    if (review.reviewer !== req.user.username) {
+    if (String(review.reviewer) !== String(req.user.id)) {
       return res
         .status(403)
         .json({ error: 'You can only edit your own reviews.' });
@@ -74,7 +90,8 @@ router.put('/:id', verifyToken, async (req, res) => {
       await syncEstablishmentRating(review.establishment);
     }
 
-    return res.json({ review });
+    const populated = await review.populate('reviewer', 'username');
+    return res.json({ review: normalizeReview(populated.toObject()) });
   } catch (error) {
     console.error(error);
     return res.status(400).json({ error: 'Failed to update review.' });
@@ -85,8 +102,7 @@ router.delete('/:id', verifyToken, async (req, res) => {
   try {
     const r = await Review.findById(req.params.id);
     if (!r) return res.status(404).json({ error: 'Review not found.' });
-    // TODO(Phase 2.1): migrate to ID-based ownership check (see PUT /:id).
-    if (r.reviewer !== req.user.username) {
+    if (String(r.reviewer) !== String(req.user.id)) {
       return res
         .status(403)
         .json({ error: 'You can only delete your own reviews.' });

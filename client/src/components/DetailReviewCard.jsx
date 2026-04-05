@@ -131,7 +131,7 @@ export default function DetailReviewCard({ review, onDelete, onUpdate }) {
   const [isEditingResponse, setIsEditingResponse] = useState(false);
   const [responseBody, setResponseBody] = useState('');
 
-  const isOwner = user && user.username === review.reviewer;
+  const isOwner = user && String(user.id) === String(review.reviewerId || '');
   const isEstablishmentOwner = user && user.role === 'owner';
 
   const handleSave = () => {

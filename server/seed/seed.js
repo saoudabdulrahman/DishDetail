@@ -63,6 +63,10 @@ async function main() {
       role: 'user',
     })),
   );
+  const users = await User.find({ username: { $in: uniqueReviewers } }).select(
+    '_id username',
+  );
+  const userIdByUsername = new Map(users.map((u) => [u.username, u._id]));
 
   // Add a sample owner account linked to the first establishment
   const firstEst = establishments[0];
@@ -84,7 +88,7 @@ async function main() {
       establishment: idMap.get(r.restaurantId),
       title: ensureString(r.title, 'Untitled Review'),
       rating: r.rating,
-      reviewer: ensureString(r.reviewer),
+      reviewer: userIdByUsername.get(ensureString(r.reviewer)),
       date: ensureString(r.date),
       body: ensureString(r.body),
       reviewImage: r.reviewImage || null,
