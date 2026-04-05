@@ -20,6 +20,10 @@ export default function AboutPage() {
         description: 'Next Generation Frontend Tooling.',
       },
       {
+        name: 'Headless UI',
+        description: 'Unstyled, fully accessible UI components.',
+      },
+      {
         name: 'Lucide React',
         description: 'Beautiful & consistent icon toolkit.',
       },
@@ -36,6 +40,15 @@ export default function AboutPage() {
         description:
           'Pluggable JavaScript linter and opinionated code formatter.',
       },
+      {
+        name: 'Vitest & Testing Library',
+        description:
+          'Blazing fast unit test framework with React testing utilities.',
+      },
+      {
+        name: 'MSW',
+        description: 'API mocking library for browser and Node.js.',
+      },
     ],
     server: [
       {
@@ -48,6 +61,14 @@ export default function AboutPage() {
         description: 'Elegant MongoDB object modeling for Node.js.',
       },
       {
+        name: 'Helmet',
+        description: 'Security middleware for Express.',
+      },
+      {
+        name: 'Express Rate Limit',
+        description: 'Basic rate-limiting middleware for Express.',
+      },
+      {
         name: 'dotenv',
         description: 'Loads environment variables from a .env file.',
       },
@@ -58,6 +79,10 @@ export default function AboutPage() {
       {
         name: 'slugify',
         description: 'String slugification utility.',
+      },
+      {
+        name: 'Vitest & Supertest',
+        description: 'Testing framework and HTTP assertion library.',
       },
     ],
     infrastructure: [
