@@ -1,9 +1,12 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useEffect } from 'react';
 import { useSearchParams } from 'react-router';
+import { useQuery } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import ReviewCard from '../components/ReviewCard';
 import { api } from '../api';
 import { usePageTitle } from '../utils/usePageTitle.js';
+
+const EMPTY_ARRAY = [];
 
 export default function ReviewsPage() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -11,13 +14,6 @@ export default function ReviewsPage() {
   const cuisineFilter = searchParams.get('cuisine') || '';
   const page = Number(searchParams.get('page')) || 1;
   usePageTitle(cuisineFilter ? `${cuisineFilter} Reviews` : 'Latest Reviews');
-
-  const [restaurants, setRestaurants] = useState([]);
-  const [reviews, setReviews] = useState([]);
-  const [totalReviews, setTotalReviews] = useState(0);
-  const [limit, setLimit] = useState(20);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
 
   const handleCuisineChange = (e) => {
     const cuisine = e.target.value;
@@ -43,44 +39,36 @@ export default function ReviewsPage() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  const {
+    data: estData,
+    isLoading: isEstLoading,
+    isError: isEstError,
+  } = useQuery({
+    queryKey: ['establishments', { q: '', minRating: 0 }],
+    queryFn: () => api().getEstablishments(),
+  });
+
+  const {
+    data: revData,
+    isLoading: isRevLoading,
+    isError: isRevError,
+  } = useQuery({
+    queryKey: ['reviews', { q: query, page, cuisineFilter }],
+    queryFn: () => api().getReviews({ q: query, page, cuisine: cuisineFilter }),
+  });
+
   useEffect(() => {
-    let cancelled = false;
+    if (isEstError || isRevError) {
+      toast.error('Failed to load reviews.');
+    }
+  }, [isEstError, isRevError]);
 
-    const fetchReviews = async () => {
-      setLoading(true);
-      setError('');
-      try {
-        const [estRes, revRes] = await Promise.all([
-          // Fetch all establishments for the cuisine dropdown.
-          // This is a metadata-only call: only cuisine and _id fields are needed,
-          // but the endpoint doesn\'t support field projection yet, so we accept
-          // the full payload. A dedicated /api/cuisines endpoint would be cleaner long-term.
-          api().getEstablishments({ limit: 1000 }),
-          api().getReviews({ q: query, page, cuisine: cuisineFilter }),
-        ]);
-        if (!cancelled) {
-          setRestaurants(estRes.establishments);
-          setReviews(revRes.reviews);
-          setTotalReviews(revRes.total);
-          setLimit(revRes.limit || 20);
-        }
-      } catch (error) {
-        if (!cancelled) {
-          console.error(error);
-          setError('Failed to load reviews.');
-          toast.error('Failed to load reviews.');
-        }
-      } finally {
-        if (!cancelled) setLoading(false);
-      }
-    };
-
-    fetchReviews();
-
-    return () => {
-      cancelled = true;
-    };
-  }, [query, page, cuisineFilter]);
+  const restaurants = estData?.establishments || EMPTY_ARRAY;
+  const reviews = revData?.reviews || EMPTY_ARRAY;
+  const totalReviews = revData?.total || 0;
+  const limit = revData?.limit || 20;
+  const loading = isEstLoading || isRevLoading;
+  const error = isEstError || isRevError ? 'Failed to load reviews.' : '';
 
   const restaurantMap = useMemo(() => {
     return new Map(restaurants.map((r) => [r._id, r]));

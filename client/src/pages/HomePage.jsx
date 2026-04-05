@@ -1,5 +1,6 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router';
+import { useQuery } from '@tanstack/react-query';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { toast } from 'sonner';
 import ReviewCard from '../components/ReviewCard';
@@ -7,31 +8,33 @@ import { api } from '../api';
 import { useAuth } from '../auth/useAuth';
 import { usePageTitle } from '../utils/usePageTitle.js';
 
+const EMPTY_ARRAY = [];
+
 export default function HomePage() {
   usePageTitle('Home');
   const { user, setAuthModal } = useAuth();
   const navigate = useNavigate();
-  const [restaurants, setRestaurants] = useState([]);
-  const [reviews, setReviews] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
   const [sortBy, setSortBy] = useState('recent');
 
+  const { data: estData, isError: isEstError } = useQuery({
+    queryKey: ['establishments', { q: '', minRating: 0 }],
+    queryFn: () => api().getEstablishments(),
+  });
+
+  const { data: revData, isError: isRevError } = useQuery({
+    queryKey: ['reviews', { q: '' }],
+    queryFn: () => api().getReviews(),
+  });
+
   useEffect(() => {
-    let cancelled = false;
-    Promise.all([api().getEstablishments(), api().getReviews()])
-      .then(([estRes, revRes]) => {
-        if (cancelled) return;
-        setRestaurants(estRes.establishments);
-        setReviews(revRes.reviews);
-      })
-      .catch((error) => {
-        console.error(error);
-        toast.error('Failed to load homepage data.');
-      });
-    return () => {
-      cancelled = true;
-    };
-  }, []);
+    if (isEstError || isRevError) {
+      toast.error('Failed to load homepage data.');
+    }
+  }, [isEstError, isRevError]);
+
+  const restaurants = estData?.establishments || EMPTY_ARRAY;
+  const reviews = revData?.reviews || EMPTY_ARRAY;
 
   const restaurantById = useMemo(
     () => new Map(restaurants.map((r) => [r._id, r])),

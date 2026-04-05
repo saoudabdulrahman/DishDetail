@@ -5,9 +5,11 @@ import reactRefresh from 'eslint-plugin-react-refresh';
 import react from 'eslint-plugin-react';
 import jsxA11y from 'eslint-plugin-jsx-a11y';
 import eslintConfigPrettier from 'eslint-config-prettier';
+import pluginQuery from '@tanstack/eslint-plugin-query';
 
 export default [
   { ignores: ['dist', 'node_modules'] },
+  ...pluginQuery.configs['flat/recommended'],
   {
     files: ['**/*.{js,jsx}'],
     languageOptions: {

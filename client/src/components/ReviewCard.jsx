@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { ArrowRight, ThumbsUp, ThumbsDown, MessageCircle } from 'lucide-react';
 import { toast } from 'sonner';
 import { useAuth } from '../auth/useAuth';
@@ -20,6 +21,7 @@ export default function ReviewCard({ review, restaurant, variant = 'stack' }) {
   const [imgLoaded, setImgLoaded] = useState(false);
   const navigate = useNavigate();
   const { user } = useAuth();
+  const queryClient = useQueryClient();
 
   const [helpfulCount, setHelpfulCount] = useState(review.helpfulCount || 0);
   const [unhelpfulCount, setUnhelpfulCount] = useState(
@@ -27,7 +29,18 @@ export default function ReviewCard({ review, restaurant, variant = 'stack' }) {
   );
   const [userVote, setUserVote] = useState(null);
 
-  const handleVote = async (e, type) => {
+  const voteMutation = useMutation({
+    mutationFn: (updates) => api().updateReview(review._id, updates),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['reviews'] });
+      queryClient.invalidateQueries({ queryKey: ['establishment'] });
+    },
+    onError: () => {
+      toast.error('Failed to update vote.');
+    },
+  });
+
+  const handleVote = (e, type) => {
     e.preventDefault();
     e.stopPropagation();
 
@@ -64,15 +77,10 @@ export default function ReviewCard({ review, restaurant, variant = 'stack' }) {
     setUnhelpfulCount(newUnhelpful);
     setUserVote(newVote);
 
-    try {
-      await api().updateReview(review._id, {
-        helpfulCount: newHelpful,
-        unhelpfulCount: newUnhelpful,
-      });
-    } catch (error) {
-      console.error(error);
-      toast.error('Failed to update vote.');
-    }
+    voteMutation.mutate({
+      helpfulCount: newHelpful,
+      unhelpfulCount: newUnhelpful,
+    });
   };
 
   const handleCommentClick = (e) => {

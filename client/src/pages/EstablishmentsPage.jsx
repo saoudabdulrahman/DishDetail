@@ -1,5 +1,6 @@
-import { useEffect, useState, useMemo } from 'react';
+import { useMemo, useEffect } from 'react';
 import { useSearchParams } from 'react-router';
+import { useQuery } from '@tanstack/react-query';
 import EstablishmentCard from '../components/EstablishmentCard';
 import { api } from '../api';
 import { toast } from 'sonner';
@@ -13,47 +14,32 @@ export default function EstablishmentsPage() {
   const cuisineFilter = searchParams.get('cuisine') || '';
   const page = Number(searchParams.get('page')) || 1;
 
-  const [establishments, setEstablishments] = useState([]);
-  const [totalEstablishments, setTotalEstablishments] = useState(0);
-  const [limit, setLimit] = useState(20);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  const {
+    data,
+    isLoading: loading,
+    isError,
+  } = useQuery({
+    queryKey: ['establishments', { q: query, minRating, page, cuisineFilter }],
+    queryFn: async () => {
+      return api().getEstablishments({
+        q: query,
+        minRating,
+        page,
+        cuisine: cuisineFilter,
+      });
+    },
+  });
 
   useEffect(() => {
-    let cancelled = false;
+    if (isError) {
+      toast.error('Failed to load establishments.');
+    }
+  }, [isError]);
 
-    const fetchEstablishments = async () => {
-      setLoading(true);
-      setError('');
-      try {
-        const res = await api().getEstablishments({
-          q: query,
-          minRating,
-          page,
-          cuisine: cuisineFilter,
-        });
-        if (!cancelled) {
-          setEstablishments(res.establishments);
-          setTotalEstablishments(res.total);
-          setLimit(res.limit || 20);
-        }
-      } catch (error) {
-        if (!cancelled) {
-          console.error(error);
-          setError('Failed to load establishments.');
-          toast.error('Failed to load establishments.');
-        }
-      } finally {
-        if (!cancelled) setLoading(false);
-      }
-    };
-
-    fetchEstablishments();
-
-    return () => {
-      cancelled = true;
-    };
-  }, [query, minRating, page, cuisineFilter]);
+  const establishments = data?.establishments || [];
+  const totalEstablishments = data?.total || 0;
+  const limit = data?.limit || 20;
+  const error = isError ? 'Failed to load establishments.' : '';
 
   const handleRatingChange = (e) => {
     const rating = e.target.value;
