@@ -28,12 +28,7 @@ npm install
 
 ### 2) Configure Environment Variables
 
-**Server** — Create a `.env` file in the **server/** directory:
-
-```env
-MONGODB_URI=mongodb://127.0.0.1:27017/dishdetail
-PORT=3000
-```
+**Server** — Follow the instructions in `server/.env.example`
 
 **Client** — Copy `client/.env.example` to `client/.env`:
 
@@ -94,8 +89,9 @@ npm run dev:client
 - **Responsive Design**: Optimized for both desktop and mobile devices.
 - **Layout Stability**: Optimized with `scrollbar-gutter` and stable image placeholders.
 
-## Security
+## Security & Observability
 
+- **Structured Logging**: Uses [**Pino**](https://getpino.io/) for efficient, JSON-based logging with human-readable output in development via `pino-pretty`.
 - **HTTP Security Headers**: [`helmet`](https://helmetjs.github.io/) is applied globally.
 - **Auth Rate Limiting**: [`express-rate-limit`](https://github.com/express-rate-limit/express-rate-limit) restricts `/api/auth` endpoints.
 - **Graceful Shutdown**: The server listens for `SIGTERM` and `SIGINT` signals for clean exits.
