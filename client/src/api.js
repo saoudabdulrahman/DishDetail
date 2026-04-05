@@ -43,11 +43,13 @@ export function api() {
     signup: (payload) =>
       fetchJson(`${BASE}/api/auth/signup`, {
         method: 'POST',
+        credentials: 'include',
         body: JSON.stringify(payload),
       }),
     login: (payload) =>
       fetchJson(`${BASE}/api/auth/login`, {
         method: 'POST',
+        credentials: 'include',
         body: JSON.stringify(payload),
       }),
     getUser: (id) => fetchJson(`${BASE}/api/users/${id}`),

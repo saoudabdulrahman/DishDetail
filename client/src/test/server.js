@@ -5,6 +5,10 @@ const okJson = (data) => HttpResponse.json(data, { status: 200 });
 
 export const defaultHandlers = [
   http.get('/api/health', () => okJson({ ok: true })),
+  http.get('/api/auth/me', () =>
+    okJson({ user: { id: 'u1', username: 'tester', bio: '', role: 'user' } }),
+  ),
+  http.post('/api/auth/logout', () => okJson({ ok: true })),
   http.get('/api/establishments', () => okJson({ establishments: [] })),
   http.get('/api/reviews', () => okJson({ reviews: [] })),
   http.get('/api/establishments/:slug', ({ params }) =>
