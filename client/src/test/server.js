@@ -31,6 +31,11 @@ export const defaultHandlers = [
   http.post('/api/auth/signup', async () =>
     okJson({ user: { id: 'u2', username: 'new-user' } }),
   ),
+  http.get('/api/users/username/:username', ({ params }) =>
+    okJson({
+      user: { id: 'u2', username: params.username, bio: '', role: 'critic' },
+    }),
+  ),
   http.put('/api/users/:id', async ({ params, request }) => {
     const updates = await request.json();
     return okJson({
