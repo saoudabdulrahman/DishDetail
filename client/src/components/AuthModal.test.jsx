@@ -4,23 +4,14 @@ import userEvent from '@testing-library/user-event';
 import AuthModal from './AuthModal';
 import { AuthContext } from '../auth/context';
 
-const validateUserMock = vi.fn();
-const saveUserMock = vi.fn();
-vi.mock('../auth/userStorage', () => ({
-  validateUser: (...args) => validateUserMock(...args),
-  saveUser: (...args) => saveUserMock(...args),
-}));
-
 describe('AuthModal', () => {
   beforeEach(() => {
-    validateUserMock.mockReset();
-    saveUserMock.mockReset();
+    vi.clearAllMocks();
   });
 
   it('logs in successfully from login form', async () => {
     const user = userEvent.setup();
     const login = vi.fn();
-    validateUserMock.mockResolvedValue({ id: 'u1', username: 'alice' });
 
     render(
       <AuthContext.Provider
@@ -35,16 +26,13 @@ describe('AuthModal', () => {
       </AuthContext.Provider>,
     );
 
-    await user.type(screen.getByPlaceholderText('e.g., john_doe'), 'alice');
+    await user.type(screen.getByPlaceholderText('e.g., john_doe'), 'tester');
     await user.type(screen.getByPlaceholderText('••••••••'), 'password1');
     await user.click(screen.getByRole('button', { name: 'Log In' }));
 
     await waitFor(() => {
-      expect(validateUserMock).toHaveBeenCalledWith('alice', 'password1');
-      expect(login).toHaveBeenCalledWith(
-        { id: 'u1', username: 'alice' },
-        false,
-      );
+      // The mock MSW server returns { id: 'u1', username: 'tester' }
+      expect(login).toHaveBeenCalledWith({ id: 'u1', username: 'tester' });
     });
   });
 
