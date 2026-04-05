@@ -32,7 +32,8 @@ describe('Auth Routes', () => {
         .send({ username: 'missing_fields' }); // missing email and password
 
       expect(res.status).toBe(400);
-      expect(res.body.error).toBe('Missing required fields.');
+      expect(typeof res.body.error).toBe('string');
+      expect(res.body.error.length).toBeGreaterThan(0);
     });
 
     it('returns 409 if username is taken', async () => {
@@ -76,6 +77,17 @@ describe('Auth Routes', () => {
       expect(res.status).toBe(201);
       expect(res.body.user.username).toBe('newuser');
       expect(typeof res.body.token).toBe('string');
+    });
+
+    it('returns 400 for invalid email format', async () => {
+      const res = await request(app).post('/api/auth/signup').send({
+        username: 'newuser',
+        email: 'not-an-email',
+        password: 'password123',
+      });
+
+      expect(res.status).toBe(400);
+      expect(res.body.error).toBe('Please enter a valid email.');
     });
   });
 

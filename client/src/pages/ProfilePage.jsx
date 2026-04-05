@@ -5,6 +5,7 @@ import { useAuth } from '../auth/useAuth';
 import { api } from '../api';
 import ReviewCard from '../components/ReviewCard';
 import { usePageTitle } from '../utils/usePageTitle.js';
+import { profileSchema } from '../validation/forms';
 
 export default function ProfilePage() {
   const { username } = useParams();
@@ -33,8 +34,10 @@ export default function ProfilePage() {
 
   const [isEditing, setIsEditing] = useState(false);
   const [bio, setBio] = useState(authUser?.bio || '');
+  const [avatarUrl, setAvatarUrl] = useState(authUser?.avatar || '');
   const [restaurants, setRestaurants] = useState([]);
   const [reviews, setReviews] = useState([]);
+  const [error, setError] = useState('');
 
   // Fetch the profile user from API when viewing someone else's profile
   useEffect(() => {
@@ -87,7 +90,16 @@ export default function ProfilePage() {
   );
 
   const handleSave = async () => {
-    const promise = updateProfile({ bio });
+    setError('');
+    const parsed = profileSchema.safeParse({ avatarUrl, bio });
+    if (!parsed.success) {
+      setError(parsed.error.issues[0].message);
+      return;
+    }
+    const promise = updateProfile({
+      avatar: parsed.data.avatarUrl,
+      bio: parsed.data.bio,
+    });
     toast.promise(promise, {
       loading: 'Updating profile...',
       success: 'Profile updated successfully!',
@@ -103,6 +115,7 @@ export default function ProfilePage() {
 
   const handleCancel = () => {
     setBio(authUser?.bio || '');
+    setAvatarUrl(authUser?.avatar || '');
     setIsEditing(false);
   };
 
@@ -163,6 +176,22 @@ export default function ProfilePage() {
                   {authUser.username}
                 </h2>
               </div>
+              {error && (
+                <div className="font-ui border-error text-error bg-error/10 rounded-xl border px-5 py-2 text-sm">
+                  {error}
+                </div>
+              )}
+
+              <label className="font-ui text-on-surface-variant flex flex-col gap-1.5 text-sm font-semibold">
+                Avatar URL
+                <input
+                  type="url"
+                  placeholder="https://..."
+                  value={avatarUrl}
+                  onChange={(e) => setAvatarUrl(e.target.value)}
+                  className="font-ui bg-surface-container-high text-on-surface placeholder:text-on-surface-variant/40 focus:ring-primary w-full rounded-2xl border-none px-5 py-3 text-sm transition-all duration-200 outline-none focus:ring-1"
+                />
+              </label>
 
               <label className="font-ui text-on-surface-variant flex flex-col gap-1.5 text-sm font-semibold">
                 Bio

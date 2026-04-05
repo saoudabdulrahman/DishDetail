@@ -6,6 +6,11 @@ import { useAuth } from '../auth/useAuth';
 import { formatDate } from '../utils/date';
 import { cn } from '../utils/cn';
 import StarRating from './StarRating';
+import {
+  commentSchema,
+  ownerResponseSchema,
+  reviewEditSchema,
+} from '../validation/forms';
 
 const inputCls =
   'font-ui bg-surface-container-high text-on-surface placeholder:text-on-surface-variant/40 w-full rounded-xl border-none px-5 py-2.5 text-sm outline-none transition-all duration-200 focus:ring-1 focus:ring-primary';
@@ -135,10 +140,19 @@ export default function DetailReviewCard({ review, onDelete, onUpdate }) {
   const isEstablishmentOwner = user && user.role === 'owner';
 
   const handleSave = () => {
+    const parsed = reviewEditSchema.safeParse({
+      editTitle,
+      editBody,
+      editRating,
+    });
+    if (!parsed.success) {
+      toast.error(parsed.error.issues[0].message);
+      return;
+    }
     onUpdate(review._id, {
-      title: editTitle,
-      body: editBody,
-      rating: editRating,
+      title: parsed.data.editTitle,
+      body: parsed.data.editBody,
+      rating: parsed.data.editRating,
       isEdited: true,
     });
     setIsEditing(false);
@@ -193,9 +207,13 @@ export default function DetailReviewCard({ review, onDelete, onUpdate }) {
   };
 
   const handleSaveResponse = () => {
-    if (!responseBody.trim()) return;
+    const parsed = ownerResponseSchema.safeParse({ body: responseBody });
+    if (!parsed.success) {
+      toast.error(parsed.error.issues[0].message);
+      return;
+    }
     onUpdate(review._id, {
-      ownerResponse: { date: new Date().toISOString(), body: responseBody },
+      ownerResponse: { date: new Date().toISOString(), body: parsed.data.body },
     });
     toast.success('Response saved.');
     setIsEditingResponse(false);
@@ -215,11 +233,15 @@ export default function DetailReviewCard({ review, onDelete, onUpdate }) {
 
   const handleAddComment = async (e) => {
     e.preventDefault();
-    if (!commentText.trim()) return;
+    const parsed = commentSchema.safeParse({ text: commentText });
+    if (!parsed.success) {
+      toast.error(parsed.error.issues[0].message);
+      return;
+    }
     const newComment = {
       author: user.username,
       date: new Date().toISOString(),
-      body: commentText,
+      body: parsed.data.text,
     };
     try {
       await onUpdate(review._id, {
@@ -246,11 +268,16 @@ export default function DetailReviewCard({ review, onDelete, onUpdate }) {
   };
 
   const saveEditComment = async (commentId) => {
+    const parsed = commentSchema.safeParse({ text: editCommentText });
+    if (!parsed.success) {
+      toast.error(parsed.error.issues[0].message);
+      return;
+    }
     try {
       await onUpdate(review._id, {
         comments: review.comments.map((c) =>
           c._id === commentId ?
-            { ...c, body: editCommentText, isEdited: true }
+            { ...c, body: parsed.data.text, isEdited: true }
           : c,
         ),
       });

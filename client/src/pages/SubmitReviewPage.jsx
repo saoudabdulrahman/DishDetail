@@ -12,6 +12,7 @@ import ReviewCard from '../components/ReviewCard';
 import StarRating from '../components/StarRating';
 import { api } from '../api';
 import { usePageTitle } from '../utils/usePageTitle.js';
+import { submitReviewSchema } from '../validation/forms';
 
 export default function SubmitReviewPage() {
   usePageTitle('Submit a Review');
@@ -70,28 +71,24 @@ export default function SubmitReviewPage() {
     e.preventDefault();
     setError('');
     if (isSubmitting) return;
-    if (!selectedRestaurant) {
-      setError('Please select a restaurant to review.');
-      return;
-    }
-    if (rating === 0) {
-      setError('Please select a star rating.');
-      return;
-    }
-    if (!reviewTitle.trim()) {
-      setError('Please enter a review title.');
-      return;
-    }
-    if (!reviewText.trim()) {
-      setError('Please write a review.');
+    const parsed = submitReviewSchema.safeParse({
+      selectedRestaurantSlug: selectedRestaurant?.slug || '',
+      rating,
+      reviewTitle,
+      reviewText,
+    });
+    if (!parsed.success) {
+      setError(parsed.error.issues[0].message);
       return;
     }
 
+    const { reviewTitle: cleanTitle, reviewText: cleanBody } = parsed.data;
+
     setIsSubmitting(true);
     const promise = api().createReview(selectedRestaurant.slug, {
-      title: reviewTitle,
+      title: cleanTitle,
       rating,
-      body: reviewText,
+      body: cleanBody,
       reviewImage: null,
     });
 
