@@ -40,6 +40,16 @@ const ReviewSchema = new mongoose.Schema(
     reviewImage: { type: String, default: null },
     helpfulCount: { type: Number, default: 0 },
     unhelpfulCount: { type: Number, default: 0 },
+    helpfulVoters: {
+      type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+      default: [],
+      select: false,
+    },
+    unhelpfulVoters: {
+      type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+      default: [],
+      select: false,
+    },
     isEdited: { type: Boolean, default: false },
     comments: { type: [CommentSchema], default: [] },
     ownerResponse: { type: OwnerResponseSchema, default: null },

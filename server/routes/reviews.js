@@ -122,18 +122,42 @@ router.delete('/:id', verifyToken, async (req, res) => {
 router.post('/:id/vote', verifyToken, async (req, res) => {
   try {
     const { type } = req.body || {};
+    const voterId = req.user.id;
     if (type !== 'helpful' && type !== 'unhelpful') {
       return res.status(400).json({ error: 'Invalid vote type.' });
     }
-    const review = await Review.findById(req.params.id);
-    if (!review) return res.status(404).json({ error: 'Review not found.' });
-    // No duplicate-vote prevention; same user can vote multiple times
-    if (type === 'helpful') review.helpfulCount += 1;
-    if (type === 'unhelpful') review.unhelpfulCount += 1;
-    await review.save();
+
+    const countField = type === 'helpful' ? 'helpfulCount' : 'unhelpfulCount';
+    const voterField = type === 'helpful' ? 'helpfulVoters' : 'unhelpfulVoters';
+
+    // Atomically match only if the review exists and the user has not voted
+    // on either side yet. The $ne checks on both arrays prevent cross-type
+    // double voting and make the check-and-update a single round-trip.
+    const result = await Review.findOneAndUpdate(
+      {
+        _id: req.params.id,
+        helpfulVoters: { $ne: voterId },
+        unhelpfulVoters: { $ne: voterId },
+      },
+      {
+        $inc: { [countField]: 1 },
+        $addToSet: { [voterField]: voterId },
+      },
+      { new: true },
+    );
+
+    if (!result) {
+      // Distinguish between review-not-found and already-voted.
+      const exists = await Review.exists({ _id: req.params.id });
+      if (!exists) return res.status(404).json({ error: 'Review not found.' });
+      return res
+        .status(409)
+        .json({ error: 'You have already voted on this review.' });
+    }
+
     return res.json({
-      helpfulCount: review.helpfulCount,
-      unhelpfulCount: review.unhelpfulCount,
+      helpfulCount: result.helpfulCount,
+      unhelpfulCount: result.unhelpfulCount,
     });
   } catch (error) {
     console.error(error);
