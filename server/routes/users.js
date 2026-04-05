@@ -59,7 +59,7 @@ router.put(
       if (req.body.bio !== undefined) updates.bio = req.body.bio;
 
       const u = await User.findByIdAndUpdate(req.params.id, updates, {
-        new: true,
+        returnDocument: 'after',
       });
       if (!u) return res.status(404).json({ error: 'User not found.' });
 

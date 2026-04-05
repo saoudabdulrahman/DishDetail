@@ -141,18 +141,18 @@ export default function DetailReviewCard({ review, onDelete, onUpdate }) {
 
   const handleSave = () => {
     const parsed = reviewEditSchema.safeParse({
-      editTitle,
-      editBody,
-      editRating,
+      title: editTitle,
+      body: editBody,
+      rating: editRating,
     });
     if (!parsed.success) {
       toast.error(parsed.error.issues[0].message);
       return;
     }
     onUpdate(review._id, {
-      title: parsed.data.editTitle,
-      body: parsed.data.editBody,
-      rating: parsed.data.editRating,
+      title: parsed.data.title,
+      body: parsed.data.body,
+      rating: parsed.data.rating,
       isEdited: true,
     });
     setIsEditing(false);

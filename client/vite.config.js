@@ -17,4 +17,29 @@ export default defineConfig({
       '/api': 'http://localhost:3000',
     },
   },
+  build: {
+    rolldownOptions: {
+      output: {
+        codeSplitting: {
+          groups: [
+            {
+              name: 'react-vendor',
+              test: /node_modules[\\/]react/,
+              priority: 20,
+            },
+            {
+              name: 'ui-vendor',
+              test: /node_modules[\\/](@headlessui|lucide-react|sonner)/,
+              priority: 15,
+            },
+            {
+              name: 'vendor',
+              test: /node_modules/,
+              priority: 10,
+            },
+          ],
+        },
+      },
+    },
+  },
 });

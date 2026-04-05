@@ -127,7 +127,7 @@ export default function EstablishmentsPage() {
             value={minRating}
             onChange={handleRatingChange}
             aria-label="Filter establishments by minimum rating"
-            className="text-primary font-ui cursor-pointer border-none bg-transparent text-right text-xs font-bold uppercase focus:ring-0"
+            className="text-primary font-ui cursor-pointer border-none bg-transparent text-xs font-bold uppercase focus:ring-0"
           >
             <option value={0} className="bg-surface-container-high">
               All Ratings
@@ -153,7 +153,7 @@ export default function EstablishmentsPage() {
             value={cuisineFilter}
             onChange={handleCuisineChange}
             aria-label="Filter establishments by cuisine"
-            className="text-primary font-ui max-w-[50%] cursor-pointer truncate border-none bg-transparent text-right text-xs font-bold uppercase focus:ring-0 sm:max-w-37.5"
+            className="text-primary font-ui max-w-[50%] cursor-pointer truncate border-none bg-transparent text-xs font-bold uppercase focus:ring-0 sm:max-w-37.5"
           >
             <option value="" className="bg-surface-container-high">
               All Cuisines

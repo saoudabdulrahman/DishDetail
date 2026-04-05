@@ -82,12 +82,18 @@ export default function SubmitReviewPage() {
       return;
     }
 
-    const { reviewTitle: cleanTitle, reviewText: cleanBody } = parsed.data;
+    const {
+      reviewTitle: cleanTitle,
+      reviewText: cleanBody,
+      rating: cleanRating,
+    } = parsed.data;
 
     setIsSubmitting(true);
     const promise = api().createReview(selectedRestaurant.slug, {
       title: cleanTitle,
-      rating,
+      rating: cleanRating,
+      reviewer: user?.username || 'Anonymous',
+      reviewerAvatar: user?.avatar,
       body: cleanBody,
       reviewImage: null,
     });

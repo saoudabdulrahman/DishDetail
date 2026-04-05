@@ -4,8 +4,6 @@ const optionalUrl = z
   .string()
   .trim()
   .max(2048, 'URL is too long.')
-  .optional()
-  .or(z.literal(''))
   .transform((value) => value || '')
   .refine(
     (value) => !value || z.string().url().safeParse(value).success,
@@ -57,17 +55,17 @@ export const profileSchema = z.object({
 });
 
 export const reviewEditSchema = z.object({
-  editTitle: z
+  title: z
     .string()
     .trim()
     .min(1, 'Review title cannot be empty.')
     .max(200, 'Review title must be at most 200 characters.'),
-  editBody: z
+  body: z
     .string()
     .trim()
     .min(1, 'Review body cannot be empty.')
     .max(5000, 'Review body must be at most 5000 characters.'),
-  editRating: z.number().int().min(1, 'Please select a star rating.').max(5),
+  rating: z.number().int().min(1, 'Please select a star rating.').max(5),
 });
 
 export const commentSchema = z.object({

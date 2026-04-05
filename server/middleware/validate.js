@@ -21,7 +21,11 @@ export function validate({ body, params, query } = {}) {
       if (!result.success) {
         return res.status(400).json({ error: result.error.issues[0].message });
       }
-      req.query = result.data;
+      Object.defineProperty(req, 'query', {
+        value: result.data,
+        writable: true,
+        configurable: true,
+      });
     }
 
     return next();

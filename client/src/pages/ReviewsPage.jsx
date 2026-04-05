@@ -126,7 +126,7 @@ export default function ReviewsPage() {
             value={cuisineFilter}
             onChange={handleCuisineChange}
             aria-label="Filter reviews by cuisine"
-            className="text-primary font-ui max-w-[50%] cursor-pointer truncate border-none bg-transparent text-right text-xs font-bold uppercase focus:ring-0 sm:max-w-37.5"
+            className="text-primary font-ui max-w-[50%] cursor-pointer truncate border-none bg-transparent text-xs font-bold uppercase focus:ring-0 sm:max-w-37.5"
           >
             <option value="" className="bg-surface-container-high">
               All Tastes
