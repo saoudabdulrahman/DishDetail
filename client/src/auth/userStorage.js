@@ -6,11 +6,11 @@ export async function saveUser(user) {
   return created;
 }
 
-export async function validateUser(username, password) {
-  const client = api();
-  const { user } = await client.login({ username, password });
-  return user;
-}
+//export async function validateUser(username, password) {
+//  const client = api();
+//  const { user } = await client.login({ username, password });
+//  return user;
+//}
 
 export async function updateUser(userId, updates) {
   const client = api();

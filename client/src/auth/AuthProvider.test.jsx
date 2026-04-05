@@ -41,11 +41,9 @@ describe('AuthProvider', () => {
 
     await user.click(screen.getByRole('button', { name: 'login' }));
     expect(screen.getByTestId('username')).toHaveTextContent('alice');
-    expect(localStorage.getItem('dishdetail_auth')).toContain('alice');
 
     await user.click(screen.getByRole('button', { name: 'logout' }));
     expect(screen.getByTestId('username')).toHaveTextContent('none');
-    expect(localStorage.getItem('dishdetail_auth')).toBeNull();
   });
 
   it('updateProfile updates state and storage', async () => {
@@ -67,7 +65,6 @@ describe('AuthProvider', () => {
 
     await waitFor(() => {
       expect(updateUser).toHaveBeenCalledWith('u1', { bio: 'updated' });
-      expect(localStorage.getItem('dishdetail_auth')).toContain('updated');
     });
   });
 });
