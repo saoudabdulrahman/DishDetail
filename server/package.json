@@ -6,7 +6,7 @@
   "scripts": {
     "seed": "node seed/seed.js",
     "start": "node server.js",
-    "dev": "node --watch server.js | pino-pretty",
+    "dev": "node --watch server.js",
     "test": "vitest run",
     "test:watch": "vitest",
     "lint": "eslint . --cache --cache-location .eslintcache"

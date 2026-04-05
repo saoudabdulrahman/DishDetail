@@ -7,6 +7,7 @@ import mongoose from 'mongoose';
 import cookieParser from 'cookie-parser';
 import { pino } from 'pino';
 import pinoHttp from 'pino-http';
+import pretty from 'pino-pretty';
 import { connectDb } from './model/db.js';
 import authRoutes from './routes/auth.js';
 import userRoutes from './routes/users.js';
@@ -19,7 +20,12 @@ dotenv.config();
 // Sets up database connections, shared middleware, and primary API routes.
 const app = express();
 const PORT = process.env.PORT || 3000;
-const logger = pino({ level: process.env.LOG_LEVEL || 'info' });
+const logger = pino(
+  pretty({
+    colorize: true,
+    translateTime: 'SYS:standard',
+  }),
+);
 
 await connectDb(process.env.MONGODB_URI);
 
