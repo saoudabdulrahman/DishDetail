@@ -6,7 +6,7 @@ import jwt from 'jsonwebtoken';
 
 const router = Router();
 const SALT_ROUNDS = 10;
-const JWT_SECRET = 'secret';
+const JWT_SECRET = process.env.JWT_SECRET;
 
 router.post('/signup', async (req, res) => {
   try {
