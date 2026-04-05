@@ -1,7 +1,17 @@
+import { loadAuth } from './auth/storage';
+
 async function fetchJson(url, options = {}) {
+  const auth = loadAuth();
+  const authHeader =
+    auth?.token ? { Authorization: `Bearer ${auth.token}` } : {};
+
   // Normalize API failures so callers handle a single error shape.
   const res = await fetch(url, {
-    headers: { 'Content-Type': 'application/json', ...(options.headers || {}) },
+    headers: {
+      'Content-Type': 'application/json',
+      ...authHeader,
+      ...(options.headers || {}),
+    },
     ...options,
   });
   const data = await res.json().catch(() => ({}));
@@ -43,14 +53,22 @@ export function api() {
     signup: (payload) =>
       fetchJson(`${BASE}/api/auth/signup`, {
         method: 'POST',
-        credentials: 'include',
         body: JSON.stringify(payload),
       }),
     login: (payload) =>
       fetchJson(`${BASE}/api/auth/login`, {
         method: 'POST',
-        credentials: 'include',
         body: JSON.stringify(payload),
+      }),
+    logout: () =>
+      fetchJson(`${BASE}/api/auth/logout`, {
+        method: 'POST',
+      }),
+    me: () => fetchJson(`${BASE}/api/auth/me`),
+    voteReview: (id, type) =>
+      fetchJson(`${BASE}/api/reviews/${id}/vote`, {
+        method: 'POST',
+        body: JSON.stringify({ type }),
       }),
     getUser: (id) => fetchJson(`${BASE}/api/users/${id}`),
     getUserByUsername: (username) =>

@@ -2,6 +2,7 @@ import { Router } from 'express';
 import Review from '../model/Review.js';
 import Establishment from '../model/Establishment.js';
 import { syncEstablishmentRating } from '../utils/syncRating.js';
+import { verifyToken } from '../utils/auth.js';
 
 const router = Router();
 
@@ -36,16 +37,16 @@ router.get('/', async (req, res) => {
   }
 });
 
-router.put('/:id', async (req, res) => {
+router.put('/:id', verifyToken, async (req, res) => {
   try {
-    // Whitelist mutable review fields; exclude establishment, reviewer, date
+    // Whitelist mutable review fields; exclude establishment, reviewer, date.
+    // helpfulCount and unhelpfulCount are intentionally excluded — they are only
+    // mutated through POST /:id/vote to prevent self-manipulation.
     const allowed = [
       'title',
       'body',
       'rating',
       'isEdited',
-      'helpfulCount',
-      'unhelpfulCount',
       'comments',
       'ownerResponse',
       'reviewImage',
@@ -55,10 +56,18 @@ router.put('/:id', async (req, res) => {
       if (k in (req.body || {})) updates[k] = req.body[k];
     }
 
-    const review = await Review.findByIdAndUpdate(req.params.id, updates, {
-      new: true,
-    });
+    const review = await Review.findById(req.params.id);
     if (!review) return res.status(404).json({ error: 'Review not found.' });
+    // TODO(Phase 2.1): migrate to ID-based ownership check once reviewer is an
+    // ObjectId ref. String comparison is fragile if usernames become mutable.
+    if (review.reviewer !== req.user.username) {
+      return res
+        .status(403)
+        .json({ error: 'You can only edit your own reviews.' });
+    }
+
+    Object.assign(review, updates);
+    await review.save();
 
     // Only recalculate establishment rating if the review's rating changed
     if (updates.rating !== undefined) {
@@ -72,10 +81,18 @@ router.put('/:id', async (req, res) => {
   }
 });
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', verifyToken, async (req, res) => {
   try {
-    const r = await Review.findByIdAndDelete(req.params.id);
+    const r = await Review.findById(req.params.id);
     if (!r) return res.status(404).json({ error: 'Review not found.' });
+    // TODO(Phase 2.1): migrate to ID-based ownership check (see PUT /:id).
+    if (r.reviewer !== req.user.username) {
+      return res
+        .status(403)
+        .json({ error: 'You can only delete your own reviews.' });
+    }
+
+    await Review.findByIdAndDelete(req.params.id);
 
     await syncEstablishmentRating(r.establishment);
 
@@ -86,7 +103,7 @@ router.delete('/:id', async (req, res) => {
   }
 });
 
-router.post('/:id/vote', async (req, res) => {
+router.post('/:id/vote', verifyToken, async (req, res) => {
   try {
     const { type } = req.body || {};
     if (type !== 'helpful' && type !== 'unhelpful') {

@@ -1,9 +1,9 @@
 const AUTH_KEY = 'dishdetail_auth';
 
-export function saveAuth(user, rememberMe) {
+export function saveAuth(user, token, rememberMe) {
   const THIRTY_DAYS_MS = 1000 * 60 * 60 * 24 * 30;
   const expiresAt = rememberMe ? Date.now() + THIRTY_DAYS_MS : null;
-  const payload = { user, expiresAt };
+  const payload = { user, token, expiresAt };
 
   if (rememberMe) {
     localStorage.setItem(AUTH_KEY, JSON.stringify(payload));
@@ -28,7 +28,16 @@ export function loadAuth() {
       return null;
     }
 
-    return parsed.user ?? null;
+    if (!parsed?.user || typeof parsed.token !== 'string' || !parsed.token) {
+      clearAuth();
+      return null;
+    }
+
+    return {
+      user: parsed.user,
+      token: parsed.token,
+      rememberMe: Boolean(parsed.expiresAt),
+    };
   } catch {
     // Clear malformed payloads so subsequent reads recover cleanly.
     clearAuth();

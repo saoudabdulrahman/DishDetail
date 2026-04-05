@@ -9,13 +9,13 @@ describe('auth storage', () => {
   });
 
   it('stores remembered auth in localStorage', () => {
-    saveAuth({ id: 'u1' }, true);
+    saveAuth({ id: 'u1' }, 'token-1', true);
     expect(localStorage.getItem('dishdetail_auth')).toBeTruthy();
     expect(sessionStorage.getItem('dishdetail_auth')).toBeNull();
   });
 
   it('stores non-remembered auth in sessionStorage', () => {
-    saveAuth({ id: 'u1' }, false);
+    saveAuth({ id: 'u1' }, 'token-1', false);
     expect(sessionStorage.getItem('dishdetail_auth')).toBeTruthy();
     expect(localStorage.getItem('dishdetail_auth')).toBeNull();
   });
@@ -25,10 +25,26 @@ describe('auth storage', () => {
     vi.spyOn(Date, 'now').mockReturnValue(now);
     localStorage.setItem(
       'dishdetail_auth',
-      JSON.stringify({ user: { id: 'u1' }, expiresAt: now - 1 }),
+      JSON.stringify({
+        user: { id: 'u1' },
+        token: 'token-1',
+        expiresAt: now - 1,
+      }),
     );
     expect(loadAuth()).toBeNull();
     expect(localStorage.getItem('dishdetail_auth')).toBeNull();
+  });
+
+  it('returns user and token for valid payload', () => {
+    sessionStorage.setItem(
+      'dishdetail_auth',
+      JSON.stringify({ user: { id: 'u1' }, token: 'token-1', expiresAt: null }),
+    );
+    expect(loadAuth()).toEqual({
+      user: { id: 'u1' },
+      token: 'token-1',
+      rememberMe: false,
+    });
   });
 
   it('clears malformed payload and returns null', () => {

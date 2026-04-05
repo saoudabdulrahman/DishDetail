@@ -30,10 +30,10 @@ export const defaultHandlers = [
     }),
   ),
   http.post('/api/auth/login', async () =>
-    okJson({ user: { id: 'u1', username: 'tester' } }),
+    okJson({ user: { id: 'u1', username: 'tester' }, token: 'test-token' }),
   ),
   http.post('/api/auth/signup', async () =>
-    okJson({ user: { id: 'u2', username: 'new-user' } }),
+    okJson({ user: { id: 'u2', username: 'new-user' }, token: 'test-token' }),
   ),
   http.get('/api/users/username/:username', ({ params }) =>
     okJson({

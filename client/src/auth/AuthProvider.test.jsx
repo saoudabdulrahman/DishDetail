@@ -15,7 +15,9 @@ function Consumer() {
   return (
     <div>
       <div data-testid="username">{user?.username ?? 'none'}</div>
-      <button onClick={() => login({ id: 'u1', username: 'alice' }, true)}>
+      <button
+        onClick={() => login({ id: 'u1', username: 'alice' }, 'token-1', true)}
+      >
         login
       </button>
       <button onClick={() => logout()}>logout</button>

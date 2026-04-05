@@ -1,53 +1,78 @@
-import { useMemo, useState } from 'react';
-//import { clearAuth, loadAuth, saveAuth } from './storage';
+import { useMemo, useState, useEffect } from 'react';
+import { clearAuth, loadAuth, saveAuth } from './storage';
 import { updateUser as updateStorageUser } from './userStorage';
 import { AuthContext } from './context';
-import { useEffect } from 'react';
+import { api } from '../api';
 
 export default function AuthProvider({ children }) {
-  const [user, setUser] = useState(null);
+  const initialAuth = useMemo(() => loadAuth(), []);
+  const [user, setUser] = useState(() => initialAuth?.user ?? null);
+  const [token, setToken] = useState(() => initialAuth?.token ?? null);
+  const [rememberMe, setRememberMe] = useState(
+    () => initialAuth?.rememberMe ?? false,
+  );
   // Allowed values: 'login' | 'signup' | null.
   const [authModal, setAuthModal] = useState(null);
 
   useEffect(() => {
-    fetch('http://localhost:3000/api/auth/me', {
-      credentials: 'include',
-    })
-      .then((res) => res.json())
+    if (!initialAuth?.token) {
+      return;
+    }
+    let cancelled = false;
+
+    api()
+      .me()
       .then((data) => {
-        setUser(data.user);
+        if (!cancelled) {
+          setUser(data.user);
+        }
       })
-      .catch(() => setUser(null));
-  }, []);
+      .catch(() => {
+        if (cancelled) return;
+        clearAuth();
+        setUser(null);
+        setToken(null);
+        setRememberMe(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [initialAuth?.token]);
 
   const value = useMemo(() => {
     return {
       user,
+      token,
       authModal,
       setAuthModal,
-      login: (userData) => {
-        // backend already set cookie
+      login: (userData, tokenValue, rememberMe) => {
+        saveAuth(userData, tokenValue, rememberMe);
         setUser(userData);
+        setToken(tokenValue);
+        setRememberMe(rememberMe);
       },
       logout: async () => {
-        await fetch('http://localhost:3000/api/auth/logout', {
-          method: 'POST',
-          credentials: 'include',
-        });
+        await api().logout();
+        clearAuth();
         setUser(null);
+        setToken(null);
+        setRememberMe(false);
       },
       updateProfile: async (updates) => {
         if (!user?.id) return;
         try {
           const updated = await updateStorageUser(user.id, updates);
           setUser(updated);
+          if (token) {
+            saveAuth(updated, token, rememberMe);
+          }
         } catch (error) {
           console.error(error);
           throw error;
         }
       },
     };
-  }, [user, authModal]);
+  }, [user, token, rememberMe, authModal]);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

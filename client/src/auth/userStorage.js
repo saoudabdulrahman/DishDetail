@@ -2,8 +2,8 @@ import { api } from '../api';
 
 export async function saveUser(user) {
   const client = api();
-  const { user: created } = await client.signup(user);
-  return created;
+  const { user: created, token } = await client.signup(user);
+  return { user: created, token };
 }
 
 //export async function validateUser(username, password) {
