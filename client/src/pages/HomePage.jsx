@@ -275,12 +275,15 @@ export default function HomePage() {
                     key={critic.name}
                     className="flex items-center justify-between"
                   >
-                    <div className="flex items-center space-x-3">
-                      <div className="bg-surface-container-highest text-primary flex h-10 w-10 items-center justify-center rounded-xl text-xs font-bold">
+                    <Link
+                      to={`/profile/${critic.name}`}
+                      className="hover:bg-surface-container-low -ml-1 flex items-center space-x-3 rounded-xl p-1 pr-3 no-underline transition-colors"
+                    >
+                      <div className="bg-surface-bright text-primary flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-xs font-bold">
                         {critic.name.slice(0, 2).toUpperCase()}
                       </div>
                       <div>
-                        <p className="font-ui text-sm font-bold">
+                        <p className="font-ui text-on-surface text-sm font-bold">
                           {critic.name}
                         </p>
                         <p className="text-on-surface-variant font-ui text-[10px] tracking-widest uppercase">
@@ -288,7 +291,7 @@ export default function HomePage() {
                           {critic.count === 1 ? 'review' : 'reviews'}
                         </p>
                       </div>
-                    </div>
+                    </Link>
                   </div>
                 ))}
               </div>

@@ -23,6 +23,7 @@ export default function StarRating({
         onMouseLeave={() => setHover(0)}
         role="radiogroup"
         aria-label="Select a rating from 1 to 5 stars"
+        tabIndex={-1}
       >
         {[1, 2, 3, 4, 5].map((star) => (
           <button

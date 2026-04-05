@@ -55,8 +55,7 @@ router.post('/:slug/reviews', async (req, res) => {
     const est = await Establishment.findOne({ slug: req.params.slug });
     if (!est) return res.status(404).json({ error: 'Not found.' });
 
-    const { title, rating, reviewer, reviewerAvatar, body, reviewImage } =
-      req.body || {};
+    const { title, rating, reviewer, body, reviewImage } = req.body || {};
     if (!title || !rating || !reviewer || !body) {
       return res.status(400).json({ error: 'Missing required fields.' });
     }
@@ -66,10 +65,6 @@ router.post('/:slug/reviews', async (req, res) => {
       title,
       rating: Number(rating),
       reviewer,
-      // Generate avatar from username if not provided
-      reviewerAvatar:
-        reviewerAvatar ||
-        `https://i.pravatar.cc/150?u=${encodeURIComponent(reviewer)}`,
       body,
       reviewImage: reviewImage || null,
     });

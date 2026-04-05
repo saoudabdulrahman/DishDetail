@@ -6,17 +6,33 @@ export default [
   { ignores: ['dist', 'node_modules'] },
   {
     files: ['**/*.{js,mjs,cjs}'],
-    rules: js.configs.recommended.rules,
     languageOptions: {
       ecmaVersion: 'latest',
       sourceType: 'module',
-      globals: globals.node,
+      globals: {
+        ...globals.node,
+        ...globals.es2021,
+      },
+    },
+    rules: {
+      ...js.configs.recommended.rules,
+      'no-unused-vars': ['error', { varsIgnorePattern: '^_' }],
+      'no-console': ['warn', { allow: ['warn', 'error'] }],
+      'no-throw-literal': 'error',
+    },
+  },
+  {
+    files: ['server.js', 'seed/**/*.js'],
+    rules: {
+      'no-process-exit': 'off',
     },
   },
   {
     files: ['**/*.test.{js,mjs,cjs}', '**/*.spec.{js,mjs,cjs}'],
     languageOptions: {
-      globals: globals.vitest,
+      globals: {
+        ...globals.vitest,
+      },
     },
   },
   eslintConfigPrettier,

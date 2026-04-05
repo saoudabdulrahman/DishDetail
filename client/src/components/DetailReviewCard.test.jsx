@@ -1,5 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
+import { MemoryRouter } from 'react-router';
 import userEvent from '@testing-library/user-event';
 import { AuthContext } from '../auth/context';
 import DetailReviewCard from './DetailReviewCard';
@@ -32,15 +33,22 @@ function renderCard({
   onDelete = vi.fn(),
 } = {}) {
   return render(
-    <AuthContext.Provider
-      value={{ user, logout: vi.fn(), setAuthModal: vi.fn(), authModal: null }}
-    >
-      <DetailReviewCard
-        review={review}
-        onUpdate={onUpdate}
-        onDelete={onDelete}
-      />
-    </AuthContext.Provider>,
+    <MemoryRouter>
+      <AuthContext.Provider
+        value={{
+          user,
+          logout: vi.fn(),
+          setAuthModal: vi.fn(),
+          authModal: null,
+        }}
+      >
+        <DetailReviewCard
+          review={review}
+          onUpdate={onUpdate}
+          onDelete={onDelete}
+        />
+      </AuthContext.Provider>
+    </MemoryRouter>,
   );
 }
 

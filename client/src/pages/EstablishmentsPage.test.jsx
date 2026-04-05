@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { screen, waitFor } from '@testing-library/react';
 import { http, HttpResponse, server } from '../test/server';
 import { renderWithProviders } from '../test/render.jsx';
@@ -13,6 +13,7 @@ describe('EstablishmentsPage', () => {
   });
 
   it('shows error state when request fails', async () => {
+    vi.spyOn(console, 'error').mockImplementation(() => {});
     server.use(
       http.get('/api/establishments', () =>
         HttpResponse.json({ error: 'Failed' }, { status: 500 }),

@@ -117,7 +117,17 @@ export default function ReviewCard({ review, restaurant, variant = 'stack' }) {
             {review.title || 'Untitled Review'}
           </p>
           <p className="font-body text-on-surface-variant mb-6 max-w-md text-sm opacity-75">
-            {review.reviewer} · {formatDate(review.date)}
+            <button
+              type="button"
+              onClick={(e) => {
+                e.preventDefault();
+                navigate(`/profile/${review.reviewer}`);
+              }}
+              className="hover:text-primary font-inherit cursor-pointer border-none bg-transparent p-0 text-inherit transition-colors"
+            >
+              {review.reviewer}
+            </button>{' '}
+            · {formatDate(review.date)}
           </p>
 
           <div className="text-primary font-ui flex items-center space-x-2 font-bold">
@@ -190,32 +200,34 @@ export default function ReviewCard({ review, restaurant, variant = 'stack' }) {
             </div>
 
             <div className="border-outline-variant/10 flex items-center justify-between border-t pt-6">
-              <div className="flex items-center space-x-3">
-                {review.reviewerAvatar ?
-                  <img
-                    src={review.reviewerAvatar}
-                    alt={review.reviewer}
-                    className="h-10 w-10 rounded-xl object-cover"
-                  />
-                : <div className="bg-surface-bright text-primary flex h-10 w-10 shrink-0 items-center justify-center rounded-xl font-bold">
-                    {review.reviewer?.slice(0, 2).toUpperCase()}
-                  </div>
-                }
+              <button
+                type="button"
+                className="hover:bg-surface-container-highest -ml-1 flex cursor-pointer items-center space-x-3 rounded-xl border-none bg-transparent p-1 transition-colors"
+                onClick={(e) => {
+                  e.preventDefault();
+                  navigate(`/profile/${review.reviewer}`);
+                }}
+              >
+                <div className="bg-surface-bright text-primary flex h-10 w-10 shrink-0 items-center justify-center rounded-xl font-bold">
+                  {review.reviewer?.slice(0, 2).toUpperCase()}
+                </div>
                 <div>
                   <p className="font-ui text-sm font-bold">{review.reviewer}</p>
                   <p className="text-on-surface-variant font-ui text-[10px] tracking-widest uppercase">
                     {formatDate(review.date)}
                   </p>
                 </div>
-              </div>
+              </button>
 
               {/* Prevent clicks on actions from triggering the parent link. */}
               <div
+                role="presentation"
                 className="flex items-center gap-3 sm:gap-6"
                 onClick={(e) => e.preventDefault()}
               >
-                <div
-                  className="group/btn flex cursor-pointer items-center space-x-2 transition-transform active:scale-90"
+                <button
+                  type="button"
+                  className="group/btn flex cursor-pointer items-center space-x-2 border-none bg-transparent p-0 transition-transform active:scale-90"
                   onClick={(e) => handleVote(e, 'helpful')}
                 >
                   <ThumbsUp
@@ -239,9 +251,10 @@ export default function ReviewCard({ review, restaurant, variant = 'stack' }) {
                       {helpfulCount}
                     </span>
                   )}
-                </div>
-                <div
-                  className="group/btn flex cursor-pointer items-center space-x-2 transition-transform active:scale-90"
+                </button>
+                <button
+                  type="button"
+                  className="group/btn flex cursor-pointer items-center space-x-2 border-none bg-transparent p-0 transition-transform active:scale-90"
                   onClick={(e) => handleVote(e, 'unhelpful')}
                 >
                   <ThumbsDown
@@ -265,9 +278,10 @@ export default function ReviewCard({ review, restaurant, variant = 'stack' }) {
                       {unhelpfulCount}
                     </span>
                   )}
-                </div>
-                <div
-                  className="group/btn flex cursor-pointer items-center space-x-2 transition-transform active:scale-90"
+                </button>
+                <button
+                  type="button"
+                  className="group/btn flex cursor-pointer items-center space-x-2 border-none bg-transparent p-0 transition-transform active:scale-90"
                   onClick={handleCommentClick}
                 >
                   <MessageCircle
@@ -279,7 +293,7 @@ export default function ReviewCard({ review, restaurant, variant = 'stack' }) {
                       {review.comments.length}
                     </span>
                   )}
-                </div>
+                </button>
               </div>
             </div>
           </div>
@@ -328,7 +342,17 @@ export default function ReviewCard({ review, restaurant, variant = 'stack' }) {
         </div>
 
         <p className="text-on-surface-variant font-ui mb-4 text-xs">
-          {review.reviewer} · {formatDate(review.date)}
+          <button
+            type="button"
+            onClick={(e) => {
+              e.preventDefault();
+              navigate(`/profile/${review.reviewer}`);
+            }}
+            className="hover:text-primary font-inherit cursor-pointer border-none bg-transparent p-0 text-inherit transition-colors"
+          >
+            {review.reviewer}
+          </button>{' '}
+          · {formatDate(review.date)}
         </p>
 
         <span className="text-on-surface-variant hover:text-primary font-ui text-xs font-bold uppercase transition-colors">
