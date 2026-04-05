@@ -53,6 +53,8 @@ export function api() {
         body: JSON.stringify(payload),
       }),
     getUser: (id) => fetchJson(`${BASE}/api/users/${id}`),
+    getUserByUsername: (username) =>
+      fetchJson(`${BASE}/api/users/username/${encodeURIComponent(username)}`),
     updateUser: (id, updates) =>
       fetchJson(`${BASE}/api/users/${id}`, {
         method: 'PUT',

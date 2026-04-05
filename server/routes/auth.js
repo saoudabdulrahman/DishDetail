@@ -28,7 +28,6 @@ router.post('/signup', async (req, res) => {
       email: email.trim(),
       username: username.trim(),
       password,
-      avatar: `https://i.pravatar.cc/150?u=${encodeURIComponent(username)}`,
       bio: '',
     });
 

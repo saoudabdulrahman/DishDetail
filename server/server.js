@@ -48,14 +48,14 @@ app.use('/api/establishments', establishmentRoutes);
 app.use('/api/reviews', reviewRoutes);
 
 const server = app.listen(PORT, () => {
-  console.log(`DishDetail API server running on http://localhost:${PORT}`);
+  console.warn(`DishDetail API server running on http://localhost:${PORT}`);
 });
 
 const shutdown = () => {
-  console.log('Shutdown signal received: closing server');
+  console.warn('Shutdown signal received: closing server');
   server.close(async () => {
     await mongoose.connection.close();
-    console.log('Database connection closed');
+    console.warn('Database connection closed');
     process.exit(0);
   });
 };

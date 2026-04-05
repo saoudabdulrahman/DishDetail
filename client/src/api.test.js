@@ -12,10 +12,11 @@ describe('api client', () => {
       json: async () => ({ review: { _id: 'r1' } }),
     });
 
+    const BASE = import.meta.env.VITE_API_BASE_URL ?? '';
     await api().createReview('slug-1', { title: 'Great' });
 
     expect(fetchMock).toHaveBeenCalledWith(
-      '/api/establishments/slug-1/reviews',
+      `${BASE}/api/establishments/slug-1/reviews`,
       expect.objectContaining({
         method: 'POST',
         body: JSON.stringify({ title: 'Great' }),
@@ -32,10 +33,11 @@ describe('api client', () => {
       json: async () => ({ review: { _id: 'r1', title: 'Updated' } }),
     });
 
+    const BASE = import.meta.env.VITE_API_BASE_URL ?? '';
     await api().updateReview('r1', { title: 'Updated', rating: 4 });
 
     expect(fetchMock).toHaveBeenCalledWith(
-      '/api/reviews/r1',
+      `${BASE}/api/reviews/r1`,
       expect.objectContaining({
         method: 'PUT',
         body: JSON.stringify({ title: 'Updated', rating: 4 }),
@@ -52,10 +54,11 @@ describe('api client', () => {
       json: async () => ({}),
     });
 
+    const BASE = import.meta.env.VITE_API_BASE_URL ?? '';
     await api().deleteReview('r1');
 
     expect(fetchMock).toHaveBeenCalledWith(
-      '/api/reviews/r1',
+      `${BASE}/api/reviews/r1`,
       expect.objectContaining({ method: 'DELETE' }),
     );
   });
@@ -66,10 +69,11 @@ describe('api client', () => {
       json: async () => ({ user: { id: 'u1', username: 'alice' } }),
     });
 
+    const BASE = import.meta.env.VITE_API_BASE_URL ?? '';
     await api().login({ username: 'alice', password: 'pass123' });
 
     expect(fetchMock).toHaveBeenCalledWith(
-      '/api/auth/login',
+      `${BASE}/api/auth/login`,
       expect.objectContaining({
         method: 'POST',
         body: JSON.stringify({ username: 'alice', password: 'pass123' }),
@@ -83,10 +87,11 @@ describe('api client', () => {
       json: async () => ({ user: { id: 'u2', username: 'bob' } }),
     });
 
+    const BASE = import.meta.env.VITE_API_BASE_URL ?? '';
     await api().signup({ username: 'bob', password: 'pass123' });
 
     expect(fetchMock).toHaveBeenCalledWith(
-      '/api/auth/signup',
+      `${BASE}/api/auth/signup`,
       expect.objectContaining({
         method: 'POST',
         body: JSON.stringify({ username: 'bob', password: 'pass123' }),
