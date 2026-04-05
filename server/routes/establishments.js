@@ -10,15 +10,22 @@ router.get('/', async (req, res) => {
   try {
     const q = (req.query.q || '').toString().trim();
     const minRating = Number(req.query.minRating || 0);
+    const page = Math.max(1, Number(req.query.page) || 1);
+    const limit = Math.max(1, Number(req.query.limit) || 20);
+    const cuisineFilter = (req.query.cuisine || '').toString().trim();
 
     const filter = {};
     if (q) {
-      // $elemMatch required for cuisine array to match individual elements
+      // $text index replaces the regex search for restaurantName and description.
+      // We also keep a regex match for cuisine array since it's not in the text index.
       filter.$or = [
-        { restaurantName: { $regex: q, $options: 'i' } },
+        { $text: { $search: q } },
         { cuisine: { $elemMatch: { $regex: q, $options: 'i' } } },
-        { description: { $regex: q, $options: 'i' } },
       ];
+    }
+    // Cuisine filter is applied server-side so pagination counts are accurate.
+    if (cuisineFilter) {
+      filter.cuisine = cuisineFilter;
     }
     // Apply rating filter only if minRating is valid and positive
     if (!Number.isNaN(minRating) && minRating > 0) {
@@ -26,13 +33,18 @@ router.get('/', async (req, res) => {
     }
 
     // Sort by highest rating first, then alphabetical for ties
-    const establishments = await Establishment.find(filter)
-      .sort({ rating: -1, restaurantName: 1 })
-      .lean();
+    const [establishments, total] = await Promise.all([
+      Establishment.find(filter)
+        .sort({ rating: -1, restaurantName: 1 })
+        .skip((page - 1) * limit)
+        .limit(limit)
+        .lean(),
+      Establishment.countDocuments(filter),
+    ]);
 
-    return res.json({ establishments });
+    return res.json({ establishments, total, page, limit });
   } catch (error) {
-    console.error(error);
+    req.log.error({ err: error });
     return res.status(500).json({ error: 'Failed to fetch establishments.' });
   }
 });
@@ -55,7 +67,7 @@ router.get('/:slug', async (req, res) => {
     }));
     return res.json({ establishment: est, reviews: normalizedReviews });
   } catch (error) {
-    console.error(error);
+    req.log.error({ err: error });
     return res.status(400).json({ error: 'Could not fetch establishment.' });
   }
 });
@@ -85,7 +97,7 @@ router.post('/:slug/reviews', verifyToken, async (req, res) => {
 
     return res.status(201).json({ review });
   } catch (error) {
-    console.error(error);
+    req.log.error({ err: error });
     return res.status(400).json({ error: 'Failed to create review.' });
   }
 });

@@ -26,11 +26,20 @@ export function api() {
 
   return {
     health: () => fetchJson(`${BASE}/api/health`),
-    getEstablishments: ({ q = '', minRating = 0 } = {}) =>
+    getEstablishments: ({
+      q = '',
+      minRating = 0,
+      page = 1,
+      limit = 20,
+      cuisine = '',
+    } = {}) =>
       fetchJson(
         `${BASE}/api/establishments?${new URLSearchParams({
           ...(q ? { q } : {}),
           ...(minRating ? { minRating: String(minRating) } : {}),
+          ...(cuisine ? { cuisine } : {}),
+          page: String(page),
+          limit: String(limit),
         })}`,
       ),
     getEstablishment: (slug) => fetchJson(`${BASE}/api/establishments/${slug}`),
@@ -39,8 +48,15 @@ export function api() {
         method: 'POST',
         body: JSON.stringify(payload),
       }),
-    getReviews: ({ q = '' } = {}) =>
-      fetchJson(`${BASE}/api/reviews?${new URLSearchParams(q ? { q } : {})}`),
+    getReviews: ({ q = '', page = 1, limit = 20, cuisine = '' } = {}) =>
+      fetchJson(
+        `${BASE}/api/reviews?${new URLSearchParams({
+          ...(q ? { q } : {}),
+          ...(cuisine ? { cuisine } : {}),
+          page: String(page),
+          limit: String(limit),
+        })}`,
+      ),
     updateReview: (id, updates) =>
       fetchJson(`${BASE}/api/reviews/${id}`, {
         method: 'PUT',

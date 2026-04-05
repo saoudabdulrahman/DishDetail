@@ -19,4 +19,6 @@ const EstablishmentSchema = new mongoose.Schema(
   { timestamps: true },
 );
 
+EstablishmentSchema.index({ restaurantName: 'text', description: 'text' });
+
 export default mongoose.model('Establishment', EstablishmentSchema);

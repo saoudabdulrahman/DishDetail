@@ -61,7 +61,7 @@ router.post('/signup', async (req, res) => {
     const token = signTokenForUser(u);
     return res.status(201).json({ user: publicUser(u), token });
   } catch (error) {
-    console.error(error);
+    req.log.error({ err: error });
     return res.status(500).json({ error: 'Signup failed.' });
   }
 });
@@ -89,7 +89,7 @@ router.post('/login', async (req, res) => {
     const token = signTokenForUser(u);
     return res.json({ user: publicUser(u), token });
   } catch (error) {
-    console.error(error);
+    req.log.error({ err: error });
     return res.status(500).json({ error: 'Login failed.' });
   }
 });

@@ -21,6 +21,9 @@ function normalizeReview(review) {
 router.get('/', async (req, res) => {
   try {
     const q = (req.query.q || '').toString().trim();
+    const page = Math.max(1, Number(req.query.page) || 1);
+    const limit = Math.max(1, Number(req.query.limit) || 20);
+    const cuisineFilter = (req.query.cuisine || '').toString().trim();
 
     const filter = {};
     if (req.query.establishmentId) {
@@ -28,29 +31,64 @@ router.get('/', async (req, res) => {
     }
 
     if (q) {
-      // Two-step search: find establishments by name, then reviews matching text or those establishments
-      const estMatches = await Establishment.find({
-        restaurantName: { $regex: q, $options: 'i' },
-      }).select('_id');
-      const reviewerMatches = await User.find({
-        username: { $regex: q, $options: 'i' },
-      }).select('_id');
+      // $text cannot appear inside $or in MongoDB — it must be a top-level
+      // filter or its results pre-fetched. We collect matching IDs from all
+      // three sources and then union them with a single $in at the top level.
+      const [textMatches, estMatches, reviewerMatches] = await Promise.all([
+        Review.find({ $text: { $search: q } })
+          .select('_id')
+          .lean(),
+        Establishment.find({ $text: { $search: q } })
+          .select('_id')
+          .lean(),
+        User.find({ username: { $regex: q, $options: 'i' } })
+          .select('_id')
+          .lean(),
+      ]);
       filter.$or = [
-        { title: { $regex: q, $options: 'i' } },
-        { body: { $regex: q, $options: 'i' } },
+        { _id: { $in: textMatches.map((r) => r._id) } },
         { reviewer: { $in: reviewerMatches.map((u) => u._id) } },
         { establishment: { $in: estMatches.map((e) => e._id) } },
       ];
     }
 
-    const reviews = await Review.find(filter)
-      .populate('reviewer', 'username')
-      .lean();
+    // If a cuisine filter is active, restrict to establishments that serve it.
+    // We do this as a pre-query so the result IDs can fold into the main filter,
+    // keeping pagination counts accurate server-side.
+    if (cuisineFilter) {
+      const estWithCuisine = await Establishment.find({
+        cuisine: cuisineFilter,
+      })
+        .select('_id')
+        .lean();
+      const allowedIds = estWithCuisine.map((e) => e._id);
+      // Merge with any existing establishment constraint
+      if (filter.establishment) {
+        // Already filtering by a specific establishment — intersect
+        if (
+          !allowedIds.some((id) => String(id) === String(filter.establishment))
+        ) {
+          // The specific establishment doesn't serve this cuisine, return empty
+          return res.json({ reviews: [], total: 0, page, limit });
+        }
+      } else {
+        filter.establishment = { $in: allowedIds };
+      }
+    }
+
+    const [reviews, total] = await Promise.all([
+      Review.find(filter)
+        .skip((page - 1) * limit)
+        .limit(limit)
+        .populate('reviewer', 'username')
+        .lean(),
+      Review.countDocuments(filter),
+    ]);
     const normalizedReviews = reviews.map(normalizeReview);
 
-    return res.json({ reviews: normalizedReviews });
+    return res.json({ reviews: normalizedReviews, total, page, limit });
   } catch (error) {
-    console.error(error);
+    req.log.error({ err: error });
     return res.status(500).json({ error: 'Failed to fetch reviews.' });
   }
 });
@@ -93,7 +131,7 @@ router.put('/:id', verifyToken, async (req, res) => {
     const populated = await review.populate('reviewer', 'username');
     return res.json({ review: normalizeReview(populated.toObject()) });
   } catch (error) {
-    console.error(error);
+    req.log.error({ err: error });
     return res.status(400).json({ error: 'Failed to update review.' });
   }
 });
@@ -114,7 +152,7 @@ router.delete('/:id', verifyToken, async (req, res) => {
 
     return res.json({ ok: true });
   } catch (error) {
-    console.error(error);
+    req.log.error({ err: error });
     return res.status(400).json({ error: 'Failed to delete review.' });
   }
 });
@@ -160,7 +198,7 @@ router.post('/:id/vote', verifyToken, async (req, res) => {
       unhelpfulCount: result.unhelpfulCount,
     });
   } catch (error) {
-    console.error(error);
+    req.log.error({ err: error });
     return res.status(400).json({ error: 'Failed to vote.' });
   }
 });
