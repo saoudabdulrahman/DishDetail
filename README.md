@@ -6,7 +6,7 @@ DishDetail is a full-stack restaurant review application built with **React 19**
 
 This project uses **npm Workspaces** to manage both the frontend and backend in a single repository:
 
-- `client/`: React frontend (Vite 8, Tailwind CSS v4, React Router 7, Lucide Icons)
+- `client/`: React frontend (Vite 8, Tailwind CSS v4, React Router 7, Headless UI, Lucide Icons)
 - `server/`: Express 5 backend (Node.js, Mongoose 9, JWT-Bearer authentication)
 - `server/seed/`: Database seeding scripts and sample data
 
@@ -80,6 +80,7 @@ npm run dev:client
 ## Key Features
 
 - **Styling**: Modern, utility-first UI built with **Tailwind CSS v4**.
+- **Accessible Components**: Interactive UI built with **Headless UI** primitives.
 - **Authentication**: JWT-based authentication using **Bearer tokens** in the Authorization header.
 - **Validation**: End-to-end type safety using **Zod** schemas.
 - **User Profiles**: View and edit personal profiles via `/profile/:username` routes.
@@ -95,6 +96,7 @@ npm run dev:client
 - **Structured Logging**: Uses [**Pino**](https://getpino.io/) for efficient, JSON-based logging with human-readable output in development via `pino-pretty`.
 - **HTTP Security Headers**: [`helmet`](https://helmetjs.github.io/) is applied globally.
 - **Auth Rate Limiting**: [`express-rate-limit`](https://github.com/express-rate-limit/express-rate-limit) restricts `/api/auth` endpoints.
+- **Image Upload Pipeline**: Uses `multer` with **Cloudinary** for media upload and delivery.
 - **Graceful Shutdown**: The server listens for `SIGTERM` and `SIGINT` signals for clean exits.
 
 ## Development Tools

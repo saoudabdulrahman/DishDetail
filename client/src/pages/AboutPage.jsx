@@ -23,6 +23,7 @@ export default function AboutPage() {
         name: 'Headless UI',
         description: 'Unstyled, fully accessible UI components.',
       },
+      { name: 'Zod', description: 'Type-safe schema validation library.' },
       {
         name: 'Lucide React',
         description: 'Beautiful & consistent icon toolkit.',
@@ -49,6 +50,11 @@ export default function AboutPage() {
         name: 'MSW',
         description: 'API mocking library for browser and Node.js.',
       },
+      {
+        name: 'happy-dom',
+        description:
+          'Lightweight DOM environment used by Vitest on the client.',
+      },
     ],
     server: [
       {
@@ -59,6 +65,10 @@ export default function AboutPage() {
       {
         name: 'Mongoose',
         description: 'Elegant MongoDB object modeling for Node.js.',
+      },
+      {
+        name: 'bcryptjs',
+        description: 'Password hashing for secure credential storage.',
       },
       {
         name: 'Helmet',
@@ -75,6 +85,18 @@ export default function AboutPage() {
       {
         name: 'cors',
         description: 'Node.js CORS middleware.',
+      },
+      {
+        name: 'Zod',
+        description: 'Server-side request and payload validation.',
+      },
+      {
+        name: 'Pino & pino-http',
+        description: 'Structured logging for the API and HTTP lifecycle.',
+      },
+      {
+        name: 'Multer & Cloudinary',
+        description: 'Image upload pipeline and cloud media storage.',
       },
       {
         name: 'slugify',
@@ -99,6 +121,14 @@ export default function AboutPage() {
         name: 'Husky',
         description: 'Git hooks made easy.',
       },
+      {
+        name: 'lint-staged',
+        description: 'Runs formatting and lint checks on staged files.',
+      },
+      {
+        name: 'Prettier',
+        description: 'Code formatting across client and server workspaces.',
+      },
     ],
     thirdParty: [
       {
@@ -109,8 +139,21 @@ export default function AboutPage() {
         name: 'MongoDB / Atlas',
         description: 'NoSQL Database for data persistence.',
       },
+      {
+        name: 'Cloudinary',
+        description: 'Hosted media transformation and delivery service.',
+      },
     ],
   };
+
+  const productHighlights = [
+    'Discover restaurants by browsing establishments and recent reviews.',
+    'Filter and search dining spots by name, cuisine, and minimum rating.',
+    'Share rich reviews with star ratings, written feedback, and optional images.',
+    'Vote reviews as Helpful or Unhelpful to surface useful community content.',
+    'Use JWT-based authentication and username routes like /profile/:username.',
+    'Enjoy route-level code splitting for faster initial page loads.',
+  ];
 
   const renderSection = (title, badge, badgeColor, items) => (
     <div className="mb-12">
@@ -150,10 +193,29 @@ export default function AboutPage() {
         </h1>
         <p className="font-body text-on-surface-variant mx-auto mb-10 max-w-xl text-lg leading-relaxed md:mx-0">
           DishDetail is a full-stack restaurant review application built as a
-          monorepo. It enables users to discover local restaurants, read
-          community reviews, and share dining experiences. We rely on top-tier
-          open-source software and services to deliver a robust platform.
+          monorepo with npm Workspaces. It helps people discover local
+          restaurants, explore community feedback, and publish their own dining
+          experiences with modern tooling across the stack.
         </p>
+      </section>
+
+      <section className="mb-20">
+        <h2 className="font-headline border-outline-variant/15 mb-12 border-b pb-4 text-4xl font-bold">
+          Product Highlights
+        </h2>
+
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+          {productHighlights.map((item) => (
+            <div
+              key={item}
+              className="bg-surface-container-low border-outline-variant/10 hover:border-outline-variant/30 rounded-xl border p-6 transition-colors"
+            >
+              <p className="font-ui text-on-surface-variant text-sm leading-relaxed">
+                {item}
+              </p>
+            </div>
+          ))}
+        </div>
       </section>
 
       <section className="mb-20">
