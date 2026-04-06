@@ -72,6 +72,13 @@ export const routes = createBrowserRouter([
                     Component: m.default,
                   })),
               },
+              {
+                path: '/establishments/new',
+                lazy: () =>
+                  import('./pages/CreateEstablishmentPage').then((m) => ({
+                    Component: m.default,
+                  })),
+              },
             ],
           },
           // Catch-all Route

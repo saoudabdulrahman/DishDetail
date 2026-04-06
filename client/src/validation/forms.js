@@ -83,3 +83,37 @@ export const ownerResponseSchema = z.object({
     .min(1, 'Response cannot be empty.')
     .max(2000, 'Response must be at most 2000 characters.'),
 });
+
+export const createEstablishmentSchema = z.object({
+  restaurantName: z
+    .string()
+    .trim()
+    .min(1, 'Restaurant name is required.')
+    .max(200, 'Restaurant name must be at most 200 characters.'),
+  cuisine: z.string().trim().min(1, 'At least one cuisine is required.'),
+  description: z
+    .string()
+    .trim()
+    .max(1000, 'Description must be at most 1000 characters.')
+    .optional()
+    .or(z.literal('')),
+  address: z
+    .string()
+    .trim()
+    .max(300, 'Address must be at most 300 characters.')
+    .optional()
+    .or(z.literal('')),
+  hours: z
+    .string()
+    .trim()
+    .max(200, 'Hours must be at most 200 characters.')
+    .optional()
+    .or(z.literal('')),
+  phone: z
+    .string()
+    .trim()
+    .max(30, 'Phone must be at most 30 characters.')
+    .optional()
+    .or(z.literal('')),
+  website: optionalUrl.optional().or(z.literal('')),
+});

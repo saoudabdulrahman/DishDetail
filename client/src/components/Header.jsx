@@ -67,6 +67,21 @@ export default function Header() {
           >
             Reviews
           </NavLink>
+          {user && !user.ownedEstablishment && (
+            <NavLink
+              to="/establishments/new"
+              className={({ isActive }) =>
+                cn(
+                  'font-headline flex items-center gap-1 text-lg font-bold tracking-tight no-underline transition-colors duration-200',
+                  isActive ?
+                    'text-primary border-secondary border-b-2 pb-1'
+                  : 'text-on-surface-variant hover:text-on-background',
+                )
+              }
+            >
+              Add a Restaurant
+            </NavLink>
+          )}
         </nav>
 
         <div className="flex shrink-0 items-center gap-4 sm:gap-6">
@@ -204,6 +219,9 @@ export default function Header() {
             {[
               { to: '/establishments', label: 'Establishments' },
               { to: '/reviews', label: 'Reviews' },
+              ...(user && !user.ownedEstablishment ?
+                [{ to: '/establishments/new', label: 'Add a Restaurant' }]
+              : []),
             ].map(({ to, label }) => (
               <NavLink
                 key={to}
