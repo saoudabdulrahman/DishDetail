@@ -1,13 +1,5 @@
 import { createBrowserRouter } from 'react-router';
 import App from './App.jsx';
-import HomePage from './pages/HomePage';
-import ReviewsPage from './pages/ReviewsPage';
-import EstablishmentsPage from './pages/EstablishmentsPage';
-import EstablishmentPage from './pages/EstablishmentPage';
-import SubmitReviewPage from './pages/SubmitReviewPage';
-import ProfilePage from './pages/ProfilePage';
-import ProfileRedirect from './pages/ProfileRedirect';
-import NotFoundPage from './pages/NotFoundPage';
 import MainLayout from './components/MainLayout';
 import ProtectedRoute from './components/ProtectedRoute';
 
@@ -20,21 +12,69 @@ export const routes = createBrowserRouter([
         // Main Layout Routes
         element: <MainLayout />,
         children: [
-          { index: true, element: <HomePage /> },
-          { path: '/reviews', element: <ReviewsPage /> },
-          { path: '/establishments', element: <EstablishmentsPage /> },
-          { path: '/establishments/:slug', element: <EstablishmentPage /> },
-          { path: '/profile/:username', element: <ProfilePage /> },
+          {
+            index: true,
+            lazy: () =>
+              import('./pages/HomePage').then((m) => ({
+                Component: m.default,
+              })),
+          },
+          {
+            path: '/reviews',
+            lazy: () =>
+              import('./pages/ReviewsPage').then((m) => ({
+                Component: m.default,
+              })),
+          },
+          {
+            path: '/establishments',
+            lazy: () =>
+              import('./pages/EstablishmentsPage').then((m) => ({
+                Component: m.default,
+              })),
+          },
+          {
+            path: '/establishments/:slug',
+            lazy: () =>
+              import('./pages/EstablishmentPage').then((m) => ({
+                Component: m.default,
+              })),
+          },
+          {
+            path: '/profile/:username',
+            lazy: () =>
+              import('./pages/ProfilePage').then((m) => ({
+                Component: m.default,
+              })),
+          },
           {
             // Protected Routes
             element: <ProtectedRoute />,
             children: [
-              { path: '/profile', element: <ProfileRedirect /> },
-              { path: '/submit-review', element: <SubmitReviewPage /> },
+              {
+                path: '/profile',
+                lazy: () =>
+                  import('./pages/ProfileRedirect').then((m) => ({
+                    Component: m.default,
+                  })),
+              },
+              {
+                path: '/submit-review',
+                lazy: () =>
+                  import('./pages/SubmitReviewPage').then((m) => ({
+                    Component: m.default,
+                  })),
+              },
             ],
           },
           // Catch-all Route
-          { path: '*', element: <NotFoundPage /> },
+          {
+            path: '*',
+            lazy: () =>
+              import('./pages/NotFoundPage').then((m) => ({
+                Component: m.default,
+              })),
+          },
         ],
       },
     ],

@@ -39,7 +39,7 @@ describe('Review vote route', () => {
 
   it('returns 400 for invalid vote type', async () => {
     const res = await request(app)
-      .post('/api/reviews/review-1/vote')
+      .post('/api/reviews/507f1f77bcf86cd799439001/vote')
       .send({ type: 'invalid' });
 
     expect(res.status).toBe(400);
@@ -52,26 +52,26 @@ describe('Review vote route', () => {
     exists.mockResolvedValue(null);
 
     const res = await request(app)
-      .post('/api/reviews/review-1/vote')
+      .post('/api/reviews/507f1f77bcf86cd799439001/vote')
       .send({ type: 'helpful' });
 
     expect(res.status).toBe(404);
     expect(res.body.error).toBe('Review not found.');
-    expect(exists).toHaveBeenCalledWith({ _id: 'review-1' });
+    expect(exists).toHaveBeenCalledWith({ _id: '507f1f77bcf86cd799439001' });
   });
 
   it('increments helpful count and tracks voter for first helpful vote', async () => {
     findOneAndUpdate.mockResolvedValue({ helpfulCount: 3, unhelpfulCount: 1 });
 
     const res = await request(app)
-      .post('/api/reviews/review-1/vote')
+      .post('/api/reviews/507f1f77bcf86cd799439001/vote')
       .send({ type: 'helpful' });
 
     expect(res.status).toBe(200);
     expect(res.body).toEqual({ helpfulCount: 3, unhelpfulCount: 1 });
     expect(findOneAndUpdate).toHaveBeenCalledWith(
       {
-        _id: 'review-1',
+        _id: '507f1f77bcf86cd799439001',
         helpfulVoters: { $ne: '507f1f77bcf86cd799439011' },
         unhelpfulVoters: { $ne: '507f1f77bcf86cd799439011' },
       },
@@ -87,14 +87,14 @@ describe('Review vote route', () => {
     findOneAndUpdate.mockResolvedValue({ helpfulCount: 2, unhelpfulCount: 2 });
 
     const res = await request(app)
-      .post('/api/reviews/review-1/vote')
+      .post('/api/reviews/507f1f77bcf86cd799439001/vote')
       .send({ type: 'unhelpful' });
 
     expect(res.status).toBe(200);
     expect(res.body).toEqual({ helpfulCount: 2, unhelpfulCount: 2 });
     expect(findOneAndUpdate).toHaveBeenCalledWith(
       {
-        _id: 'review-1',
+        _id: '507f1f77bcf86cd799439001',
         helpfulVoters: { $ne: '507f1f77bcf86cd799439011' },
         unhelpfulVoters: { $ne: '507f1f77bcf86cd799439011' },
       },
@@ -108,10 +108,10 @@ describe('Review vote route', () => {
 
   it('returns 409 when user has already voted helpful', async () => {
     findOneAndUpdate.mockResolvedValue(null);
-    exists.mockResolvedValue({ _id: 'review-1' });
+    exists.mockResolvedValue({ _id: '507f1f77bcf86cd799439001' });
 
     const res = await request(app)
-      .post('/api/reviews/review-1/vote')
+      .post('/api/reviews/507f1f77bcf86cd799439001/vote')
       .send({ type: 'helpful' });
 
     expect(res.status).toBe(409);
@@ -120,10 +120,10 @@ describe('Review vote route', () => {
 
   it('returns 409 when user has already voted unhelpful', async () => {
     findOneAndUpdate.mockResolvedValue(null);
-    exists.mockResolvedValue({ _id: 'review-1' });
+    exists.mockResolvedValue({ _id: '507f1f77bcf86cd799439001' });
 
     const res = await request(app)
-      .post('/api/reviews/review-1/vote')
+      .post('/api/reviews/507f1f77bcf86cd799439001/vote')
       .send({ type: 'unhelpful' });
 
     expect(res.status).toBe(409);
@@ -138,15 +138,15 @@ describe('Review vote route', () => {
     });
 
     await request(app)
-      .post('/api/reviews/review-1/vote')
+      .post('/api/reviews/507f1f77bcf86cd799439001/vote')
       .send({ type: 'helpful' });
 
     // Second vote: findOneAndUpdate returns null because both $ne filters now exclude this voter
     findOneAndUpdate.mockResolvedValueOnce(null);
-    exists.mockResolvedValue({ _id: 'review-1' });
+    exists.mockResolvedValue({ _id: '507f1f77bcf86cd799439001' });
 
     const res = await request(app)
-      .post('/api/reviews/review-1/vote')
+      .post('/api/reviews/507f1f77bcf86cd799439001/vote')
       .send({ type: 'unhelpful' });
 
     expect(res.status).toBe(409);

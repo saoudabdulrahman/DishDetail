@@ -6,6 +6,7 @@ import { useAuth } from '../auth/useAuth';
 import { saveUser } from '../auth/userStorage';
 import { cn } from '../utils/cn';
 import { api } from '../api';
+import { loginSchema, signupSchema } from '../validation/forms';
 
 // Shared field wrapper
 function Field({ label, children }) {
@@ -111,15 +112,18 @@ function LoginForm({ onSwitch, onSuccess }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
-    if (!username.trim() || !password) {
-      setError('Please enter your username and password.');
+    const parsed = loginSchema.safeParse({ username, password });
+    if (!parsed.success) {
+      setError(parsed.error.issues[0].message);
       triggerShake();
       return;
     }
+    const { username: cleanUsername, password: cleanPassword } = parsed.data;
+
     try {
       const { user, token } = await api().login({
-        username: username.trim(),
-        password,
+        username: cleanUsername,
+        password: cleanPassword,
       });
       login(user, token, rememberMe);
       onSuccess();
@@ -206,34 +210,28 @@ function SignupForm({ onSwitch, onSuccess }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
-    const e1 = email.trim();
-    const u1 = username.trim();
+    const parsed = signupSchema.safeParse({
+      email,
+      username,
+      password,
+      confirm,
+    });
+    if (!parsed.success) {
+      setError(parsed.error.issues[0].message);
+      triggerShake();
+      return;
+    }
 
-    if (!e1 || !u1 || !password || !confirm) {
-      setError('Please fill out all fields.');
-      triggerShake();
-      return;
-    }
-    if (!e1.includes('@')) {
-      setError('Please enter a valid email.');
-      triggerShake();
-      return;
-    }
-    if (password.length < 8) {
-      setError('Password must be at least 8 characters.');
-      triggerShake();
-      return;
-    }
-    if (password !== confirm) {
-      setError('Passwords do not match.');
-      triggerShake();
-      return;
-    }
     try {
+      const {
+        email: cleanEmail,
+        username: cleanUsername,
+        password: cleanPassword,
+      } = parsed.data;
       const { user, token } = await saveUser({
-        email: e1,
-        username: u1,
-        password,
+        email: cleanEmail,
+        username: cleanUsername,
+        password: cleanPassword,
       });
       login(user, token, true);
       onSuccess();

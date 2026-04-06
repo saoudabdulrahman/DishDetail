@@ -56,8 +56,6 @@ describe('AuthModal', () => {
     );
 
     await user.click(screen.getByRole('button', { name: 'Log In' }));
-    expect(
-      screen.getByText('Please enter your username and password.'),
-    ).toBeInTheDocument();
+    expect(screen.getByText('Please enter your username.')).toBeInTheDocument();
   });
 });

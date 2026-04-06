@@ -41,7 +41,7 @@ export default function HomePage() {
   const featured = useMemo(() => {
     return [...reviews]
       .sort((a, b) => b.rating - a.rating)
-      .slice(0, 10)
+      .slice(0, 5)
       .map((review) => ({
         review,
         restaurant: restaurantById.get(review.establishment),
@@ -99,17 +99,22 @@ export default function HomePage() {
       .map(([name, count]) => ({ name, count }));
   }, [reviews]);
 
+  const featuredIds = useMemo(
+    () => new Set(featured.map(({ review }) => review._id)),
+    [featured],
+  );
+
   const feedReviews = useMemo(() => {
-    let result = [...reviews];
+    let result = reviews.filter((r) => !featuredIds.has(r._id));
 
     if (sortBy === 'recent')
-      result.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+      result.sort((a, b) => new Date(b.date) - new Date(a.date));
     if (sortBy === 'highest') result.sort((a, b) => b.rating - a.rating);
     if (sortBy === 'trending')
       result.sort((a, b) => (b.helpfulCount ?? 0) - (a.helpfulCount ?? 0));
 
-    return result.slice(1, 3);
-  }, [reviews, sortBy]);
+    return result.slice(0, 2);
+  }, [reviews, sortBy, featuredIds]);
 
   return (
     <main className="px-fluid-container mx-auto max-w-7xl pt-24 pb-20">
