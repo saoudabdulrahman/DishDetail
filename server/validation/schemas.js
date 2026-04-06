@@ -148,4 +148,70 @@ export const bodySchema = {
       .optional(),
     reviewImage: optionalTrimmedUrl.nullable().optional(),
   }),
+  establishmentCreate: z.object({
+    restaurantName: z
+      .string()
+      .trim()
+      .min(1, 'Name is required.')
+      .max(200, 'Name must be at most 200 characters.'),
+    cuisine: z
+      .array(z.string().trim().min(1))
+      .min(1, 'At least one cuisine is required.'),
+    description: z
+      .string()
+      .trim()
+      .max(1000, 'Description must be at most 1000 characters.')
+      .optional(),
+    address: z
+      .string()
+      .trim()
+      .max(300, 'Address must be at most 300 characters.')
+      .optional(),
+    hours: z
+      .string()
+      .trim()
+      .max(200, 'Hours must be at most 200 characters.')
+      .optional(),
+    phone: z
+      .string()
+      .trim()
+      .max(30, 'Phone must be at most 30 characters.')
+      .optional(),
+    website: optionalTrimmedUrl,
+    restaurantImage: optionalTrimmedUrl,
+  }),
+  establishmentUpdate: z.object({
+    restaurantName: z
+      .string()
+      .trim()
+      .min(1, 'Name cannot be empty.')
+      .max(200, 'Name must be at most 200 characters.')
+      .optional(),
+    cuisine: z
+      .array(z.string().trim().min(1))
+      .min(1, 'At least one cuisine is required.')
+      .optional(),
+    description: z
+      .string()
+      .trim()
+      .max(1000, 'Description must be at most 1000 characters.')
+      .optional(),
+    address: z
+      .string()
+      .trim()
+      .max(300, 'Address must be at most 300 characters.')
+      .optional(),
+    hours: z
+      .string()
+      .trim()
+      .max(200, 'Hours must be at most 200 characters.')
+      .optional(),
+    phone: z
+      .string()
+      .trim()
+      .max(30, 'Phone must be at most 30 characters.')
+      .optional(),
+    website: optionalTrimmedUrl,
+    restaurantImage: optionalTrimmedUrl,
+  }),
 };

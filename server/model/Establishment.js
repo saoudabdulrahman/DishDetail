@@ -15,6 +15,11 @@ const EstablishmentSchema = new mongoose.Schema(
     hours: { type: String, default: '' },
     phone: { type: String, default: '' },
     website: { type: String, default: '' },
+    owner: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+      default: null,
+    },
   },
   { timestamps: true },
 );

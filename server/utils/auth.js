@@ -24,6 +24,7 @@ export function verifyToken(req, res, next) {
     req.user = {
       id: decoded.id,
       username: decoded.username,
+      role: decoded.role,
     };
     return next();
   } catch (error) {
