@@ -57,4 +57,6 @@ const ReviewSchema = new mongoose.Schema(
   { timestamps: true },
 );
 
+ReviewSchema.index({ title: 'text', body: 'text' });
+
 export default mongoose.model('Review', ReviewSchema);

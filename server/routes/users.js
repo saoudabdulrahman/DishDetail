@@ -12,7 +12,7 @@ router.get('/username/:username', async (req, res) => {
     if (!u) return res.status(404).json({ error: 'User not found.' });
     return res.json({ user: publicUser(u) });
   } catch (error) {
-    console.error(error);
+    req.log.error({ err: error });
     return res.status(500).json({ error: 'Failed to fetch user.' });
   }
 });
@@ -26,7 +26,7 @@ router.get('/:id', async (req, res) => {
     if (!u) return res.status(404).json({ error: 'User not found.' });
     return res.json({ user: publicUser(u) });
   } catch (error) {
-    console.error(error);
+    req.log.error({ err: error });
     return res.status(400).json({ error: 'Invalid user id.' });
   }
 });
@@ -58,7 +58,7 @@ router.put('/:id', verifyToken, async (req, res) => {
 
     return res.json({ user: publicUser(u) });
   } catch (error) {
-    console.error(error);
+    req.log.error({ err: error });
     return res.status(400).json({ error: 'Invalid request.' });
   }
 });

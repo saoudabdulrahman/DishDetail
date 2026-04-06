@@ -11,7 +11,11 @@ export default function EstablishmentsPage() {
   const minRating = Number(searchParams.get('minRating') || 0);
   const query = (searchParams.get('q') || '').toLowerCase();
   const cuisineFilter = searchParams.get('cuisine') || '';
+  const page = Number(searchParams.get('page')) || 1;
+
   const [establishments, setEstablishments] = useState([]);
+  const [totalEstablishments, setTotalEstablishments] = useState(0);
+  const [limit, setLimit] = useState(20);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
@@ -22,9 +26,17 @@ export default function EstablishmentsPage() {
       setLoading(true);
       setError('');
       try {
-        const { establishments: fetchedEstablishments } =
-          await api().getEstablishments({ q: query, minRating });
-        if (!cancelled) setEstablishments(fetchedEstablishments);
+        const res = await api().getEstablishments({
+          q: query,
+          minRating,
+          page,
+          cuisine: cuisineFilter,
+        });
+        if (!cancelled) {
+          setEstablishments(res.establishments);
+          setTotalEstablishments(res.total);
+          setLimit(res.limit || 20);
+        }
       } catch (error) {
         if (!cancelled) {
           console.error(error);
@@ -41,7 +53,7 @@ export default function EstablishmentsPage() {
     return () => {
       cancelled = true;
     };
-  }, [query, minRating]);
+  }, [query, minRating, page, cuisineFilter]);
 
   const handleRatingChange = (e) => {
     const rating = e.target.value;
@@ -52,6 +64,7 @@ export default function EstablishmentsPage() {
         } else {
           prev.set('minRating', rating);
         }
+        prev.delete('page');
         return prev;
       },
       { replace: true },
@@ -67,10 +80,19 @@ export default function EstablishmentsPage() {
         } else {
           prev.set('cuisine', cuisine);
         }
+        prev.delete('page');
         return prev;
       },
       { replace: true },
     );
+  };
+
+  const handlePageChange = (newPage) => {
+    setSearchParams((prev) => {
+      prev.set('page', String(newPage));
+      return prev;
+    });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const cuisines = useMemo(
@@ -81,11 +103,7 @@ export default function EstablishmentsPage() {
     [establishments],
   );
 
-  const filteredEstablishments = useMemo(() => {
-    return establishments.filter((r) =>
-      cuisineFilter ? r.cuisine.includes(cuisineFilter) : true,
-    );
-  }, [establishments, cuisineFilter]);
+  const totalPages = Math.ceil(totalEstablishments / limit);
 
   return (
     <main className="px-fluid-container mx-auto max-w-7xl pt-24 pb-20">
@@ -161,8 +179,8 @@ export default function EstablishmentsPage() {
           <p className="font-ui text-error col-span-full text-center text-sm">
             {error}
           </p>
-        : filteredEstablishments.length > 0 ?
-          filteredEstablishments.map((restaurant) => (
+        : establishments.length > 0 ?
+          establishments.map((restaurant) => (
             <EstablishmentCard key={restaurant._id} restaurant={restaurant} />
           ))
         : <p className="font-ui text-on-surface-variant col-span-full text-center text-sm">
@@ -170,6 +188,29 @@ export default function EstablishmentsPage() {
           </p>
         }
       </section>
+
+      {/* Pagination Controls */}
+      {!loading && !error && totalPages > 1 && (
+        <div className="mt-8 flex items-center justify-center space-x-4">
+          <button
+            disabled={page <= 1}
+            onClick={() => handlePageChange(page - 1)}
+            className="text-primary font-ui disabled:text-on-surface-variant/50 text-sm font-bold uppercase disabled:cursor-not-allowed"
+          >
+            Previous
+          </button>
+          <span className="text-on-surface-variant font-ui text-sm">
+            Page {page} of {totalPages}
+          </span>
+          <button
+            disabled={page >= totalPages}
+            onClick={() => handlePageChange(page + 1)}
+            className="text-primary font-ui disabled:text-on-surface-variant/50 text-sm font-bold uppercase disabled:cursor-not-allowed"
+          >
+            Next
+          </button>
+        </div>
+      )}
     </main>
   );
 }

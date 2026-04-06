@@ -9,9 +9,13 @@ export default function ReviewsPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const query = (searchParams.get('q') || '').toLowerCase();
   const cuisineFilter = searchParams.get('cuisine') || '';
+  const page = Number(searchParams.get('page')) || 1;
   usePageTitle(cuisineFilter ? `${cuisineFilter} Reviews` : 'Latest Reviews');
+
   const [restaurants, setRestaurants] = useState([]);
   const [reviews, setReviews] = useState([]);
+  const [totalReviews, setTotalReviews] = useState(0);
+  const [limit, setLimit] = useState(20);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
@@ -24,10 +28,19 @@ export default function ReviewsPage() {
         } else {
           prev.set('cuisine', cuisine);
         }
+        prev.delete('page');
         return prev;
       },
       { replace: true },
     );
+  };
+
+  const handlePageChange = (newPage) => {
+    setSearchParams((prev) => {
+      prev.set('page', String(newPage));
+      return prev;
+    });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   useEffect(() => {
@@ -38,12 +51,18 @@ export default function ReviewsPage() {
       setError('');
       try {
         const [estRes, revRes] = await Promise.all([
-          api().getEstablishments(),
-          api().getReviews({ q: query }),
+          // Fetch all establishments for the cuisine dropdown.
+          // This is a metadata-only call: only cuisine and _id fields are needed,
+          // but the endpoint doesn\'t support field projection yet, so we accept
+          // the full payload. A dedicated /api/cuisines endpoint would be cleaner long-term.
+          api().getEstablishments({ limit: 1000 }),
+          api().getReviews({ q: query, page, cuisine: cuisineFilter }),
         ]);
         if (!cancelled) {
           setRestaurants(estRes.establishments);
           setReviews(revRes.reviews);
+          setTotalReviews(revRes.total);
+          setLimit(revRes.limit || 20);
         }
       } catch (error) {
         if (!cancelled) {
@@ -61,7 +80,7 @@ export default function ReviewsPage() {
     return () => {
       cancelled = true;
     };
-  }, [query]);
+  }, [query, page, cuisineFilter]);
 
   const restaurantMap = useMemo(() => {
     return new Map(restaurants.map((r) => [r._id, r]));
@@ -81,11 +100,10 @@ export default function ReviewsPage() {
         const restaurant = restaurantMap.get(review.establishment);
         return { review, restaurant };
       })
-      .filter(({ restaurant }) => !!restaurant)
-      .filter(({ restaurant }) =>
-        cuisineFilter ? restaurant.cuisine.includes(cuisineFilter) : true,
-      );
-  }, [reviews, restaurantMap, cuisineFilter]);
+      .filter(({ restaurant }) => !!restaurant);
+  }, [reviews, restaurantMap]);
+
+  const totalPages = Math.ceil(totalReviews / limit);
 
   return (
     <main className="px-fluid-container mx-auto max-w-7xl pt-24 pb-20">
@@ -148,6 +166,29 @@ export default function ReviewsPage() {
           </p>
         }
       </section>
+
+      {/* Pagination Controls */}
+      {!loading && !error && totalPages > 1 && (
+        <div className="mt-8 flex items-center justify-center space-x-4">
+          <button
+            disabled={page <= 1}
+            onClick={() => handlePageChange(page - 1)}
+            className="text-primary font-ui disabled:text-on-surface-variant/50 text-sm font-bold uppercase disabled:cursor-not-allowed"
+          >
+            Previous
+          </button>
+          <span className="text-on-surface-variant font-ui text-sm">
+            Page {page} of {totalPages}
+          </span>
+          <button
+            disabled={page >= totalPages}
+            onClick={() => handlePageChange(page + 1)}
+            className="text-primary font-ui disabled:text-on-surface-variant/50 text-sm font-bold uppercase disabled:cursor-not-allowed"
+          >
+            Next
+          </button>
+        </div>
+      )}
     </main>
   );
 }
