@@ -7,7 +7,7 @@ DishDetail is a full-stack restaurant review application built with **React 19**
 This project uses **npm Workspaces** to manage both the frontend and backend in a single repository:
 
 - `client/`: React frontend (Vite 8, Tailwind CSS v4, React Router 7, Lucide Icons)
-- `server/`: Express 5 backend (Node.js, Mongoose 9, JWT-cookie authentication)
+- `server/`: Express 5 backend (Node.js, Mongoose 9, JWT-Bearer authentication)
 - `server/seed/`: Database seeding scripts and sample data
 
 ## Prerequisites
@@ -80,12 +80,13 @@ npm run dev:client
 ## Key Features
 
 - **Styling**: Modern, utility-first UI built with **Tailwind CSS v4**.
-- **Authentication**: JWT-based session management using secure cookies.
-- **User Profiles**: View and edit personal profiles via `/user/:username` routes.
+- **Authentication**: JWT-based authentication using **Bearer tokens** in the Authorization header.
+- **Validation**: End-to-end type safety using **Zod** schemas.
+- **User Profiles**: View and edit personal profiles via `/profile/:username` routes.
 - **Restaurant Discovery**: Search by name or filter by cuisine and minimum rating.
 - **Rich Reviews**: Star ratings, body text, and support for image uploads.
-- **Social Interaction**: Vote reviews as "Helpful" or "Unhelpful" and leave comments.
-- **Owner Responses**: Establishment owners can respond to customer feedback.
+- **Social Interaction**: Vote reviews as "Helpful" or "Unhelpful".
+- **Performance**: Route-level **code splitting** and **dynamic imports** for faster page loads.
 - **Responsive Design**: Optimized for both desktop and mobile devices.
 - **Layout Stability**: Optimized with `scrollbar-gutter` and stable image placeholders.
 
@@ -100,5 +101,5 @@ npm run dev:client
 
 - **Formatting**: `npm run format` (Prettier)
 - **Linting**: `npm run lint` (ESLint)
-- **Testing**: `npm run test` (Vitest — unit and integration tests across both workspaces)
+- **Testing**: `npm run test` (Vitest — uses **happy-dom** for fast client-side tests).
 - **Git Hooks**: Pre-commit hooks via **Husky** and **lint-staged**.

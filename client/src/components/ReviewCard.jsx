@@ -8,6 +8,14 @@ import StarRating from './StarRating';
 import { formatDate } from '../utils/date';
 import { cn } from '../utils/cn';
 
+const optimizeCloudinaryUrl = (url) => {
+  if (!url || !url.includes('cloudinary.com')) return url;
+  if (url.includes('/upload/')) {
+    return url.replace('/upload/', '/upload/f_auto,q_auto/');
+  }
+  return url;
+};
+
 export default function ReviewCard({ review, restaurant, variant = 'stack' }) {
   const [imgLoaded, setImgLoaded] = useState(false);
   const navigate = useNavigate();
@@ -82,7 +90,7 @@ export default function ReviewCard({ review, restaurant, variant = 'stack' }) {
       >
         {review.reviewImage ?
           <img
-            src={review.reviewImage}
+            src={optimizeCloudinaryUrl(review.reviewImage)}
             alt={`Food or ambiance from ${restaurant.restaurantName}`}
             className={cn(
               'h-full w-full object-cover transition-transform duration-700 group-hover:scale-110',
@@ -152,7 +160,7 @@ export default function ReviewCard({ review, restaurant, variant = 'stack' }) {
           {review.reviewImage && (
             <div className="relative aspect-video shrink-0 overflow-hidden md:aspect-auto md:h-auto md:min-h-72 md:w-64">
               <img
-                src={review.reviewImage}
+                src={optimizeCloudinaryUrl(review.reviewImage)}
                 alt={`Food or ambiance from ${restaurant.restaurantName}`}
                 className={cn(
                   'absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105',
@@ -311,7 +319,7 @@ export default function ReviewCard({ review, restaurant, variant = 'stack' }) {
       {review.reviewImage && (
         <div className="relative w-2/5 shrink-0">
           <img
-            src={review.reviewImage}
+            src={optimizeCloudinaryUrl(review.reviewImage)}
             alt={`Food or ambiance from ${restaurant.restaurantName}`}
             className={cn(
               'h-full w-full object-cover transition-transform duration-500 group-hover:scale-105',

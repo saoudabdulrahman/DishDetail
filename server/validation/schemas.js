@@ -32,7 +32,7 @@ export const querySchema = {
     q: z.string().trim().max(100, 'Search query is too long.').optional(),
     minRating: z.coerce.number().min(0).max(5).optional(),
     page: z.coerce.number().int().min(1).optional(),
-    limit: z.coerce.number().int().min(1).max(100).optional(),
+    limit: z.coerce.number().int().min(1).max(1000).optional(),
     cuisine: z
       .string()
       .trim()
@@ -84,12 +84,6 @@ export const bodySchema = {
       .min(1, 'Review title is required.')
       .max(200, 'Review title must be at most 200 characters.'),
     rating: z.coerce.number().int().min(1).max(5),
-    reviewer: z
-      .string()
-      .trim()
-      .min(1, 'Reviewer is required.')
-      .max(64, 'Reviewer name is too long.'),
-    reviewerAvatar: optionalTrimmedUrl,
     body: z
       .string()
       .trim()

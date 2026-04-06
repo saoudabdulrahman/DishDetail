@@ -26,6 +26,26 @@ export function api() {
 
   return {
     health: () => fetchJson(`${BASE}/api/health`),
+    uploadImage: (file) => {
+      const formData = new FormData();
+      formData.append('image', file);
+
+      const auth = loadAuth();
+      const authHeader =
+        auth?.token ? { Authorization: `Bearer ${auth.token}` } : {};
+
+      return fetch(`${BASE}/api/upload`, {
+        method: 'POST',
+        headers: {
+          ...authHeader,
+        },
+        body: formData,
+      }).then(async (res) => {
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok) throw new Error(data?.error || 'Upload failed');
+        return data;
+      });
+    },
     getEstablishments: ({
       q = '',
       minRating = 0,

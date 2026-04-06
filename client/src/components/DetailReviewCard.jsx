@@ -12,6 +12,14 @@ import {
   reviewEditSchema,
 } from '../validation/forms';
 
+const optimizeCloudinaryUrl = (url) => {
+  if (!url || !url.includes('cloudinary.com')) return url;
+  if (url.includes('/upload/')) {
+    return url.replace('/upload/', '/upload/f_auto,q_auto/');
+  }
+  return url;
+};
+
 const inputCls =
   'font-ui bg-surface-container-high text-on-surface placeholder:text-on-surface-variant/40 w-full rounded-xl border-none px-5 py-2.5 text-sm outline-none transition-all duration-200 focus:ring-1 focus:ring-primary';
 
@@ -403,9 +411,9 @@ export default function DetailReviewCard({ review, onDelete, onUpdate }) {
 
       {/* Review Image */}
       {review.reviewImage && (
-        <div className="mt-4 overflow-hidden rounded-lg">
+        <div className="mt-4 w-fit overflow-hidden rounded-lg">
           <img
-            src={review.reviewImage}
+            src={optimizeCloudinaryUrl(review.reviewImage)}
             alt="Food or establishment atmosphere"
             className={`max-h-52 w-auto object-cover transition-opacity duration-300 ${imgLoaded ? 'opacity-100' : 'opacity-0'}`}
             onLoad={() => setImgLoaded(true)}

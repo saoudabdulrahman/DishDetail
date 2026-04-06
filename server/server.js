@@ -1,6 +1,6 @@
+import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
-import dotenv from 'dotenv';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
 import mongoose from 'mongoose';
@@ -13,25 +13,39 @@ import authRoutes from './routes/auth.js';
 import userRoutes from './routes/users.js';
 import establishmentRoutes from './routes/establishments.js';
 import reviewRoutes from './routes/reviews.js';
-
-dotenv.config();
+import uploadRoutes from './routes/upload.js';
 
 // Entry point for the DishDetail Express server.
 // Sets up database connections, shared middleware, and primary API routes.
 const app = express();
 const PORT = process.env.PORT || 3000;
-const logger = pino(
-  pretty({
-    colorize: true,
-    translateTime: 'SYS:standard',
-  }),
-);
+const isDev = process.env.NODE_ENV !== 'production' && process.stdout.isTTY;
+
+const logger =
+  isDev ?
+    pino(
+      pretty({
+        sync: true,
+        colorize: true,
+        translateTime: 'SYS:standard',
+      }),
+    )
+  : pino();
 
 await connectDb(process.env.MONGODB_URI);
 
 // Standard middleware stack: CORS for cross-origin client requests
-// and JSON parsing with a 2mb limit to accommodate base64 review images.
-app.use(helmet());
+// and JSON parsing for standard API payloads.
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        ...helmet.contentSecurityPolicy.getDefaultDirectives(),
+        'img-src': ["'self'", 'data:', 'https://res.cloudinary.com'],
+      },
+    },
+  }),
+);
 app.use(pinoHttp({ logger }));
 app.use(
   cors({
@@ -39,7 +53,7 @@ app.use(
     credentials: true,
   }),
 );
-app.use(express.json({ limit: '2mb' }));
+app.use(express.json());
 app.use(cookieParser());
 
 // API routes
@@ -56,6 +70,7 @@ app.use('/api/auth', authLimiter, authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/establishments', establishmentRoutes);
 app.use('/api/reviews', reviewRoutes);
+app.use('/api/upload', uploadRoutes);
 
 app.use((err, req, res, _next) => {
   const status = err.status ?? 500;
