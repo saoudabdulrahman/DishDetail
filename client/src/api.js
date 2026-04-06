@@ -63,6 +63,20 @@ export function api() {
         })}`,
       ),
     getEstablishment: (slug) => fetchJson(`${BASE}/api/establishments/${slug}`),
+    createEstablishment: (payload) =>
+      fetchJson(`${BASE}/api/establishments`, {
+        method: 'POST',
+        body: JSON.stringify(payload),
+      }),
+    claimEstablishment: (slug) =>
+      fetchJson(`${BASE}/api/establishments/${slug}/claim`, {
+        method: 'POST',
+      }),
+    updateEstablishment: (slug, payload) =>
+      fetchJson(`${BASE}/api/establishments/${slug}`, {
+        method: 'PUT',
+        body: JSON.stringify(payload),
+      }),
     createReview: (slug, payload) =>
       fetchJson(`${BASE}/api/establishments/${slug}/reviews`, {
         method: 'POST',
