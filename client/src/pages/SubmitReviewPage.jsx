@@ -29,6 +29,8 @@ export default function SubmitReviewPage() {
   const [rating, setRating] = useState(0);
   const [reviewTitle, setReviewTitle] = useState('');
   const [reviewText, setReviewText] = useState('');
+  const [imageFile, setImageFile] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
   const [error, setError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -67,6 +69,23 @@ export default function SubmitReviewPage() {
     setError('');
   };
 
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      if (file.size > 5 * 1024 * 1024) {
+        setError('Image size must be less than 5MB.');
+        return;
+      }
+      setImageFile(file);
+      const reader = new FileReader();
+      reader.onloadend = () => setImagePreview(reader.result);
+      reader.readAsDataURL(file);
+    } else {
+      setImageFile(null);
+      setImagePreview(null);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
@@ -89,11 +108,24 @@ export default function SubmitReviewPage() {
     } = parsed.data;
 
     setIsSubmitting(true);
+
+    let uploadedImageUrl = null;
+    if (imageFile) {
+      try {
+        const res = await api().uploadImage(imageFile);
+        uploadedImageUrl = res.url;
+      } catch {
+        setIsSubmitting(false);
+        setError('Failed to upload image. Please try again.');
+        return;
+      }
+    }
+
     const promise = api().createReview(selectedRestaurant.slug, {
       title: cleanTitle,
       rating: cleanRating,
       body: cleanBody,
-      reviewImage: null,
+      reviewImage: uploadedImageUrl,
     });
 
     toast.promise(promise, {
@@ -203,6 +235,32 @@ export default function SubmitReviewPage() {
                   rows={5}
                   className="font-ui bg-surface-container-high text-on-surface placeholder:text-on-surface-variant/40 focus:ring-primary field-sizing-content w-full resize-none rounded-2xl border-none px-5 py-3 text-sm wrap-anywhere transition-all duration-200 outline-none focus:ring-1"
                 />
+
+                {/* Image Upload */}
+                <div>
+                  <label
+                    htmlFor="image-upload"
+                    className="text-on-surface-variant font-ui mb-2 block text-sm font-semibold"
+                  >
+                    Add a Photo (Optional)
+                  </label>
+                  <input
+                    id="image-upload"
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageChange}
+                    className="font-ui bg-surface-container-high text-on-surface focus:ring-primary file:bg-primary file:text-on-primary w-full cursor-pointer rounded-xl border-none px-5 py-3 text-sm transition-all duration-200 file:mr-4 file:cursor-pointer file:rounded-xl file:border-none file:px-4 file:py-2 file:text-sm file:font-semibold file:transition-all hover:file:brightness-110 focus:ring-1"
+                  />
+                  {imagePreview && (
+                    <div className="mt-4 overflow-hidden rounded-2xl">
+                      <img
+                        src={imagePreview}
+                        alt="Preview"
+                        className="max-h-64 w-full object-cover"
+                      />
+                    </div>
+                  )}
+                </div>
 
                 {/* Submit Button */}
                 <div>

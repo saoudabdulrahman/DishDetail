@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import { v2 as cloudinary } from 'cloudinary';
 import Review from '../model/Review.js';
 import Establishment from '../model/Establishment.js';
 import User from '../model/User.js';
@@ -133,6 +134,28 @@ router.put(
         if (k in req.body) updates[k] = req.body[k];
       }
 
+      // Cleanup old Cloudinary image if it's being replaced or removed
+      if (
+        'reviewImage' in updates &&
+        review.reviewImage &&
+        review.reviewImage !== updates.reviewImage &&
+        review.reviewImage.includes('cloudinary.com')
+      ) {
+        try {
+          const parts = review.reviewImage.split('/');
+          const folderPart = parts[parts.length - 2];
+          const filenamePart = parts[parts.length - 1].split('.')[0];
+          const publicId = `${folderPart}/${filenamePart}`;
+          await cloudinary.uploader.destroy(publicId);
+        } catch (cloudinaryError) {
+          const log = req.log?.error ? req.log : console;
+          log.error(
+            { err: cloudinaryError },
+            'Failed to delete old image from Cloudinary during review update',
+          );
+        }
+      }
+
       Object.assign(review, updates);
       await review.save();
 
@@ -163,6 +186,27 @@ router.delete(
         return res
           .status(403)
           .json({ error: 'You can only delete your own reviews.' });
+      }
+
+      // If there is an image, delete it from Cloudinary
+      if (r.reviewImage && r.reviewImage.includes('cloudinary.com')) {
+        try {
+          // Extract the public_id from the Cloudinary URL.
+          // Format: https://res.cloudinary.com/cloud_name/image/upload/v1234567890/folder/filename.jpg
+          const parts = r.reviewImage.split('/');
+          const folderPart = parts[parts.length - 2];
+          const filenamePart = parts[parts.length - 1].split('.')[0];
+          const publicId = `${folderPart}/${filenamePart}`;
+
+          await cloudinary.uploader.destroy(publicId);
+        } catch (cloudinaryError) {
+          // Log the error but don't block the review deletion
+          const log = req.log?.error ? req.log : console;
+          log.error(
+            { err: cloudinaryError },
+            'Failed to delete image from Cloudinary during review deletion',
+          );
+        }
       }
 
       await Review.findByIdAndDelete(req.params.id);
