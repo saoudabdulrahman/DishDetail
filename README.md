@@ -1,107 +1,104 @@
 # DishDetail
 
-DishDetail is a full-stack restaurant review application built with **React 19**, **Node.js**, **Express 5**, and **MongoDB**. It allows users to discover local restaurants, read community reviews, share their own dining experiences, and manage personal profiles.
+DishDetail is a full-stack restaurant review platform built with **React 19**, **Express 5**, and **MongoDB** in an **npm Workspaces** monorepo.
+
+It lets users browse establishments, publish reviews, vote review quality, and manage public profiles.
 
 ## Project Structure
 
-This project uses **npm Workspaces** to manage both the frontend and backend in a single repository:
-
-- `client/`: React frontend (Vite 8, Tailwind CSS v4, React Router 7, Headless UI, Lucide Icons)
-- `server/`: Express 5 backend (Node.js, Mongoose 9, JWT-Bearer authentication)
-- `server/seed/`: Database seeding scripts and sample data
+- `client/` - React 19 + Vite 8 frontend (React Router 7, Tailwind CSS v4, TanStack Query)
+- `server/` - Express 5 API (Mongoose 9, JWT auth, Zod validation, Pino logging)
+- `server/seed/` - seed scripts for sample establishments/reviews/users
 
 ## Prerequisites
 
-- [Node.js](https://nodejs.org/) (v20 or later)
-- [npm](https://www.npmjs.com/) (v10 or later)
-- [MongoDB](https://www.mongodb.com/try/download/community) (local instance or MongoDB Atlas)
+- [Node.js](https://nodejs.org/) v20+
+- [npm](https://www.npmjs.com/) v10+
+- [MongoDB](https://www.mongodb.com/try/download/community) local instance or Atlas
 
-## Initial Setup
+## Setup
 
-### 1) Install Dependencies
-
-From the root directory, run the following to install dependencies for all workspaces using npm:
+### 1) Install dependencies
 
 ```sh
 npm install
 ```
 
-### 2) Configure Environment Variables
+### 2) Configure environment variables
 
-**Server** — Follow the instructions in `server/.env.example`
+Server: copy `server/.env.example` to `server/.env` and fill values.
 
-**Client** — Copy `client/.env.example` to `client/.env`:
+Client: copy `client/.env.example` to `client/.env`.
 
-```sh
-cp client/.env.example client/.env
-```
+`VITE_API_BASE_URL` defaults to `http://localhost:3000` for local development.
 
-The default value (`http://localhost:3000`) works for local development.
-
-### 3) Seed the Database
-
-Populate the database with sample establishments and reviews:
+### 3) Seed local data (optional, recommended)
 
 ```sh
 npm run seed
 ```
 
----
-
-## Running the Application
-
-### Development Mode
-
-Run both the frontend and backend simultaneously using the root development script:
+## Run the app
 
 ```sh
 npm run dev
 ```
 
-- **Frontend**: [http://localhost:5173](http://localhost:5173)
-- **Backend API**: [http://localhost:3000](http://localhost:3000)
+- Frontend: `http://localhost:5173`
+- Backend API: `http://localhost:3000`
 
-### Individual Workspaces
-
-**Backend Server:**
-
-```sh
-npm run dev:server
-```
-
-**Frontend Client:**
+Run one workspace at a time:
 
 ```sh
 npm run dev:client
+npm run dev:server
 ```
 
----
+## Available root scripts
 
-## Key Features
+- `npm run dev` - run client + server in parallel
+- `npm run build` - build all workspaces
+- `npm run lint` - lint all workspaces
+- `npm run test` - run all workspace tests
+- `npm run format` / `npm run format:check` - prettier write/check
+- `npm run seed` - seed database from server workspace
+- `npm run test:watch:client` / `npm run test:watch:server` - workspace watch mode
 
-- **Styling**: Modern, utility-first UI built with **Tailwind CSS v4**.
-- **Accessible Components**: Interactive UI built with **Headless UI** primitives.
-- **Authentication**: JWT-based authentication using **Bearer tokens** in the Authorization header.
-- **Validation**: End-to-end type safety using **Zod** schemas.
-- **User Profiles**: View and edit personal profiles via `/profile/:username` routes.
-- **Restaurant Discovery**: Search by name or filter by cuisine and minimum rating.
-- **Rich Reviews**: Star ratings, body text, and support for image uploads.
-- **Social Interaction**: Vote reviews as "Helpful" or "Unhelpful".
-- **Performance**: Route-level **code splitting** and **dynamic imports** for faster page loads.
-- **Responsive Design**: Optimized for both desktop and mobile devices.
-- **Layout Stability**: Optimized with `scrollbar-gutter` and stable image placeholders.
+## Current product capabilities
 
-## Security & Observability
+- Establishment discovery with search, cuisine filter, minimum rating filter, and pagination
+- Review feed with search, cuisine filtering, and pagination
+- Homepage with featured spotlight, latest critiques (sorting by Recent, Highest, Trending), and popular taste/top critic sidebars
+- Establishment detail pages with associated reviews
+- Authenticated review creation, editing, and deletion
+- Review voting (`helpful` / `unhelpful`) with duplicate-vote protection
+- Image upload support for reviews through Cloudinary
+- Public profile pages at `/profile/:username`
+- Authenticated profile updates (`avatar`, `bio`)
+- Route-level lazy loading for major pages
 
-- **Structured Logging**: Uses [**Pino**](https://getpino.io/) for efficient, JSON-based logging with human-readable output in development via `pino-pretty`.
-- **HTTP Security Headers**: [`helmet`](https://helmetjs.github.io/) is applied globally.
-- **Auth Rate Limiting**: [`express-rate-limit`](https://github.com/express-rate-limit/express-rate-limit) restricts `/api/auth` endpoints.
-- **Image Upload Pipeline**: Uses `multer` with **Cloudinary** for media upload and delivery.
-- **Graceful Shutdown**: The server listens for `SIGTERM` and `SIGINT` signals for clean exits.
+## API overview
 
-## Development Tools
+- `/api/health`
+- `/api/auth` (`signup`, `login`, `logout`, `me`)
+- `/api/users` (read by id/username, update own profile)
+- `/api/establishments` (list/detail/create review)
+- `/api/reviews` (list/update/delete/vote)
+- `/api/upload` (authenticated image upload)
 
-- **Formatting**: `npm run format` (Prettier)
-- **Linting**: `npm run lint` (ESLint)
-- **Testing**: `npm run test` (Vitest — uses **happy-dom** for fast client-side tests).
-- **Git Hooks**: Pre-commit hooks via **Husky** and **lint-staged**.
+## Security and runtime notes
+
+- JWT bearer-token auth (`Authorization: Bearer <token>`)
+- Password hashing with `bcryptjs` (10 rounds)
+- `helmet` for security headers (including Cloudinary image CSP allowance)
+- `express-rate-limit` on auth routes
+- Structured logging with `pino` + `pino-http` (`pino-pretty` in local dev)
+- Graceful shutdown on `SIGTERM`/`SIGINT`
+
+## Tooling and tests
+
+- ESLint + Prettier
+- Husky + lint-staged pre-commit checks
+- Vitest in both workspaces
+- `happy-dom`, Testing Library, and MSW for client tests
+- Supertest for server route tests

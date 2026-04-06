@@ -54,7 +54,8 @@ export default function ReviewsPage() {
     isError: isRevError,
   } = useQuery({
     queryKey: ['reviews', { q: query, page, cuisineFilter }],
-    queryFn: () => api().getReviews({ q: query, page, cuisine: cuisineFilter }),
+    queryFn: () =>
+      api().getReviews({ q: query, page, cuisine: cuisineFilter, limit: 20 }),
   });
 
   useEffect(() => {
@@ -161,7 +162,7 @@ export default function ReviewsPage() {
           <button
             disabled={page <= 1}
             onClick={() => handlePageChange(page - 1)}
-            className="text-primary font-ui disabled:text-on-surface-variant/50 text-sm font-bold uppercase disabled:cursor-not-allowed"
+            className="text-primary font-ui disabled:text-on-surface-variant/50 cursor-pointer text-sm font-bold uppercase disabled:cursor-not-allowed"
           >
             Previous
           </button>
@@ -171,7 +172,7 @@ export default function ReviewsPage() {
           <button
             disabled={page >= totalPages}
             onClick={() => handlePageChange(page + 1)}
-            className="text-primary font-ui disabled:text-on-surface-variant/50 text-sm font-bold uppercase disabled:cursor-not-allowed"
+            className="text-primary font-ui disabled:text-on-surface-variant/50 cursor-pointer text-sm font-bold uppercase disabled:cursor-not-allowed"
           >
             Next
           </button>

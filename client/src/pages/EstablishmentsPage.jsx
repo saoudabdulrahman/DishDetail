@@ -26,6 +26,7 @@ export default function EstablishmentsPage() {
         minRating,
         page,
         cuisine: cuisineFilter,
+        limit: 20,
       });
     },
   });
@@ -184,7 +185,7 @@ export default function EstablishmentsPage() {
           <button
             disabled={page <= 1}
             onClick={() => handlePageChange(page - 1)}
-            className="text-primary font-ui disabled:text-on-surface-variant/50 text-sm font-bold uppercase disabled:cursor-not-allowed"
+            className="text-primary font-ui disabled:text-on-surface-variant/50 cursor-pointer text-sm font-bold uppercase disabled:cursor-not-allowed"
           >
             Previous
           </button>
@@ -194,7 +195,7 @@ export default function EstablishmentsPage() {
           <button
             disabled={page >= totalPages}
             onClick={() => handlePageChange(page + 1)}
-            className="text-primary font-ui disabled:text-on-surface-variant/50 text-sm font-bold uppercase disabled:cursor-not-allowed"
+            className="text-primary font-ui disabled:text-on-surface-variant/50 cursor-pointer text-sm font-bold uppercase disabled:cursor-not-allowed"
           >
             Next
           </button>
