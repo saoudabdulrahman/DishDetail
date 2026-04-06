@@ -63,7 +63,7 @@ router.put(
       });
       if (!u) return res.status(404).json({ error: 'User not found.' });
 
-      return res.json({ user: publicUser(u) });
+      return res.json({ user: publicUser(u, true) });
     } catch (error) {
       req.log?.error({ err: error }) || console.error(error);
       return res.status(400).json({ error: 'Invalid request.' });

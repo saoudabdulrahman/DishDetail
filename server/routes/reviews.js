@@ -71,7 +71,9 @@ router.get(
         const allowedIds = estWithCuisine.map((e) => e._id);
         if (filter.establishment) {
           if (
-            !allowedIds.some((id) => String(id) === String(filter.establishment))
+            !allowedIds.some(
+              (id) => String(id) === String(filter.establishment),
+            )
           ) {
             return res.json({ reviews: [], total: 0, page, limit });
           }
@@ -184,7 +186,8 @@ router.post(
       const voterId = req.user.id;
 
       const countField = type === 'helpful' ? 'helpfulCount' : 'unhelpfulCount';
-      const voterField = type === 'helpful' ? 'helpfulVoters' : 'unhelpfulVoters';
+      const voterField =
+        type === 'helpful' ? 'helpfulVoters' : 'unhelpfulVoters';
 
       // Atomic update with duplicate prevention from HEAD
       const result = await Review.findOneAndUpdate(
@@ -202,7 +205,8 @@ router.post(
 
       if (!result) {
         const exists = await Review.exists({ _id: req.params.id });
-        if (!exists) return res.status(404).json({ error: 'Review not found.' });
+        if (!exists)
+          return res.status(404).json({ error: 'Review not found.' });
         return res
           .status(409)
           .json({ error: 'You have already voted on this review.' });

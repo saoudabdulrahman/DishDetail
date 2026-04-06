@@ -40,8 +40,11 @@ router.post(
       }).lean();
 
       if (existing) {
-        const field = existing.username === cleanUsername ? 'username' : 'email';
-        return res.status(409).json({ error: `That ${field} is already taken.` });
+        const field =
+          existing.username === cleanUsername ? 'username' : 'email';
+        return res
+          .status(409)
+          .json({ error: `That ${field} is already taken.` });
       }
 
       const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
@@ -55,7 +58,7 @@ router.post(
       });
 
       const token = signTokenForUser(u);
-      return res.status(201).json({ user: publicUser(u), token });
+      return res.status(201).json({ user: publicUser(u, true), token });
     } catch (error) {
       req.log?.error({ err: error }) || console.error(error);
       return res.status(500).json({ error: 'Signup failed.' });
@@ -83,7 +86,7 @@ router.post(
       }
 
       const token = signTokenForUser(u);
-      return res.json({ user: publicUser(u), token });
+      return res.json({ user: publicUser(u, true), token });
     } catch (error) {
       req.log?.error({ err: error }) || console.error(error);
       return res.status(500).json({ error: 'Login failed.' });
@@ -102,7 +105,7 @@ router.get('/me', verifyToken, async (req, res) => {
     const user = await User.findById(req.user.id);
     if (!user) return res.status(401).json({ user: null });
 
-    return res.json({ user: publicUser(user) });
+    return res.json({ user: publicUser(user, true) });
   } catch {
     return res.status(401).json({ user: null });
   }

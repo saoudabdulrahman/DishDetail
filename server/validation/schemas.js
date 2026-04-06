@@ -31,12 +31,26 @@ export const querySchema = {
   establishmentsList: z.object({
     q: z.string().trim().max(100, 'Search query is too long.').optional(),
     minRating: z.coerce.number().min(0).max(5).optional(),
+    page: z.coerce.number().int().min(1).optional(),
+    limit: z.coerce.number().int().min(1).max(100).optional(),
+    cuisine: z
+      .string()
+      .trim()
+      .max(50, 'Cuisine filter is too long.')
+      .optional(),
   }),
   reviewsList: z.object({
     q: z.string().trim().max(100, 'Search query is too long.').optional(),
     establishmentId: z
       .string()
       .regex(objectIdRegex, 'Invalid establishment id format.')
+      .optional(),
+    page: z.coerce.number().int().min(1).optional(),
+    limit: z.coerce.number().int().min(1).max(100).optional(),
+    cuisine: z
+      .string()
+      .trim()
+      .max(50, 'Cuisine filter is too long.')
       .optional(),
   }),
 };

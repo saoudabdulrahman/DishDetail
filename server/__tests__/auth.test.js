@@ -4,6 +4,7 @@ import request from 'supertest';
 import authRouter from '../routes/auth.js';
 import User from '../model/User.js';
 import jwt from 'jsonwebtoken';
+import bcrypt from 'bcryptjs';
 
 process.env.JWT_SECRET = 'test-secret';
 
@@ -12,6 +13,13 @@ vi.mock('../model/User.js', () => ({
     findOne: vi.fn(),
     findById: vi.fn(),
     create: vi.fn(),
+  },
+}));
+
+vi.mock('bcryptjs', () => ({
+  default: {
+    compare: vi.fn(),
+    hash: vi.fn(),
   },
 }));
 
@@ -103,9 +111,42 @@ describe('Auth Routes', () => {
       expect(res.body.error).toBe('Invalid username or password.');
     });
 
-    it.todo(
-      'returns 401 on bad password - needs to be updated after bcrypt is implemented',
-    );
+    it('returns 401 on bad password', async () => {
+      User.findOne.mockResolvedValue({
+        _id: '507f1f77bcf86cd799439011',
+        username: 'tester',
+        password: 'hashed_password',
+      });
+      bcrypt.compare.mockResolvedValue(false);
+
+      const res = await request(app)
+        .post('/api/auth/login')
+        .send({ username: 'tester', password: 'wrongpassword' });
+
+      expect(res.status).toBe(401);
+      expect(res.body.error).toBe('Invalid username or password.');
+    });
+
+    it('returns user and token on successful login', async () => {
+      User.findOne.mockResolvedValue({
+        _id: '507f1f77bcf86cd799439011',
+        username: 'tester',
+        email: 'tester@example.com',
+        password: 'hashed_password',
+        bio: '',
+        role: 'user',
+        ownedEstablishment: null,
+      });
+      bcrypt.compare.mockResolvedValue(true);
+
+      const res = await request(app)
+        .post('/api/auth/login')
+        .send({ username: 'tester', password: 'password123' });
+
+      expect(res.status).toBe(200);
+      expect(res.body.user.username).toBe('tester');
+      expect(typeof res.body.token).toBe('string');
+    });
   });
 
   describe('GET /api/auth/me', () => {

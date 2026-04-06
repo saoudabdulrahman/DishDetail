@@ -92,8 +92,6 @@ export default function SubmitReviewPage() {
     const promise = api().createReview(selectedRestaurant.slug, {
       title: cleanTitle,
       rating: cleanRating,
-      reviewer: user?.username || 'Anonymous',
-      reviewerAvatar: user?.avatar,
       body: cleanBody,
       reviewImage: null,
     });
