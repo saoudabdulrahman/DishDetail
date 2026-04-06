@@ -7,7 +7,7 @@ export default defineConfig({
   plugins: [react(), tailwindcss()],
   test: {
     globals: true,
-    environment: 'jsdom',
+    environment: 'happy-dom',
     setupFiles: './src/test/setup.js',
     css: true,
     clearMocks: true,
@@ -28,9 +28,19 @@ export default defineConfig({
               priority: 20,
             },
             {
+              name: 'router-vendor',
+              test: /node_modules[\\/]react-router/,
+              priority: 18,
+            },
+            {
               name: 'ui-vendor',
               test: /node_modules[\\/](@headlessui|lucide-react|sonner)/,
               priority: 15,
+            },
+            {
+              name: 'validation-vendor',
+              test: /node_modules[\\/]zod/,
+              priority: 12,
             },
             {
               name: 'vendor',
