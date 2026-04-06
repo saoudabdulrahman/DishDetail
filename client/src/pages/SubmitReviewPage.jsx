@@ -1,5 +1,6 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Search } from 'lucide-react';
 import { toast } from 'sonner';
 import {
@@ -14,17 +15,18 @@ import { api } from '../api';
 import { usePageTitle } from '../utils/usePageTitle.js';
 import { submitReviewSchema } from '../validation/forms';
 
+const EMPTY_ARRAY = [];
+
 export default function SubmitReviewPage() {
   usePageTitle('Submit a Review');
   const navigate = useNavigate();
   const { state } = useLocation();
+  const queryClient = useQueryClient();
 
   const [selectedRestaurant, setSelectedRestaurant] = useState(
     state?.restaurant || null,
   );
   const [query, setQuery] = useState('');
-  const [restaurants, setRestaurants] = useState([]);
-  const [featured, setFeatured] = useState([]);
 
   const [rating, setRating] = useState(0);
   const [reviewTitle, setReviewTitle] = useState('');
@@ -32,23 +34,29 @@ export default function SubmitReviewPage() {
   const [imageFile, setImageFile] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
   const [error, setError] = useState('');
-  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const { data: estData, isError: isEstError } = useQuery({
+    queryKey: ['establishments', { q: '', minRating: 0 }],
+    queryFn: () => api().getEstablishments(),
+  });
+
+  const { data: revData, isError: isRevError } = useQuery({
+    queryKey: ['reviews', { q: '' }],
+    queryFn: () => api().getReviews(),
+  });
 
   useEffect(() => {
-    let cancelled = false;
-    Promise.all([api().getEstablishments(), api().getReviews()])
-      .then(([estRes, revRes]) => {
-        if (cancelled) return;
-        setRestaurants(estRes.establishments);
-        setFeatured(
-          [...revRes.reviews].sort((a, b) => b.rating - a.rating).slice(0, 4),
-        );
-      })
-      .catch(() => toast.error('Failed to load restaurant list.'));
-    return () => {
-      cancelled = true;
-    };
-  }, []);
+    if (isEstError || isRevError) {
+      toast.error('Failed to load restaurant list.');
+    }
+  }, [isEstError, isRevError]);
+
+  const restaurants = estData?.establishments || EMPTY_ARRAY;
+  const featured = useMemo(() => {
+    return [...(revData?.reviews || [])]
+      .sort((a, b) => b.rating - a.rating)
+      .slice(0, 4);
+  }, [revData]);
 
   const restaurantById = useMemo(
     () => new Map(restaurants.map((r) => [r._id, r])),
@@ -86,10 +94,23 @@ export default function SubmitReviewPage() {
     }
   };
 
+  const createReviewMutation = useMutation({
+    mutationFn: (newReview) =>
+      api().createReview(selectedRestaurant.slug, newReview),
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({
+        queryKey: ['establishment', selectedRestaurant.slug],
+      });
+      queryClient.invalidateQueries({ queryKey: ['establishments'] });
+      queryClient.invalidateQueries({ queryKey: ['reviews'] });
+      navigate(`/establishments/${selectedRestaurant.slug}#${data.review._id}`);
+    },
+  });
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
-    if (isSubmitting) return;
+    if (createReviewMutation.isPending) return;
     const parsed = submitReviewSchema.safeParse({
       selectedRestaurantSlug: selectedRestaurant?.slug || '',
       rating,
@@ -107,21 +128,18 @@ export default function SubmitReviewPage() {
       rating: cleanRating,
     } = parsed.data;
 
-    setIsSubmitting(true);
-
     let uploadedImageUrl = null;
     if (imageFile) {
       try {
         const res = await api().uploadImage(imageFile);
         uploadedImageUrl = res.url;
       } catch {
-        setIsSubmitting(false);
         setError('Failed to upload image. Please try again.');
         return;
       }
     }
 
-    const promise = api().createReview(selectedRestaurant.slug, {
+    const promise = createReviewMutation.mutateAsync({
       title: cleanTitle,
       rating: cleanRating,
       body: cleanBody,
@@ -133,15 +151,6 @@ export default function SubmitReviewPage() {
       success: 'Review submitted successfully!',
       error: 'Failed to submit review.',
     });
-
-    try {
-      const { review } = await promise;
-      navigate(`/establishments/${selectedRestaurant.slug}#${review._id}`);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setIsSubmitting(false);
-    }
   };
 
   return (
@@ -266,10 +275,12 @@ export default function SubmitReviewPage() {
                 <div>
                   <button
                     type="submit"
-                    disabled={isSubmitting}
+                    disabled={createReviewMutation.isPending}
                     className="gold-gradient text-on-secondary font-ui w-full cursor-pointer rounded-xl border-none px-8 py-3 text-sm font-bold shadow-lg transition-all duration-200 hover:-translate-y-0.5 hover:brightness-110 active:scale-95 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
                   >
-                    {isSubmitting ? 'Submitting…' : 'Submit Review'}
+                    {createReviewMutation.isPending ?
+                      'Submitting…'
+                    : 'Submit Review'}
                   </button>
                 </div>
               </div>

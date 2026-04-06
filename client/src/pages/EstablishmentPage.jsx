@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useParams, useNavigate } from 'react-router';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { Star, MapPin, Clock, Phone, Globe, ArrowLeft } from 'lucide-react';
 import { toast } from 'sonner';
 import { api } from '../api';
@@ -7,16 +8,30 @@ import DetailReviewCard from '../components/DetailReviewCard';
 import { cn } from '../utils/cn';
 import { usePageTitle } from '../utils/usePageTitle.js';
 
+const EMPTY_ARRAY = [];
+
 export default function EstablishmentPage() {
   const { slug } = useParams();
   const navigate = useNavigate();
-  const [restaurant, setRestaurant] = useState(null);
-  usePageTitle(restaurant?.restaurantName || 'Loading...');
-  const [reviews, setReviews] = useState([]);
+  const queryClient = useQueryClient();
   const [visibleCount, setVisibleCount] = useState(2);
   const [imgLoaded, setImgLoaded] = useState(false);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+
+  const {
+    data,
+    isLoading: loading,
+    isError,
+    error: queryError,
+  } = useQuery({
+    queryKey: ['establishment', slug],
+    queryFn: () => api().getEstablishment(slug),
+  });
+
+  const restaurant = data?.establishment;
+  const reviews = data?.reviews || EMPTY_ARRAY;
+  const error = isError ? queryError?.message || 'Failed to load.' : '';
+
+  usePageTitle(restaurant?.restaurantName || 'Loading...');
 
   const sortedReviews = useMemo(() => {
     return [...reviews].sort(
@@ -29,8 +44,8 @@ export default function EstablishmentPage() {
     if (sortedReviews.length > 0 && window.location.hash) {
       const id = window.location.hash.substring(1);
       const index = sortedReviews.findIndex((r) => r._id === id);
-      if (index >= visibleCount) setVisibleCount(index + 1);
       const timer = setTimeout(() => {
+        if (index >= visibleCount) setVisibleCount(index + 1);
         document
           .getElementById(id)
           ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -38,29 +53,6 @@ export default function EstablishmentPage() {
       return () => clearTimeout(timer);
     }
   }, [sortedReviews, visibleCount]);
-
-  useEffect(() => {
-    let cancelled = false;
-    const fetchEstablishment = async () => {
-      setLoading(true);
-      setError('');
-      try {
-        const { establishment, reviews } = await api().getEstablishment(slug);
-        if (!cancelled) {
-          setRestaurant(establishment);
-          setReviews(reviews);
-        }
-      } catch (error) {
-        if (!cancelled) setError(error || 'Failed to load.');
-      } finally {
-        if (!cancelled) setLoading(false);
-      }
-    };
-    fetchEstablishment();
-    return () => {
-      cancelled = true;
-    };
-  }, [slug]);
 
   const handleUpdateReview = async (reviewId, updates) => {
     const promise = api().updateReview(reviewId, updates);
@@ -71,7 +63,16 @@ export default function EstablishmentPage() {
     });
     try {
       const { review } = await promise;
-      setReviews((prev) => prev.map((r) => (r._id === reviewId ? review : r)));
+      queryClient.setQueryData(['establishment', slug], (oldData) => {
+        if (!oldData) return oldData;
+        return {
+          ...oldData,
+          reviews: oldData.reviews.map((r) =>
+            r._id === reviewId ? review : r,
+          ),
+        };
+      });
+      queryClient.invalidateQueries({ queryKey: ['reviews'] });
     } catch (error) {
       console.error(error);
     }
@@ -86,7 +87,14 @@ export default function EstablishmentPage() {
     });
     try {
       await promise;
-      setReviews((prev) => prev.filter((r) => r._id !== reviewId));
+      queryClient.setQueryData(['establishment', slug], (oldData) => {
+        if (!oldData) return oldData;
+        return {
+          ...oldData,
+          reviews: oldData.reviews.filter((r) => r._id !== reviewId),
+        };
+      });
+      queryClient.invalidateQueries({ queryKey: ['reviews'] });
     } catch (error) {
       console.error(error);
     }

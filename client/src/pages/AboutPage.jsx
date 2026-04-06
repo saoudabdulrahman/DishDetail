@@ -12,6 +12,10 @@ export default function AboutPage() {
         description: 'Declarative routing for React web applications.',
       },
       {
+        name: 'TanStack Query',
+        description: 'Powerful asynchronous state management for TS/JS.',
+      },
+      {
         name: 'Tailwind CSS',
         description: 'A utility-first CSS framework for rapid UI development.',
       },
@@ -113,7 +117,7 @@ export default function AboutPage() {
         description: 'Monorepo dependency management.',
       },
       {
-        name: 'npm-run-all',
+        name: 'npm-run-all2',
         description:
           'CLI tool to run multiple npm-scripts in parallel or sequential.',
       },
@@ -147,12 +151,14 @@ export default function AboutPage() {
   };
 
   const productHighlights = [
-    'Discover restaurants by browsing establishments and recent reviews.',
-    'Filter and search dining spots by name, cuisine, and minimum rating.',
-    'Share rich reviews with star ratings, written feedback, and optional images.',
-    'Vote reviews as Helpful or Unhelpful to surface useful community content.',
-    'Use JWT-based authentication and username routes like /profile/:username.',
-    'Enjoy route-level code splitting for faster initial page loads.',
+    'Discover restaurants through establishment listings, detail pages, and review feeds with pagination.',
+    'Search and filter by name, cuisine, and minimum rating for faster discovery.',
+    'Explore a curated homepage with featured spotlights, latest critiques, and trending sorting.',
+    'Create, edit, and delete rich reviews with star ratings, body text, and optional images.',
+    'Vote reviews as Helpful or Unhelpful with duplicate-vote protection.',
+    'Use JWT Bearer-token authentication with username routes like /profile/:username.',
+    'Update your own profile data (avatar and bio) once authenticated.',
+    'Enjoy route-level code splitting and React Query caching for faster page transitions.',
   ];
 
   const renderSection = (title, badge, badgeColor, items) => (

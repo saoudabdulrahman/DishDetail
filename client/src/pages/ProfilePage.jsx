@@ -1,5 +1,6 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Link, useParams } from 'react-router';
+import { useQuery } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { useAuth } from '../auth/useAuth';
 import { api } from '../api';
@@ -7,26 +8,27 @@ import ReviewCard from '../components/ReviewCard';
 import { usePageTitle } from '../utils/usePageTitle.js';
 import { profileSchema } from '../validation/forms';
 
+const EMPTY_ARRAY = [];
+
 export default function ProfilePage() {
   const { username } = useParams();
   const { user: authUser, updateProfile } = useAuth();
 
   const isOwnProfile = authUser?.username === username;
 
-  const [fetchedUser, setFetchedUser] = useState(null);
-  const [loading, setLoading] = useState(!isOwnProfile);
-  const [notFound, setNotFound] = useState(false);
-  const [lastUsername, setLastUsername] = useState(username);
+  const {
+    data: userData,
+    isLoading: isUserLoading,
+    isError: isUserError,
+  } = useQuery({
+    queryKey: ['user', username],
+    queryFn: () => api().getUserByUsername(username),
+    enabled: !isOwnProfile,
+    retry: false,
+  });
 
-  // Reset state during render if the username changes
-  if (username !== lastUsername) {
-    setLastUsername(username);
-    setFetchedUser(null);
-    setLoading(!isOwnProfile);
-    setNotFound(false);
-  }
-
-  const profileUser = isOwnProfile ? authUser : fetchedUser;
+  const profileUser = isOwnProfile ? authUser : userData?.user;
+  const notFound = isUserError && !isOwnProfile;
 
   usePageTitle(
     profileUser?.username ? `${profileUser.username}'s Profile` : 'Profile',
@@ -35,49 +37,22 @@ export default function ProfilePage() {
   const [isEditing, setIsEditing] = useState(false);
   const [bio, setBio] = useState(authUser?.bio || '');
   const [avatarUrl, setAvatarUrl] = useState(authUser?.avatar || '');
-  const [restaurants, setRestaurants] = useState([]);
-  const [reviews, setReviews] = useState([]);
   const [error, setError] = useState('');
 
-  // Fetch the profile user from API when viewing someone else's profile
-  useEffect(() => {
-    if (isOwnProfile) return;
+  const { data: estData, isLoading: isEstLoading } = useQuery({
+    queryKey: ['establishments', { q: '', minRating: 0 }],
+    queryFn: () => api().getEstablishments(),
+  });
 
-    let cancelled = false;
-    api()
-      .getUserByUsername(username)
-      .then(({ user }) => {
-        if (cancelled) return;
-        setFetchedUser(user);
-        setLoading(false);
-      })
-      .catch(() => {
-        if (cancelled) return;
-        setNotFound(true);
-        setLoading(false);
-      });
-    return () => {
-      cancelled = true;
-    };
-  }, [username, isOwnProfile]);
+  const { data: revData, isLoading: isRevLoading } = useQuery({
+    queryKey: ['reviews', { q: '' }],
+    queryFn: () => api().getReviews(),
+  });
 
-  // Fetch restaurants and reviews for the review list
-  useEffect(() => {
-    let cancelled = false;
-    Promise.all([api().getEstablishments(), api().getReviews()])
-      .then(([estRes, revRes]) => {
-        if (cancelled) return;
-        setRestaurants(estRes.establishments);
-        setReviews(revRes.reviews);
-      })
-      .catch((error) => {
-        console.error(error);
-        toast.error('Failed to load data. Please try again.');
-      });
-    return () => {
-      cancelled = true;
-    };
-  }, []);
+  const restaurants = estData?.establishments || EMPTY_ARRAY;
+  const reviews = revData?.reviews || EMPTY_ARRAY;
+  const loading =
+    (isUserLoading && !isOwnProfile) || isEstLoading || isRevLoading;
 
   const restaurantById = useMemo(
     () => new Map(restaurants.map((r) => [r._id, r])),

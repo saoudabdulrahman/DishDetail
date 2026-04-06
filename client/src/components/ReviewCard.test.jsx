@@ -1,9 +1,11 @@
 import { describe, expect, it, vi } from 'vitest';
+import { QueryClientProvider } from '@tanstack/react-query';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router';
 import ReviewCard from './ReviewCard';
 import { AuthContext } from '../auth/context';
+import { createTestQueryClient } from '../test/render';
 
 vi.mock('../api', () => ({
   api: () => ({
@@ -41,19 +43,23 @@ function renderCard({
   variant = 'feed',
   user = null,
 } = {}) {
+  const testQueryClient = createTestQueryClient();
+
   return render(
-    <MemoryRouter>
-      <AuthContext.Provider
-        value={{
-          user,
-          logout: vi.fn(),
-          setAuthModal: vi.fn(),
-          authModal: null,
-        }}
-      >
-        <ReviewCard review={review} restaurant={rest} variant={variant} />
-      </AuthContext.Provider>
-    </MemoryRouter>,
+    <QueryClientProvider client={testQueryClient}>
+      <MemoryRouter>
+        <AuthContext.Provider
+          value={{
+            user,
+            logout: vi.fn(),
+            setAuthModal: vi.fn(),
+            authModal: null,
+          }}
+        >
+          <ReviewCard review={review} restaurant={rest} variant={variant} />
+        </AuthContext.Provider>
+      </MemoryRouter>
+    </QueryClientProvider>,
   );
 }
 

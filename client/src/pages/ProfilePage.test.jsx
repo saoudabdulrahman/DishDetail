@@ -1,30 +1,36 @@
 import { describe, expect, it, vi } from 'vitest';
+import { QueryClientProvider } from '@tanstack/react-query';
 import { render, screen } from '@testing-library/react';
 import { MemoryRouter, Route, Routes } from 'react-router';
 import ProfilePage from './ProfilePage';
 import { AuthContext } from '../auth/context';
 import { server, http, HttpResponse } from '../test/server';
+import { createTestQueryClient } from '../test/render';
 
 describe('ProfilePage', () => {
   it('renders profile summary for authenticated user', async () => {
+    const testQueryClient = createTestQueryClient();
+
     render(
-      <MemoryRouter initialEntries={['/profile/alice']}>
-        <AuthContext.Provider
-          value={{
-            user: {
-              id: 'u1',
-              username: 'alice',
-              bio: 'Food lover',
-              role: 'critic',
-            },
-            updateProfile: vi.fn(),
-          }}
-        >
-          <Routes>
-            <Route path="/profile/:username" element={<ProfilePage />} />
-          </Routes>
-        </AuthContext.Provider>
-      </MemoryRouter>,
+      <QueryClientProvider client={testQueryClient}>
+        <MemoryRouter initialEntries={['/profile/alice']}>
+          <AuthContext.Provider
+            value={{
+              user: {
+                id: 'u1',
+                username: 'alice',
+                bio: 'Food lover',
+                role: 'critic',
+              },
+              updateProfile: vi.fn(),
+            }}
+          >
+            <Routes>
+              <Route path="/profile/:username" element={<ProfilePage />} />
+            </Routes>
+          </AuthContext.Provider>
+        </MemoryRouter>
+      </QueryClientProvider>,
     );
 
     expect(await screen.findByText('alice')).toBeInTheDocument();
@@ -67,24 +73,28 @@ describe('ProfilePage', () => {
       ),
     );
 
+    const testQueryClient = createTestQueryClient();
+
     render(
-      <MemoryRouter initialEntries={['/profile/bob']}>
-        <AuthContext.Provider
-          value={{
-            user: {
-              id: 'u1',
-              username: 'alice',
-              bio: 'Food lover',
-              role: 'critic',
-            },
-            updateProfile: vi.fn(),
-          }}
-        >
-          <Routes>
-            <Route path="/profile/:username" element={<ProfilePage />} />
-          </Routes>
-        </AuthContext.Provider>
-      </MemoryRouter>,
+      <QueryClientProvider client={testQueryClient}>
+        <MemoryRouter initialEntries={['/profile/bob']}>
+          <AuthContext.Provider
+            value={{
+              user: {
+                id: 'u1',
+                username: 'alice',
+                bio: 'Food lover',
+                role: 'critic',
+              },
+              updateProfile: vi.fn(),
+            }}
+          >
+            <Routes>
+              <Route path="/profile/:username" element={<ProfilePage />} />
+            </Routes>
+          </AuthContext.Provider>
+        </MemoryRouter>
+      </QueryClientProvider>,
     );
 
     expect(
