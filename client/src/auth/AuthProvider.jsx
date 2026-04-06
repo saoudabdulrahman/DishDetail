@@ -58,6 +58,23 @@ export default function AuthProvider({ children }) {
         setToken(null);
         setRememberMe(false);
       },
+      // Called after create/claim establishment so the new role ('owner') and
+      // ownedEstablishment are reflected in the auth state immediately without
+      // requiring a logout/login cycle. Saves the new token, re-fetches the
+      // user from /auth/me, then updates both state and storage.
+      refreshAuth: async (newToken) => {
+        saveAuth(user, newToken, rememberMe);
+        setToken(newToken);
+        try {
+          const { user: freshUser } = await api().me();
+          setUser(freshUser);
+          saveAuth(freshUser, newToken, rememberMe);
+        } catch {
+          clearAuth();
+          setUser(null);
+          setToken(null);
+        }
+      },
       updateProfile: async (updates) => {
         if (!user?.id) return;
         try {
