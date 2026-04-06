@@ -36,7 +36,10 @@ export default function EstablishmentsPage() {
     }
   }, [isError]);
 
-  const establishments = data?.establishments || [];
+  const establishments = useMemo(
+    () => data?.establishments || [],
+    [data?.establishments],
+  );
   const totalEstablishments = data?.total || 0;
   const limit = data?.limit || 20;
   const error = isError ? 'Failed to load establishments.' : '';
