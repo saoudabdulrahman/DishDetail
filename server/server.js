@@ -7,7 +7,6 @@ import mongoose from 'mongoose';
 import cookieParser from 'cookie-parser';
 import { pino } from 'pino';
 import pinoHttp from 'pino-http';
-import pretty from 'pino-pretty';
 import { connectDb } from './model/db.js';
 import authRoutes from './routes/auth.js';
 import userRoutes from './routes/users.js';
@@ -19,18 +18,22 @@ import uploadRoutes from './routes/upload.js';
 // Sets up database connections, shared middleware, and primary API routes.
 const app = express();
 const PORT = process.env.PORT || 3000;
-const isDev = process.env.NODE_ENV !== 'production' && process.stdout.isTTY;
+const usePrettyLogging =
+  process.env.NODE_ENV !== 'production' && process.stdout.isTTY;
 
-const logger =
-  isDev ?
-    pino(
-      pretty({
-        sync: true,
-        colorize: true,
-        translateTime: 'SYS:standard',
-      }),
-    )
-  : pino();
+const logger = pino(
+  usePrettyLogging ?
+    {
+      transport: {
+        target: 'pino-pretty',
+        options: {
+          colorize: true,
+          translateTime: 'SYS:standard',
+        },
+      },
+    }
+  : {},
+);
 
 await connectDb(process.env.MONGODB_URI);
 
