@@ -7,7 +7,10 @@ import { usePageTitle } from '../utils/usePageTitle';
 import { createEstablishmentSchema } from '../validation/forms';
 
 export default function CreateEstablishmentPage() {
-  usePageTitle('Add a Restaurant');
+  usePageTitle(
+    'Add a Restaurant',
+    'Create a new restaurant listing on DishDetail and manage your establishment profile.',
+  );
   const navigate = useNavigate();
   const { user, refreshAuth } = useAuth();
 

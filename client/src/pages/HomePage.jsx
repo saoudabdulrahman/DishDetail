@@ -11,18 +11,29 @@ import { usePageTitle } from '../utils/usePageTitle.js';
 const EMPTY_ARRAY = [];
 
 export default function HomePage() {
-  usePageTitle('Home');
+  usePageTitle(
+    'Home',
+    'Explore featured restaurants, latest critiques, and trending reviews from the DishDetail community.',
+  );
   const { user, setAuthModal } = useAuth();
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(0);
   const [sortBy, setSortBy] = useState('recent');
 
-  const { data: estData, isError: isEstError } = useQuery({
+  const {
+    data: estData,
+    isLoading: isEstLoading,
+    isError: isEstError,
+  } = useQuery({
     queryKey: ['establishments', { q: '', minRating: 0 }],
     queryFn: () => api().getEstablishments(),
   });
 
-  const { data: revData, isError: isRevError } = useQuery({
+  const {
+    data: revData,
+    isLoading: isRevLoading,
+    isError: isRevError,
+  } = useQuery({
     queryKey: ['reviews', { q: '' }],
     queryFn: () => api().getReviews(),
   });
@@ -35,6 +46,8 @@ export default function HomePage() {
 
   const restaurants = estData?.establishments || EMPTY_ARRAY;
   const reviews = revData?.reviews || EMPTY_ARRAY;
+  const loading = isEstLoading || isRevLoading;
+  const error = isEstError || isRevError ? 'Failed to load homepage data.' : '';
 
   const restaurantById = useMemo(
     () => new Map(restaurants.map((r) => [r._id, r])),
@@ -148,6 +161,11 @@ export default function HomePage() {
           </Link>
         </div>
       </section>
+      {error && (
+        <section className="mb-10">
+          <p className="font-ui text-error text-sm">{error}</p>
+        </section>
+      )}
       <section className="mb-32">
         <div className="mb-8 flex items-end justify-between">
           <div>
@@ -176,7 +194,7 @@ export default function HomePage() {
           </div>
         </div>
 
-        {featured.length > 0 ?
+        {!loading && !error && featured.length > 0 ?
           <div className="editorial-grid">
             <ReviewCard
               review={featured[0].review}
@@ -194,12 +212,18 @@ export default function HomePage() {
               ))}
             </div>
           </div>
-        : <div className="editorial-grid">
+        : loading ?
+          <div className="editorial-grid">
             <div className="bg-surface-container-high col-span-12 h-125 animate-pulse rounded-sm lg:col-span-7" />
             <div className="col-span-12 flex flex-col space-y-6 lg:col-span-5">
               <div className="bg-surface-container-high h-56 animate-pulse rounded-sm" />
               <div className="bg-surface-container-high h-56 animate-pulse rounded-sm" />
             </div>
+          </div>
+        : <div className="bg-surface-container rounded-2xl p-10 text-center">
+            <p className="font-ui text-on-surface-variant text-sm">
+              No featured reviews available yet.
+            </p>
           </div>
         }
       </section>
@@ -232,14 +256,28 @@ export default function HomePage() {
             </div>
           </div>
           <div className="space-y-12">
-            {feedReviews.map((review) => (
-              <ReviewCard
-                key={review._id}
-                review={review}
-                restaurant={restaurantById.get(review.establishment)}
-                variant="feed"
-              />
-            ))}
+            {loading ?
+              Array.from({ length: 2 }).map((_, i) => (
+                <div
+                  key={i}
+                  className="bg-surface-container-high h-64 animate-pulse rounded-sm"
+                />
+              ))
+            : !error && feedReviews.length > 0 ?
+              feedReviews.map((review) => (
+                <ReviewCard
+                  key={review._id}
+                  review={review}
+                  restaurant={restaurantById.get(review.establishment)}
+                  variant="feed"
+                />
+              ))
+            : <div className="bg-surface-container rounded-2xl p-10 text-center">
+                <p className="font-ui text-on-surface-variant text-sm">
+                  No reviews available right now.
+                </p>
+              </div>
+            }
           </div>
           <div className="mt-16 text-center">
             <Link

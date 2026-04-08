@@ -1,6 +1,12 @@
 import { Link } from 'react-router';
+import { usePageTitle } from '../utils/usePageTitle.js';
 
 export default function AboutPage() {
+  usePageTitle(
+    'About',
+    'Learn about DishDetail, the technology stack, and the product capabilities behind the platform.',
+  );
+
   const packages = {
     client: [
       {

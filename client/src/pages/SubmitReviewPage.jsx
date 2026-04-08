@@ -18,7 +18,10 @@ import { submitReviewSchema } from '../validation/forms';
 const EMPTY_ARRAY = [];
 
 export default function SubmitReviewPage() {
-  usePageTitle('Submit a Review');
+  usePageTitle(
+    'Submit a Review',
+    'Share your dining experience by posting a new restaurant review on DishDetail.',
+  );
   const navigate = useNavigate();
   const { state } = useLocation();
   const queryClient = useQueryClient();

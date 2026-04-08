@@ -43,12 +43,8 @@ router.get(
 
       const filter = {};
       if (q) {
-        // $text index replaces the regex search for restaurantName and description.
-        // We also keep a regex match for cuisine array since it's not in the text index.
-        filter.$or = [
-          { $text: { $search: q } },
-          { cuisine: { $elemMatch: { $regex: q, $options: 'i' } } },
-        ];
+        // Text search covers indexed establishment fields.
+        filter.$text = { $search: q };
       }
       // Cuisine filter is applied server-side so pagination counts are accurate.
       if (cuisineFilter) {
@@ -71,7 +67,7 @@ router.get(
 
       return res.json({ establishments, total, page, limit });
     } catch (error) {
-      req.log?.error({ err: error }) || console.error(error);
+      req.log?.error({ err: error }, 'Failed to fetch establishments');
       return res.status(500).json({ error: 'Failed to fetch establishments.' });
     }
   },
@@ -130,7 +126,7 @@ router.post(
 
       return res.status(201).json({ establishment, token });
     } catch (error) {
-      req.log?.error({ err: error }) || console.error(error);
+      req.log?.error({ err: error }, 'Failed to create establishment');
       return res.status(500).json({ error: 'Failed to create establishment.' });
     }
   },
@@ -163,7 +159,7 @@ router.get(
       }));
       return res.json({ establishment: est, reviews: normalizedReviews });
     } catch (error) {
-      req.log?.error({ err: error }) || console.error(error);
+      req.log?.error({ err: error }, 'Failed to fetch establishment');
       return res.status(400).json({ error: 'Could not fetch establishment.' });
     }
   },
@@ -213,7 +209,7 @@ router.post(
 
       return res.json({ establishment, token });
     } catch (error) {
-      req.log?.error({ err: error }) || console.error(error);
+      req.log?.error({ err: error }, 'Failed to claim establishment');
       return res.status(500).json({ error: 'Failed to claim establishment.' });
     }
   },
@@ -270,7 +266,7 @@ router.put(
 
       return res.json({ establishment });
     } catch (error) {
-      req.log?.error({ err: error }) || console.error(error);
+      req.log?.error({ err: error }, 'Failed to update establishment');
       return res.status(500).json({ error: 'Failed to update establishment.' });
     }
   },
@@ -304,7 +300,7 @@ router.post(
 
       return res.status(201).json({ review });
     } catch (error) {
-      req.log?.error({ err: error }) || console.error(error);
+      req.log?.error({ err: error }, 'Failed to create review');
       return res.status(400).json({ error: 'Failed to create review.' });
     }
   },

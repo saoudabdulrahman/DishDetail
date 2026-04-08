@@ -51,7 +51,7 @@ router.get(
           Establishment.find({ $text: { $search: q } })
             .select('_id')
             .lean(),
-          User.find({ username: { $regex: q, $options: 'i' } })
+          User.find({ $text: { $search: q } })
             .select('_id')
             .lean(),
         ]);
@@ -96,7 +96,7 @@ router.get(
 
       return res.json({ reviews: normalizedReviews, total, page, limit });
     } catch (error) {
-      req.log?.error({ err: error }) || console.error(error);
+      req.log?.error({ err: error }, 'Failed to fetch reviews');
       return res.status(500).json({ error: 'Failed to fetch reviews.' });
     }
   },
@@ -148,8 +148,7 @@ router.put(
           const publicId = `${folderPart}/${filenamePart}`;
           await cloudinary.uploader.destroy(publicId);
         } catch (cloudinaryError) {
-          const log = req.log?.error ? req.log : console;
-          log.error(
+          req.log?.error(
             { err: cloudinaryError },
             'Failed to delete old image from Cloudinary during review update',
           );
@@ -167,7 +166,7 @@ router.put(
       const populated = await review.populate('reviewer', 'username');
       return res.json({ review: normalizeReview(populated.toObject()) });
     } catch (error) {
-      req.log?.error({ err: error }) || console.error(error);
+      req.log?.error({ err: error }, 'Failed to update review');
       return res.status(400).json({ error: 'Failed to update review.' });
     }
   },
@@ -201,8 +200,7 @@ router.delete(
           await cloudinary.uploader.destroy(publicId);
         } catch (cloudinaryError) {
           // Log the error but don't block the review deletion
-          const log = req.log?.error ? req.log : console;
-          log.error(
+          req.log?.error(
             { err: cloudinaryError },
             'Failed to delete image from Cloudinary during review deletion',
           );
@@ -214,7 +212,7 @@ router.delete(
 
       return res.json({ ok: true });
     } catch (error) {
-      req.log?.error({ err: error }) || console.error(error);
+      req.log?.error({ err: error }, 'Failed to delete review');
       return res.status(400).json({ error: 'Failed to delete review.' });
     }
   },
@@ -261,7 +259,7 @@ router.post(
         unhelpfulCount: result.unhelpfulCount,
       });
     } catch (error) {
-      req.log?.error({ err: error }) || console.error(error);
+      req.log?.error({ err: error }, 'Failed to vote on review');
       return res.status(400).json({ error: 'Failed to vote.' });
     }
   },

@@ -3,7 +3,10 @@ import { UtensilsCrossed } from 'lucide-react';
 import { usePageTitle } from '../utils/usePageTitle.js';
 
 export default function NotFoundPage() {
-  usePageTitle('Page Not Found');
+  usePageTitle(
+    'Page Not Found',
+    'The page you requested does not exist on DishDetail.',
+  );
   return (
     <main className="px-fluid-container flex min-h-[60vh] items-center justify-center py-20 text-center">
       <div className="flex max-w-md flex-col items-center">
