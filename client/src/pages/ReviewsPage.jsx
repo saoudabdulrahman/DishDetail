@@ -13,7 +13,12 @@ export default function ReviewsPage() {
   const query = (searchParams.get('q') || '').toLowerCase();
   const cuisineFilter = searchParams.get('cuisine') || '';
   const page = Number(searchParams.get('page')) || 1;
-  usePageTitle(cuisineFilter ? `${cuisineFilter} Reviews` : 'Latest Reviews');
+  usePageTitle(
+    cuisineFilter ? `${cuisineFilter} Reviews` : 'Latest Reviews',
+    cuisineFilter ?
+      `Read ${cuisineFilter} restaurant reviews from the DishDetail community.`
+    : 'Read recent restaurant reviews and discover what diners recommend on DishDetail.',
+  );
 
   const handleCuisineChange = (e) => {
     const cuisine = e.target.value;

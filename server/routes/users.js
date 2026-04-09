@@ -14,7 +14,7 @@ router.get('/username/:username', async (req, res) => {
     if (!u) return res.status(404).json({ error: 'User not found.' });
     return res.json({ user: publicUser(u) });
   } catch (error) {
-    req.log?.error({ err: error }) || console.error(error);
+    req.log?.error({ err: error }, 'Failed to fetch user by username');
     return res.status(500).json({ error: 'Failed to fetch user.' });
   }
 });
@@ -28,7 +28,7 @@ router.get('/:id', validate({ params: paramsSchema.id }), async (req, res) => {
     if (!u) return res.status(404).json({ error: 'User not found.' });
     return res.json({ user: publicUser(u) });
   } catch (error) {
-    req.log?.error({ err: error }) || console.error(error);
+    req.log?.error({ err: error }, 'Failed to fetch user by id');
     return res.status(400).json({ error: 'Invalid user id.' });
   }
 });
@@ -65,7 +65,7 @@ router.put(
 
       return res.json({ user: publicUser(u, true) });
     } catch (error) {
-      req.log?.error({ err: error }) || console.error(error);
+      req.log?.error({ err: error }, 'Failed to update user profile');
       return res.status(400).json({ error: 'Invalid request.' });
     }
   },

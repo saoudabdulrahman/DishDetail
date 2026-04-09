@@ -34,16 +34,9 @@ router.post('/', verifyToken, upload.single('image'), (req, res, _next) => {
     },
     (error, result) => {
       if (error) {
-        // Detailed logging to help identify the issue
-        console.error('Cloudinary upload error details:', error);
-        if (req.log) {
-          req.log.error({ err: error }, 'Cloudinary upload failed');
-        } else {
-          console.error('Cloudinary upload failed', error);
-        }
+        req.log?.error({ err: error }, 'Cloudinary upload failed');
         return res.status(500).json({
           error: 'Failed to upload image.',
-          details: error.message || 'Unknown Cloudinary error',
         });
       }
       res.status(200).json({ url: result.secure_url });

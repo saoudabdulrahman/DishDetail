@@ -1,4 +1,7 @@
 import jwt from 'jsonwebtoken';
+import { pino } from 'pino';
+
+const logger = pino();
 
 export function verifyToken(req, res, next) {
   const jwtSecret = process.env.JWT_SECRET;
@@ -28,7 +31,7 @@ export function verifyToken(req, res, next) {
     };
     return next();
   } catch (error) {
-    console.error('JWT verification failed:', error);
+    logger.warn({ err: error }, 'JWT verification failed');
     return res.status(401).json({ error: 'Invalid or expired token.' });
   }
 }

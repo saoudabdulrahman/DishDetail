@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Link, useParams } from 'react-router';
 import { useQuery } from '@tanstack/react-query';
 import { toast } from 'sonner';
@@ -32,6 +32,9 @@ export default function ProfilePage() {
 
   usePageTitle(
     profileUser?.username ? `${profileUser.username}'s Profile` : 'Profile',
+    profileUser?.username ?
+      `View ${profileUser.username}'s reviews and profile activity on DishDetail.`
+    : 'View reviewer profiles and activity on DishDetail.',
   );
 
   const [isEditing, setIsEditing] = useState(false);
@@ -39,12 +42,20 @@ export default function ProfilePage() {
   const [avatarUrl, setAvatarUrl] = useState(authUser?.avatar || '');
   const [error, setError] = useState('');
 
-  const { data: estData, isLoading: isEstLoading } = useQuery({
+  const {
+    data: estData,
+    isLoading: isEstLoading,
+    isError: isEstError,
+  } = useQuery({
     queryKey: ['establishments', { q: '', minRating: 0 }],
     queryFn: () => api().getEstablishments(),
   });
 
-  const { data: revData, isLoading: isRevLoading } = useQuery({
+  const {
+    data: revData,
+    isLoading: isRevLoading,
+    isError: isRevError,
+  } = useQuery({
     queryKey: ['reviews', { q: '' }],
     queryFn: () => api().getReviews(),
   });
@@ -53,6 +64,14 @@ export default function ProfilePage() {
   const reviews = revData?.reviews || EMPTY_ARRAY;
   const loading =
     (isUserLoading && !isOwnProfile) || isEstLoading || isRevLoading;
+  const activityError =
+    isEstError || isRevError ? 'Failed to load profile activity.' : '';
+
+  useEffect(() => {
+    if (activityError) {
+      toast.error(activityError);
+    }
+  }, [activityError]);
 
   const restaurantById = useMemo(
     () => new Map(restaurants.map((r) => [r._id, r])),
@@ -251,7 +270,11 @@ export default function ProfilePage() {
           </span>
         </div>
 
-        {profileReviews.length > 0 ?
+        {activityError ?
+          <div className="bg-surface-container rounded-2xl p-12 text-center">
+            <p className="font-body text-error">{activityError}</p>
+          </div>
+        : profileReviews.length > 0 ?
           <div className="space-y-4">
             {profileReviews.map((review) => {
               const restaurant = restaurantById.get(review.establishment);

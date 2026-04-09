@@ -53,7 +53,11 @@ export default function EstablishmentPage() {
   const reviews = data?.reviews || EMPTY_ARRAY;
   const error = isError ? queryError?.message || 'Failed to load.' : '';
 
-  usePageTitle(restaurant?.restaurantName || 'Loading...');
+  usePageTitle(
+    restaurant?.restaurantName || 'Loading...',
+    restaurant?.description ||
+      'View restaurant details, ratings, and community reviews on DishDetail.',
+  );
 
   const sortedReviews = useMemo(() => {
     return [...reviews].sort(

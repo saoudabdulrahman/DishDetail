@@ -7,7 +7,10 @@ import { toast } from 'sonner';
 import { usePageTitle } from '../utils/usePageTitle.js';
 
 export default function EstablishmentsPage() {
-  usePageTitle('Establishments');
+  usePageTitle(
+    'Establishments',
+    'Browse restaurants by cuisine and rating, with paginated discovery across the DishDetail community.',
+  );
   const [searchParams, setSearchParams] = useSearchParams();
   const minRating = Number(searchParams.get('minRating') || 0);
   const query = (searchParams.get('q') || '').toLowerCase();

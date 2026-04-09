@@ -60,7 +60,7 @@ router.post(
       const token = signTokenForUser(u);
       return res.status(201).json({ user: publicUser(u, true), token });
     } catch (error) {
-      req.log?.error({ err: error }) || console.error(error);
+      req.log?.error({ err: error }, 'Signup failed');
       return res.status(500).json({ error: 'Signup failed.' });
     }
   },
@@ -88,7 +88,7 @@ router.post(
       const token = signTokenForUser(u);
       return res.json({ user: publicUser(u, true), token });
     } catch (error) {
-      req.log?.error({ err: error }) || console.error(error);
+      req.log?.error({ err: error }, 'Login failed');
       return res.status(500).json({ error: 'Login failed.' });
     }
   },
