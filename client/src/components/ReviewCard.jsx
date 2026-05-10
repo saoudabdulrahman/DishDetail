@@ -23,20 +23,30 @@ export default function ReviewCard({ review, restaurant, variant = 'stack' }) {
   const { user } = useAuth();
   const queryClient = useQueryClient();
 
-  const [helpfulCount, setHelpfulCount] = useState(review.helpfulCount || 0);
-  const [unhelpfulCount, setUnhelpfulCount] = useState(
-    review.unhelpfulCount || 0,
-  );
-  const [userVote, setUserVote] = useState(null);
+  const [voteOverride, setVoteOverride] = useState(null);
+  const currentVoteOverride =
+    voteOverride?.reviewId === review._id ? voteOverride : null;
+  const helpfulCount =
+    currentVoteOverride?.helpfulCount ?? review.helpfulCount ?? 0;
+  const unhelpfulCount =
+    currentVoteOverride?.unhelpfulCount ?? review.unhelpfulCount ?? 0;
+  const userVote = currentVoteOverride?.userVote ?? review.userVote ?? null;
 
   const voteMutation = useMutation({
-    mutationFn: (updates) => api().updateReview(review._id, updates),
-    onSuccess: () => {
+    mutationFn: (type) => api().voteReview(review._id, type),
+    onSuccess: (data, type) => {
+      setVoteOverride({
+        reviewId: review._id,
+        helpfulCount: data.helpfulCount,
+        unhelpfulCount: data.unhelpfulCount,
+        userVote: data.userVote || type,
+      });
       queryClient.invalidateQueries({ queryKey: ['reviews'] });
       queryClient.invalidateQueries({ queryKey: ['establishment'] });
     },
-    onError: () => {
-      toast.error('Failed to update vote.');
+    onError: (error) => {
+      setVoteOverride(null);
+      toast.error(error.message || 'Failed to update vote.');
     },
   });
 
@@ -49,38 +59,23 @@ export default function ReviewCard({ review, restaurant, variant = 'stack' }) {
       return;
     }
 
-    let newHelpful = helpfulCount;
-    let newUnhelpful = unhelpfulCount;
-    let newVote = userVote;
-
-    if (type === 'helpful') {
-      if (userVote === 'helpful') {
-        newHelpful--;
-        newVote = null;
-      } else {
-        if (userVote === 'unhelpful') newUnhelpful--;
-        newHelpful++;
-        newVote = 'helpful';
-      }
-    } else {
-      if (userVote === 'unhelpful') {
-        newUnhelpful--;
-        newVote = null;
-      } else {
-        if (userVote === 'helpful') newHelpful--;
-        newUnhelpful++;
-        newVote = 'unhelpful';
-      }
+    if (userVote) {
+      toast.error('You have already voted on this review.');
+      return;
     }
 
-    setHelpfulCount(newHelpful);
-    setUnhelpfulCount(newUnhelpful);
-    setUserVote(newVote);
+    const newHelpful = type === 'helpful' ? helpfulCount + 1 : helpfulCount;
+    const newUnhelpful =
+      type === 'unhelpful' ? unhelpfulCount + 1 : unhelpfulCount;
 
-    voteMutation.mutate({
+    setVoteOverride({
+      reviewId: review._id,
       helpfulCount: newHelpful,
       unhelpfulCount: newUnhelpful,
+      userVote: type,
     });
+
+    voteMutation.mutate(type);
   };
 
   const handleCommentClick = (e) => {
@@ -137,7 +132,7 @@ export default function ReviewCard({ review, restaurant, variant = 'stack' }) {
               type="button"
               onClick={(e) => {
                 e.preventDefault();
-                navigate(`/profile/${review.reviewer}`);
+                navigate(`/profile/${encodeURIComponent(review.reviewer)}`);
               }}
               className="hover:text-primary font-inherit cursor-pointer border-none bg-transparent p-0 text-inherit transition-colors"
             >
@@ -221,7 +216,7 @@ export default function ReviewCard({ review, restaurant, variant = 'stack' }) {
                 className="hover:bg-surface-container-highest -ml-1 flex cursor-pointer items-center space-x-3 rounded-xl border-none bg-transparent p-1 transition-colors"
                 onClick={(e) => {
                   e.preventDefault();
-                  navigate(`/profile/${review.reviewer}`);
+                  navigate(`/profile/${encodeURIComponent(review.reviewer)}`);
                 }}
               >
                 <div className="bg-surface-bright text-primary flex h-10 w-10 shrink-0 items-center justify-center rounded-xl font-bold">
@@ -362,7 +357,7 @@ export default function ReviewCard({ review, restaurant, variant = 'stack' }) {
             type="button"
             onClick={(e) => {
               e.preventDefault();
-              navigate(`/profile/${review.reviewer}`);
+              navigate(`/profile/${encodeURIComponent(review.reviewer)}`);
             }}
             className="hover:text-primary font-inherit cursor-pointer border-none bg-transparent p-0 text-inherit transition-colors"
           >

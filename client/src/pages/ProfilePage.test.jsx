@@ -1,6 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { MemoryRouter, Route, Routes } from 'react-router';
 import ProfilePage from './ProfilePage';
 import { AuthContext } from '../auth/context';
@@ -19,6 +20,7 @@ describe('ProfilePage', () => {
               user: {
                 id: 'u1',
                 username: 'alice',
+                avatar: 'https://example.com/alice.png',
                 bio: 'Food lover',
                 role: 'critic',
               },
@@ -34,7 +36,57 @@ describe('ProfilePage', () => {
     );
 
     expect(await screen.findByText('alice')).toBeInTheDocument();
+    expect(await screen.findByAltText("alice's avatar")).toHaveAttribute(
+      'src',
+      'https://example.com/alice.png',
+    );
     expect(await screen.findByText('Your Reviews')).toBeInTheDocument();
+  });
+
+  it('submits avatar and bio updates for the authenticated user', async () => {
+    const user = userEvent.setup();
+    const updateProfile = vi.fn().mockResolvedValue(undefined);
+    const testQueryClient = createTestQueryClient();
+
+    render(
+      <QueryClientProvider client={testQueryClient}>
+        <MemoryRouter initialEntries={['/profile/alice']}>
+          <AuthContext.Provider
+            value={{
+              user: {
+                id: 'u1',
+                username: 'alice',
+                avatar: 'https://example.com/old.png',
+                bio: 'Food lover',
+                role: 'critic',
+              },
+              updateProfile,
+            }}
+          >
+            <Routes>
+              <Route path="/profile/:username" element={<ProfilePage />} />
+            </Routes>
+          </AuthContext.Provider>
+        </MemoryRouter>
+      </QueryClientProvider>,
+    );
+
+    await user.click(
+      await screen.findByRole('button', { name: 'Edit Profile' }),
+    );
+    const avatarInput = screen.getByLabelText('Avatar URL');
+    const bioInput = screen.getByLabelText('Bio');
+
+    await user.clear(avatarInput);
+    await user.type(avatarInput, 'https://example.com/new.png');
+    await user.clear(bioInput);
+    await user.type(bioInput, 'Updated bio');
+    await user.click(screen.getByRole('button', { name: 'Save Changes' }));
+
+    expect(updateProfile).toHaveBeenCalledWith({
+      avatar: 'https://example.com/new.png',
+      bio: 'Updated bio',
+    });
   });
 
   it('renders other user profile and their writing section', async () => {

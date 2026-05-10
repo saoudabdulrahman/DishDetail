@@ -4,7 +4,7 @@ import Establishment from '../model/Establishment.js';
 import Review from '../model/Review.js';
 import User from '../model/User.js';
 import { syncEstablishmentRating } from '../utils/syncRating.js';
-import { verifyToken } from '../utils/auth.js';
+import { optionalToken, verifyToken } from '../utils/auth.js';
 import { generateSlug } from '../utils/slugify.js';
 import { validate } from '../middleware/validate.js';
 import {
@@ -15,6 +15,45 @@ import {
 
 const router = Router();
 
+function normalizeComment(comment) {
+  const author =
+    comment.authorId && typeof comment.authorId === 'object' ?
+      comment.authorId
+    : null;
+
+  return {
+    ...comment,
+    author: author?.username || comment.author || 'Unknown',
+    authorId: author?._id || comment.authorId || null,
+  };
+}
+
+function getUserVote(review, viewerId) {
+  if (!viewerId) return null;
+  if (review.helpfulVoters?.some((id) => String(id) === String(viewerId))) {
+    return 'helpful';
+  }
+  if (review.unhelpfulVoters?.some((id) => String(id) === String(viewerId))) {
+    return 'unhelpful';
+  }
+  return null;
+}
+
+function normalizeReview(review, viewerId) {
+  const { helpfulVoters, unhelpfulVoters, ...safeReview } = review;
+
+  return {
+    ...safeReview,
+    reviewer: review.reviewer?.username || 'Unknown',
+    reviewerId:
+      typeof review.reviewer === 'object' ?
+        review.reviewer?._id
+      : review.reviewer,
+    comments: (review.comments || []).map(normalizeComment),
+    userVote: getUserVote({ helpfulVoters, unhelpfulVoters }, viewerId),
+  };
+}
+
 // Re-issues a signed JWT reflecting the user's current role.
 // Called after create/claim so the client receives an updated token immediately
 // rather than waiting for the next login.
@@ -24,7 +63,7 @@ function reissueToken(user) {
   return jwt.sign(
     { id: user._id.toString(), username: user.username, role: user.role },
     jwtSecret,
-    { expiresIn: '30d' },
+    { expiresIn: process.env.JWT_EXPIRES_IN || '2h' },
   );
 }
 
@@ -118,11 +157,20 @@ router.post(
         owner: user._id,
       });
 
-      user.role = 'owner';
-      user.ownedEstablishment = establishment._id;
-      await user.save();
+      const updatedUser = await User.findOneAndUpdate(
+        { _id: user._id, ownedEstablishment: null },
+        { $set: { role: 'owner', ownedEstablishment: establishment._id } },
+        { new: true },
+      );
 
-      const token = reissueToken(user);
+      if (!updatedUser) {
+        await Establishment.findByIdAndDelete(establishment._id);
+        return res
+          .status(409)
+          .json({ error: 'You already own an establishment.' });
+      }
+
+      const token = reissueToken(updatedUser);
 
       return res.status(201).json({ establishment, token });
     } catch (error) {
@@ -138,6 +186,7 @@ router.post(
 
 router.get(
   '/:slug',
+  optionalToken,
   validate({ params: paramsSchema.slug }),
   async (req, res) => {
     try {
@@ -146,17 +195,18 @@ router.get(
         .lean();
       if (!est) return res.status(404).json({ error: 'Not found.' });
 
-      const reviews = await Review.find({ establishment: est._id })
+      const reviewsQuery = Review.find({ establishment: est._id })
         .populate('reviewer', 'username')
-        .lean();
-      const normalizedReviews = reviews.map((review) => ({
-        ...review,
-        reviewer: review.reviewer?.username || 'Unknown',
-        reviewerId:
-          typeof review.reviewer === 'object' ?
-            review.reviewer?._id
-          : review.reviewer,
-      }));
+        .populate('comments.authorId', 'username');
+
+      if (req.user?.id) {
+        reviewsQuery.select('+helpfulVoters +unhelpfulVoters');
+      }
+
+      const reviews = await reviewsQuery.lean();
+      const normalizedReviews = reviews.map((review) =>
+        normalizeReview(review, req.user?.id),
+      );
       return res.json({ establishment: est, reviews: normalizedReviews });
     } catch (error) {
       req.log?.error({ err: error }, 'Failed to fetch establishment');
@@ -195,19 +245,40 @@ router.post(
           .json({ error: 'This establishment has already been claimed.' });
       }
 
-      establishment.owner = user._id;
-      await establishment.save();
+      const updatedUser = await User.findOneAndUpdate(
+        { _id: user._id, ownedEstablishment: null },
+        { $set: { role: 'owner', ownedEstablishment: establishment._id } },
+        { new: true },
+      );
 
-      user.role = 'owner';
-      user.ownedEstablishment = establishment._id;
-      await user.save();
+      if (!updatedUser) {
+        return res
+          .status(409)
+          .json({ error: 'You already own an establishment.' });
+      }
 
-      const token = reissueToken(user);
+      const claimedEstablishment = await Establishment.findOneAndUpdate(
+        { _id: establishment._id, owner: null },
+        { $set: { owner: updatedUser._id } },
+        { new: true },
+      );
+
+      if (!claimedEstablishment) {
+        await User.updateOne(
+          { _id: updatedUser._id, ownedEstablishment: establishment._id },
+          { $set: { role: 'user', ownedEstablishment: null } },
+        );
+        return res
+          .status(409)
+          .json({ error: 'This establishment has already been claimed.' });
+      }
+
+      const token = reissueToken(updatedUser);
 
       // Populate owner before returning so the shape matches GET /:slug
-      await establishment.populate('owner', 'username');
+      await claimedEstablishment.populate('owner', 'username');
 
-      return res.json({ establishment, token });
+      return res.json({ establishment: claimedEstablishment, token });
     } catch (error) {
       req.log?.error({ err: error }, 'Failed to claim establishment');
       return res.status(500).json({ error: 'Failed to claim establishment.' });

@@ -8,6 +8,7 @@ describe('publicUser utility', () => {
       username: 'testuser',
       email: 'test@example.com',
       password: 'supersecretpassword123',
+      avatar: 'https://example.com/avatar.png',
       bio: 'hello',
       role: 'user',
       ownedEstablishment: null,
@@ -17,6 +18,7 @@ describe('publicUser utility', () => {
 
     expect(result.password).toBeUndefined(); // Crucial: explicitly verifying it doesn't leak
     expect(result.username).toBe('testuser');
+    expect(result.avatar).toBe('https://example.com/avatar.png');
     expect(result.id).toBe('12345');
     expect(result._id).toBeUndefined();
   });

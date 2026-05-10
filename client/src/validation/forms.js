@@ -1,5 +1,7 @@
 import { z } from 'zod';
 
+const usernameRegex = /^[a-zA-Z0-9_-]+$/;
+
 const optionalUrl = z
   .string()
   .trim()
@@ -22,7 +24,11 @@ export const signupSchema = z
       .string()
       .trim()
       .min(3, 'Username must be at least 3 characters.')
-      .max(32, 'Username must be at most 32 characters.'),
+      .max(32, 'Username must be at most 32 characters.')
+      .regex(
+        usernameRegex,
+        'Username may only contain letters, numbers, underscores, and hyphens.',
+      ),
     password: z.string().min(8, 'Password must be at least 8 characters.'),
     confirm: z.string().min(1, 'Please confirm your password.'),
   })

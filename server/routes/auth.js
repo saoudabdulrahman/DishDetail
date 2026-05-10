@@ -20,7 +20,7 @@ function signTokenForUser(user) {
     { id: user._id.toString(), username: user.username, role: user.role },
     jwtSecret,
     {
-      expiresIn: '30d',
+      expiresIn: process.env.JWT_EXPIRES_IN || '2h',
     },
   );
 }
@@ -60,6 +60,15 @@ router.post(
       const token = signTokenForUser(u);
       return res.status(201).json({ user: publicUser(u, true), token });
     } catch (error) {
+      if (error?.code === 11000) {
+        const field =
+          error.keyPattern?.username ? 'username'
+          : error.keyPattern?.email ? 'email'
+          : 'field';
+        return res
+          .status(409)
+          .json({ error: `That ${field} is already taken.` });
+      }
       req.log?.error({ err: error }, 'Signup failed');
       return res.status(500).json({ error: 'Signup failed.' });
     }

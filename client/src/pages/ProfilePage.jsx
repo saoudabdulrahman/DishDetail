@@ -215,9 +215,16 @@ export default function ProfilePage() {
             </div>
             // Profile Summary
           : <div className="flex flex-col items-center gap-6 sm:flex-row sm:items-start">
-              <div className="bg-surface-container-highest text-primary flex h-24 w-24 shrink-0 items-center justify-center rounded-xl text-3xl font-black sm:h-36 sm:w-36">
-                {profileUser.username?.slice(0, 2).toUpperCase()}
-              </div>
+              {profileUser.avatar ?
+                <img
+                  src={profileUser.avatar}
+                  alt={`${profileUser.username}'s avatar`}
+                  className="bg-surface-container-highest h-24 w-24 shrink-0 rounded-xl object-cover sm:h-36 sm:w-36"
+                />
+              : <div className="bg-surface-container-highest text-primary flex h-24 w-24 shrink-0 items-center justify-center rounded-xl text-3xl font-black sm:h-36 sm:w-36">
+                  {profileUser.username?.slice(0, 2).toUpperCase()}
+                </div>
+              }
 
               <div className="flex-1 text-center sm:text-left">
                 <span className="text-secondary font-label text-xs font-bold tracking-[0.2em] uppercase">
@@ -239,6 +246,7 @@ export default function ProfilePage() {
                   <button
                     onClick={() => {
                       setBio(authUser?.bio || '');
+                      setAvatarUrl(authUser?.avatar || '');
                       setIsEditing(true);
                     }}
                     className="font-ui bg-surface-container-high text-on-surface hover:bg-surface-container-highest w-full cursor-pointer rounded-xl border-none px-6 py-2.5 text-sm font-semibold transition-colors duration-200 sm:w-auto"
@@ -277,7 +285,9 @@ export default function ProfilePage() {
         : profileReviews.length > 0 ?
           <div className="space-y-4">
             {profileReviews.map((review) => {
-              const restaurant = restaurantById.get(review.establishment);
+              const restaurant =
+                review.establishmentSummary ||
+                restaurantById.get(review.establishment);
               if (!restaurant) return null;
               return (
                 <ReviewCard

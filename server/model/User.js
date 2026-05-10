@@ -17,6 +17,7 @@ const UserSchema = new mongoose.Schema(
       lowercase: true,
     },
     password: { type: String, required: true },
+    avatar: { type: String, default: '' },
     bio: { type: String, default: '', maxlength: 500 },
     role: { type: String, enum: ['user', 'owner'], default: 'user' },
     ownedEstablishment: {

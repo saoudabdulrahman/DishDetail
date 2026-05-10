@@ -303,7 +303,9 @@ export default function SubmitReviewPage() {
           </div>
           <div className="flex flex-col gap-4">
             {featured.map((review) => {
-              const restaurant = restaurantById.get(review.establishment);
+              const restaurant =
+                review.establishmentSummary ||
+                restaurantById.get(review.establishment);
               if (!restaurant) return null;
               return (
                 <ReviewCard

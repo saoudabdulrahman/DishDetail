@@ -97,6 +97,7 @@ async function main() {
       isEdited: r.isEdited || false,
       comments:
         r.comments?.map((c) => ({
+          authorId: userIdByUsername.get(ensureString(c.author)) || null,
           author: ensureString(c.author),
           date: ensureString(c.date),
           body: ensureString(c.body),

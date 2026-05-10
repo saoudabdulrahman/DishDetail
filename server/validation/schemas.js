@@ -2,6 +2,7 @@ import { z } from 'zod';
 
 const objectIdRegex = /^[a-f\d]{24}$/i;
 const slugRegex = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+const usernameRegex = /^[a-zA-Z0-9_-]+$/;
 
 const optionalTrimmedUrl = z
   .string()
@@ -18,9 +19,19 @@ const optionalTrimmedUrl = z
     'Please enter a valid URL.',
   );
 
+const commentBodySchema = z
+  .string()
+  .trim()
+  .min(1, 'Comment body cannot be empty.')
+  .max(2000, 'Comment body must be at most 2000 characters.');
+
 export const paramsSchema = {
   id: z.object({
     id: z.string().regex(objectIdRegex, 'Invalid id format.'),
+  }),
+  idComment: z.object({
+    id: z.string().regex(objectIdRegex, 'Invalid id format.'),
+    commentId: z.string().regex(objectIdRegex, 'Invalid comment id format.'),
   }),
   slug: z.object({
     slug: z.string().regex(slugRegex, 'Invalid slug format.'),
@@ -32,7 +43,7 @@ export const querySchema = {
     q: z.string().trim().max(100, 'Search query is too long.').optional(),
     minRating: z.coerce.number().min(0).max(5).optional(),
     page: z.coerce.number().int().min(1).optional(),
-    limit: z.coerce.number().int().min(1).max(1000).optional(),
+    limit: z.coerce.number().int().min(1).max(100).optional(),
     cuisine: z
       .string()
       .trim()
@@ -62,7 +73,11 @@ export const bodySchema = {
       .string()
       .trim()
       .min(3, 'Username must be at least 3 characters.')
-      .max(32, 'Username must be at most 32 characters.'),
+      .max(32, 'Username must be at most 32 characters.')
+      .regex(
+        usernameRegex,
+        'Username may only contain letters, numbers, underscores, and hyphens.',
+      ),
     password: z.string().min(8, 'Password must be at least 8 characters.'),
   }),
   login: z.object({
@@ -99,55 +114,41 @@ export const bodySchema = {
         message: 'Invalid vote type.',
       }),
   }),
-  reviewUpdate: z.object({
-    title: z
-      .string()
-      .trim()
-      .min(1, 'Review title cannot be empty.')
-      .max(200, 'Review title must be at most 200 characters.')
-      .optional(),
+  commentCreate: z.object({
+    body: commentBodySchema,
+  }),
+  commentUpdate: z.object({
+    body: commentBodySchema,
+  }),
+  ownerResponse: z.object({
     body: z
       .string()
       .trim()
-      .min(1, 'Review body cannot be empty.')
-      .max(5000, 'Review body must be at most 5000 characters.')
-      .optional(),
-    rating: z.coerce.number().int().min(1).max(5).optional(),
-    isEdited: z.boolean().optional(),
-    helpfulCount: z.number().int().min(0).optional(),
-    unhelpfulCount: z.number().int().min(0).optional(),
-    comments: z
-      .array(
-        z.object({
-          _id: z.string().optional(),
-          author: z
-            .string()
-            .trim()
-            .min(1, 'Comment author is required.')
-            .max(64, 'Comment author is too long.'),
-          date: z.iso.datetime('Comment date must be a valid ISO datetime.'),
-          body: z
-            .string()
-            .trim()
-            .min(1, 'Comment body cannot be empty.')
-            .max(2000, 'Comment body must be at most 2000 characters.'),
-          isEdited: z.boolean().optional(),
-        }),
-      )
-      .optional(),
-    ownerResponse: z
-      .object({
-        date: z.iso.datetime('Response date must be a valid ISO datetime.'),
-        body: z
-          .string()
-          .trim()
-          .min(1, 'Response body cannot be empty.')
-          .max(2000, 'Response body must be at most 2000 characters.'),
-      })
-      .nullable()
-      .optional(),
-    reviewImage: optionalTrimmedUrl.nullable().optional(),
+      .min(1, 'Response body cannot be empty.')
+      .max(2000, 'Response body must be at most 2000 characters.'),
   }),
+  reviewUpdate: z.strictObject(
+    {
+      title: z
+        .string()
+        .trim()
+        .min(1, 'Review title cannot be empty.')
+        .max(200, 'Review title must be at most 200 characters.')
+        .optional(),
+      body: z
+        .string()
+        .trim()
+        .min(1, 'Review body cannot be empty.')
+        .max(5000, 'Review body must be at most 5000 characters.')
+        .optional(),
+      rating: z.coerce.number().int().min(1).max(5).optional(),
+      reviewImage: optionalTrimmedUrl.nullable().optional(),
+    },
+    {
+      error:
+        'Review updates may only include title, body, rating, or reviewImage.',
+    },
+  ),
   establishmentCreate: z.object({
     restaurantName: z
       .string()

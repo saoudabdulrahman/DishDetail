@@ -120,6 +120,29 @@ export function api() {
         method: 'POST',
         body: JSON.stringify({ type }),
       }),
+    addReviewComment: (id, body) =>
+      fetchJson(`${BASE}/api/reviews/${id}/comments`, {
+        method: 'POST',
+        body: JSON.stringify({ body }),
+      }),
+    updateReviewComment: (id, commentId, body) =>
+      fetchJson(`${BASE}/api/reviews/${id}/comments/${commentId}`, {
+        method: 'PUT',
+        body: JSON.stringify({ body }),
+      }),
+    deleteReviewComment: (id, commentId) =>
+      fetchJson(`${BASE}/api/reviews/${id}/comments/${commentId}`, {
+        method: 'DELETE',
+      }),
+    saveOwnerResponse: (id, body) =>
+      fetchJson(`${BASE}/api/reviews/${id}/owner-response`, {
+        method: 'PUT',
+        body: JSON.stringify({ body }),
+      }),
+    deleteOwnerResponse: (id) =>
+      fetchJson(`${BASE}/api/reviews/${id}/owner-response`, {
+        method: 'DELETE',
+      }),
     getUser: (id) => fetchJson(`${BASE}/api/users/${id}`),
     getUserByUsername: (username) =>
       fetchJson(`${BASE}/api/users/username/${encodeURIComponent(username)}`),

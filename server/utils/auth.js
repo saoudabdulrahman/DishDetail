@@ -3,35 +3,54 @@ import { pino } from 'pino';
 
 const logger = pino();
 
-export function verifyToken(req, res, next) {
+function readUserFromToken(req) {
   const jwtSecret = process.env.JWT_SECRET;
   const authHeader = req.headers.authorization || '';
 
   if (!authHeader.startsWith('Bearer ')) {
-    return res
-      .status(401)
-      .json({ error: 'Missing or invalid authorization header.' });
+    return { error: 'Missing or invalid authorization header.' };
   }
 
   const token = authHeader.slice('Bearer '.length).trim();
   if (!token) {
-    return res.status(401).json({ error: 'Missing token.' });
+    return { error: 'Missing token.' };
   }
 
   if (!jwtSecret) {
-    return res.status(500).json({ error: 'JWT secret is not configured.' });
+    return { error: 'JWT secret is not configured.', status: 500 };
   }
 
   try {
     const decoded = jwt.verify(token, jwtSecret);
-    req.user = {
-      id: decoded.id,
-      username: decoded.username,
-      role: decoded.role,
+    return {
+      user: {
+        id: decoded.id,
+        username: decoded.username,
+        role: decoded.role,
+      },
     };
-    return next();
   } catch (error) {
     logger.warn({ err: error }, 'JWT verification failed');
-    return res.status(401).json({ error: 'Invalid or expired token.' });
+    return { error: 'Invalid or expired token.' };
   }
+}
+
+export function verifyToken(req, res, next) {
+  const result = readUserFromToken(req);
+  if (result.user) {
+    req.user = result.user;
+    return next();
+  }
+  return res.status(result.status || 401).json({ error: result.error });
+}
+
+export function optionalToken(req, _res, next) {
+  const authHeader = req.headers.authorization || '';
+  if (!authHeader) return next();
+
+  const result = readUserFromToken(req);
+  if (result.user) {
+    req.user = result.user;
+  }
+  return next();
 }

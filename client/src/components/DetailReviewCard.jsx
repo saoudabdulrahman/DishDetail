@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link } from 'react-router';
 import { Star, Edit, Trash2, ThumbsUp, ThumbsDown } from 'lucide-react';
 import { toast } from 'sonner';
+import { api } from '../api';
 import { useAuth } from '../auth/useAuth';
 import { formatDate } from '../utils/date';
 import { cn } from '../utils/cn';
@@ -122,7 +123,17 @@ function CommentItem({
   );
 }
 
-export default function DetailReviewCard({ review, onDelete, onUpdate }) {
+export default function DetailReviewCard({
+  review,
+  onDelete,
+  onUpdate,
+  onAddComment,
+  onUpdateComment,
+  onDeleteComment,
+  onSaveOwnerResponse,
+  onDeleteOwnerResponse,
+  canManageOwnerResponse = false,
+}) {
   const { user, setAuthModal } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
   const [imgLoaded, setImgLoaded] = useState(false);
@@ -135,17 +146,20 @@ export default function DetailReviewCard({ review, onDelete, onUpdate }) {
   const [editingCommentId, setEditingCommentId] = useState(null);
   const [editCommentText, setEditCommentText] = useState('');
 
-  const [helpfulCount, setHelpfulCount] = useState(review.helpfulCount || 0);
-  const [unhelpfulCount, setUnhelpfulCount] = useState(
-    review.unhelpfulCount || 0,
-  );
-  const [userVote, setUserVote] = useState(null);
+  const [voteOverride, setVoteOverride] = useState(null);
 
   const [isEditingResponse, setIsEditingResponse] = useState(false);
   const [responseBody, setResponseBody] = useState('');
 
   const isOwner = user && String(user.id) === String(review.reviewerId || '');
-  const isEstablishmentOwner = user && user.role === 'owner';
+  const isEstablishmentOwner = Boolean(user && canManageOwnerResponse);
+  const currentVoteOverride =
+    voteOverride?.reviewId === review._id ? voteOverride : null;
+  const helpfulCount =
+    currentVoteOverride?.helpfulCount ?? review.helpfulCount ?? 0;
+  const unhelpfulCount =
+    currentVoteOverride?.unhelpfulCount ?? review.unhelpfulCount ?? 0;
+  const userVote = currentVoteOverride?.userVote ?? review.userVote ?? null;
 
   const handleSave = () => {
     const parsed = reviewEditSchema.safeParse({
@@ -161,7 +175,6 @@ export default function DetailReviewCard({ review, onDelete, onUpdate }) {
       title: parsed.data.title,
       body: parsed.data.body,
       rating: parsed.data.rating,
-      isEdited: true,
     });
     setIsEditing(false);
   };
@@ -178,59 +191,72 @@ export default function DetailReviewCard({ review, onDelete, onUpdate }) {
     setEditRating(review.rating);
   };
 
-  const handleVote = (type) => {
+  const handleVote = async (type) => {
     if (!user) {
       toast.error('You must be logged in to vote on reviews.');
       return;
     }
-    let newHelpful = helpfulCount,
-      newUnhelpful = unhelpfulCount,
-      newVote = userVote;
-    if (type === 'helpful') {
-      if (userVote === 'helpful') {
-        newHelpful--;
-        newVote = null;
-      } else {
-        if (userVote === 'unhelpful') newUnhelpful--;
-        newHelpful++;
-        newVote = 'helpful';
-      }
-    } else {
-      if (userVote === 'unhelpful') {
-        newUnhelpful--;
-        newVote = null;
-      } else {
-        if (userVote === 'helpful') newHelpful--;
-        newUnhelpful++;
-        newVote = 'unhelpful';
-      }
+
+    if (userVote) {
+      toast.error('You have already voted on this review.');
+      return;
     }
-    setHelpfulCount(newHelpful);
-    setUnhelpfulCount(newUnhelpful);
-    setUserVote(newVote);
-    onUpdate(review._id, {
+
+    const previousHelpful = helpfulCount;
+    const previousUnhelpful = unhelpfulCount;
+    const newHelpful = type === 'helpful' ? helpfulCount + 1 : helpfulCount;
+    const newUnhelpful =
+      type === 'unhelpful' ? unhelpfulCount + 1 : unhelpfulCount;
+
+    setVoteOverride({
+      reviewId: review._id,
       helpfulCount: newHelpful,
       unhelpfulCount: newUnhelpful,
+      userVote: type,
     });
+
+    try {
+      const result = await api().voteReview(review._id, type);
+      setVoteOverride({
+        reviewId: review._id,
+        helpfulCount: result.helpfulCount,
+        unhelpfulCount: result.unhelpfulCount,
+        userVote: result.userVote || type,
+      });
+    } catch (error) {
+      setVoteOverride({
+        reviewId: review._id,
+        helpfulCount: previousHelpful,
+        unhelpfulCount: previousUnhelpful,
+        userVote: null,
+      });
+      toast.error(error.message || 'Failed to update vote.');
+    }
   };
 
-  const handleSaveResponse = () => {
+  const handleSaveResponse = async () => {
     const parsed = ownerResponseSchema.safeParse({ body: responseBody });
     if (!parsed.success) {
       toast.error(parsed.error.issues[0].message);
       return;
     }
-    onUpdate(review._id, {
-      ownerResponse: { date: new Date().toISOString(), body: parsed.data.body },
-    });
-    toast.success('Response saved.');
-    setIsEditingResponse(false);
+    try {
+      await onSaveOwnerResponse(review._id, parsed.data.body);
+      toast.success('Response saved.');
+      setIsEditingResponse(false);
+    } catch (error) {
+      toast.error(error.message || 'Failed to save response.');
+    }
   };
 
-  const handleDeleteResponse = () => {
+  const handleDeleteResponse = async () => {
     if (window.confirm('Delete your response?')) {
-      onUpdate(review._id, { ownerResponse: null });
-      toast.success('Response deleted.');
+      try {
+        await onDeleteOwnerResponse(review._id);
+        toast.success('Response deleted.');
+      } catch (error) {
+        toast.error(error.message || 'Failed to delete response.');
+      }
     }
   };
 
@@ -246,15 +272,8 @@ export default function DetailReviewCard({ review, onDelete, onUpdate }) {
       toast.error(parsed.error.issues[0].message);
       return;
     }
-    const newComment = {
-      author: user.username,
-      date: new Date().toISOString(),
-      body: parsed.data.text,
-    };
     try {
-      await onUpdate(review._id, {
-        comments: [...(review.comments || []), newComment],
-      });
+      await onAddComment(review._id, parsed.data.text);
       toast.success('Comment added.');
       setCommentText('');
     } catch {
@@ -265,9 +284,7 @@ export default function DetailReviewCard({ review, onDelete, onUpdate }) {
   const handleDeleteComment = async (commentId) => {
     if (window.confirm('Delete this comment?')) {
       try {
-        await onUpdate(review._id, {
-          comments: review.comments.filter((c) => c._id !== commentId),
-        });
+        await onDeleteComment(review._id, commentId);
         toast.success('Comment deleted.');
       } catch {
         // onUpdate already shows a toast on failure
@@ -282,13 +299,7 @@ export default function DetailReviewCard({ review, onDelete, onUpdate }) {
       return;
     }
     try {
-      await onUpdate(review._id, {
-        comments: review.comments.map((c) =>
-          c._id === commentId ?
-            { ...c, body: parsed.data.text, isEdited: true }
-          : c,
-        ),
-      });
+      await onUpdateComment(review._id, commentId, parsed.data.text);
       setEditingCommentId(null);
       setEditCommentText('');
       toast.success('Comment updated.');
@@ -352,7 +363,7 @@ export default function DetailReviewCard({ review, onDelete, onUpdate }) {
       {/* Header */}
       <div className="mb-4 flex items-center justify-between gap-4">
         <Link
-          to={`/profile/${review.reviewer}`}
+          to={`/profile/${encodeURIComponent(review.reviewer)}`}
           className="hover:bg-surface-container-highest -ml-1 flex items-center gap-3 rounded-xl p-1 pr-3 no-underline transition-colors"
         >
           <div className="bg-surface-bright text-primary flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-sm font-bold">

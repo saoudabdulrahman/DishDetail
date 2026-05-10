@@ -52,11 +52,14 @@ export default function AuthProvider({ children }) {
         setRememberMe(rememberMe);
       },
       logout: async () => {
-        await api().logout();
-        clearAuth();
-        setUser(null);
-        setToken(null);
-        setRememberMe(false);
+        try {
+          await api().logout();
+        } finally {
+          clearAuth();
+          setUser(null);
+          setToken(null);
+          setRememberMe(false);
+        }
       },
       // Called after create/claim establishment so the new role ('owner') and
       // ownedEstablishment are reflected in the auth state immediately without

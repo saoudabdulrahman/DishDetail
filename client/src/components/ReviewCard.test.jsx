@@ -9,7 +9,10 @@ import { createTestQueryClient } from '../test/render';
 
 vi.mock('../api', () => ({
   api: () => ({
-    updateReview: vi.fn().mockResolvedValue({}),
+    voteReview: vi.fn().mockResolvedValue({
+      helpfulCount: 2,
+      unhelpfulCount: 0,
+    }),
   }),
 }));
 
@@ -95,6 +98,23 @@ describe('ReviewCard', () => {
     await waitFor(() => {
       expect(screen.getByText('2')).toBeInTheDocument();
     });
+  });
+
+  it('uses server-provided vote state to block voting after refresh', async () => {
+    renderCard({
+      review: { ...baseReview, userVote: 'helpful' },
+      user: { id: 'u-bob', username: 'bob' },
+    });
+
+    const voteDivs = document.querySelectorAll(
+      '.cursor-pointer.flex.items-center.space-x-2',
+    );
+    await userEvent.click(voteDivs[0]);
+
+    expect(toastError).toHaveBeenCalledWith(
+      'You have already voted on this review.',
+    );
+    expect(screen.getByText('1')).toBeInTheDocument();
   });
 
   it('blocks vote and shows toast error for unauthenticated user', async () => {

@@ -123,7 +123,7 @@ export default function Header() {
                     <MenuItem>
                       {({ focus }) => (
                         <NavLink
-                          to={`/profile/${user.username}`}
+                          to={`/profile/${encodeURIComponent(user.username)}`}
                           className={cn(
                             'text-on-surface font-ui flex items-center gap-2 px-4 py-3 text-sm no-underline transition-colors duration-200',
                             focus && 'bg-surface-container-high',
@@ -246,7 +246,7 @@ export default function Header() {
             {user ?
               <div className="flex flex-col space-y-1">
                 <NavLink
-                  to={`/profile/${user.username}`}
+                  to={`/profile/${encodeURIComponent(user.username)}`}
                   onClick={closeMenu}
                   className="text-on-surface-variant hover:text-on-background hover:bg-surface-container font-ui flex items-center gap-2 rounded-sm px-3 py-2 text-sm no-underline transition-colors duration-200"
                 >

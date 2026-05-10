@@ -7,6 +7,7 @@ import mongoose from 'mongoose';
 import cookieParser from 'cookie-parser';
 import { pino } from 'pino';
 import pinoHttp from 'pino-http';
+import { validateServerConfig } from './utils/config.js';
 import { connectDb } from './model/db.js';
 import authRoutes from './routes/auth.js';
 import userRoutes from './routes/users.js';
@@ -18,6 +19,7 @@ import uploadRoutes from './routes/upload.js';
 // Sets up database connections, shared middleware, and primary API routes.
 const app = express();
 const PORT = process.env.PORT || 3000;
+const config = validateServerConfig(process.env);
 const usePrettyLogging =
   process.env.NODE_ENV !== 'production' && process.stdout.isTTY;
 
@@ -35,7 +37,7 @@ const logger = pino(
   : {},
 );
 
-await connectDb(process.env.MONGODB_URI);
+await connectDb(config.mongoUri);
 
 // Standard middleware stack: CORS for cross-origin client requests
 // and JSON parsing for standard API payloads.
@@ -52,28 +54,45 @@ app.use(
 app.use(pinoHttp({ logger }));
 app.use(
   cors({
-    origin: process.env.CLIENT_ORIGIN || 'http://localhost:5173',
+    origin: config.clientOrigin,
     credentials: true,
   }),
 );
-app.use(express.json());
+app.use(express.json({ limit: '100kb' }));
 app.use(cookieParser());
 
 // API routes
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  limit: 100,
+  limit: 20,
   message: {
     error: 'Too many requests from this IP, please try again in 15 minutes.',
   },
 });
 
+const writeLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  limit: 300,
+  skip: (req) => !['POST', 'PUT', 'PATCH', 'DELETE'].includes(req.method),
+  message: {
+    error: 'Too many write requests from this IP, please try again later.',
+  },
+});
+
+const uploadLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  limit: 30,
+  message: {
+    error: 'Too many upload requests from this IP, please try again later.',
+  },
+});
+
 app.get('/api/health', (req, res) => res.json({ ok: true }));
 app.use('/api/auth', authLimiter, authRoutes);
-app.use('/api/users', userRoutes);
-app.use('/api/establishments', establishmentRoutes);
-app.use('/api/reviews', reviewRoutes);
-app.use('/api/upload', uploadRoutes);
+app.use('/api/users', writeLimiter, userRoutes);
+app.use('/api/establishments', writeLimiter, establishmentRoutes);
+app.use('/api/reviews', writeLimiter, reviewRoutes);
+app.use('/api/upload', uploadLimiter, uploadRoutes);
 
 app.use((err, req, res, _next) => {
   const status = err.status ?? 500;

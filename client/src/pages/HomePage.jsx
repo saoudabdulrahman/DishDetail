@@ -1,4 +1,4 @@
-import { useMemo, useState, useEffect } from 'react';
+import { useCallback, useMemo, useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router';
 import { useQuery } from '@tanstack/react-query';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
@@ -54,16 +54,22 @@ export default function HomePage() {
     [restaurants],
   );
 
+  const getRestaurantForReview = useCallback(
+    (review) =>
+      review.establishmentSummary || restaurantById.get(review.establishment),
+    [restaurantById],
+  );
+
   const featured = useMemo(() => {
     return [...reviews]
       .sort((a, b) => b.rating - a.rating)
       .slice(0, 5)
       .map((review) => ({
         review,
-        restaurant: restaurantById.get(review.establishment),
+        restaurant: getRestaurantForReview(review),
       }))
       .filter(({ restaurant }) => restaurant);
-  }, [reviews, restaurantById]);
+  }, [reviews, getRestaurantForReview]);
 
   const stackPool = featured.slice(1, 5);
   const itemsPerPage = 2;
@@ -84,7 +90,7 @@ export default function HomePage() {
     const counts = {};
 
     reviews.forEach((review) => {
-      const restaurant = restaurantById.get(review.establishment);
+      const restaurant = getRestaurantForReview(review);
       if (!restaurant?.cuisine) return;
 
       const values =
@@ -102,7 +108,7 @@ export default function HomePage() {
       .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
       .slice(0, 5)
       .map(([cuisine]) => cuisine);
-  }, [reviews, restaurantById]);
+  }, [reviews, getRestaurantForReview]);
 
   const topCritics = useMemo(() => {
     const counts = {};
@@ -264,14 +270,20 @@ export default function HomePage() {
                 />
               ))
             : !error && feedReviews.length > 0 ?
-              feedReviews.map((review) => (
-                <ReviewCard
-                  key={review._id}
-                  review={review}
-                  restaurant={restaurantById.get(review.establishment)}
-                  variant="feed"
-                />
-              ))
+              feedReviews
+                .map((review) => ({
+                  review,
+                  restaurant: getRestaurantForReview(review),
+                }))
+                .filter(({ restaurant }) => restaurant)
+                .map(({ review, restaurant }) => (
+                  <ReviewCard
+                    key={review._id}
+                    review={review}
+                    restaurant={restaurant}
+                    variant="feed"
+                  />
+                ))
             : <div className="bg-surface-container rounded-2xl p-10 text-center">
                 <p className="font-ui text-on-surface-variant text-sm">
                   No reviews available right now.
@@ -322,7 +334,7 @@ export default function HomePage() {
                     className="flex items-center justify-between"
                   >
                     <Link
-                      to={`/profile/${critic.name}`}
+                      to={`/profile/${encodeURIComponent(critic.name)}`}
                       className="hover:bg-surface-container-low -ml-1 flex items-center space-x-3 rounded-xl p-1 pr-3 no-underline transition-colors"
                     >
                       <div className="bg-surface-bright text-primary flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-xs font-bold">

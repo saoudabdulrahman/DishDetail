@@ -126,6 +126,46 @@ export default function EstablishmentPage() {
     }
   };
 
+  const replaceReviewInCache = (reviewId, review) => {
+    queryClient.setQueryData(['establishment', slug], (oldData) => {
+      if (!oldData) return oldData;
+      return {
+        ...oldData,
+        reviews: oldData.reviews.map((r) => (r._id === reviewId ? review : r)),
+      };
+    });
+    queryClient.invalidateQueries({ queryKey: ['reviews'] });
+  };
+
+  const handleAddComment = async (reviewId, body) => {
+    const { review } = await api().addReviewComment(reviewId, body);
+    replaceReviewInCache(reviewId, review);
+  };
+
+  const handleUpdateComment = async (reviewId, commentId, body) => {
+    const { review } = await api().updateReviewComment(
+      reviewId,
+      commentId,
+      body,
+    );
+    replaceReviewInCache(reviewId, review);
+  };
+
+  const handleDeleteComment = async (reviewId, commentId) => {
+    const { review } = await api().deleteReviewComment(reviewId, commentId);
+    replaceReviewInCache(reviewId, review);
+  };
+
+  const handleSaveOwnerResponse = async (reviewId, body) => {
+    const { review } = await api().saveOwnerResponse(reviewId, body);
+    replaceReviewInCache(reviewId, review);
+  };
+
+  const handleDeleteOwnerResponse = async (reviewId) => {
+    const { review } = await api().deleteOwnerResponse(reviewId);
+    replaceReviewInCache(reviewId, review);
+  };
+
   const handleClaim = async () => {
     if (isClaiming) return;
     setIsClaiming(true);
@@ -561,6 +601,12 @@ export default function EstablishmentPage() {
                 review={review}
                 onUpdate={handleUpdateReview}
                 onDelete={handleDeleteReview}
+                onAddComment={handleAddComment}
+                onUpdateComment={handleUpdateComment}
+                onDeleteComment={handleDeleteComment}
+                onSaveOwnerResponse={handleSaveOwnerResponse}
+                onDeleteOwnerResponse={handleDeleteOwnerResponse}
+                canManageOwnerResponse={isOwner}
               />
             ))}
             {visibleCount < reviews.length && (

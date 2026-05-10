@@ -4,7 +4,7 @@ import Review from '../model/Review.js';
 import Establishment from '../model/Establishment.js';
 import User from '../model/User.js';
 import { syncEstablishmentRating } from '../utils/syncRating.js';
-import { verifyToken } from '../utils/auth.js';
+import { optionalToken, verifyToken } from '../utils/auth.js';
 import { validate } from '../middleware/validate.js';
 import {
   bodySchema,
@@ -14,19 +14,88 @@ import {
 
 const router = Router();
 
-function normalizeReview(review) {
+function normalizeComment(comment) {
+  const author =
+    comment.authorId && typeof comment.authorId === 'object' ?
+      comment.authorId
+    : null;
+
   return {
-    ...review,
+    ...comment,
+    author: author?.username || comment.author || 'Unknown',
+    authorId: author?._id || comment.authorId || null,
+  };
+}
+
+function getUserVote(review, viewerId) {
+  if (!viewerId) return null;
+  if (review.helpfulVoters?.some((id) => String(id) === String(viewerId))) {
+    return 'helpful';
+  }
+  if (review.unhelpfulVoters?.some((id) => String(id) === String(viewerId))) {
+    return 'unhelpful';
+  }
+  return null;
+}
+
+function normalizeReview(review, viewerId) {
+  const establishment =
+    review.establishment && typeof review.establishment === 'object' ?
+      review.establishment
+    : null;
+  const { helpfulVoters, unhelpfulVoters, ...safeReview } = review;
+
+  return {
+    ...safeReview,
+    establishment: establishment?._id || review.establishment,
+    establishmentSummary:
+      establishment ?
+        {
+          _id: establishment._id,
+          restaurantName: establishment.restaurantName,
+          slug: establishment.slug,
+          cuisine: establishment.cuisine,
+          rating: establishment.rating,
+          restaurantImage: establishment.restaurantImage,
+          address: establishment.address,
+          description: establishment.description,
+        }
+      : undefined,
     reviewer: review.reviewer?.username || 'Unknown',
     reviewerId:
       typeof review.reviewer === 'object' ?
         review.reviewer?._id
       : review.reviewer,
+    comments: (review.comments || []).map(normalizeComment),
+    userVote: getUserVote({ helpfulVoters, unhelpfulVoters }, viewerId),
   };
+}
+
+async function sendPopulatedReview(res, review, viewerId) {
+  const populated = await review.populate([
+    { path: 'reviewer', select: 'username' },
+    { path: 'comments.authorId', select: 'username' },
+    {
+      path: 'establishment',
+      select:
+        'restaurantName slug cuisine rating restaurantImage address description',
+    },
+  ]);
+  return res.json({ review: normalizeReview(populated.toObject(), viewerId) });
+}
+
+async function isEstablishmentOwner(review, userId) {
+  const establishment = await Establishment.findById(review.establishment)
+    .select('owner')
+    .lean();
+  return Boolean(
+    establishment?.owner && String(establishment.owner) === String(userId),
+  );
 }
 
 router.get(
   '/',
+  optionalToken,
   validate({ query: querySchema.reviewsList }),
   async (req, res) => {
     try {
@@ -83,16 +152,28 @@ router.get(
         }
       }
 
+      const reviewsQuery = Review.find(filter)
+        .sort({ createdAt: -1 })
+        .skip((page - 1) * limit)
+        .limit(limit)
+        .populate('reviewer', 'username')
+        .populate('comments.authorId', 'username')
+        .populate(
+          'establishment',
+          'restaurantName slug cuisine rating restaurantImage address description',
+        );
+
+      if (req.user?.id) {
+        reviewsQuery.select('+helpfulVoters +unhelpfulVoters');
+      }
+
       const [reviews, total] = await Promise.all([
-        Review.find(filter)
-          .sort({ createdAt: -1 })
-          .skip((page - 1) * limit)
-          .limit(limit)
-          .populate('reviewer', 'username')
-          .lean(),
+        reviewsQuery.lean(),
         Review.countDocuments(filter),
       ]);
-      const normalizedReviews = reviews.map(normalizeReview);
+      const normalizedReviews = reviews.map((review) =>
+        normalizeReview(review, req.user?.id),
+      );
 
       return res.json({ reviews: normalizedReviews, total, page, limit });
     } catch (error) {
@@ -108,7 +189,9 @@ router.put(
   validate({ params: paramsSchema.id, body: bodySchema.reviewUpdate }),
   async (req, res) => {
     try {
-      const review = await Review.findById(req.params.id);
+      const review = await Review.findById(req.params.id).select(
+        '+helpfulVoters +unhelpfulVoters',
+      );
       if (!review) return res.status(404).json({ error: 'Review not found.' });
 
       if (String(review.reviewer) !== String(req.user.id)) {
@@ -117,18 +200,9 @@ router.put(
           .json({ error: 'You can only edit your own reviews.' });
       }
 
-      // Whitelist mutable review fields
-      const allowed = [
-        'title',
-        'body',
-        'rating',
-        'isEdited',
-        'helpfulCount',
-        'unhelpfulCount',
-        'comments',
-        'ownerResponse',
-        'reviewImage',
-      ];
+      // Whitelist only user-editable review content. Counters, comments,
+      // owner responses, and edit metadata are server-owned fields.
+      const allowed = ['title', 'body', 'rating', 'reviewImage'];
       const updates = {};
       for (const k of allowed) {
         if (k in req.body) updates[k] = req.body[k];
@@ -155,6 +229,10 @@ router.put(
         }
       }
 
+      if (Object.keys(updates).length > 0) {
+        updates.isEdited = true;
+      }
+
       Object.assign(review, updates);
       await review.save();
 
@@ -163,11 +241,172 @@ router.put(
         await syncEstablishmentRating(review.establishment);
       }
 
-      const populated = await review.populate('reviewer', 'username');
-      return res.json({ review: normalizeReview(populated.toObject()) });
+      return sendPopulatedReview(res, review, req.user.id);
     } catch (error) {
       req.log?.error({ err: error }, 'Failed to update review');
       return res.status(400).json({ error: 'Failed to update review.' });
+    }
+  },
+);
+
+router.post(
+  '/:id/comments',
+  verifyToken,
+  validate({ params: paramsSchema.id, body: bodySchema.commentCreate }),
+  async (req, res) => {
+    try {
+      const review = await Review.findById(req.params.id).select(
+        '+helpfulVoters +unhelpfulVoters',
+      );
+      if (!review) return res.status(404).json({ error: 'Review not found.' });
+
+      review.comments.push({
+        authorId: req.user.id,
+        author: req.user.username,
+        date: new Date().toISOString(),
+        body: req.body.body,
+        isEdited: false,
+      });
+      await review.save();
+
+      return sendPopulatedReview(res, review, req.user.id);
+    } catch (error) {
+      req.log?.error({ err: error }, 'Failed to add review comment');
+      return res.status(400).json({ error: 'Failed to add comment.' });
+    }
+  },
+);
+
+router.put(
+  '/:id/comments/:commentId',
+  verifyToken,
+  validate({ params: paramsSchema.idComment, body: bodySchema.commentUpdate }),
+  async (req, res) => {
+    try {
+      const review = await Review.findById(req.params.id).select(
+        '+helpfulVoters +unhelpfulVoters',
+      );
+      if (!review) return res.status(404).json({ error: 'Review not found.' });
+
+      const comment = review.comments.id(req.params.commentId);
+      if (!comment)
+        return res.status(404).json({ error: 'Comment not found.' });
+
+      const isAuthor =
+        comment.authorId ?
+          String(comment.authorId) === String(req.user.id)
+        : comment.author === req.user.username;
+
+      if (!isAuthor) {
+        return res
+          .status(403)
+          .json({ error: 'You can only edit your own comments.' });
+      }
+
+      comment.body = req.body.body;
+      comment.isEdited = true;
+      await review.save();
+
+      return sendPopulatedReview(res, review, req.user.id);
+    } catch (error) {
+      req.log?.error({ err: error }, 'Failed to update review comment');
+      return res.status(400).json({ error: 'Failed to update comment.' });
+    }
+  },
+);
+
+router.delete(
+  '/:id/comments/:commentId',
+  verifyToken,
+  validate({ params: paramsSchema.idComment }),
+  async (req, res) => {
+    try {
+      const review = await Review.findById(req.params.id).select(
+        '+helpfulVoters +unhelpfulVoters',
+      );
+      if (!review) return res.status(404).json({ error: 'Review not found.' });
+
+      const comment = review.comments.id(req.params.commentId);
+      if (!comment)
+        return res.status(404).json({ error: 'Comment not found.' });
+
+      const isAuthor =
+        comment.authorId ?
+          String(comment.authorId) === String(req.user.id)
+        : comment.author === req.user.username;
+
+      if (!isAuthor) {
+        return res
+          .status(403)
+          .json({ error: 'You can only delete your own comments.' });
+      }
+
+      comment.deleteOne();
+      await review.save();
+
+      return sendPopulatedReview(res, review, req.user.id);
+    } catch (error) {
+      req.log?.error({ err: error }, 'Failed to delete review comment');
+      return res.status(400).json({ error: 'Failed to delete comment.' });
+    }
+  },
+);
+
+router.put(
+  '/:id/owner-response',
+  verifyToken,
+  validate({ params: paramsSchema.id, body: bodySchema.ownerResponse }),
+  async (req, res) => {
+    try {
+      const review = await Review.findById(req.params.id).select(
+        '+helpfulVoters +unhelpfulVoters',
+      );
+      if (!review) return res.status(404).json({ error: 'Review not found.' });
+
+      if (!(await isEstablishmentOwner(review, req.user.id))) {
+        return res
+          .status(403)
+          .json({ error: 'Only the establishment owner can respond.' });
+      }
+
+      review.ownerResponse = {
+        date: new Date().toISOString(),
+        body: req.body.body,
+      };
+      await review.save();
+
+      return sendPopulatedReview(res, review, req.user.id);
+    } catch (error) {
+      req.log?.error({ err: error }, 'Failed to save owner response');
+      return res.status(400).json({ error: 'Failed to save response.' });
+    }
+  },
+);
+
+router.delete(
+  '/:id/owner-response',
+  verifyToken,
+  validate({ params: paramsSchema.id }),
+  async (req, res) => {
+    try {
+      const review = await Review.findById(req.params.id).select(
+        '+helpfulVoters +unhelpfulVoters',
+      );
+      if (!review) return res.status(404).json({ error: 'Review not found.' });
+
+      if (!(await isEstablishmentOwner(review, req.user.id))) {
+        return res
+          .status(403)
+          .json({ error: 'Only the establishment owner can delete response.' });
+      }
+
+      review.ownerResponse = null;
+      await review.save();
+
+      return sendPopulatedReview(res, review, req.user.id);
+    } catch (error) {
+      req.log?.error({ err: error }, 'Failed to delete owner response');
+      return res.status(400).json({ error: 'Failed to delete response.' });
     }
   },
 );
@@ -257,6 +496,7 @@ router.post(
       return res.json({
         helpfulCount: result.helpfulCount,
         unhelpfulCount: result.unhelpfulCount,
+        userVote: type,
       });
     } catch (error) {
       req.log?.error({ err: error }, 'Failed to vote on review');

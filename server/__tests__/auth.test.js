@@ -87,6 +87,26 @@ describe('Auth Routes', () => {
       expect(typeof res.body.token).toBe('string');
     });
 
+    it('returns 409 for duplicate key races during signup', async () => {
+      User.findOne.mockReturnValue({
+        lean: vi.fn().mockResolvedValue(null),
+      });
+      bcrypt.hash.mockResolvedValue('hashed_password');
+      User.create.mockRejectedValue({
+        code: 11000,
+        keyPattern: { email: 1 },
+      });
+
+      const res = await request(app).post('/api/auth/signup').send({
+        username: 'newuser',
+        email: 'new@example.com',
+        password: 'password123',
+      });
+
+      expect(res.status).toBe(409);
+      expect(res.body.error).toBe('That email is already taken.');
+    });
+
     it('returns 400 for invalid email format', async () => {
       const res = await request(app).post('/api/auth/signup').send({
         username: 'newuser',
@@ -96,6 +116,19 @@ describe('Auth Routes', () => {
 
       expect(res.status).toBe(400);
       expect(res.body.error).toBe('Please enter a valid email.');
+    });
+
+    it('returns 400 for usernames that are not URL-safe', async () => {
+      const res = await request(app).post('/api/auth/signup').send({
+        username: 'bad/name',
+        email: 'new@example.com',
+        password: 'password123',
+      });
+
+      expect(res.status).toBe(400);
+      expect(res.body.error).toBe(
+        'Username may only contain letters, numbers, underscores, and hyphens.',
+      );
     });
   });
 
@@ -165,6 +198,7 @@ describe('Auth Routes', () => {
         _id: '507f1f77bcf86cd799439011',
         username: 'tester',
         email: 'tester@example.com',
+        avatar: 'https://example.com/avatar.png',
         bio: '',
         role: 'user',
         ownedEstablishment: null,
@@ -175,6 +209,7 @@ describe('Auth Routes', () => {
         .set('Authorization', `Bearer ${token}`);
       expect(res.status).toBe(200);
       expect(res.body.user.username).toBe('tester');
+      expect(res.body.user.avatar).toBe('https://example.com/avatar.png');
     });
   });
 });

@@ -91,7 +91,9 @@ export default function ReviewsPage() {
   const filteredReviews = useMemo(() => {
     return reviews
       .map((review) => {
-        const restaurant = restaurantMap.get(review.establishment);
+        const restaurant =
+          review.establishmentSummary ||
+          restaurantMap.get(review.establishment);
         return { review, restaurant };
       })
       .filter(({ restaurant }) => !!restaurant);

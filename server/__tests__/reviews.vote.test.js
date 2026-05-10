@@ -20,6 +20,7 @@ vi.mock('../model/User.js', () => ({
 }));
 
 vi.mock('../utils/auth.js', () => ({
+  optionalToken: (_req, _res, next) => next(),
   verifyToken: (req, res, next) => {
     req.user = { id: '507f1f77bcf86cd799439011', username: 'tester' };
     return next();
@@ -68,7 +69,11 @@ describe('Review vote route', () => {
       .send({ type: 'helpful' });
 
     expect(res.status).toBe(200);
-    expect(res.body).toEqual({ helpfulCount: 3, unhelpfulCount: 1 });
+    expect(res.body).toEqual({
+      helpfulCount: 3,
+      unhelpfulCount: 1,
+      userVote: 'helpful',
+    });
     expect(findOneAndUpdate).toHaveBeenCalledWith(
       {
         _id: '507f1f77bcf86cd799439001',
@@ -91,7 +96,11 @@ describe('Review vote route', () => {
       .send({ type: 'unhelpful' });
 
     expect(res.status).toBe(200);
-    expect(res.body).toEqual({ helpfulCount: 2, unhelpfulCount: 2 });
+    expect(res.body).toEqual({
+      helpfulCount: 2,
+      unhelpfulCount: 2,
+      userVote: 'unhelpful',
+    });
     expect(findOneAndUpdate).toHaveBeenCalledWith(
       {
         _id: '507f1f77bcf86cd799439001',

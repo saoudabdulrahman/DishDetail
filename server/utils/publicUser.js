@@ -7,6 +7,7 @@ export function publicUser(u, includePrivate = false) {
   const user = {
     id: u._id.toString(),
     username: u.username,
+    avatar: u.avatar || '',
     bio: u.bio,
     role: u.role,
     ownedEstablishment: u.ownedEstablishment || null,
